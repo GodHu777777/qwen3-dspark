@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（UTC+8；本轮补核截至 01:36:46 的 quality128 与 varlen CPU 准备证据）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；本轮 experiment_journal 已成功唤醒并恢复专职续记 R08/S05，此前临时代记事实保留。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 01:55（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -497,3 +497,21 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **局限与下一决策。** 原S04 failed gate仍失败；不将源码推测写成已确认upper-left，也不把private control写成修复方案。只有另行GPU授权、独立source/archive身份与新证据目录齐备后才执行矩阵；public对upper-left而private对lower-right仅支持该runtime/shape的mapping解释，GQA差异或两oracle皆不符需继续定位。诊断完成也不自动提升为full-Qwen/KV正确性或性能成功。无模型/checkpoint/final-test输入，本轮未启动GPU/训练/部署、未改实现或commit/push。
 
 **归档与独立复核补记。** 诊断源码、测试与协议已归档为 `cd317f7`。Astra core 独立复核报告无阻断项；隐藏 GPU 重跑 7/7 CPU tests 通过，额外 CPU 替身 worker 检查六调用顺序/参数、数值 mismatch 后继续矩阵、原始证据先保存及 production_gate_passed 保持 false。证据保存在未发布 `output/native-varlen-independent-review-20261009/`。本补记引用独立审查交付，未把 CPU 替身称为原生 GPU 验证；本轮仍未启动新 GPU 诊断。
+
+
+<a id="native-varlen-diagnostic-gpu"></a>
+## 2026-10-09 01:55（UTC+8）— S06：唯一六调用 GPU 诊断支持本 runtime/shape 的 explicit-window mapping 解释
+
+**问题与预声明假设。** S04 的大数值差异本身没有定位根因，S05 静态源码链只是待检验的window mapping假设：public wrapper的literal right-window0可能对cached terminal suffix使用top-left，private无window的causal special case可能使用需要的bottom-right。应在同输入同时对照两种FP32 MATH oracle，以GQA/复制KV和解析ramp分辨解释，而不是修改原gate阈值或失败后换backend算通过。
+
+**方法与固定矩阵。** 直接读取[七份公开诊断报告](../reports/native-varlen-diagnostic-20261009/README.md)及aggregate/audit/input-identity/protocol/runtime/source-identity，另读本地未发布 `output/native-varlen-diagnostic-20261009-cd317f7/public-verification.json`、archive和worker/launcher/controller终态。唯一授权matrix含三variant×两inputs，恰六次native调用：publicGQA、public复制每个KVhead两份/noGQA、privateATen `is_causal=true/window_left=None/window_right=None`，各跑原random和zero-Q/local-position ramp一次；private始终是预声明mapping control，不是fallback。保持seed20261009、原CPU FP32 K→V→Q抽样再转BF16、Q[1,8]/K[17,29]/inactive13、Hq16/Hkv8/D128、scale1/√128/dropout0，以及atol0.02/rtol0.02/RMS≤0.005、timeout120。数值不匹配保留并继续既定matrix，backend异常/nonfinite/timeout另记失败。没有补跑或松阈值。
+
+**实测观察。** 六例输出均finite且shape/dtype/device通过，逐例已保存operator map，各恰一个 `aten::_flash_attention_forward`。四个public结果均仅匹配top-left，两个private control仅匹配bottom-right；diagnostic_completed/三层exit0不改 `production_gate_passed=false`。原random的public GQA及重复KV相同：对top-left maxabs **0.0076074600**、RMS **0.0009926664**，对bottom-right maxabs **3.7750650644**、RMS **0.6740736880**、17841/18432超阈值。private random对bottom-right maxabs **0.0042855740**、RMS **0.0006106310**，0元素超阈值，对top-left仍不匹配。
+
+解析ramp `V=local_position/32`：public输出与BF16 top-left均值逐bit相同（首请求0，第二请求0..7/64）；private与BF16 bottom-right均值逐bit相同（首请求0.25，第二请求21..28/64）。对FP32 oracle的tiny非零误差来自reference averaging口径，不把oracle误差写成解析指纹不一致。random和ramp两种输入的publicGQA/重复KV输出hash均相同，audit另逐bit核相同；该矩阵不支持GQA grouping是这一次失败原因。结合revision-matched源码链，支持**当前pinned ROCm runtime、原首组shape**中explicit right-window0映射top-left，而private无window causal special case映射bottom-right的解释；不泛化到其他形状、runtime、架构或全Qwen。
+
+**身份与独立核验。** execution source为 `cd317f79a572dc976ddf660f3bcb2d4a4724635d`，archive SHA **`3537bf3185e1b5f5ae07f477bb4f14c13db6d97c648c1633900c8e7caad58c40`**、script SHA `ac47f2ba1e7b1a940f3a0e87081b6063bf9d199f51fa9f62ac654a467254962f`、protocol SHA延续S05的c370831c…。记录者独立核七个public文件SHA与public-verification一致、31个worker源码SHA逐个与该commit blobs一致、archive与本地保留件相同，重核6例分类/flash计数及两个public raw-output哈希相等。GPU-hidden CPU审计的 **49 tensors hash/shape/dtype通过、原input按seed/draw顺序重构exact**、analytic ramp逐bit核与before/aftersource相同等事实依据公开audit和verification留证；完整tensors仅远端私有，本轮不冒称记录者再加载全部raw tensor。raw output/dispatch先保存后classification由源码审查/独立CPU流程测试支持，与S04缺失event map的失败轮次分开。
+
+**终态与隔离。** worker completion exit0/no timeout、launcher return0、controller return0均有本地留证；runtime pre/post为01:48:44–01:48:54（UTC+8），三diagnostic进程已退出的事实据既有postcheck，非本轮记录者live轮询。peakallocated **81909248bytes**，pre/postVRAMused均8962183168bytes，compute句柄只保留原ASR、ASRHTTP正常/ready/notbusy，桌面render/card活动未改。Torch2.12.0+rocm7.2、HIP7.2.53211/gfx1201，AOTriton偏好与nativeATen dispatch已记录，但确切devicekernel未独立追踪。9.55196299秒含profiler/oracles/persistence，不是benchmark。
+
+**结论边界与下一决策。** 原S04production gate继续失败；本次完成诊断不证明整个Qwen/KV修复、全部cached/poison/crop形状通过、模型分布无损、质量或性能。生产adapter/backend默认没有由这次diag改变。若后续明确pin private backend，仍必须先以原三组tensor gate/原阈值全部验证，再做wholeQwen/KV及实际物理工作/成本检查，CPU实现授权也不等于这些GPU门槛已完成。协调者报告step512quality正在执行，结果未到，本条不写完成或checkpoint选择。公开报告归档为 `e32fbb1`（协调者已核 push 成功），不得冒充execution cd317f7；scope/README入口更新也不等于deployment或新实验。记录者只续notebook，未改root scope/core源码、开GPU、操作进程或commit/push；final test未读。
