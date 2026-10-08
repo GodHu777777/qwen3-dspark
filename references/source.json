@@ -1,0 +1,11 @@
+{
+  "dataset": "mlabonne/open-perfectblend",
+  "revision": "af60f3c18201652a83a93f46fcfee1b646ba3df7",
+  "path": "data/train-00000-of-00006.parquet",
+  "size_bytes": 248696008,
+  "sha256": "06d223e493c9e3822c7862ae0705c1a0e4705fd21385276917fc8348e7ce7b0f",
+  "verified_against": "Hugging Face tree API LFS oid at pinned revision",
+  "license_from_dataset_card": "apache-2.0",
+  "retrieved_date": "2026-10-08",
+  "dataset_viewer_status": "splits succeeded; rows and parquet cache failed; downloaded pinned original Parquet instead"
+}

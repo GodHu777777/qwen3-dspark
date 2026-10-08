@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.env.*
+.DS_Store
+/output/
+/data/
+/runs/
+/checkpoints/
+*.safetensors
+*.pt
+*.parquet
+/configs/*.local.json
+# Historical machine-specific launch configs/notes; portable examples are tracked.
+/configs/pilot.json
+/configs/train-pilot.json
+/docs/local-operations.md

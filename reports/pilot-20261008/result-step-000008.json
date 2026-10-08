@@ -1,0 +1,31 @@
+{
+  "step": 8,
+  "checkpoint": "REMOTE_CHECKPOINT/step-000008",
+  "validation_before": {
+    "loss": 2.746993746076311,
+    "ce": 8.962182113102504,
+    "l1": 1.9699071986334664,
+    "confidence_bce": 0.07785909037504878,
+    "teacher_forced_accept": 0.015046407601663045,
+    "confidence_mae": 0.01738944969006947,
+    "supervised_tokens": 23.571428571428573
+  },
+  "validation_after": {
+    "loss": 2.714264529091971,
+    "ce": 8.684707777840751,
+    "l1": 1.974229199545724,
+    "confidence_bce": 0.06898754462599754,
+    "teacher_forced_accept": 0.012885409207748515,
+    "confidence_mae": 0.013045132027140685,
+    "supervised_tokens": 23.571428571428573
+  },
+  "target_frozen_verified": true,
+  "trainable_parameters": 161692161,
+  "train_rows": 49,
+  "validation_rows": 7,
+  "amp": "bfloat16",
+  "trainable_dtype": "float32",
+  "elapsed_seconds": 7.641154180979356,
+  "peak_allocated_bytes": 4588885504,
+  "scope": "short training execution check; teacher-forced metrics are not rollout acceptance or speedup"
+}

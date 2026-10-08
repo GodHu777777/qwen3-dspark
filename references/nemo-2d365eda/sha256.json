@@ -1,0 +1,7 @@
+{
+  "nemo_automodel/components/speculative/dspark/draft_qwen3.py": "094ae67eb62eaef79bb946a37483aa52dba225bca507bcf70f6d49188e029cc1",
+  "nemo_automodel/components/speculative/dspark/target.py": "609de855e6afc81410b7ef52cbe016430cb80375e53a2d01cc7e871875dbb066",
+  "nemo_automodel/components/speculative/dspark/loss.py": "6e0f1a85ac042c4fbc2424ebb2979d91f0af1783aad92efdae4df68cecc1fd50",
+  "nemo_automodel/components/speculative/dspark/markov_head.py": "d20d1ee54a26392956d7e4fc0914b51f27de61040c228aa30821bfcacd067bcb",
+  "nemo_automodel/components/attention/dflash_mask.py": "c22599eda773a9f411b7b711378bc48b46b4a231ddc172fc4b3c93bb4f8c5e92"
+}
