@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 01:55（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 02:02（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -515,3 +515,23 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **终态与隔离。** worker completion exit0/no timeout、launcher return0、controller return0均有本地留证；runtime pre/post为01:48:44–01:48:54（UTC+8），三diagnostic进程已退出的事实据既有postcheck，非本轮记录者live轮询。peakallocated **81909248bytes**，pre/postVRAMused均8962183168bytes，compute句柄只保留原ASR、ASRHTTP正常/ready/notbusy，桌面render/card活动未改。Torch2.12.0+rocm7.2、HIP7.2.53211/gfx1201，AOTriton偏好与nativeATen dispatch已记录，但确切devicekernel未独立追踪。9.55196299秒含profiler/oracles/persistence，不是benchmark。
 
 **结论边界与下一决策。** 原S04production gate继续失败；本次完成诊断不证明整个Qwen/KV修复、全部cached/poison/crop形状通过、模型分布无损、质量或性能。生产adapter/backend默认没有由这次diag改变。若后续明确pin private backend，仍必须先以原三组tensor gate/原阈值全部验证，再做wholeQwen/KV及实际物理工作/成本检查，CPU实现授权也不等于这些GPU门槛已完成。协调者报告step512quality正在执行，结果未到，本条不写完成或checkpoint选择。公开报告归档为 `e32fbb1`（协调者已核 push 成功），不得冒充execution cd317f7；scope/README入口更新也不等于deployment或新实验。记录者只续notebook，未改root scope/core源码、开GPU、操作进程或commit/push；final test未读。
+
+
+<a id="expanded-quality512"></a>
+## 2026-10-09 02:02（UTC+8）— R09：expanded step512 quality32 完成，同panel配对接受量提升
+
+**问题与方法。** R08只观察expanded128，需要在不变panel/source/protocol下比较中间checkpoint512，不能靠改变temperature、budget、seed或删失败prompt制造接受收益。直接读取[八份quality512报告](../reports/expanded-quality512-20261009/README.md)及aggregate/audit/per-prompt/numerical-probes/protocol/runtime/source-identity、本地未发布 `output/expanded-quality512-20261009-a278e5a/public-verification.json`，并逐字段对照R08。八份public SHA与verification一致；30个executed package SHA与a278e5a Git blobs/128worker逐个相同，panel文件SHA b5119c7f…、manifest fd8efdd09f58c20a24e4c248532bb1460282b6eadb2e73d51754e9acaeeaa2ec、data/target identity与32case ordinal/seed均相同，protocol文件bytes完全一致。此前CPU512dry-run的inventory较早；正式执行前在128的同一archive上fresh dry-run通过的事实据报告/verification，未将旧dryrun binding冒充此次执行。
+
+仍为nativeBF16/SDPA、draftFP32+BF16 AMP、temperature1、无filter、actualfloat64 q、fullblock7只因预算截短、max128。checkpoint weights SHA为 `667d2dd6e8ad7d11e2115e936af1b6cf7e44357d68e3412f5c9ef433f26690ae`，metadata SHA `30d8813eaa5a4db7a50ddbf164f17b8c045e79ae38434e378aa8e703bc699ddb`（独立核本地T07metadata同SHA），本次binding `41d39d07cd6c8a55efab5ea2ddd75e39f55e7a570e3de264ae7c278379db4b56`；不同checkpoint完整run绑定仍不同。execution source仍 `a278e5a5d7d74a1f77f8dcd475700959ee158cb0`，公开归档本地commit为 `329bb049a14a142d58383a4e4ebda4df8331382f`（02:00:29，协调者随后工具核实push成功），不将归档commit当execution身份。
+
+**执行观察。** 32/32完成，worker/launcher/controller各有exit0、no timeout；2620observed blocks的finite/shape/actualprobability/cache/EOS/budget检查通过，actualq为float64，最大q/p normalization误差6.66134e-16/5.55112e-16。运行资源留证pre/post01:51:11–01:55:32（UTC+8），三collector PID均已退出、只有原ASR持compute句柄，ASRHTTP正常/ready/notbusy，VRAMused前后8962183168bytes，peakallocated2267403776bytes；本轮依据已导出的runtime/postcheck，不重新live轮询。
+
+**配对模型行为。** Step512共 **3941 outputs/2620rounds/1299accepted draft**，draft/round **0.495801527**，对照128为581/3268=**0.177784578**。记录者独立从32个per-prompt重算所有总数、histogram和prefix分母，并按每prompt等权重重算macro：128 **0.176533098**、512 **0.528943552**；31例ratio上升、1例下降、0例持平，paired delta中位数 **0.321620822**。这支持固定native协议/panel下接受行为的更广改善，保留下降例子，非答案事实质量或置信校准结果。相同prompt/seed不保证跨checkpoint相同已生成prefix；3例EOS outcome改变，输出3874→3941、EOS5→4，不能用round/work数量比当speedup，rounds也不当独立重复给CI。
+
+**Prefix与四分母。** prefix length0..7的round histogram为 **1814/515/173/74/24/8/4/8**，加和2620，按长度加权1299；8个全7接受block来自2515个7-token proposal，长prefix仍少。各位置prefix event/count为 **806/2620、291/2602、118/2580、44/2563、20/2547、12/2529、8/2514**。proposed与target-verified位置各 **17960**，effective labels **17955**；一次accepted draft EOS位于第2候选，其自身与第1位置仍保留，之后5个已验证尾部排除。四EOS为3residual+1accepted，bonusEOS0；未观测预算尾部不补零。
+
+attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955prefix-label分母。initial32draw之后实际committed为 **3909=3941−32=1299+2602+8bonus**，与3901attempted不同。17个全proposal接受block中9个达到budget不抽bonus，另acceptedEOS round也不抽bonus，故不机械以rounds+accepted算commit。实际commit/round为 **1.491984733**，target verification query rows为 **20580=17960+2620**、含每轮oldanchor但不含prefill；这些是执行计数，不是同物理负载的时延比较。
+
+**数值保真。** 预选cases0/1 round0共16rows，记录者逐行重算 **16行TV全非零、maxTV0.05288759555199574、argmaxchanges0**，与aggregate相同。128maxTV0.0457641418对应另一组sampledprefix，不能把max差写成checkpoint对target数值稳定性的受控因果作用。argmax不变不等于随机law不变；execution通过仍不证明nativeBF16 block p等于freshsequential p。未解除旧数值问题，也不是新pinned varlen backend的gate。
+
+**局限与下一决策。** Step512仍是max1280训练计划的中间checkpoint；只支持复核下一段有界训练，不将它写成最终选定checkpoint，不改变panel/seed/policy。协调者已授权strict512→1024，但本条实际启动PID/结果尚未交付，授权不作完成证据；1024/1280在本条未记录启动，后续训练另起T08。fit44/eval43采集与STS/fit-prevalence常数留出比较仍待后续冻结选择。全部development已用于TF监测，eval43只是相对STSfit留出；final test未读。性能、native分布无损、outputquality及全局异步调度收益未测。记录者仅改notebook，不运行GPU、改实现/进程或commit/push。
