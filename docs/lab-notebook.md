@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:10（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09/S07，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 02:14（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09/S07/T08，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -551,3 +551,19 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **协议身份与证据顺序。** 原public protocol SHA **08c501349bb59d30a888f1a5669a6c5bcb0bdfbf5f9e894c409fb2e702d49ff9**未变；新pinned SHA **f42729a4e857b1e1f0023888ba1f5c0e86602b36e764243d52007f96866cb98a**显式绑定backend/runtime/windowNone/privateentry及旧protocol hash。原三组shapes/draw顺序、FP32双oracle、atol0.02/rtol0.02/RMS≤0.005、ramp/active/inactivepoison/crop检查都保留；11次native调用只在真实原assertions全部通过时发生。新增atomicJSON与每call先保存QKV/cu/raw output、oracle/scalar再assert，是失败留证修复，不松数值标准，不重写旧archives。CPU替身11-call通过不能代替真实full tensor gate。
 
 **局限与下一决策。** 协调者报告1024训练当时仍live，完整tensorGPU仅获等待释放后的条件授权；manifest GPU_executed=false，S07不写已跑。原S04失败和S06的production_gate_passed=false保持原结论，显式新backend没有生产晋升或wholeQwen/KV通过。后续先按新绑定/原阈值执行完整tensor gate，再冻结实际pretrainedQwen/KV的结构与数值报告协议；拟议wholemodel synthetic schedule不是已交付/已运行结果，观察后不得临时发明BF16pass阈值。没有quality/STS/性能或final-test结论；记录者只notebook，无GPU/实现/进程/commit/push动作，实际tensor结果另记新条。
+
+
+<a id="expanded-step1024"></a>
+## 2026-10-09 02:14（UTC+8）— T08：expanded strict resume 512→1024 与动态标签基线
+
+**问题与方法。** T07完成512、R09观察同panel接受行为改善后，下一段仍须保持冻结训练身份，实际恢复weights/optimizer/RNG，不能把TF信号当rollout1024结论。直接读取[五份本段报告](../reports/expanded-training-step1024-20261009/README.md)、[summary](../reports/expanded-training-step1024-20261009/summary.json)、[checkpoint核验](../reports/expanded-training-step1024-20261009/checkpoint-verification.json)、[source identity](../reports/expanded-training-step1024-20261009/source-identity.json)和公开steps513–1024 metrics，另核未发布 `output/expanded-training-step1024-20261009/` 的public-verification/result/completion/run/metadata/latest/full metrics及runner OS退出标识。执行仅获授权strict resume512→1024、`--stop-after 1024`；原source `796fecc0d9142c1a733ad6df47b105fab4ee9f05`、config SHA `ea8091ca8d124434696ccd15f88249839aaf1d71bdf540c3db9142bcbdda4762`、max_steps1280保持不变。
+
+**直接观察与继承核对。** 02:03:15.985–02:09:24.680（UTC+8）training child exit0、runner OS exit0、timed_out=false；最外层shell wrapper没有由该verifier独立wait，不添第三个exit0。本段新增512 optimizer updates/4096 microsteps，累计8192/932=**8.7896995708遍**，本段增加4.3948497854遍。记录者从本地full metrics重核恰为1–1024、所有scalar finite，最初512行保留换行逐字节等于T07原文件，SHA `1d305e9d85b0ad33b62aa350649584ee60c0f1978edbc30501472e8f4e14c2bb`；公开512条新增metrics与raw513–1024解析记录逐项相同。run identity逐字段等于step512、metadata identity匹配，initial dev逐字段等于step512 final，仍非未中断连续训练的逐bit对照。
+
+**Checkpoint与执行身份。** 公开checkpoint-verification和本地step1024-verification bytes/SHA一致，latest/metadata/resume-state均1024，报告记录62个Adam state entries的step全1024、source112/config bytes未变、preflight/run身份一致、weights/resume重hash通过。weights SHA `5b9984de9817531ca29544890dc2988a1c0aa3aff6866a828ec8a81a2641a765`、resume SHA `5d083a262a252baa19b0164e9737d172948093d755781d4cfd39f610260f3fd1`，与本地metadata逐项一致。记录者独立重算五个public SHA和summary所列五个raw SHA；source identity与512报告相同，21个训练package源码SHA逐个等于796fecc Git blobs。source112是远端完整树核验计数，不等于21个package模块；大型weights/resume-state的重hash/加载及完整source/config bytes核验依据direction留证，未声称记录者本轮加载远端大文件。公开归档本地commit `5a96d7d14eb0199166b7c498ded68899a4300a0d`（02:13:28）独立核实；执行身份仍796fecc，本条未查询push/CI。
+
+**TF结果与confidence边界。** 同119dev、固定anchors、样本内weights加权再宏平均，512→1024 loss **2.191068616→2.064107772**、CE **4.807051978→4.370612417**、L1 **1.425409559→1.293027493**；teacher-forced软overlap **0.287295218→0.353486253**（28.7295%→35.3486%），supervised tokens宏平均213.87394958不变。confidence BCE **0.427494834→0.463321805**、MAE **0.184831666→0.208602766**绝对值上升，但overlap目标随draft改变，不能据此跨checkpoint称预测退化。**同step1024**的constant-zero MAE按同weights/宏平均定义为 **0.353486253**，learned MAE **0.208602766**较低；只支持优于零基线，constant-mean/median与真实rollout校准未测。35.3486%不是实测连续接受率、答案质量或confidence已校准，也不能替代独立quality32。
+
+**计时与资源。** target frozen=true、161692161 trainables、932train/119dev、exact train sequence tokens424267、BF16 AMP/FP32 trainables；peakallocated **5632856064 bytes**。optimizer-loop末条elapsed **323.60860635秒**含Python/logging；result **338.22575630秒**从initial dev后开始，含末dev/save；child wall **368.69495988秒**另含startup、identity、模型/strict-resume加载、两次dev及保存。三种计时口径分别保留，无serving吞吐、独占全系统峰值或speedup结论。
+
+**局限与下一决策。** 已完成的仅是本段严格恢复和TF监测；step1024仍为1280计划中间checkpoint，没有rollout1024、checkpoint/policy最终选择、STSfit/eval或scheduler收益。协调者随后授权1024→1280，但本条实际PID/结果未交付，不能把授权写成启动或完成。pinned private backend完整tensor gate据协调者报告已通过、公开报告仍在导出；本条不填初步数值、不替代S04原失败或wholeQwen/KV门槛，完整交付后另起S08。final test未读；记录者仅追加notebook，无GPU、实现/进程、冻结快照或commit/push动作。
