@@ -1,0 +1,57 @@
+{
+  "torch": "2.12.0+rocm7.2",
+  "hip": "7.2.53211",
+  "cuda": null,
+  "device": "AMD Radeon Graphics",
+  "device_arch": "gfx1201",
+  "rocm_flash_preferred_library": "_ROCmFABackend.AOTriton",
+  "rocm_flash_prefer_ck_env": null,
+  "backend_identity_scope": "Native ATen flash dispatch recorded; preferred library is a preference, not an independently traced device-kernel identity",
+  "peak_allocated_bytes": 82391552,
+  "runtime_pin_observed": {
+    "torch": "2.12.0+rocm7.2",
+    "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+    "hip": "7.2.53211",
+    "device_arch": "gfx1201",
+    "flash_preference": "_ROCmFABackend.AOTriton",
+    "flash_prefer_ck_env": null,
+    "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+  },
+  "completion": {
+    "exit_code": 0,
+    "timed_out": false,
+    "wall_seconds": 10.753625566023402,
+    "status": "passed"
+  },
+  "launcher_exit": {
+    "returncode": 0,
+    "utc": 1791483104.22262
+  },
+  "controller_exit": {
+    "returncode": 0,
+    "utc": 1791483104.6358316
+  },
+  "pre": {
+    "utc": "2026-10-08T18:11:32Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_inventory_recorded_and_untouched": true
+  },
+  "post": {
+    "utc": "2026-10-08T18:11:44Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_inventory_recorded_and_untouched": true
+  },
+  "scope": "Elapsed time includes oracle/profile/persistence; not a benchmark."
+}

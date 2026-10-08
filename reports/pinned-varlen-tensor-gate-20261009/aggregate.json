@@ -1,0 +1,438 @@
+{
+  "status": "passed",
+  "backend": "rocm_aten_no_window_pinned_v1",
+  "cases": [
+    {
+      "name": "interleaved_cached_tail",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "gathered_k_shape": [
+        46,
+        8,
+        128
+      ],
+      "physical_k": 59,
+      "native_operators": {
+        "aten::resolve_conj": 2,
+        "aten::resolve_neg": 2,
+        "aten::to": 2,
+        "aten::_to_copy": 2,
+        "aten::empty_strided": 3,
+        "aten::copy_": 2,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "per_request_error": {
+        "max_abs": 0.004285573959350586,
+        "rms": 0.0006106310174800456
+      },
+      "packed_error": {
+        "max_abs": 0.004285573959350586,
+        "rms": 0.0006106308428570628
+      },
+      "causal_sentinel_error": {
+        "max_abs": 0.0,
+        "rms": 0.0
+      },
+      "other_request_isolation_exact": true,
+      "inactive_isolation_exact": true
+    },
+    {
+      "name": "crop_exit_readd",
+      "q_shape": [
+        6,
+        16,
+        128
+      ],
+      "gathered_k_shape": [
+        17,
+        8,
+        128
+      ],
+      "physical_k": 17,
+      "native_operators": {
+        "aten::resolve_conj": 2,
+        "aten::resolve_neg": 2,
+        "aten::to": 2,
+        "aten::_to_copy": 2,
+        "aten::empty_strided": 3,
+        "aten::copy_": 2,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "per_request_error": {
+        "max_abs": 0.007105827331542969,
+        "rms": 0.0008891412289813161
+      },
+      "packed_error": {
+        "max_abs": 0.007105827331542969,
+        "rms": 0.0008891416946426034
+      },
+      "causal_sentinel_error": {
+        "max_abs": 0.0,
+        "rms": 0.0
+      },
+      "other_request_isolation_exact": true
+    },
+    {
+      "name": "crop_zero_then_append",
+      "q_shape": [
+        2,
+        16,
+        128
+      ],
+      "gathered_k_shape": [
+        2,
+        8,
+        128
+      ],
+      "physical_k": 8,
+      "native_operators": {
+        "aten::resolve_conj": 2,
+        "aten::resolve_neg": 2,
+        "aten::to": 2,
+        "aten::_to_copy": 2,
+        "aten::empty_strided": 3,
+        "aten::copy_": 2,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "per_request_error": {
+        "max_abs": 0.007795095443725586,
+        "rms": 0.001023079501464963
+      },
+      "packed_error": {
+        "max_abs": 0.007795095443725586,
+        "rms": 0.001023079501464963
+      },
+      "causal_sentinel_error": {
+        "max_abs": 0.0,
+        "rms": 0.0
+      },
+      "other_request_isolation_exact": true,
+      "inactive_isolation_exact": true
+    }
+  ],
+  "comparisons": [
+    {
+      "case": "interleaved_cached_tail",
+      "comparison": 0,
+      "max_abs": 0.004285573959350586,
+      "rms": 0.0006106310174800456
+    },
+    {
+      "case": "interleaved_cached_tail",
+      "comparison": 1,
+      "max_abs": 0.004285573959350586,
+      "rms": 0.0006106308428570628
+    },
+    {
+      "case": "interleaved_cached_tail",
+      "comparison": 2,
+      "max_abs": 0.0,
+      "rms": 0.0
+    },
+    {
+      "case": "crop_exit_readd",
+      "comparison": 3,
+      "max_abs": 0.007105827331542969,
+      "rms": 0.0008891412289813161
+    },
+    {
+      "case": "crop_exit_readd",
+      "comparison": 4,
+      "max_abs": 0.007105827331542969,
+      "rms": 0.0008891416946426034
+    },
+    {
+      "case": "crop_exit_readd",
+      "comparison": 5,
+      "max_abs": 0.0,
+      "rms": 0.0
+    },
+    {
+      "case": "crop_zero_then_append",
+      "comparison": 6,
+      "max_abs": 0.007795095443725586,
+      "rms": 0.001023079501464963
+    },
+    {
+      "case": "crop_zero_then_append",
+      "comparison": 7,
+      "max_abs": 0.007795095443725586,
+      "rms": 0.001023079501464963
+    },
+    {
+      "case": "crop_zero_then_append",
+      "comparison": 8,
+      "max_abs": 0.0,
+      "rms": 0.0
+    }
+  ],
+  "native_calls": [
+    {
+      "call": 0,
+      "case": "interleaved_cached_tail",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-000.pt",
+      "native_operators": {
+        "aten::resolve_conj": 2,
+        "aten::resolve_neg": 2,
+        "aten::to": 2,
+        "aten::_to_copy": 2,
+        "aten::empty_strided": 3,
+        "aten::copy_": 2,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "a4cd695db935227a67f6509f3f66f09fa0b9b737fccb0bd378c365aa79ed6d4a"
+    },
+    {
+      "call": 1,
+      "case": "interleaved_cached_tail",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-001.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "3c7a9127ee835b587f76375f49442933e503746759ae33996025c2be7c8d3afb"
+    },
+    {
+      "call": 2,
+      "case": "interleaved_cached_tail",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-002.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "26f43333c6d181e969ede7db5ccf57456f9efa207a3f2eb696e07ce332b9f9ad"
+    },
+    {
+      "call": 3,
+      "case": "interleaved_cached_tail",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-003.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "2c9470cae9fb83c5b561ce966450442c94fd871d8b5d968ab8c2197f19a645f4"
+    },
+    {
+      "call": 4,
+      "case": "crop_exit_readd",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-004.pt",
+      "native_operators": {
+        "aten::resolve_conj": 2,
+        "aten::resolve_neg": 2,
+        "aten::to": 2,
+        "aten::_to_copy": 2,
+        "aten::empty_strided": 3,
+        "aten::copy_": 2,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "eebb21df1d8c0413e3298307f9bfa7892557061b4a4a231dde10ceea96a27b09"
+    },
+    {
+      "call": 5,
+      "case": "crop_exit_readd",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-005.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "a0468fb3b10b013192f5ff7d9cae3369938f7bf9592b90a5f4afcd2df89afc55"
+    },
+    {
+      "call": 6,
+      "case": "crop_exit_readd",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-006.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "c333412b17e753233534bce15da92e4137955eec10464b3f54d70905aaac42e1"
+    },
+    {
+      "call": 7,
+      "case": "crop_zero_then_append",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-007.pt",
+      "native_operators": {
+        "aten::resolve_conj": 2,
+        "aten::resolve_neg": 2,
+        "aten::to": 2,
+        "aten::_to_copy": 2,
+        "aten::empty_strided": 3,
+        "aten::copy_": 2,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "4d90540bfbcc401386bf8ef5f085dac21d5da8051fae63a43072525fa42ceee5"
+    },
+    {
+      "call": 8,
+      "case": "crop_zero_then_append",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-008.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "e57d91fc62f562bb599b1982dc10fc34ad82b0a55127d17bbb659d425d545472"
+    },
+    {
+      "call": 9,
+      "case": "crop_zero_then_append",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-009.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "ec5c148a9422cee734f085ffbb2877255d0b66d4edc76ce1f05122bfad404382"
+    },
+    {
+      "call": 10,
+      "case": "crop_zero_then_append",
+      "status": "raw_output_saved",
+      "tensor_file": "private-native-010.pt",
+      "native_operators": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "tensor_file_sha256": "c449c2d2eca101039e071e315e753bb5f074244eae6858853d92faf6cae830a4"
+    }
+  ],
+  "native_call_count": 11,
+  "scope": "Pinned backend small-tensor gate only; original public gate remains failed; no whole-Qwen/losslessness/performance claim."
+}

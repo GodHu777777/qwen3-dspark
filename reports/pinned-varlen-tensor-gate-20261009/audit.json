@@ -1,0 +1,13 @@
+{
+  "native_tensor_file_hashes_verified": 11,
+  "cpu_oracle_cases_verified": 3,
+  "original_fixed_limits_retained": true,
+  "all_native_outputs_finite_shape_checked": true,
+  "all_native_flash_event_counts_exactly_one": true,
+  "all_ramp_outputs_exact_analytic": true,
+  "other_request_isolation_exact": true,
+  "inactive_isolation_exact": true,
+  "cpu_oracle_matches_saved_gpu_math_oracle": true,
+  "runtime_pin_matches_exactly": true,
+  "source_identity_before_after_unchanged": true
+}

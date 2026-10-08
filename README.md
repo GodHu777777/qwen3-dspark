@@ -137,10 +137,10 @@ Its [completed expansion](reports/data-expansion-20261009/README.md) produced
 932 train, 119 dev and 119 final-test responses from 1,280 inputs; 110 were rejected.
 Structural audits passed. Final test remains excluded from development and tuning.
 
-[Expanded training through step512](reports/expanded-training-step512-20261009/README.md)
+[Expanded training through step1024](reports/expanded-training-step1024-20261009/README.md)
 uses 32 anchors and accumulation 8, with verified checkpoint/optimizer resumes and
 a frozen target. On the same 119 dev rows, teacher-forced overlap increased from
-0.086% initially to 28.73%; this is not measured rollout acceptance or speedup.
+0.086% initially to 35.35%; this is not measured rollout acceptance or speedup.
 The [resource and first-resume report](reports/expanded-training-20261009/README.md)
 records the two-cycle memory gate and earlier steps.
 
@@ -153,7 +153,9 @@ BF16 block/sequential probability differences remain, and STS is not fitted.
 A [six-call ROCm diagnostic](reports/native-varlen-diagnostic-20261009/README.md)
 identified a causal-window alignment mismatch in the tested public varlen path.
 An explicit private-ATen control produced the required alignment on that shape.
-The original native gate remains failed; full adapter/model validation is pending.
+The original public-wrapper gate remains failed. The explicit pinned backend
+[passed all original small-tensor cases](reports/pinned-varlen-tensor-gate-20261009/README.md);
+whole pretrained-model/KV validation is still pending.
 
 ## Experiment journal
 

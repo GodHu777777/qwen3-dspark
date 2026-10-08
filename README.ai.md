@@ -209,7 +209,7 @@ a sequential-distribution equivalence result. Step512 quality32 completed on the
 1,299 draft tokens (0.4958/round), 3,941 outputs; 31/32 prompt ratios improved.
 One accepted-EOS block excludes five verified tail labels, so effective positions
 are 17,955 versus 17,960 verified. See reports/expanded-quality512-20261009.
-STS fitting remains unexecuted; training is still at step512 of the frozen1280 plan. Fit/eval execution and
+STS fitting remains unexecuted; training has completed step1024 of the frozen1280 plan. Fit/eval execution and
 fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
 selection. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.
@@ -227,8 +227,8 @@ outputs match top-left causality, while two private no-window ATen controls
 match bottom-right; GQA and repeated-KV public outputs are bit-identical. See
 reports/native-varlen-diagnostic-20261009. This supports explicit-window mapping
 as the cause for this pinned runtime/shape. It neither passes the original failed
-gate nor establishes whole-Qwen correctness. An explicit pinned backend still
-requires the full original tensor cases and whole-model/KV validation.
+gate nor establishes whole-Qwen correctness. An explicit pinned backend has a separate full-tensor protocol; whole-model/KV
+validation remains required before any broader correctness claim.
 
 Explicit private ROCm backend preparation: rocm_varlen.py adds the opt-in
 rocm_aten_no_window_pinned_v1 reference kernel with exact observed runtime/schema
@@ -238,8 +238,10 @@ construction, layout checks handle normal/no_grad/inference_mode explicitly.
 probe_varlen.py can bind this backend while preserving the original public
 PROTOCOL, cases and thresholds; new raw evidence is saved before assertions.
 25 CPU tests pass, including an11-call CPU substitute of the entire tensor gate.
-No new backend GPU gate has run yet. docs/pinned-rocm-varlen.md defines remaining
-full-tensor and actual-pretrained-Qwen/KV requirements; whole-model structural
+The explicit backend passed the full three-case/11-call tensor gate on source
+5281a6a, with original thresholds and exact isolation; see
+reports/pinned-varlen-tensor-gate-20261009. The public failure remains unchanged.
+docs/pinned-rocm-varlen.md defines actual-pretrained-Qwen/KV requirements; whole-model structural
 checks and BF16 numerical reporting stay separate, with any numerical acceptance
 threshold requiring a pre-execution decision. Do not edit the frozen training
 snapshot or reinterpret the old public failure as a pass.

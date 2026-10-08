@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "seed": 20261009,
+  "dtype": "bfloat16",
+  "query_heads": 16,
+  "kv_heads": 8,
+  "head_dim": 128,
+  "window_size": [
+    null,
+    null
+  ],
+  "enable_gqa": true,
+  "timeout_seconds": 120,
+  "atol": 0.02,
+  "rtol": 0.02,
+  "max_rms_error": 0.005,
+  "isolation_atol": 0.0,
+  "cases": [
+    {
+      "name": "interleaved_cached_tail",
+      "markers": [
+        1,
+        2
+      ],
+      "q": [
+        1,
+        8
+      ],
+      "k": [
+        17,
+        29
+      ],
+      "inactive_k": 13
+    },
+    {
+      "name": "crop_exit_readd",
+      "markers": [
+        1,
+        2,
+        4
+      ],
+      "q": [
+        3,
+        2,
+        1
+      ],
+      "k": [
+        11,
+        5,
+        1
+      ],
+      "inactive_k": 0
+    },
+    {
+      "name": "crop_zero_then_append",
+      "markers": [
+        1
+      ],
+      "q": [
+        2
+      ],
+      "k": [
+        2
+      ],
+      "inactive_k": 6
+    }
+  ],
+  "oracles": [
+    "FP32 MATH per-request SDPA with explicit bottom-right mask",
+    "FP32 MATH packed SDPA using PackedTarget._attention_payload"
+  ],
+  "checks": [
+    "finite shape/dtype/device",
+    "fixed elementwise and RMS limits",
+    "zero-Q position-ramp causal sentinel",
+    "inactive KV poison",
+    "other active request QKV poison with unchanged first request",
+    "exactly one aten::_flash_attention_forward per native call"
+  ],
+  "scope": "Small tensor backend support/numerical gate only; not full model, losslessness, calibration or performance evidence",
+  "backend": "rocm_aten_no_window_pinned_v1",
+  "runtime_pin": {
+    "torch": "2.12.0+rocm7.2",
+    "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+    "hip": "7.2.53211",
+    "device_arch": "gfx1201",
+    "flash_preference": "_ROCmFABackend.AOTriton",
+    "flash_prefer_ck_env": null,
+    "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+  },
+  "is_causal": true,
+  "private_entry": "aten::_flash_attention_forward",
+  "gqa_mode": "implicit Hq16/Hkv8 in private ATen",
+  "original_public_protocol_sha256": "08c501349bb59d30a888f1a5669a6c5bcb0bdfbf5f9e894c409fb2e702d49ff9"
+}
