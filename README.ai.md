@@ -205,3 +205,11 @@ execution or STS fitting has run through this collector. Fit/eval execution and
 fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
 selection. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.
+
+Experimental native varlen: varlen_target.py adds active-request KV gathering and
+one HF native-attention callback per layer, retaining packed_target.py as a dense
+oracle. Ten CPU tensor/model tests and three probe-controller tests passed.
+The first real gfx1201 probe failed numerical comparison on 17841/18432 elements;
+see reports/native-varlen-probe-20261009 and docs/varlen-target.md. Native output
+must not be used for quality/performance claims until this correctness failure
+is resolved. The failure does not affect the separate SDPA quality collector.

@@ -81,5 +81,8 @@ native varlen 文档提到 `num_splits=1` 用于减少 batch 组成引起的 red
 
 独立 `PackedLayout` / `VarlenPackedTarget` 和显式 CPU-only oracle 已实现；
 5 个原 packed tests + 5 个 varlen tests 在 GPU 隐藏的 FP32 CPU 模式通过。
-固定小 tensor gate 已准备，默认仅 stdlib dry-run，尚未运行 native GPU/JIT。
-见 [实现与固定 GPU 探针协议](varlen-target.md)；真实执行仍需单独协调 GPU 窗口。
+固定小 tensor gate 默认仅 stdlib dry-run。一次已授权的 native GPU 执行在
+首组 BF16 数值比较失败（17,841/18,432 元素超容差，maxabs3.7750649452）；
+后续 ramp、隔离与 crop 检查未执行。见 [独立失败报告](../reports/native-varlen-probe-20261009/README.md)
+与 [实现和原固定协议](varlen-target.md)。本机 native 路径尚未通过正确性，
+不能据此开展质量或性能结论；原协议阈值不改，新诊断 GPU 执行需另行授权。

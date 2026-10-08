@@ -1,4 +1,4 @@
-# Native varlen target: CPU implementation and proposed GPU gate
+# Native varlen target: CPU implementation and failed GPU gate
 
 The dense `PackedTarget` remains the default and independent oracle. The separate
 `VarlenPackedTarget` uses an HF attention callback that preserves Qwen QKV
@@ -29,14 +29,23 @@ adapter semantics, not successful native GPU execution. Work counters distinguis
 adapter calls, CPU oracle calls and native calls; existing dense Q×K counts remain
 explicitly counterfactual domains when native varlen is selected.
 
-## Fixed small-tensor GPU protocol (not executed)
+## Fixed small-tensor GPU protocol and failed execution
+
+One native attempt from source `d454427` ran on gfx1201 and failed the first
+BF16 numerical comparison: 17,841/18,432 elements exceeded the fixed tolerance,
+with maximum absolute error 3.7750649452. Process exit was 1 without timeout.
+The later ramp, isolation and crop cases were not reached. See the separate
+[immutable failure report](../reports/native-varlen-probe-20261009/README.md).
+This local native path has not passed correctness and must not support subsequent
+quality or performance claims. The protocol below is preserved unchanged;
+new diagnostic work requires a separate protocol and GPU authorization.
 
 `python scripts/probe_varlen.py --dry-run` uses only stdlib. Syntax and a guarded
 dry-run forbidding Torch/Transformers/package imports passed. The full protocol
 and its SHA256 are printed with source hashes. No execution is authorized by the
 existence of this tool; coordinate a separate GPU window first.
 
-After approval, `--execute --output <fresh-directory>` starts one bounded worker
+For an authorized run, `--execute --output <fresh-directory>` starts one bounded worker
 using the invoking Python. It creates an independent process group and kills only
 that group on the fixed 120-second timeout or controller interruption. No model,
 checkpoint, final-test text or environment installation is involved.
