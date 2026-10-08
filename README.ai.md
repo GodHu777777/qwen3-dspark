@@ -47,6 +47,10 @@ to real model/cache execution; see docs/stochastic-sampling.md for the actual-q,
 admission and numerical contracts. scheduler.py is a pure CPU global prefix
 planner; hardware profiling, multi-request execution and asynchronous scheduling
 remain unfinished (docs/dspark-reproduction-scope.md).
+calibration.py implements CPU sequential temperature scaling of confidence
+logits against realized validation prefix events (8 tests). It requires frozen
+checkpoint/data/protocol identity and uncensored proposal collection. No real
+rollout calibration has been fitted; see docs/confidence-calibration.md.
 CachedTarget has six CPU FP32 tests and a real same-dtype HF cached greedy
 check (117 tokens on seven pilot prompts). Reports/cached-target-20261008 records
 a BF16 full-recompute/cached near-tie divergence and isolated target costs.
