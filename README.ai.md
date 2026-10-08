@@ -191,3 +191,17 @@ argmax change. This uses the original pilot aligned128 checkpoint, not expanded
 training weights, and does not establish distribution losslessness or speedup.
 See docs/stochastic-gate.md; GPU windows still require
 coordination with generation, memory gates and training.
+
+Expanded development rollout collection: rollout_protocol.py freezes exactly
+119 accepted dev prompts into quality32 (export order), fit44/eval43 (fixed salted
+ID hash), checkpoint-independent per-prompt seeds, data/target/generation identity
+and two preselected first-round TV probes. collect_rollout.py provides stdlib-only
+dry-run and a separate bound source worker for quality32 native BF16 stochastic
+collection (temp1, no filtering, float64 actual q,128 tokens, full proposals).
+It records four distinct position denominators, rejection-tail prefix zeros,
+accepted-EOS truncation, cache/finite checks and private partial evidence. Nine
+CPU tests and real step128/512 binding dry-runs pass; no expanded quality GPU
+execution or STS fitting has run through this collector. Fit/eval execution and
+fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
+selection. See docs/rollout-collection.md; keep final test locked and coordinate
+GPU windows separately. This does not modify completed old-pilot gate evidence.
