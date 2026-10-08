@@ -1,0 +1,93 @@
+{
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "hip": "7.2.53211",
+    "runtime_pin": {
+      "torch": "2.12.0+rocm7.2",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "hip": "7.2.53211",
+      "device_arch": "gfx1201",
+      "flash_preference": "_ROCmFABackend.AOTriton",
+      "flash_prefer_ck_env": null,
+      "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+    },
+    "free_bytes_before_load": 25528631296,
+    "process_allocation_cap_bytes": 6442450944
+  },
+  "completion": {
+    "exit_code": 1,
+    "timed_out": false,
+    "execution_completed": true,
+    "worker_status": "completed_with_failed_layer_attention_gate",
+    "structural_status": "passed",
+    "layer_attention_numerical_status": "failed",
+    "numerical_comparison_status": "completed",
+    "system_pass_claimed": false,
+    "wall_seconds": 45.775552889099345,
+    "timing_scope": "Oracle/instrumentation/persistence included; not a benchmark"
+  },
+  "peak_allocated_bytes": 3808959488,
+  "launcher_exit": {
+    "returncode": 1,
+    "utc": 1791484818.5098698
+  },
+  "controller_exit": {
+    "returncode": 1,
+    "utc": 1791484823.0857203
+  },
+  "controller_os_exit_code": 1,
+  "exit_scope": "Worker OS exit waited by launcher, launcher by controller, controller OS exit captured by shell. Shell itself not independently waited.",
+  "pre": {
+    "utc": "2026-10-08T18:39:28Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram": [
+      {
+        "total_bytes": 34208743424,
+        "used_bytes": 8955969536,
+        "free_bytes": 25252773888
+      }
+    ],
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_dri_occupancy_recorded_privately": true
+  },
+  "post": {
+    "utc": "2026-10-08T18:40:22Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram": [
+      {
+        "total_bytes": 34208743424,
+        "used_bytes": 8955969536,
+        "free_bytes": 25252773888
+      }
+    ],
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_dri_occupancy_recorded_privately": true
+  },
+  "postrelease": {
+    "utc": "2026-10-08T18:40:45Z",
+    "owned_pids": {
+      "3987138": false,
+      "3987140": false,
+      "3987358": false,
+      "3987560": false
+    },
+    "kfd_pids": [
+      1208354
+    ],
+    "asr_ready": true,
+    "asr_busy": false,
+    "vram": [
+      {
+        "total_bytes": 34208743424,
+        "used_bytes": 8955969536
+      }
+    ]
+  }
+}

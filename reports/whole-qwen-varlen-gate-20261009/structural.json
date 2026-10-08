@@ -1,0 +1,401 @@
+{
+  "checks": [
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "prime"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "prime"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "prime"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "prime",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "prime",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "prime"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "prime"
+    },
+    {
+      "kind": "reference_request_lengths_match",
+      "passed": true,
+      "stage": "prime"
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "cached_tail"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "cached_tail"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "cached_tail"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "cached_tail",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "cached_tail",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "cached_tail"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "cached_tail"
+    },
+    {
+      "kind": "reference_request_lengths_match",
+      "passed": true,
+      "stage": "cached_tail"
+    },
+    {
+      "kind": "crop_exact_KV_and_position_subset",
+      "passed": true,
+      "request": "A",
+      "length": 8
+    },
+    {
+      "kind": "crop_exact_KV_and_position_subset",
+      "passed": true,
+      "request": "B",
+      "length": 3
+    },
+    {
+      "kind": "removed_request_marker_absent",
+      "passed": true,
+      "request": "C"
+    },
+    {
+      "kind": "readded_request_fresh_marker_and_position_zero",
+      "passed": true,
+      "request": "C"
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "crop_exit_readd"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "crop_exit_readd"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "crop_exit_readd"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "crop_exit_readd",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "crop_exit_readd",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "crop_exit_readd"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "crop_exit_readd"
+    },
+    {
+      "kind": "reference_request_lengths_match",
+      "passed": true,
+      "stage": "crop_exit_readd"
+    },
+    {
+      "kind": "crop_exact_KV_and_position_subset",
+      "passed": true,
+      "request": "A",
+      "length": 0
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "crop_zero"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "crop_zero"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "crop_zero"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "crop_zero",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "crop_zero",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "crop_zero"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "crop_zero"
+    },
+    {
+      "kind": "reference_request_lengths_match",
+      "passed": true,
+      "stage": "crop_zero"
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "inactive_C_control"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "inactive_C_control"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "inactive_C_control"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "inactive_C_control",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "inactive_C_control",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "inactive_C_control"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "inactive_C_control"
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "inactive_C_poison"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "inactive_C_poison"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "inactive_C_poison"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "inactive_C_poison",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "inactive_C_poison",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "inactive_C_poison"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "inactive_C_poison"
+    },
+    {
+      "kind": "paired_request_isolation_content",
+      "passed": true,
+      "pair": "inactive_C"
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "other_active_B_control"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "other_active_B_control"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "other_active_B_control"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "other_active_B_control",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "other_active_B_control",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "other_active_B_control"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "other_active_B_control"
+    },
+    {
+      "kind": "request_state_before_forward",
+      "passed": true,
+      "stage": "other_active_B_poison"
+    },
+    {
+      "kind": "actual_model_request_positions",
+      "passed": true,
+      "stage": "other_active_B_poison"
+    },
+    {
+      "kind": "actual_model_input_tokens_and_RoPE_positions",
+      "passed": true,
+      "stage": "other_active_B_poison"
+    },
+    {
+      "kind": "one_forward_one_attention_per_layer",
+      "passed": true,
+      "stage": "other_active_B_poison",
+      "model_forwards": 1,
+      "attention_calls": 28
+    },
+    {
+      "kind": "native_flash_operator_count",
+      "passed": true,
+      "stage": "other_active_B_poison",
+      "operator_counts": {
+        "aten::_flash_attention_forward": 28
+      }
+    },
+    {
+      "kind": "append_preserves_actual_old_KV_content",
+      "passed": true,
+      "stage": "other_active_B_poison"
+    },
+    {
+      "kind": "request_lengths_after_forward",
+      "passed": true,
+      "stage": "other_active_B_poison"
+    },
+    {
+      "kind": "paired_request_isolation_content",
+      "passed": true,
+      "pair": "other_active_B"
+    },
+    {
+      "kind": "all_normal_layers_compared",
+      "passed": true,
+      "count": 112
+    }
+  ],
+  "poison_pairs": [
+    {
+      "name": "inactive_C",
+      "A_QKV_exact": true,
+      "hidden_logits_and_all_A_KV_exact": true,
+      "tensors_sha256": "6398c8d01595559e4cfb9d26759d4814f3c68e0f0d058ac6e050cdb824d25abb"
+    },
+    {
+      "name": "other_active_B",
+      "A_QKV_exact": true,
+      "hidden_logits_and_all_A_KV_exact": true,
+      "tensors_sha256": "a578be543a8227cc47c68fff5e958a3a5bc0aa7b05a0b09900a17caa13b9ddae"
+    }
+  ]
+}

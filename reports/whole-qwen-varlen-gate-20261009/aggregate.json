@@ -1,0 +1,245 @@
+{
+  "status": "completed_with_failed_layer_attention_gate",
+  "structural_status": "passed",
+  "layer_attention_numerical_status": "failed",
+  "numerical_comparison_status": "completed",
+  "system_pass_claimed": false,
+  "runtime_scope": "real_pretrained_gpu",
+  "execution_completed": true,
+  "native_model_forwards": 8,
+  "native_attention_callbacks": 224,
+  "normal_layer_comparisons": 112,
+  "failed_normal_layers": 3,
+  "request_level_comparisons": 252,
+  "failed_request_level_comparisons": 5,
+  "all_elementwise_atol_rtol_checks_passed": true,
+  "normal_query_rows": 67,
+  "max_pooled_rms": 0.005617228976866915,
+  "max_request_rms": 0.005858863661653259,
+  "failed_layer_details": [
+    {
+      "stage": "prime",
+      "phase": "normal",
+      "layer": 26,
+      "attention_gate_required": true,
+      "q_shape": [
+        50,
+        16,
+        128
+      ],
+      "kv_shape": [
+        50,
+        8,
+        128
+      ],
+      "query_lengths": [
+        16,
+        21,
+        13
+      ],
+      "key_lengths": [
+        16,
+        21,
+        13
+      ],
+      "gather_content_exact": true,
+      "finite_shape_dtype_device_checked": true,
+      "errors": {
+        "elements": 102400,
+        "max_abs": 0.10264968872070312,
+        "rms": 0.004639313224139681,
+        "equal_elements": 6146,
+        "mismatched_elements": 0,
+        "passes_fixed_limits": true
+      },
+      "per_request_errors": [
+        {
+          "elements": 32768,
+          "max_abs": 0.05979347229003906,
+          "rms": 0.004775625152577925,
+          "equal_elements": 2048,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": true
+        },
+        {
+          "elements": 43008,
+          "max_abs": 0.07973289489746094,
+          "rms": 0.005156346376898285,
+          "equal_elements": 2049,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": false
+        },
+        {
+          "elements": 26624,
+          "max_abs": 0.10264968872070312,
+          "rms": 0.0034296194326587166,
+          "equal_elements": 2049,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": true
+        }
+      ],
+      "passes_fixed_limits": false,
+      "failed_tensors_sha256": "4330ef9dc2782643ea4a3b3a2c8ffcc8a1fbc87ee4b92438008bb36c535434cb",
+      "status": "observed"
+    },
+    {
+      "stage": "cached_tail",
+      "phase": "normal",
+      "layer": 26,
+      "attention_gate_required": true,
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        8,
+        128
+      ],
+      "query_lengths": [
+        1,
+        8
+      ],
+      "key_lengths": [
+        17,
+        29
+      ],
+      "gather_content_exact": true,
+      "finite_shape_dtype_device_checked": true,
+      "errors": {
+        "elements": 18432,
+        "max_abs": 0.06225776672363281,
+        "rms": 0.005617228976866915,
+        "equal_elements": 0,
+        "mismatched_elements": 0,
+        "passes_fixed_limits": false
+      },
+      "per_request_errors": [
+        {
+          "elements": 2048,
+          "max_abs": 0.06225776672363281,
+          "rms": 0.005140981200392655,
+          "equal_elements": 0,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": false
+        },
+        {
+          "elements": 16384,
+          "max_abs": 0.061618804931640625,
+          "rms": 0.0056739499546633,
+          "equal_elements": 0,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": false
+        }
+      ],
+      "passes_fixed_limits": false,
+      "failed_tensors_sha256": "95bab1ca99d20c4654dec1f97c4a7119280a93fba9dc7b2cd25ed1a8d5ca4b58",
+      "status": "observed"
+    },
+    {
+      "stage": "crop_exit_readd",
+      "phase": "normal",
+      "layer": 26,
+      "attention_gate_required": true,
+      "q_shape": [
+        6,
+        16,
+        128
+      ],
+      "kv_shape": [
+        17,
+        8,
+        128
+      ],
+      "query_lengths": [
+        3,
+        2,
+        1
+      ],
+      "key_lengths": [
+        11,
+        5,
+        1
+      ],
+      "gather_content_exact": true,
+      "finite_shape_dtype_device_checked": true,
+      "errors": {
+        "elements": 12288,
+        "max_abs": 0.06421661376953125,
+        "rms": 0.004951174410273697,
+        "equal_elements": 2048,
+        "mismatched_elements": 0,
+        "passes_fixed_limits": true
+      },
+      "per_request_errors": [
+        {
+          "elements": 6144,
+          "max_abs": 0.059356689453125,
+          "rms": 0.005113126943922948,
+          "equal_elements": 0,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": false
+        },
+        {
+          "elements": 4096,
+          "max_abs": 0.06421661376953125,
+          "rms": 0.005858863661653259,
+          "equal_elements": 0,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": false
+        },
+        {
+          "elements": 2048,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "equal_elements": 2048,
+          "mismatched_elements": 0,
+          "passes_fixed_limits": true
+        }
+      ],
+      "passes_fixed_limits": false,
+      "failed_tensors_sha256": "4c5d626a06f2ddfb47460d84d3c52036b03ccfa988484f690793f5a51ccc8f23",
+      "status": "observed"
+    }
+  ],
+  "end_to_end_summary": {
+    "dense": {
+      "hidden": {
+        "max_abs": 0.75,
+        "max_request_stage_rms": 0.04335897524609187
+      },
+      "features": {
+        "max_abs": 4.0,
+        "max_request_stage_rms": 0.08667927652395499
+      },
+      "logits": {
+        "max_abs": 0.3125,
+        "max_request_stage_rms": 0.04753580958670704
+      },
+      "probability_rows": 67,
+      "nonzero_tv_rows": 48,
+      "max_tv": 0.02292685241171581,
+      "argmax_changed_rows": 1
+    },
+    "independent": {
+      "hidden": {
+        "max_abs": 0.75,
+        "max_request_stage_rms": 0.05597760772743689
+      },
+      "features": {
+        "max_abs": 4.0,
+        "max_request_stage_rms": 0.10823922934401806
+      },
+      "logits": {
+        "max_abs": 0.46875,
+        "max_request_stage_rms": 0.054280643391947436
+      },
+      "probability_rows": 67,
+      "nonzero_tv_rows": 47,
+      "max_tv": 0.05324552637157691,
+      "argmax_changed_rows": 3
+    }
+  },
+  "scope": "Bounded actual-pretrained-Qwen structural and numerical gate; mandatory layer numerical gate failed. Endpoint differences are quantified without equivalence or speed claims."
+}
