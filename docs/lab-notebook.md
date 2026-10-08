@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:35（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 02:40（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -617,3 +617,17 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **数值与终态。** 预选case0/1 round0的[16rows](../reports/expanded-quality1280-20261009/numerical-probes.json)独立重算为 **TV全非零/max0.0927704844638265/argmaxchanges0**；前两轮max来自不同sampledprefix，不能解释成checkpoint对target稳定性的受控因果效果。Argmax不变仍不等于随机law相同，native sequential-target-law无损未证明。Worker/launcher/controller原OS退出证据均0/no timeout，shell未独立wait，不造第四exit0。[Runtime](../reports/expanded-quality1280-20261009/runtime.json) pre/post02:23:56–02:27:49、postrelease02:27:54（UTC+8）记录四自有PID已退出、KFDonlyASR/ready/notbusy、VRAMfree25246560256bytes；peakallocated **2266962944 bytes**。本轮核已有snapshot，不live操作；同步检查、diagnostic copies、float64及JSON输出使collector成为correctness reference，wall/counts不作servingbenchmark。
 
 **证据与下一决策。** Root另独立核八SHA、protocol bytes、32case totals/histogram/position/EOS、seeds和28+4/median通过。公开归档 **2f40e7cb8b5ed52c7d7c30c744cc6ab06bc54c17**（02:33:08）记录者直接核Git，root随后核push成功；execution仍a278e5a，CI本条未查询。Root最终审核/选checkpoint尚未冻结。STS未执行，fit44/eval43 collector/CLI只获CPU准备授权，eval43仅相对STSfit留出，全部dev已用于TF监测，final test未读。WholeQwenCPU准备刚交付，待独立后续里程碑，GPU未授权；S08显式小tensor通过和S04原public失败不改。没有答案质量、校准、无损或speedup主张；本轮仅改日志，无GPU/实现/进程/提交动作。
+
+
+<a id="whole-qwen-cpu-gate"></a>
+## 2026-10-09 02:40（UTC+8）— S09：whole pretrainedQwen/KV gate 的 CPU 准备与空prefix修复
+
+**问题与方法。** S08只验证小tensor，下一门槛需实际28层Qwen3-0.6B的KV内容、实际sameQKV attention和端到端数值报告各自独立。直接读取[冻结协议说明](whole-qwen-varlen-gate.md)、probe/test及未发布 `output/whole-qwen-varlen-cpu-20261009/` 的manifest、三次tests log和real-target-dry-run。CPU测试用tinyBF16模型检验控制流；正式CLI只接受真实模型/ tokenizer指纹与架构，不提供tiny替换入口，不生成文本或读取final test。记录者独立核三交付文件SHA与 **7d1fcdbd4f3415b1b63bb803965d441545319487**（02:36:50）Git blobs一致；root已核push。CPU实际source是3f2b95d archive加probe/test overlay，32script/package身份、archive/三log/dryrun SHA及protocol hash均独立核通过。并行collector改动未纳入此前CPU执行，manifest保留差异；正式launch须另绑fresh reviewed source，不把当前整树冒充CPU原件。
+
+**失败、修复与测试。** 首轮7tests/7.092秒有2失败：新请求首次append前，KV layers尚未初始化，旧快照为空；原prefix-preservation断言误报“KV layer count changed”。修复仅将 `prefix==0 and not expected` 判为空保留prefix，其余非空layer/count/content检查继续；并新增实际model position_ids篡改应在attention前拒绝的测试。第二轮8/8、6.724秒；最终 **8/8通过、7.588秒**，原失败log和两条 `(null)` 提示保留。覆盖stdlib/tiny拒绝、weights篡改拒绝、自有group timeout、tiny正常lifecycle/poison、固定阈值mismatch留证、独立gather损坏、真实position注入和第二层operator异常。CPU替身的12normal/24total layercalls不是正式112/224。Final log/hash与manifest相符，GPU设备隐藏、cuda_available=false；没有privateGPU执行。
+
+**固定机制与三个状态。** 正式协议4normal阶段prime/cached-tail/crop-exit-readd/cropzero，另2poison control pairs，共8native model forwards/**224layercalls**，其中4×28=**112normal层**强制用该层实际BF16 QKV对独立FP32 MATH bottom-right oracle、pooled及逐request都满足原0.02/0.02/RMS0.005。FP64 reduction避免S08所记极大finite误差的FP32overflow留证局限；不事后回改S08执行代码。结构状态精确核input/RoPE positions、marker/local spans、独立gather、实际KV旧prefix/inactive/crop/remove/readd，poison pairs要求A的QKV/hidden/logits/各层KV逐bit相同，非shape-only。Normal层finite mismatch保留tensor并完成既定矩阵，最终layergate仍failed；nonfinite/operator/结构异常停并留partial。端到端67normal query rows只量化densepacked/independentSDPA的hidden/selectedfeatures/KV/logit/TV，不发明pass阈值。`structural_status`、`layer_attention_numerical_status`、`numerical_comparison_status`分开，completed不代表等价，system_pass_claimed始终false。
+
+**真实文件dry-run与授权边界。** 标准库dry-run状态为dry_run_no_backend_import_no_gpu，真实模型/ tokenizer指纹与T09 target一致、generation manifest绑定一致，protocol SHA独立重算 **d83dfd50…**；不把指纹读取写成pretrained forward。预定300秒、8GiB free门槛、6GiB processallocator cap、三独立实际模型以及外部process/KFD/desktop/ASR pre/post均保留。CPU manifest当时gpu_authorized=false；root随后授权唯一一次wholeQwen GPU，最新交付只到core preflight handle54055、未收到实际启动证据，S09不写执行或通过。后续真实结果另起条；原public失败/小tensorpass/quality/速度各不互代。
+
+**独立的checkpoint决策。** Root与core完成quality1280独立review，已决定冻结 **step1280作为后续STS研究checkpoint**；这是development证据下的研究选择，不是最终产品checkpoint或最优泛化结论。R10当时“未冻结”保留其历史状态，本条记录后续决定。Direction将落盘selection manifest，身份/协议链接待完整交付后补记；STS仍未执行。记录者本轮只核证据和日志，无GPU/进程/实现/提交动作，final test及private样本未读。
