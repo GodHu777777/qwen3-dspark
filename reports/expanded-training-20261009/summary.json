@@ -1,0 +1,131 @@
+{
+  "status": "Completed through step 128 only; later stages not executed in this report",
+  "eligible_train": 932,
+  "eligible_validation": 119,
+  "train_sequence_tokens": 424267,
+  "train_completion_tokens_including_eos": 297385,
+  "pareto_shapes": [
+    {
+      "sequence_tokens": 2224,
+      "actual_anchors": 32
+    }
+  ],
+  "planned_max_steps": 1280,
+  "effective_traversals_at_planned_max": 10.987124463519313,
+  "source_commit": "796fecc0d9142c1a733ad6df47b105fab4ee9f05",
+  "stages": [
+    {
+      "step": 32,
+      "resumed_from": null,
+      "optimizer_steps_in_segment": 32,
+      "cumulative_microsteps": 256,
+      "effective_train_traversals": 0.27467811158798283,
+      "exit_code": 0,
+      "timed_out": false,
+      "subprocess_wall_seconds": 61.78925495489966,
+      "optimizer_loop_elapsed_seconds": 20.998247302952223,
+      "train_result_elapsed_seconds": 36.97336005594116,
+      "peak_allocated_bytes": 5571854848,
+      "train_rows": 932,
+      "validation_rows": 119,
+      "trainable_parameters": 161692161,
+      "target_frozen_verified": true,
+      "validation_before": {
+        "loss": 3.3859422848004255,
+        "ce": 11.998166228542809,
+        "l1": 1.9982853156177938,
+        "confidence_bce": 0.38766891265115816,
+        "teacher_forced_accept": 0.000857340240626774,
+        "confidence_mae": 0.3188619276806086,
+        "supervised_tokens": 213.87394957983193
+      },
+      "validation_after": {
+        "loss": 2.582734973490739,
+        "ce": 7.180634186047466,
+        "l1": 1.9578730258621087,
+        "confidence_bce": 0.1025858535548719,
+        "teacher_forced_accept": 0.021063482361462188,
+        "confidence_mae": 0.02043303780007262,
+        "supervised_tokens": 213.87394957983193
+      },
+      "checkpoint": {
+        "step": 32,
+        "draft_weights_sha256": "1177fb2266ac5365f57b21e71fcadb5793b2e6610e08dd8134a0563d7b259777",
+        "resume_state_sha256": "de0bc9599c69ac67f014f54e7515734223e426ca7df02f9c53465ddff66c9496",
+        "checks_passed": true,
+        "optimizer_step_values": null,
+        "optimizer_state_entries": null
+      },
+      "result_sha256": "174081d60977e6d2a214e0be53ec316261528a2f8524540ee6897a4cad193341",
+      "raw_controller_completion_sha256": "4a5b2795eaa7992e1f24fff754925343d2743bbc6a99872f3db9bf23d397695c",
+      "raw_verification_sha256": "92e7a894f80944dd1afdedd88f1ef3fe401c565f773819bdd25b94888b4e1c99"
+    },
+    {
+      "step": 128,
+      "resumed_from": 32,
+      "optimizer_steps_in_segment": 96,
+      "cumulative_microsteps": 1024,
+      "effective_train_traversals": 1.0987124463519313,
+      "exit_code": 0,
+      "timed_out": false,
+      "subprocess_wall_seconds": 107.27052364998963,
+      "optimizer_loop_elapsed_seconds": 60.14590007404331,
+      "train_result_elapsed_seconds": 76.42861543397885,
+      "peak_allocated_bytes": 5633036288,
+      "train_rows": 932,
+      "validation_rows": 119,
+      "trainable_parameters": 161692161,
+      "target_frozen_verified": true,
+      "validation_before": {
+        "loss": 2.582734973490739,
+        "ce": 7.180634186047466,
+        "l1": 1.9578730258621087,
+        "confidence_bce": 0.1025858535548719,
+        "teacher_forced_accept": 0.021063482361462188,
+        "confidence_mae": 0.02043303780007262,
+        "supervised_tokens": 213.87394957983193
+      },
+      "validation_after": {
+        "loss": 2.5258086969872484,
+        "ce": 6.329201546035895,
+        "l1": 1.8128016896608496,
+        "confidence_bce": 0.2613670398645541,
+        "teacher_forced_accept": 0.0935991536160665,
+        "confidence_mae": 0.09890231070648722,
+        "supervised_tokens": 213.87394957983193
+      },
+      "checkpoint": {
+        "step": 128,
+        "draft_weights_sha256": "5e6c2cbaf9eaca081ba3c598748952bc735e7d8b54ca5ecf77a47a6bf1c561e0",
+        "resume_state_sha256": "ea68520d884458e9187cf3a730e53b37a2e48922a7708ca326157994e15b8137",
+        "checks_passed": true,
+        "optimizer_step_values": [
+          128.0
+        ],
+        "optimizer_state_entries": 62
+      },
+      "result_sha256": "51b38e0d42e8fb3ddcb3ea667df7601321688959f67e02c1a26e156f402afe63",
+      "raw_controller_completion_sha256": "355618670ca5573442b502e7425e5449879f264861f9118b5a22128c011a7391",
+      "raw_verification_sha256": "4d621fcfd77a447613640fc0603083231370e54ab550791576bda53de425b3c8"
+    }
+  ],
+  "resumed_initial_validation_matches_step32_final": true,
+  "validation_scope": "All 119 eligible validation rows, fixed anchor seed at each evaluation; weighted within rows then macro averaged across rows. This is not the separate fixed-dev32 rollout panel.",
+  "timing_scope": {
+    "optimizer_loop_elapsed_seconds": "Last metrics.jsonl elapsed value within each segment; resets after initial validation, includes optimizer-loop Python/logging overhead",
+    "train_result_elapsed_seconds": "Begins after initial validation; includes optimizer loop, final validation and checkpoint saving",
+    "subprocess_wall_seconds": "Bounded controller wall time including child startup, identity checks, loading/resume, both validation passes, training and checkpoint saving"
+  },
+  "limits": [
+    "Teacher-forced overlap is distribution overlap, not actual speculative rollout acceptance",
+    "No quality, speedup, lossless BF16 or calibrated scheduling result",
+    "No final-test content inspected for training/evaluation; no checkpoint or policy selected",
+    "Memory gate probes observed Pareto shapes empirically, not a formal worst-case bound"
+  ],
+  "length_convention": {
+    "max_actual_train_sequence_tokens": 2224,
+    "max_rendered_template_tokens": 2225,
+    "reason": "Rendered template adds one newline after EOS; training uses exact generation IDs through EOS",
+    "direct_retokenization_confirmed": true
+  }
+}

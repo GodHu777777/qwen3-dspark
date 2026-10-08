@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "target_frozen_verified": true,
+  "shape_selection": {
+    "training_records": 932,
+    "probe_count": 1,
+    "max_sequence_tokens": 2224,
+    "max_actual_anchors": 32,
+    "dimensions": [
+      "sequence_tokens",
+      "actual_anchors"
+    ],
+    "limitation": "Measured real nondominated shapes; kernel workspace and allocator behavior need not be monotone"
+  },
+  "device_name": "AMD Radeon Graphics",
+  "target_dtype": "bfloat16",
+  "trainable_dtype": "float32",
+  "peak_allocated_across_probes": 5636591616,
+  "subprocess_wall_seconds": 22.936719155986793,
+  "exit_code": 0,
+  "timed_out": false,
+  "scope": "real Pareto training shapes, first allocation and state-resident accumulation; empirical resource gate, not a formal worst-case bound",
+  "raw_result_sha256": "ae70087d831fda4feadf837c0e8841fcba4f910f3fdefc8b87ff24d6ad75d66d",
+  "probes": [
+    {
+      "passed": true,
+      "training_records": 932,
+      "sequence_tokens": 2224,
+      "completion_tokens": 636,
+      "requested_anchors": 32,
+      "actual_anchors_per_microstep": 32,
+      "gradient_accumulation": 8,
+      "gradient_checks": {
+        "projection": true,
+        "backbone": true,
+        "markov_embedding": true,
+        "markov_projection": true,
+        "confidence": true
+      },
+      "target_frozen_verified": true,
+      "first_adam_update_verified": true,
+      "state_resident_cycle_verified": true,
+      "optimizer_state_tensor_bytes": 1293537536,
+      "peak_allocated_across_cycles": 5636591616,
+      "peak_reserved_across_cycles": 5827985408,
+      "trainable_parameters": 161692161,
+      "cycles": [
+        {
+          "cycle": 1,
+          "purpose": "first_adam_allocation",
+          "optimizer_state_bytes_before_cycle": 0,
+          "gradient_norm": 26.10303497314453,
+          "gradient_checks": {
+            "projection": true,
+            "backbone": true,
+            "markov_embedding": true,
+            "markov_projection": true,
+            "confidence": true
+          },
+          "memory_before_cycle": {
+            "free_bytes": 23525851136,
+            "total_bytes": 34208743424,
+            "allocated_bytes": 1838885376,
+            "reserved_bytes": 1849688064,
+            "peak_allocated_bytes": 1838885376,
+            "peak_reserved_bytes": 1849688064
+          },
+          "memory_before_update": {
+            "free_bytes": 20334510080,
+            "total_bytes": 34208743424,
+            "allocated_bytes": 2669287424,
+            "reserved_bytes": 4632608768,
+            "peak_allocated_bytes": 4344625664,
+            "peak_reserved_bytes": 4632608768
+          },
+          "memory_after_update": {
+            "free_bytes": 19533398016,
+            "total_bytes": 34208743424,
+            "allocated_bytes": 3942575104,
+            "reserved_bytes": 5419040768,
+            "peak_allocated_bytes": 4610315776,
+            "peak_reserved_bytes": 5419040768
+          }
+        },
+        {
+          "cycle": 2,
+          "purpose": "adam_state_resident_training",
+          "optimizer_state_bytes_before_cycle": 1293537536,
+          "gradient_norm": 1.1390042304992676,
+          "gradient_checks": {
+            "projection": true,
+            "backbone": true,
+            "markov_embedding": true,
+            "markov_projection": true,
+            "confidence": true
+          },
+          "memory_before_cycle": {
+            "free_bytes": 19533398016,
+            "total_bytes": 34208743424,
+            "allocated_bytes": 3292529152,
+            "reserved_bytes": 5419040768,
+            "peak_allocated_bytes": 3292529152,
+            "peak_reserved_bytes": 5419040768
+          },
+          "memory_before_update": {
+            "free_bytes": 19124453376,
+            "total_bytes": 34208743424,
+            "allocated_bytes": 3963808768,
+            "reserved_bytes": 5827985408,
+            "peak_allocated_bytes": 5636591616,
+            "peak_reserved_bytes": 5827985408
+          },
+          "memory_after_update": {
+            "free_bytes": 19124453376,
+            "total_bytes": 34208743424,
+            "allocated_bytes": 3942837248,
+            "reserved_bytes": 5827985408,
+            "peak_allocated_bytes": 5636591616,
+            "peak_reserved_bytes": 5827985408
+          }
+        }
+      ]
+    }
+  ]
+}
