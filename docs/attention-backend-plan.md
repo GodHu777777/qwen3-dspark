@@ -76,3 +76,10 @@ BF16 gate 的失败，不用新 backend 自动覆盖旧记录。
 以及 Q/B、R、context 分布和 backend identity，才能建立 `SPS(B, context/R)`。
 native varlen 文档提到 `num_splits=1` 用于减少 batch 组成引起的 reduction 变化，
 但这仍是候选控制项，不能未经 ROCm 实测就当成整个模型的 bitwise 等价保证。
+
+## 实现进度
+
+独立 `PackedLayout` / `VarlenPackedTarget` 和显式 CPU-only oracle 已实现；
+5 个原 packed tests + 5 个 varlen tests 在 GPU 隐藏的 FP32 CPU 模式通过。
+固定小 tensor gate 已准备，默认仅 stdlib dry-run，尚未运行 native GPU/JIT。
+见 [实现与固定 GPU 探针协议](varlen-target.md)；真实执行仍需单独协调 GPU 窗口。

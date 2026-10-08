@@ -137,6 +137,15 @@ class PackedTarget:
             if bool(((ids < 0) | (ids >= self.model.config.vocab_size)).any()):
                 raise ValueError('Token outside vocabulary')
 
+    def _attention_payload(self, query_requests, query_positions, key_requests, key_positions):
+        """Default dense oracle; alternative backends override only this boundary."""
+        mask = ((query_requests[:, None] == key_requests[None, :]) &
+                (query_positions[:, None] >= key_positions[None, :]))[None, None]
+        return {'full_attention': mask}, {}, dict(
+            mask_shape=list(mask.shape), mask_bytes=mask.numel()*mask.element_size(),
+            attention_backend='dense_sdpa',
+            scope='Dense score-domain extents, not measured kernel operations: Q has no padding; no sparse skipping is claimed')
+
     @torch.no_grad()
     def append(self, chunks):
         """Run one real model forward for any active subset, including new requests.
@@ -161,8 +170,8 @@ class PackedTarget:
         query_requests, query_positions = torch.cat(markers), torch.cat(positions)
         key_requests = torch.cat((self.key_requests, query_requests))
         key_positions = torch.cat((self.key_positions, query_positions))
-        mask = ((query_requests[:, None] == key_requests[None, :]) &
-                (query_positions[:, None] >= key_positions[None, :]))[None, None]
+        attention_mask, attention_kwargs, attention_work = self._attention_payload(
+            query_requests, query_positions, key_requests, key_positions)
         ids = torch.cat(tuple(chunks.values()), dim=1)
         q, k = ids.shape[1], key_requests.numel()
         work = dict(queried_requests=len(chunks), resident_requests=len(self._lengths),
@@ -174,12 +183,10 @@ class PackedTarget:
             dense_attention_pairs_per_head_layer=q*k, allowed_causal_pairs=causal_pairs,
             masked_cross_request_pairs=q*k-within_request_pairs,
             masked_future_pairs=within_request_pairs-causal_pairs,
-            mask_shape=list(mask.shape), mask_bytes=mask.numel()*mask.element_size(),
             attention_heads=self.model.config.num_attention_heads,
             layers=self.model.config.num_hidden_layers,
             dense_attention_pairs_all_heads_layers=q*k*self.model.config.num_attention_heads*self.model.config.num_hidden_layers,
-            model_forward_calls=1,
-            scope='Dense score-domain extents, not measured kernel operations: Q has no padding; no sparse skipping is claimed')
+            model_forward_calls=1, **attention_work)
         captured, hooks = {}, []
         def hook_for(index):
             def hook(_module, _inputs, output):
@@ -189,8 +196,8 @@ class PackedTarget:
             for index in self.layer_ids:
                 hooks.append(self.model.model.layers[index].register_forward_hook(hook_for(index)))
             output = self.model.model(input_ids=ids, position_ids=query_positions[None],
-                attention_mask={'full_attention': mask}, past_key_values=self.cache,
-                use_cache=True, return_dict=True)
+                attention_mask=attention_mask, past_key_values=self.cache,
+                use_cache=True, return_dict=True, **attention_kwargs)
             self.cache = output.past_key_values
             self.key_requests, self.key_positions = key_requests, key_positions
             for request, (_, count, start) in spans.items():
