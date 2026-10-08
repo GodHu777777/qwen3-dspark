@@ -77,3 +77,10 @@ output/ is ignored (contains generated text). Publish aggregate evidence only in
 reports/ and document source identity/scope. docs/experiment-plan.md defines
 learnability, held-out quality, cached correctness, cost and scheduling gates.
 Use git -C dspark-qwen when working from the parent workspace.
+
+Experiment logging: maintain docs/lab-notebook.md with problems, hypotheses,
+methods, failed attempts, observed results, limits and next decisions. Link source
+commits/configurations and aggregate evidence; do not reconstruct undocumented
+history as fact. User requested a dedicated 6.1 Sol recording role; currently
+sol_data owns the log because the sub-agent thread limit prevented another agent.
+Astra owns correctness/training/result review and periodic direction review.
