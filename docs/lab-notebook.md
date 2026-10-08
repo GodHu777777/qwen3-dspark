@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:24（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09/S07/T08/S08/T09，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 02:35（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -601,3 +601,19 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **计时、资源与释放。** target frozen=true、161692161 trainables、932train/119dev、train input tokens424267、BF16 AMP/FP32 trainables；peakallocated **5632856064 bytes**。optimizer-loop **160.13023932秒**含Python/logging；result **176.85806779秒**在initial dev之后开始并含末dev/save；child wall **209.20728205秒**另含startup、身份核验、模型/strict-resume加载与两次dev，三口径不推serving速度。02:20:51.044的postrelease记录shell3919877/runner3919883/train3920175已不存在（记录者另核process snapshot无三PID），KFD只保留ASR1208354且ready/notbusy，VRAMused **8962183168 bytes**、free **25246560256 bytes**；这是该时间点留证，非本轮live状态，不把退出即刻尚未完全释放的memory_after_exit误当独占训练峰值。
 
 **局限与下一决策。** 训练schedule完成，完整goal仍未完成：没有真实quality1280结果、最终checkpoint/policy选择、STSfit/eval、final-test质量、native分布无损或speedup/全局异步系统收益。协调者已给direction quality1280条件授权，其正在准备；本条尚未收到实际PID，不写已启动或完成。Core的wholeQwen脚本仍在CPU测试，没有wholeQwenGPU结果；S08小tensor通过与S04public失败均保持。已用全部dev做TF监测，后续eval43只相对STSfit留出；final test未读。记录者仅改notebook，无GPU/实现/进程/冻结训练源码/commit/push动作。
+
+
+<a id="expanded-quality1280"></a>
+## 2026-10-09 02:35（UTC+8）— R10：step1280 quality32 完成，多数prompt接受量改善但仍有下降例
+
+**问题与假设。** T09完成1280-step训练计划，不自动选定checkpoint。R10检验：在R08/R09相同source/panel/protocol/seed下，最终训练步是否提高实际随机accepted draft/round？预先保留下降例和native数值差异，不把接受量提升等同答案质量、confidence校准或系统速度。专职experiment_journal创建/恢复两次受系统thread limit拒绝，本轮复用现存Sol暂代持续记录，沿用本日志。
+
+**方法与身份。** 直接读取[八份完整报告](../reports/expanded-quality1280-20261009/README.md)及未发布 `output/expanded-quality1280-20261009-a278e5a/` 的public-verification、comparison/preflight、部署前后identity、denominator scalar审计和退出标识，不读private样本或final test。记录者独立核八public SHA、30worker模块对Git blobs，与128/512的protocol bytes、source/archive/panel/data/target和32case/seed均相同；metadata SHA与T09本地原件一致。执行source仍 **a278e5a**、checkpoint weights **d6f21ab3…**，完整hash见[source identity](../reports/expanded-quality1280-20261009/source-identity.json)。Fresh stdlib dry-run/import blocker通过，只容许checkpoint及其绑定字段变化；161archive files核验依据preflight，不混同30模块。保持nativeBF16/SDPA、draftFP32+BF16 AMP、actualfloat64 q、temperature1/无filter、fullblock7只按budget截短/max128。本轮无实现失败/修复、无删case或松policy；原数值保真问题继续保留。
+
+**结果与配对复核。** 32/32完成，**3856outputs/2270rounds/1573accepted draft**；2270blocks的finite/shape/probability/cache/EOS/budget检查通过。Draft/round **0.692951542**，对512为 **0.495801527**，对128为 **0.177784578**。记录者从[32per-prompt](../reports/expanded-quality1280-20261009/per-prompt.json)重算总数、histogram、macro和paired delta：512→1280 macro **0.528943552→0.749223719**，**28改善/4下降/0持平**，median delta **0.200878206**；下降ordinal0/11/14/24保留。对128为32/32改善。与512有3例EOS outcome改变，3941→3856outputs、4→5EOS；同prompt/seed不保证generatedprefix/horizon相同，相关round不当独立重复给CI，round减少350不作speedup。
+
+**EOS与分母。** Prefix length0..7 histogram **1427/448/211/100/43/24/8/9**，和2270、长度加权1573；9全7接受来自2174个7-token proposal。位置event/label为 **843/2270、395/2257、184/2235、84/2221、41/2205、17/2188、9/2170**。Proposed/verified均 **15563**，effective **15546**；4accepted EOS排除 **5+2+5+5=17** 个已验证tail labels，另1residual EOS、0bonus EOS。记录者按proposal length histogram/EOS scalar独立重算分母、按prefix histogram suffix重算events，均一致；raw-round/cache细查依据[audit](../reports/expanded-quality1280-20261009/audit.json)。Attempted **3815=1573+2242rejected**；32initialdraw后commit **3824=3856−32=1573+2242residual+9bonus**。24全proposal接受中15达budget无bonus、9有bonus；acceptedEOS也不抽bonus。Commit/round **1.684581498**、query rows **17833=15563+2270**含oldanchor而不含prefill，只是工作计数，不能互代label/attempt/commit分母或推速度。
+
+**数值与终态。** 预选case0/1 round0的[16rows](../reports/expanded-quality1280-20261009/numerical-probes.json)独立重算为 **TV全非零/max0.0927704844638265/argmaxchanges0**；前两轮max来自不同sampledprefix，不能解释成checkpoint对target稳定性的受控因果效果。Argmax不变仍不等于随机law相同，native sequential-target-law无损未证明。Worker/launcher/controller原OS退出证据均0/no timeout，shell未独立wait，不造第四exit0。[Runtime](../reports/expanded-quality1280-20261009/runtime.json) pre/post02:23:56–02:27:49、postrelease02:27:54（UTC+8）记录四自有PID已退出、KFDonlyASR/ready/notbusy、VRAMfree25246560256bytes；peakallocated **2266962944 bytes**。本轮核已有snapshot，不live操作；同步检查、diagnostic copies、float64及JSON输出使collector成为correctness reference，wall/counts不作servingbenchmark。
+
+**证据与下一决策。** Root另独立核八SHA、protocol bytes、32case totals/histogram/position/EOS、seeds和28+4/median通过。公开归档 **2f40e7cb8b5ed52c7d7c30c744cc6ab06bc54c17**（02:33:08）记录者直接核Git，root随后核push成功；execution仍a278e5a，CI本条未查询。Root最终审核/选checkpoint尚未冻结。STS未执行，fit44/eval43 collector/CLI只获CPU准备授权，eval43仅相对STSfit留出，全部dev已用于TF监测，final test未读。WholeQwenCPU准备刚交付，待独立后续里程碑，GPU未授权；S08显式小tensor通过和S04原public失败不改。没有答案质量、校准、无损或speedup主张；本轮仅改日志，无GPU/实现/进程/提交动作。
