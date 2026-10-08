@@ -1,0 +1,232 @@
+{
+  "scope": "BF16 fixed-shape target-only numerical probe; oracle proposals, not trained draft performance",
+  "width": 8,
+  "capacity": 256,
+  "elapsed_seconds_not_benchmark": 19.054305461002514,
+  "peak_allocated_bytes": 1403822080,
+  "examples": [
+    {
+      "example_index": 0,
+      "prompt_tokens": 59,
+      "original_failed": true,
+      "canonical_vs_stock_equal": true,
+      "canonical_vs_block_equal": true,
+      "decode_shapes_strides": [
+        [
+          [
+            1,
+            16,
+            8,
+            128
+          ],
+          [
+            1,
+            16,
+            256,
+            128
+          ],
+          [
+            1,
+            16,
+            256,
+            128
+          ],
+          [
+            1,
+            1,
+            8,
+            256
+          ],
+          [
+            16384,
+            128,
+            2048,
+            1
+          ],
+          [
+            524288,
+            32768,
+            128,
+            1
+          ],
+          [
+            2048,
+            2048,
+            256,
+            1
+          ]
+        ]
+      ],
+      "unique_decode_shapes": 1,
+      "invariants": {
+        "dummy_suffix_equal": true,
+        "stale_suffix_poison_equal": true,
+        "crop_preserves_buffer_addresses": true
+      },
+      "stock_output_count": 32,
+      "canonical_output_count": 32,
+      "oracle_output_count": 32,
+      "first_canonical_vs_stock_divergence": null,
+      "fixed_failure": {
+        "index": 17,
+        "position_in_block": 0,
+        "same_argmax_all_paths": true,
+        "full_vs_short_max_abs": 0.0,
+        "block_vs_single_history_max_abs": 0.0
+      },
+      "stock_decomposition": {
+        "prefix_length": 76,
+        "position_in_block": 0,
+        "current_chunk_max_logit_difference": 0.375,
+        "history_chunking_max_logit_difference": 0.28125,
+        "sequential_vs_full_max_logit_difference": 0.46875
+      }
+    },
+    {
+      "example_index": 1,
+      "prompt_tokens": 214,
+      "original_failed": false,
+      "canonical_vs_stock_equal": true,
+      "canonical_vs_block_equal": true,
+      "decode_shapes_strides": [
+        [
+          [
+            1,
+            16,
+            8,
+            128
+          ],
+          [
+            1,
+            16,
+            256,
+            128
+          ],
+          [
+            1,
+            16,
+            256,
+            128
+          ],
+          [
+            1,
+            1,
+            8,
+            256
+          ],
+          [
+            16384,
+            128,
+            2048,
+            1
+          ],
+          [
+            524288,
+            32768,
+            128,
+            1
+          ],
+          [
+            2048,
+            2048,
+            256,
+            1
+          ]
+        ]
+      ],
+      "unique_decode_shapes": 1,
+      "invariants": {
+        "dummy_suffix_equal": true,
+        "stale_suffix_poison_equal": true,
+        "crop_preserves_buffer_addresses": true
+      },
+      "stock_output_count": 6,
+      "canonical_output_count": 6,
+      "oracle_output_count": 6,
+      "first_canonical_vs_stock_divergence": null
+    },
+    {
+      "example_index": 2,
+      "prompt_tokens": 149,
+      "original_failed": true,
+      "canonical_vs_stock_equal": false,
+      "canonical_vs_block_equal": true,
+      "decode_shapes_strides": [
+        [
+          [
+            1,
+            16,
+            8,
+            128
+          ],
+          [
+            1,
+            16,
+            256,
+            128
+          ],
+          [
+            1,
+            16,
+            256,
+            128
+          ],
+          [
+            1,
+            1,
+            8,
+            256
+          ],
+          [
+            16384,
+            128,
+            2048,
+            1
+          ],
+          [
+            524288,
+            32768,
+            128,
+            1
+          ],
+          [
+            2048,
+            2048,
+            256,
+            1
+          ]
+        ]
+      ],
+      "unique_decode_shapes": 1,
+      "invariants": {
+        "dummy_suffix_equal": true,
+        "stale_suffix_poison_equal": true,
+        "crop_preserves_buffer_addresses": true
+      },
+      "stock_output_count": 32,
+      "canonical_output_count": 32,
+      "oracle_output_count": 32,
+      "first_canonical_vs_stock_divergence": 10,
+      "fixed_failure": {
+        "index": 23,
+        "position_in_block": 0,
+        "same_argmax_all_paths": true,
+        "full_vs_short_max_abs": 0.0,
+        "block_vs_single_history_max_abs": 0.0
+      },
+      "stock_decomposition": {
+        "prefix_length": 172,
+        "position_in_block": 0,
+        "current_chunk_max_logit_difference": 0.1875,
+        "history_chunking_max_logit_difference": 0.1875,
+        "sequential_vs_full_max_logit_difference": 0.1875
+      }
+    }
+  ],
+  "limitations": [
+    "Target-only oracle proposals; no trained drafter gate or speed benchmark.",
+    "Fixed-shape canonical and stock BF16 outputs differ for one of three examples.",
+    "No arbitrary-prefix or cross-hardware bit-exact guarantee.",
+    "CPU tiny-model prefill excludes the initial anchor; real GPU probe shares the full prompt prefill in both canonical paths."
+  ]
+}

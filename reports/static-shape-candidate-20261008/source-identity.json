@@ -1,0 +1,21 @@
+{
+  "executed_source_sha256": {
+    "prototype.py": "3d0a21f94396fe0cb50e51e937d245bbbd67a7d64cbd0dd11e798b4d8b341b46",
+    "gpu_probe.py": "e6c1badf01e514c42a71678f69f65b0763f392df5c1234d33765e6fa703253b4",
+    "controller.py": "ab0955b9177ba3184119c1c6941a4815484b708837bde78b210d023385ca3315"
+  },
+  "private_raw_sha256": {
+    "result.json": "285e2b453f49611767c96e7a074b315be7489417feb4e6ca0fd841ab8df23c28",
+    "controller.json": "56896a1003b91ca187433af1fe467b71ea5bf33e6595bc78255d7c6cd3cdc587",
+    "diagnostic.log": "de67b4121b75a0430cf6075e3b7b9c15d8d71aa2b1be4c439d901e044d489849"
+  },
+  "original_failure_report_sha256": "fdbe5bf91794d6a16fee7c1296ed414a63aa0271a6f3f32d5d494dd65985329b",
+  "privacy": "Public summaries omit prompt identities and real output tokens. Executed sources contain synthetic fixtures and machine-specific paths, not prompt content.",
+  "canonical_adapter_source_sha256": {
+    "canonical_target.py": "6b80ba03ddafce7afebfa67fd84f2c523bdc458176123bc536b3434c62035290",
+    "cached_target.py": "183ea145338c395aa3adbb50d80035af44f59535d2ae03b9d93cf0cf1f21f241",
+    "cached_decode.py": "f16b04ef254b973ebb09f2caa334a419cd44fa1f673690b9df7804ddc4adbbcc",
+    "eval_canonical_decode.py": "19d0728a07ac9d53af9db1d3b33aac078e89422f70a6985cca2811553d8493c0"
+  },
+  "canonical_cpu_tests_sha256": "88c5637b61a219147fbe5ab62f065f941e4a7b27da36685189c7efb8e4b133cb"
+}

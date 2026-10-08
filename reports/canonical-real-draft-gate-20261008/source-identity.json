@@ -1,0 +1,39 @@
+{
+  "prior_gate_sha256": "fdbe5bf91794d6a16fee7c1296ed414a63aa0271a6f3f32d5d494dd65985329b",
+  "checkpoint_sha256": "8c634a2e0b9b3b6a46d573836c1e4ab54c810b060affa65a13ea80822cf585ca",
+  "checkpoint_metadata_sha256": "dee6da573676377bc84f2db1f8b4d81f5934703bd83afd9c88ba1284490b3f2a",
+  "source_sha256": {
+    "data.py": "14a33ef586e3e76ffc28177805c91abcea4bd685ef3d9c4e1b26dfe030521fed",
+    "cached_target.py": "183ea145338c395aa3adbb50d80035af44f59535d2ae03b9d93cf0cf1f21f241",
+    "scheduler.py": "4151e7ad6dce7551a16f17daf467017edc28ef4fc464926f9dc78634a1fd3120",
+    "__init__.py": "bc0e47a109ff9d53f21efbf0b8c02d23ca53ef4658488fba8dd5de037b9b636d",
+    "config.py": "d27c330979e4c8b94d6509614057ccb1b04df7e61e38a88e453e39525d08cab8",
+    "model.py": "10abdb29396c898ca314398c9233cdbba89c13209ebb5499dbe9cc6aaa31dafc",
+    "memory_gate.py": "3e413df88e4fd23eb267f4a5ecaaced746e0d27c39ef30cc144d56733bef3d97",
+    "eval_dev_tf.py": "5846308aa3435930e1175c36a0912194ebcb3f3cebdaa4bb0154a281d9cae84c",
+    "experiment_inputs.py": "dda5dbc6f43c90f5b3434fa503d8d79941b3e74f3e67d7c4119b66746abb1b58",
+    "decode.py": "eebfd7c8d7f9cc697f4fa13d5048ec752813c8242882db9b57ff40c90cb6ce9e",
+    "checkpoint.py": "06cd16e512c2b90e19ca50faed3f5a9d4d01ded44ea355575d23e87799094635",
+    "target.py": "9046268d3112085710d78fa6fafbe5e071b358addfc1e620845140b33d1e2797",
+    "bench_cached_target.py": "425132af31261bbbcd0e88699a15520e6bff012386d39be74a07f3a0f4224e89",
+    "eval_canonical_decode.py": "19d0728a07ac9d53af9db1d3b33aac078e89422f70a6985cca2811553d8493c0",
+    "losses.py": "25b735023512429e3d2ab5d0661b08708dc10bef69804ee50be324af104348ed",
+    "canonical_target.py": "6b80ba03ddafce7afebfa67fd84f2c523bdc458176123bc536b3434c62035290",
+    "diagnose_learning.py": "738212bc71937a92a34f0aba46ac79cf704073408b06d449ecb7c3267701481c",
+    "eval_cached_decode.py": "afb721d3d487cd7f5f35416b86eb8f86875fdbd6c73712db9d8094263ec85820",
+    "eval_decode.py": "248cac7fb4e8eaff468ac5631c1f1aadbcadf1a228b5649e0a4f1a1f0be4bfd7",
+    "cached_decode.py": "f16b04ef254b973ebb09f2caa334a419cd44fa1f673690b9df7804ddc4adbbcc",
+    "train.py": "6e4e7ac514a2592b9a8c212cb41df69a33396cf9d68e4fbb6fc5a5ccdd27c471"
+  },
+  "torch": "2.12.0+rocm7.2",
+  "transformers": "5.17.0",
+  "hip": "7.2.53211",
+  "private_raw_sha256": {
+    "result.json": "9bdf1b51b459a4f5c8b7d7cd5efcd60ae719e89b999dd13c74505f98b524e182",
+    "run.json": "5e7c9f84707e55607f10d0e56f9ffda652e6d738c504383e18d761169185aa6a",
+    "controller.json": "91b74d7d9d138972caba0773748a4030b2910db0261b790fb74287d974671fab",
+    "diagnostic.log": "d01a6ee75731157bcc5b2b2ccf5e9392fe559d8681c9b0633b4e0ed9e61f3624"
+  },
+  "controller_sha256": "8f400d3287a6c3405b28fb48e1dc80dd2daba5b093dd9497d0f270de912aef84",
+  "public_redaction": "Real prompt content, example identities and output token IDs are omitted. Executed source archives retain machine-specific paths and past process IDs; no credentials are included."
+}

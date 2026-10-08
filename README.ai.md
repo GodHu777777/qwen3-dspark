@@ -116,7 +116,24 @@ are appended to draft per-layer projected K/V. 30 CPU tests pass; independent
 42-case/429-round content audit found no rollback pollution. Real BF16 gate fails
 2/3 prompts (reports/cached-decode-gate-20261008); do not advertise exact BF16
 output or speedup. eval_cached_decode has FP32 control and failed-prefix path
-decomposition; these new GPU experiments have not yet run.
+decomposition, but rerunning that native evaluator with the new four-path
+diagnostic field remains pending, as does its FP32 cached-block control.
+reports/static-shape-candidate-20261008 is a separate canonical same-prefix
+probe. That target-only probe also invoked the dynamic four-path helper on the
+saved failures; this is not a new native draft rollout or a passing native gate.
+
+Optional canonical numerical control: canonical_target.py uses fixed query
+width, fixed StaticCache capacity and explicit causal/valid masks. Features retain
+the full padded hidden tensor; predict(features,last_only) projects all padded
+rows before selecting valid outputs. Ordinary CachedTarget keeps its original
+requested-row projection; cached_decode uses the shared predict interface.
+This is a pinned HF 5.17 StaticLayer adapter, not a default engine or CUDA graph.
+39 CPU tests passed at integration. The real aligned draft gate passed 3/3
+canonical comparisons (70 tokens), but only 2/3 matched stock BF16 cached output;
+both dev examples accepted zero draft tokens. Preserve the native dynamic failure
+report. See docs/canonical-target.md and reports/canonical-real-draft-gate-20261008.
+Padding is an optional control and must not replace the paper's variable global
+verification budget or hide physical work/SPS(B) boundaries. No speedup is measured.
 
 Next training plan: configs/train-expanded.example.json and
 docs/expanded-training-plan.md. Use an immutable source checkout for training,

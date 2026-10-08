@@ -1,0 +1,33 @@
+{
+  "stopped_state": "T",
+  "pause_started_utc": "2026-10-08T15:40:08.535227+00:00",
+  "resumed_utc": "2026-10-08T15:40:37.428530+00:00",
+  "pause_seconds": 28.893291861983016,
+  "states_after_resume": [
+    "R"
+  ],
+  "log_size_before": 4021,
+  "log_size_after": 4099,
+  "log_progress_confirmed_utc": "2026-10-08T15:40:51.430674+00:00",
+  "controller_finished_utc": "2026-10-08T15:40:51.430690+00:00",
+  "diagnostic_exit": 0,
+  "drain_samples": [
+    {
+      "busy_percent": 51,
+      "total_bytes": 34208743424,
+      "used_bytes": 17509396480
+    },
+    {
+      "busy_percent": 3,
+      "total_bytes": 34208743424,
+      "used_bytes": 17509396480
+    },
+    {
+      "busy_percent": 3,
+      "total_bytes": 34208743424,
+      "used_bytes": 17509396480
+    }
+  ],
+  "identity_guard": "Exact PID/starttime/cmdline/output verification plus pidfd signals; same process resumed; parent runner untouched",
+  "bounds": "T-state check <=5 seconds, GPU drain <=8 bounded queries (5-second subprocess timeout each), child <=210 seconds, finally SIGCONT; log verification after resume is outside pause."
+}

@@ -1,0 +1,32 @@
+{
+  "stopped_state": "T",
+  "pause_started_utc": "2026-10-08T15:57:32.621845+00:00",
+  "resumed_utc": "2026-10-08T15:58:08.277109+00:00",
+  "pause_seconds": 35.65525525202975,
+  "states_after_resume": [
+    "R"
+  ],
+  "log_size_before": 6670,
+  "log_size_after": 6748,
+  "log_progress_confirmed_utc": "2026-10-08T15:58:38.285250+00:00",
+  "controller_finished_utc": "2026-10-08T15:58:38.285269+00:00",
+  "diagnostic_exit": 0,
+  "drain_samples": [
+    {
+      "busy_percent": 52,
+      "total_bytes": 34208743424,
+      "used_bytes": 17752666112
+    },
+    {
+      "busy_percent": 3,
+      "total_bytes": 34208743424,
+      "used_bytes": 17752666112
+    },
+    {
+      "busy_percent": 3,
+      "total_bytes": 34208743424,
+      "used_bytes": 17752666112
+    }
+  ],
+  "identity_guard": "Same PID/starttime/cmdline/output checked, pidfd STOP/CONT, parent runner and ASR untouched"
+}
