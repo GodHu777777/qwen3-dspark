@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "seed": 20261009,
+  "dtype": "bfloat16",
+  "q_lengths": [
+    1,
+    8
+  ],
+  "k_lengths": [
+    17,
+    29
+  ],
+  "inactive_k": 13,
+  "head_dim": 128,
+  "query_heads": 16,
+  "kv_heads": 8,
+  "atol": 0.02,
+  "rtol": 0.02,
+  "max_rms_error": 0.005,
+  "timeout_seconds": 120,
+  "native_calls": 6,
+  "variants": [
+    "public_gqa",
+    "public_repeated_kv_no_gqa",
+    "private_aten_mapping_control"
+  ],
+  "inputs": [
+    "original_random",
+    "zero_q_position_ramp"
+  ],
+  "primary_oracles": [
+    "top_left",
+    "bottom_right"
+  ],
+  "ramp_fingerprint": "full_attention",
+  "relative_error_denominator_floor": 1e-30,
+  "scope": "Independent mapping diagnosis; does not replace failed native gate or change production adapter"
+}

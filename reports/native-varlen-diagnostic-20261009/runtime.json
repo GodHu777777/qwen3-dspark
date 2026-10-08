@@ -1,0 +1,48 @@
+{
+  "torch": "2.12.0+rocm7.2",
+  "hip": "7.2.53211",
+  "device": "AMD Radeon Graphics",
+  "device_arch": "gfx1201",
+  "flash_preference": "_ROCmFABackend.AOTriton",
+  "flash_prefer_ck_env": null,
+  "peak_allocated_bytes": 81909248,
+  "backend_identity_scope": "ATen flash dispatch and library preference; exact device kernel implementation not independently traced.",
+  "completion": {
+    "exit_code": 0,
+    "timed_out": false,
+    "wall_seconds": 9.55196298705414,
+    "status": "diagnostic_completed",
+    "scope": "Execution completion is distinct from production correctness"
+  },
+  "launcher_exit": {
+    "returncode": 0,
+    "utc": 1791481734.7999783
+  },
+  "controller_exit": {
+    "returncode": 0,
+    "utc": 1791481735.2036598
+  },
+  "pre": {
+    "utc": "2026-10-08T17:48:44Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_inventory_recorded_privately_and_untouched": true
+  },
+  "post": {
+    "utc": "2026-10-08T17:48:54Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_inventory_recorded_privately_and_untouched": true
+  },
+  "scope": "Profiler/oracles/persistence included; elapsed time is not a benchmark."
+}

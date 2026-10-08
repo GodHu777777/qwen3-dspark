@@ -1,0 +1,1121 @@
+{
+  "status": "diagnostic_completed",
+  "production_gate_passed": false,
+  "cases": [
+    {
+      "name": "public_gqa__original_random",
+      "variant": "public_gqa",
+      "input": "original_random",
+      "status": "observed",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        8,
+        128
+      ],
+      "cu_query": [
+        0,
+        1,
+        9
+      ],
+      "cu_key": [
+        0,
+        17,
+        46
+      ],
+      "inputs": {
+        "q": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "662c42ccf2dcaf64e2532c19ebf3c49869fb34cfbfe3ffab76df06b55a7bda48"
+        },
+        "k": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "dc16de07df6e51a7d5edcf2f845499b65e3165336729c616954463e11e64dd2a"
+        },
+        "v": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "e8f0af921b64aabd755c981de062536b2fab72810071b4315f787632c267783c"
+        }
+      },
+      "operator_counts": {
+        "torch_attn::_varlen_attn": 1,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 7,
+        "aten::view": 1,
+        "aten::zeros": 2,
+        "aten::zero_": 2,
+        "aten::fill_": 2
+      },
+      "raw_output": {
+        "output": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "8e764f560989881ff4bc868ea6cb965f7d1c5584d218a7f4e5f0bb434d0f4376"
+        }
+      },
+      "finite": true,
+      "shape_dtype_device_match": true,
+      "oracle_tensors": {
+        "top_left": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "515cb6c75b710d494f32fcd9dbf3563d2da2fc1c8969eefe1f140f6f2fa569d1"
+        },
+        "bottom_right": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "d43712d00cd056bd1ae8730e41590a87c46cfd0ec37d92a1df8037a672c3a296"
+        }
+      },
+      "errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 0.007607460021972656,
+          "rms": 0.0009926663700915626,
+          "max_relative": 3.2136095102992996,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 17841,
+          "max_abs": 3.775065064430237,
+          "rms": 0.6740736879641838,
+          "max_relative": 33742.24632672171,
+          "passes_fixed_limits": false
+        }
+      },
+      "per_request_errors": {
+        "top_left": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 0,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "max_relative": 0.0,
+            "passes_fixed_limits": true
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 0,
+            "max_abs": 0.007607460021972656,
+            "rms": 0.0010528816826213686,
+            "max_relative": 3.2136095102992996,
+            "passes_fixed_limits": true
+          }
+        ],
+        "bottom_right": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 2014,
+            "max_abs": 3.511523276567459,
+            "rms": 0.9939148935819768,
+            "max_relative": 6035.916693550388,
+            "passes_fixed_limits": false
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 15827,
+            "max_abs": 3.775065064430237,
+            "rms": 0.6226466911064664,
+            "max_relative": 33742.24632672171,
+            "passes_fixed_limits": false
+          }
+        ]
+      },
+      "matches": [
+        "top_left"
+      ]
+    },
+    {
+      "name": "public_gqa__zero_q_position_ramp",
+      "variant": "public_gqa",
+      "input": "zero_q_position_ramp",
+      "status": "observed",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        8,
+        128
+      ],
+      "cu_query": [
+        0,
+        1,
+        9
+      ],
+      "cu_key": [
+        0,
+        17,
+        46
+      ],
+      "inputs": {
+        "q": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "1c0273095382988333e2f2b5ae487cea460737ed9be65cbad9c5de537f95bf75"
+        },
+        "k": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "dc16de07df6e51a7d5edcf2f845499b65e3165336729c616954463e11e64dd2a"
+        },
+        "v": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "f0280b0442470dd8ce8c81d347014a3342e0c250f21bbebe339f62759f928ae3"
+        }
+      },
+      "operator_counts": {
+        "torch_attn::_varlen_attn": 1,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 7,
+        "aten::view": 1,
+        "aten::zeros": 2,
+        "aten::zero_": 2,
+        "aten::fill_": 2
+      },
+      "raw_output": {
+        "output": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "3a08e7f14aa50f1ae8e22388e93a9110084ebfc45aaa11e9852a661e0cea4fba"
+        }
+      },
+      "finite": true,
+      "shape_dtype_device_match": true,
+      "oracle_tensors": {
+        "top_left": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "4f0ddb5010f7c55e735139dab99183f0331585acd9c3e2b70e41d931f08298b4"
+        },
+        "bottom_right": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "25fc9994446d81a624f1843d9a0813ec4383ab3f08962b4430944cc000e88a74"
+        }
+      },
+      "errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 7.450580596923828e-09,
+          "rms": 2.483526865641276e-09,
+          "max_relative": 7.947285338458591e-08,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.3281250298023224,
+          "rms": 0.3203865924420096,
+          "max_relative": 1.0,
+          "passes_fixed_limits": false
+        }
+      },
+      "per_request_errors": {
+        "top_left": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 0,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "max_relative": 0.0,
+            "passes_fixed_limits": true
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 0,
+            "max_abs": 7.450580596923828e-09,
+            "rms": 2.634178031930877e-09,
+            "max_relative": 7.947285338458591e-08,
+            "passes_fixed_limits": true
+          }
+        ],
+        "bottom_right": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 2048,
+            "max_abs": 0.2499999850988388,
+            "rms": 0.2499999850988388,
+            "max_relative": 1.0,
+            "passes_fixed_limits": false
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 16384,
+            "max_abs": 0.3281250298023224,
+            "rms": 0.32812500000000033,
+            "max_relative": 1.0,
+            "passes_fixed_limits": false
+          }
+        ]
+      },
+      "analytic_errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "max_relative": 0.0,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.328125,
+          "rms": 0.32038659373395206,
+          "max_relative": 1.0,
+          "passes_fixed_limits": false
+        },
+        "full_attention": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.4375,
+          "rms": 0.3719493973199401,
+          "max_relative": 1.0,
+          "passes_fixed_limits": false
+        }
+      },
+      "oracle_analytic_errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 7.450580596923828e-09,
+          "rms": 2.483526865641276e-09,
+          "max_relative": 7.947285970052083e-08,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 2.9802322387695312e-08,
+          "rms": 1.4901161193847656e-08,
+          "max_relative": 7.064254195601851e-08,
+          "passes_fixed_limits": true
+        }
+      },
+      "matches": [
+        "top_left"
+      ]
+    },
+    {
+      "name": "public_repeated_kv_no_gqa__original_random",
+      "variant": "public_repeated_kv_no_gqa",
+      "input": "original_random",
+      "status": "observed",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        16,
+        128
+      ],
+      "cu_query": [
+        0,
+        1,
+        9
+      ],
+      "cu_key": [
+        0,
+        17,
+        46
+      ],
+      "inputs": {
+        "q": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "662c42ccf2dcaf64e2532c19ebf3c49869fb34cfbfe3ffab76df06b55a7bda48"
+        },
+        "k": {
+          "shape": [
+            46,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "db678ee924526971331ede6efc5df61ef746b2f8bcf7bd7695db1f45e11937af"
+        },
+        "v": {
+          "shape": [
+            46,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "c2f3de26294df1bf49a1fa636d7db2c350497e974325e3de24a48cbd8ef49a42"
+        }
+      },
+      "operator_counts": {
+        "torch_attn::_varlen_attn": 1,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 7,
+        "aten::view": 1,
+        "aten::zeros": 2,
+        "aten::zero_": 2,
+        "aten::fill_": 2
+      },
+      "raw_output": {
+        "output": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "8e764f560989881ff4bc868ea6cb965f7d1c5584d218a7f4e5f0bb434d0f4376"
+        }
+      },
+      "finite": true,
+      "shape_dtype_device_match": true,
+      "oracle_tensors": {
+        "top_left": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "515cb6c75b710d494f32fcd9dbf3563d2da2fc1c8969eefe1f140f6f2fa569d1"
+        },
+        "bottom_right": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "d43712d00cd056bd1ae8730e41590a87c46cfd0ec37d92a1df8037a672c3a296"
+        }
+      },
+      "errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 0.007607460021972656,
+          "rms": 0.0009926663700915626,
+          "max_relative": 3.2136095102992996,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 17841,
+          "max_abs": 3.775065064430237,
+          "rms": 0.6740736879641838,
+          "max_relative": 33742.24632672171,
+          "passes_fixed_limits": false
+        }
+      },
+      "per_request_errors": {
+        "top_left": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 0,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "max_relative": 0.0,
+            "passes_fixed_limits": true
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 0,
+            "max_abs": 0.007607460021972656,
+            "rms": 0.0010528816826213686,
+            "max_relative": 3.2136095102992996,
+            "passes_fixed_limits": true
+          }
+        ],
+        "bottom_right": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 2014,
+            "max_abs": 3.511523276567459,
+            "rms": 0.9939148935819768,
+            "max_relative": 6035.916693550388,
+            "passes_fixed_limits": false
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 15827,
+            "max_abs": 3.775065064430237,
+            "rms": 0.6226466911064664,
+            "max_relative": 33742.24632672171,
+            "passes_fixed_limits": false
+          }
+        ]
+      },
+      "matches": [
+        "top_left"
+      ]
+    },
+    {
+      "name": "public_repeated_kv_no_gqa__zero_q_position_ramp",
+      "variant": "public_repeated_kv_no_gqa",
+      "input": "zero_q_position_ramp",
+      "status": "observed",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        16,
+        128
+      ],
+      "cu_query": [
+        0,
+        1,
+        9
+      ],
+      "cu_key": [
+        0,
+        17,
+        46
+      ],
+      "inputs": {
+        "q": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "1c0273095382988333e2f2b5ae487cea460737ed9be65cbad9c5de537f95bf75"
+        },
+        "k": {
+          "shape": [
+            46,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "db678ee924526971331ede6efc5df61ef746b2f8bcf7bd7695db1f45e11937af"
+        },
+        "v": {
+          "shape": [
+            46,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "0a30b0fdb5a93ee33359d2c70fc6dc3cc8800a169fc4b33fc43ed47e92aa7513"
+        }
+      },
+      "operator_counts": {
+        "torch_attn::_varlen_attn": 1,
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 7,
+        "aten::view": 1,
+        "aten::zeros": 2,
+        "aten::zero_": 2,
+        "aten::fill_": 2
+      },
+      "raw_output": {
+        "output": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "3a08e7f14aa50f1ae8e22388e93a9110084ebfc45aaa11e9852a661e0cea4fba"
+        }
+      },
+      "finite": true,
+      "shape_dtype_device_match": true,
+      "oracle_tensors": {
+        "top_left": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "4f0ddb5010f7c55e735139dab99183f0331585acd9c3e2b70e41d931f08298b4"
+        },
+        "bottom_right": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "25fc9994446d81a624f1843d9a0813ec4383ab3f08962b4430944cc000e88a74"
+        }
+      },
+      "errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 7.450580596923828e-09,
+          "rms": 2.483526865641276e-09,
+          "max_relative": 7.947285338458591e-08,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.3281250298023224,
+          "rms": 0.3203865924420096,
+          "max_relative": 1.0,
+          "passes_fixed_limits": false
+        }
+      },
+      "per_request_errors": {
+        "top_left": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 0,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "max_relative": 0.0,
+            "passes_fixed_limits": true
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 0,
+            "max_abs": 7.450580596923828e-09,
+            "rms": 2.634178031930877e-09,
+            "max_relative": 7.947285338458591e-08,
+            "passes_fixed_limits": true
+          }
+        ],
+        "bottom_right": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 2048,
+            "max_abs": 0.2499999850988388,
+            "rms": 0.2499999850988388,
+            "max_relative": 1.0,
+            "passes_fixed_limits": false
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 16384,
+            "max_abs": 0.3281250298023224,
+            "rms": 0.32812500000000033,
+            "max_relative": 1.0,
+            "passes_fixed_limits": false
+          }
+        ]
+      },
+      "analytic_errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "max_relative": 0.0,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.328125,
+          "rms": 0.32038659373395206,
+          "max_relative": 1.0,
+          "passes_fixed_limits": false
+        },
+        "full_attention": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.4375,
+          "rms": 0.3719493973199401,
+          "max_relative": 1.0,
+          "passes_fixed_limits": false
+        }
+      },
+      "oracle_analytic_errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 7.450580596923828e-09,
+          "rms": 2.483526865641276e-09,
+          "max_relative": 7.947285970052083e-08,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 2.9802322387695312e-08,
+          "rms": 1.4901161193847656e-08,
+          "max_relative": 7.064254195601851e-08,
+          "passes_fixed_limits": true
+        }
+      },
+      "matches": [
+        "top_left"
+      ]
+    },
+    {
+      "name": "private_aten_mapping_control__original_random",
+      "variant": "private_aten_mapping_control",
+      "input": "original_random",
+      "status": "observed",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        8,
+        128
+      ],
+      "cu_query": [
+        0,
+        1,
+        9
+      ],
+      "cu_key": [
+        0,
+        17,
+        46
+      ],
+      "inputs": {
+        "q": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "662c42ccf2dcaf64e2532c19ebf3c49869fb34cfbfe3ffab76df06b55a7bda48"
+        },
+        "k": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "dc16de07df6e51a7d5edcf2f845499b65e3165336729c616954463e11e64dd2a"
+        },
+        "v": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "e8f0af921b64aabd755c981de062536b2fab72810071b4315f787632c267783c"
+        }
+      },
+      "operator_counts": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "raw_output": {
+        "output": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "d1dbe7fa11ef52bc97138ee87d6d72c14c510c3f9c2be4e85504ddaadd44d699"
+        }
+      },
+      "finite": true,
+      "shape_dtype_device_match": true,
+      "oracle_tensors": {
+        "top_left": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "515cb6c75b710d494f32fcd9dbf3563d2da2fc1c8969eefe1f140f6f2fa569d1"
+        },
+        "bottom_right": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "d43712d00cd056bd1ae8730e41590a87c46cfd0ec37d92a1df8037a672c3a296"
+        }
+      },
+      "errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 17841,
+          "max_abs": 3.7744140625,
+          "rms": 0.6740822966797873,
+          "max_relative": 2811.039602746261,
+          "passes_fixed_limits": false
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 0.004285573959350586,
+          "rms": 0.000610631010230452,
+          "max_relative": 11.07707575891366,
+          "passes_fixed_limits": true
+        }
+      },
+      "per_request_errors": {
+        "top_left": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 2014,
+            "max_abs": 3.51171875,
+            "rms": 0.9939029341397547,
+            "max_relative": 411.5660377358491,
+            "passes_fixed_limits": false
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 15827,
+            "max_abs": 3.7744140625,
+            "rms": 0.622659562058419,
+            "max_relative": 2811.039602746261,
+            "passes_fixed_limits": false
+          }
+        ],
+        "bottom_right": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 0,
+            "max_abs": 0.0035468339920043945,
+            "rms": 0.0007006743786200727,
+            "max_relative": 2.6974762389259745,
+            "passes_fixed_limits": true
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 0,
+            "max_abs": 0.004285573959350586,
+            "rms": 0.0005984237097409471,
+            "max_relative": 11.07707575891366,
+            "passes_fixed_limits": true
+          }
+        ]
+      },
+      "matches": [
+        "bottom_right"
+      ]
+    },
+    {
+      "name": "private_aten_mapping_control__zero_q_position_ramp",
+      "variant": "private_aten_mapping_control",
+      "input": "zero_q_position_ramp",
+      "status": "observed",
+      "q_shape": [
+        9,
+        16,
+        128
+      ],
+      "kv_shape": [
+        46,
+        8,
+        128
+      ],
+      "cu_query": [
+        0,
+        1,
+        9
+      ],
+      "cu_key": [
+        0,
+        17,
+        46
+      ],
+      "inputs": {
+        "q": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "1c0273095382988333e2f2b5ae487cea460737ed9be65cbad9c5de537f95bf75"
+        },
+        "k": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "dc16de07df6e51a7d5edcf2f845499b65e3165336729c616954463e11e64dd2a"
+        },
+        "v": {
+          "shape": [
+            46,
+            8,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "f0280b0442470dd8ce8c81d347014a3342e0c250f21bbebe339f62759f928ae3"
+        }
+      },
+      "operator_counts": {
+        "aten::_flash_attention_forward": 1,
+        "aten::unsqueeze": 4,
+        "aten::as_strided": 8,
+        "aten::transpose": 4,
+        "aten::empty_like": 1,
+        "aten::empty_strided": 1,
+        "aten::empty": 6,
+        "aten::view": 1,
+        "aten::zeros": 1,
+        "aten::zero_": 1,
+        "aten::fill_": 1
+      },
+      "raw_output": {
+        "output": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.bfloat16",
+          "sha256": "130ee28d60357fead878ed9c817d91b34cec19f8da82d9586a79fba240af0e43"
+        }
+      },
+      "finite": true,
+      "shape_dtype_device_match": true,
+      "oracle_tensors": {
+        "top_left": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "4f0ddb5010f7c55e735139dab99183f0331585acd9c3e2b70e41d931f08298b4"
+        },
+        "bottom_right": {
+          "shape": [
+            9,
+            16,
+            128
+          ],
+          "dtype": "torch.float32",
+          "sha256": "25fc9994446d81a624f1843d9a0813ec4383ab3f08962b4430944cc000e88a74"
+        }
+      },
+      "errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.328125,
+          "rms": 0.3203865928861146,
+          "max_relative": 3.28125e+29,
+          "passes_fixed_limits": false
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 2.9802322387695312e-08,
+          "rms": 1.4901161193847656e-08,
+          "max_relative": 7.064253696565013e-08,
+          "passes_fixed_limits": true
+        }
+      },
+      "per_request_errors": {
+        "top_left": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 2048,
+            "max_abs": 0.25,
+            "rms": 0.25,
+            "max_relative": 2.4999999999999997e+29,
+            "passes_fixed_limits": false
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 16384,
+            "max_abs": 0.328125,
+            "rms": 0.3281249990686774,
+            "max_relative": 3.28125e+29,
+            "passes_fixed_limits": false
+          }
+        ],
+        "bottom_right": [
+          {
+            "elements": 2048,
+            "mismatched_elements": 0,
+            "max_abs": 1.4901161193847656e-08,
+            "rms": 1.4901161193847656e-08,
+            "max_relative": 5.960464832810452e-08,
+            "passes_fixed_limits": true
+          },
+          {
+            "elements": 16384,
+            "mismatched_elements": 0,
+            "max_abs": 2.9802322387695312e-08,
+            "rms": 1.4901161193847656e-08,
+            "max_relative": 7.064253696565013e-08,
+            "passes_fixed_limits": true
+          }
+        ]
+      },
+      "analytic_errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 18432,
+          "max_abs": 0.328125,
+          "rms": 0.32038659373395206,
+          "max_relative": 3.28125e+29,
+          "passes_fixed_limits": false
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "max_relative": 0.0,
+          "passes_fixed_limits": true
+        },
+        "full_attention": {
+          "elements": 18432,
+          "mismatched_elements": 12288,
+          "max_abs": 0.109375,
+          "rms": 0.061625831073954335,
+          "max_relative": 0.25,
+          "passes_fixed_limits": false
+        }
+      },
+      "oracle_analytic_errors": {
+        "top_left": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 7.450580596923828e-09,
+          "rms": 2.483526865641276e-09,
+          "max_relative": 7.947285970052083e-08,
+          "passes_fixed_limits": true
+        },
+        "bottom_right": {
+          "elements": 18432,
+          "mismatched_elements": 0,
+          "max_abs": 2.9802322387695312e-08,
+          "rms": 1.4901161193847656e-08,
+          "max_relative": 7.064254195601851e-08,
+          "passes_fixed_limits": true
+        }
+      },
+      "matches": [
+        "bottom_right"
+      ]
+    }
+  ],
+  "gqa_vs_duplicated_kv": {
+    "original_random": {
+      "elements": 18432,
+      "mismatched_elements": 0,
+      "max_abs": 0.0,
+      "rms": 0.0,
+      "max_relative": 0.0,
+      "passes_fixed_limits": true
+    },
+    "zero_q_position_ramp": {
+      "elements": 18432,
+      "mismatched_elements": 0,
+      "max_abs": 0.0,
+      "rms": 0.0,
+      "max_relative": 0.0,
+      "passes_fixed_limits": true
+    }
+  },
+  "conclusion": "On this pinned runtime and original first-case shape, public explicit-window outputs match top-left, private no-window control matches bottom-right. No production adapter change or full-model correctness claim."
+}

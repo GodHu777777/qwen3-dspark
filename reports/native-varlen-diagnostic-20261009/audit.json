@@ -1,0 +1,24 @@
+{
+  "verified_tensor_count": 49,
+  "all_tensor_hashes_shapes_dtypes_match": true,
+  "six_native_calls_each_with_exactly_one_flash_operator": true,
+  "all_case_outputs_finite_shape_dtype_device_checked": true,
+  "all_cpu_reconstructed_original_inputs_exact": true,
+  "gqa_vs_repeated_kv_bit_equal": true,
+  "analytic_ramp_exact_bfloat16_matches": [
+    {
+      "variant": "public_gqa",
+      "exact_analytic_alignment": "top_left"
+    },
+    {
+      "variant": "public_repeated_kv_no_gqa",
+      "exact_analytic_alignment": "top_left"
+    },
+    {
+      "variant": "private_aten_mapping_control",
+      "exact_analytic_alignment": "bottom_right"
+    }
+  ],
+  "source_before_after_identity_equal": true,
+  "raw_outputs_persisted_before_classification": "verified in reviewed source and CPU control-flow audit"
+}

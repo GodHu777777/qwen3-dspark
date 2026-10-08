@@ -1,0 +1,111 @@
+{
+  "tensors": {
+    "q": {
+      "shape": [
+        9,
+        16,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "sha256": "662c42ccf2dcaf64e2532c19ebf3c49869fb34cfbfe3ffab76df06b55a7bda48"
+    },
+    "k": {
+      "shape": [
+        46,
+        8,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "sha256": "dc16de07df6e51a7d5edcf2f845499b65e3165336729c616954463e11e64dd2a"
+    },
+    "v": {
+      "shape": [
+        46,
+        8,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "sha256": "e8f0af921b64aabd755c981de062536b2fab72810071b4315f787632c267783c"
+    },
+    "ramp_v": {
+      "shape": [
+        46,
+        8,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "sha256": "f0280b0442470dd8ce8c81d347014a3342e0c250f21bbebe339f62759f928ae3"
+    },
+    "key": {
+      "shape": [
+        1,
+        8,
+        59,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "sha256": "f08daf40ed17fa3247a4b47c2bdb1aa00a37ee65eb8eace5f863047b301ffcaf"
+    },
+    "value": {
+      "shape": [
+        1,
+        8,
+        59,
+        128
+      ],
+      "dtype": "torch.bfloat16",
+      "sha256": "d7957d858fead5bf3d060af38972a1c83b8bceb7d6dd89f1c50ed64b1bdbcd9d"
+    },
+    "qr": {
+      "shape": [
+        9
+      ],
+      "dtype": "torch.int64",
+      "sha256": "da0814a13d4480a4b335f0de34a301746b098ecd2d0129fa4ada393cfba7ecf8"
+    },
+    "qp": {
+      "shape": [
+        9
+      ],
+      "dtype": "torch.int64",
+      "sha256": "4ae62f8caa9ee77f2c5a124e1a4fdf41597e94aab18e838f7b1dd6dbd2a2483b"
+    },
+    "kr": {
+      "shape": [
+        59
+      ],
+      "dtype": "torch.int64",
+      "sha256": "183f01f1e18d1d0770353dee02d97a53c1bd4d9c5fd8f516dd9c13099e4e0046"
+    },
+    "kp": {
+      "shape": [
+        59
+      ],
+      "dtype": "torch.int64",
+      "sha256": "b6eb7e4ea962fbcb46a3ec15b36da8aedaebf1a76d09be032a4498d4d016bf48"
+    },
+    "cu_query": {
+      "shape": [
+        3
+      ],
+      "dtype": "torch.int32",
+      "sha256": "1a3eef66a104c9c2cd5c2f49821d9de2a7a694dd619db9d32d12611d7f874de9"
+    },
+    "cu_key": {
+      "shape": [
+        3
+      ],
+      "dtype": "torch.int32",
+      "sha256": "431ab0266dc3fed98def999d7e58fec8ec186797cda73d50eb9d9581937a82ac"
+    },
+    "gather_indices": {
+      "shape": [
+        46
+      ],
+      "dtype": "torch.int64",
+      "sha256": "4e32583e6f0b611d9a9a210da20710b0a3caee07d95f49e949ed61b6d06ac7e4"
+    }
+  },
+  "cpu_seed_draw_order_reconstruction_exact": true,
+  "scope": "Hashes/shapes only; full synthetic inputs and output tensors remain in private remote evidence."
+}

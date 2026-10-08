@@ -218,3 +218,11 @@ The first real gfx1201 probe failed numerical comparison on 17841/18432 elements
 see reports/native-varlen-probe-20261009 and docs/varlen-target.md. Native output
 must not be used for quality/performance claims until this correctness failure
 is resolved. The failure does not affect the separate SDPA quality collector.
+
+The independent six-call diagnostic completed on cd317f7: four public-wrapper
+outputs match top-left causality, while two private no-window ATen controls
+match bottom-right; GQA and repeated-KV public outputs are bit-identical. See
+reports/native-varlen-diagnostic-20261009. This supports explicit-window mapping
+as the cause for this pinned runtime/shape. It neither passes the original failed
+gate nor establishes whole-Qwen correctness. An explicit pinned backend still
+requires the full original tensor cases and whole-model/KV validation.

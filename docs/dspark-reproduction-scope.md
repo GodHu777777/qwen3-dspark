@@ -1,6 +1,6 @@
 # DSpark 忠实复现范围：算法、全局验证预算与执行系统
 
-核对日期：2026-10-08 UTC。本文区分论文方法、公开训练/评估代码、生产系统描述与
+来源核对日期：2026-10-08 UTC；本地实验状态更新至 2026-10-09。本文区分论文方法、公开训练/评估代码、生产系统描述与
 本仓库实测，不将一种证据当成另一种。结论是：**完整 DSpark 系统复现不能止于
 parallel drafter、单请求固定 k、confidence 阈值或一张单请求耗时表。其核心系统
 机制是多个活跃请求竞争 target 验证 token 容量，并与异步执行及可变长度 kernel
@@ -71,13 +71,14 @@ prefix survival；不能直接将位置 confidence 相加当成期望连续接�
 已经校准的前面位置保持不变。温度是在 confidence logits 上校准，而不是调整
 target 的采样温度。需要绝对概率校准，是因为 `tau` 使用数值大小，不只需要排序。
 
-本项目已实现独立 CPU STS 拟合模块与 8 项测试，但尚未收集并拟合真实 rollout，
-没有证明实际 prefix 上的校准；此前指标只有 BCE head 的 teacher-forced
-overlap/MAE。特别地，已有 Qwen3-0.6B GPU 评估现阶段只做 greedy，而上述
-分布 overlap 对应标准随机 speculative rejection sampling 的接受概率；不能
-直接把未变换分布的 overlap 解释为 deterministic greedy 的 top-1 命中率。
-忠实概率复现还需要明确 temperature、proposal/target 概率变换、接受随机数和
-residual correction sampler；greedy 可以保留为先行 correctness 分支。
+本项目已实现独立 CPU STS 拟合模块与 8 项测试，完成旧 pilot 及 expanded
+step128 的真实随机 rollout，但尚未采集预留 fit44/eval43 或拟合 STS。
+[step128 quality32](../reports/expanded-quality128-20261009/README.md) 的
+3,268 轮接受 581 个 draft token，平均 0.1778/轮；这是实际前缀接受观察，
+不能用 teacher-forced overlap/MAE 替代。当前随机协议明确 temperature=1、
+无过滤、actual q 和 float64 residual sampler；[旧 pilot gate](../reports/stochastic-gate-20261009/README.md)
+与 step128 均发现 native BF16 block 和 sequential 概率差异，不能宣称分布无损。
+分布 overlap 也不能直接解释为 deterministic greedy 的 top-1 命中率。
 
 [Appendix A](https://arxiv.org/html/2607.05147v1#A1) 给出反例：若在当前 draft
 完整生成后，利用所有未来 confidence 回溯选择全局最优长度，则下一位置
@@ -135,14 +136,14 @@ draft 与 target 在不同 CUDA stream 并发运行。本文所核对原文也�
 | 机制 | 当前证据 | 忠实复现还需完成的检查 |
 | --- | --- | --- |
 | Parallel backbone + Markov + confidence | pinned NeMo mask/loss/shift 核对，CPU 真模型测试，单样本对齐轨迹可学到每轮7接受 | 扩数据后的 held-out 质量；与纯 parallel/无 Markov 对照；禁止用单样本拟合代替泛化 |
-| 训练配方与数据 | target 重生成、三 split、严格身份/恢复；扩数据生成与训练准备中 | 实际审计后的可用数量、训练曲线、anchor/批量差距及 warmup 差距，不宣称论文规模 |
+| 训练配方与数据 | target 重生成与三 split 审计完成：932 train/119 dev/119 test；冻结源码严格恢复至 step512 | 继续冻结训练计划和质量比较，报告 anchor/批量及 warmup 差距；不宣称论文规模 |
 | KV 增量与 rollback | target/draft cache CPU及逐层 KV 内容审查通过 | 真实 dtype/backend correctness gate；BF16 cached-block 3 prompt 中2失败仍是未解决事实 |
-| Stochastic distribution recovery | CPU 概率参考与真实 Markov/tensor/cache 路径已实现；Fraction 完整 law 与 tiny Qwen KV 检查通过，相关 22 项复测通过；真实 GPU 待执行 | 检查实际 Qwen3-0.6B 的概率/缓存/数值差异，再接入调度因果性；区别概率无损理论与不同 kernel 的数值误差 |
+| Stochastic distribution recovery | CPU 概率参考与真实 Markov/tensor/cache 路径已实现；Fraction 完整 law 与 tiny Qwen KV 检查通过，旧 pilot 真机9次运行/6次复现检查通过，expanded128 quality32完成；两者均有same-prefix TV差异 | 检查实际 Qwen3-0.6B 的概率/缓存/数值差异，再接入调度因果性；区别概率无损理论与不同 kernel 的数值误差 |
 | Confidence STS | 已有独立 CPU 顺序温度拟合与 8 项测试，明确身份/EOS/截断分母；尚无真实 rollout 拟合 | 独立 dev 子集上拟合/评估并冻结逐位置温度，报告 cumprod ECE、Brier、prefix coverage；test 不参与 |
 | R 请求全局 Algorithm1 | 已有独立CPU `scheduler.py` literal planner，输出ell/B/tau/score；7项测试用小R/gamma穷举oracle，保留cliff反例 | 尚未接入解码/engine，没有实际多请求SPS；fixture仅证明算法，不证明性能或因果score来源 |
 | 硬件容量 SPS(B) | 已测单请求 eager target 若干块长；不含 draft、并发或服务管线 | 测真实 batched engine 的 SPS/shape 台阶、上下文/并发敏感性；定义计时边界，验证模型预测误差 |
 | 两步历史异步容量 K | 尚未实现 | 两步历史状态、因果隔离、当前top-K、启动/新旧请求映射、离散容量 cliffs、调度延迟隐藏 |
-| 可变长度批验证执行 | PackedTarget 单次 Qwen forward 无 query padding；5 项 CPU 测试覆盖 marker 隔离、每请求 KV 内容/crop/生命周期；仍为 dense Q×K mask | 接入多请求 draft/verify 循环，实现高效 varlen/block-sparse attention、graph shape 策略，测真实物理工作与 KV gather 成本 |
+| 可变长度批验证执行 | PackedTarget 单次 Qwen forward 无 query padding；5 项 CPU 测试覆盖 marker 隔离、每请求 KV 内容/crop/生命周期；仍为 dense Q×K mask；native adapter CPU通过、首个GPU数值gate失败，六调用诊断支持当前ROCm显式窗口的左上角对齐问题，完整修复gate未完成 | 接入多请求 draft/verify 循环，实现高效 varlen/block-sparse attention、graph shape 策略，测真实物理工作与 KV gather 成本 |
 | 吞吐—交互性 frontier | 尚未测 | 多并发/到达负载下 aggregate tok/s、per-user TPS、TTFT/ITL分位数和SLA达成率；与正确基线比较 |
 
 单请求固定 k 和 cost lookup 仍有价值：它们是基线、成本界和开发步骤。它们不构成
