@@ -44,9 +44,18 @@ NeMo 参考配置使用 512 anchors，本计划只有其 1/16。累积 8 与参�
 aligned31 诊断峰值约 5.18 GB，但它的序列很短，不能据此担保 4,096-token
 训练内存。先以审计后最长 train 序列作独立内存检查：冻结 target capture、
 32-anchor forward/backward、AdamW 第一次 update（必须创建优化器状态），
+再完成第二个 accumulation/update 周期，让 Adam moments 常驻时的 forward/backward
+峰值也实际出现。分别记录首次分配与常驻状态周期的峰值，不能假设前者覆盖后者。
 检查 loss/grad 有限、全部组件梯度、target 冻结及峰值显存。也记录当时其它服务
 占用；不停止无关进程。内存检查使用独立输出，不产生正式实验 checkpoint，
 正式训练重新 seed、重新初始化。
+
+最长序列也未必最占显存：其 completion 可能很短，实际 anchor 很少，而稍短
+序列可能有完整32 anchors。memory gate 选取真实训练记录在 `(sequence length,
+actual anchors)` 两个维度的非支配集合；最长记录若也有全数据最大 actual
+anchors，通常只需一个 probe，否则每个非支配形状独立初始化并测两周期。
+这是实际数据的经验资源检查，不是对所有 kernel workspace/allocator 行为的
+形式化 worst-case 保证。
 
 若内存有足够余量，64 anchors 可另做独立内存检查，但首个正式基线仍为 32。
 64-anchor 比较必须是新配置、新 run、从头初始化，不能在 32-anchor resume
@@ -114,13 +123,37 @@ Rollout 中第 k 个位置的接受统计只在前 k-1 个位置存活的轮次�
 权重哈希。旧 `eval_decode` 默认把 `greedy-evaluation.json` 写到 checkpoint
 父目录，会覆盖同 run 的先前评估；本计划不依赖该共享文件名保存多检查点证据。
 
-## 需要的最小工具补充与停止条件
+## 独立工具与停止条件
 
-1. 独立最长序列 memory-gate 小入口，复用 `forward_loss`，不改正式训练循环。
-2. Dev aggregate：从已保存的 token/round 私有迹计算 committed acceptance、
+已实现独立 `memory_gate`，复用 `forward_loss`，对真实非支配训练形状分别执行
+两次完整 gradient accumulation/update 周期：第一次创建 Adam moments，第二次
+覆盖 moments 常驻时的 forward/backward。分别重置并记录周期峰值，同时保存两者
+最大值。仅第一次 optimizer update 的峰值不能保证覆盖稳态；只做一个 micro-step 会漏掉
+已经分配梯度后的下一次 forward 峰值，因此不能替代这个检查。工具保存实际
+free/allocated/reserved/peak 内存、梯度与 target 冻结核验；失败时也保留结果，
+不保存 checkpoint，不影响后续正式从头初始化。
+
+```bash
+python -m dspark_qwen.memory_gate \
+  --config configs/train-expanded.local.json --output runs/memory-gate-32anchors
+```
+
+`eval_dev_tf` 只读 checkpoint 的 validation 数据，固定 records 顺序前 32 条及
+anchor seed，保存 panel 身份、每样本 macro loss、逐位置分母/teacher top-1/
+label top-1/分布重叠度/confidence MAE。任何 test 行（包括被拒绝的 test 行）
+出现在输入 records 都会拒绝；它不会调用或解锁 final test。
+
+```bash
+python -m dspark_qwen.eval_dev_tf \
+  --checkpoint runs/train-expanded-32anchors-seed20261008/step-000128 \
+  --output runs/dev-tf-step128 --panel-size 32 --anchor-seed 20262007
+```
+
+该报告明确记录 rollout gate 为 `not_run`，不能把 TF 评估成功当成 cached
+解码正确或实际接受率通过。真实 rollout 仍需独立数值 gate。
+
+待补充的 Dev aggregate：从已保存的 token/round 私有迹计算 committed acceptance、
    EOS/长度边界和按 prompt bootstrap 区间；公开报告不包含生成 token。
-3. 若需要完整逐位置 teacher top-1，可增加独立只读评估入口，复用
-   `FrozenTarget`、`DSparkDraft`、固定 anchor seed，不改变训练源码身份。
 
 NaN/Inf、target 获得梯度或被修改、数据身份不一致、缓存正确性门槛失败都是
 停止相应阶段并保留证据的条件。Dev 指标停滞则按预定分段停止，记录负面结果；

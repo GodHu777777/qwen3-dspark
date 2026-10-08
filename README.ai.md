@@ -123,3 +123,11 @@ docs/expanded-training-plan.md. Use an immutable source checkout for training,
 because strict resume identity hashes every package module including unused ones.
 The 1280-input data generation is separate; recheck its process/run artifacts
 before claiming completion or starting any conflicting GPU timing work.
+
+Expanded training preflight: memory_gate.py probes non-dominated real
+(sequence length, actual anchor count) shapes for two full accumulation/update
+cycles, including Adam state already resident. It is an empirical resource gate,
+not a formal worst-case guarantee. eval_dev_tf.py uses a fixed validation panel
+and per-position denominators; experiment_inputs rejects final test, duplicate
+identities and mismatched data/model fingerprints before model loading. CPU tools
+are tested, but the expanded-data GPU memory gate is pending generation completion.
