@@ -41,7 +41,12 @@ Checkpoint identity binds source, target/tokenizer hashes, data, config and runt
 Do not mutate a completed run manifest to get past resume checks. New source or
 config requires a new run; checkpoint formats are local, not NeMo-compatible.
 decode.py supports exact greedy acceptance logic only, full-prefix recomputation;
-stochastic sampling and hardware scheduling remain future work.
+sampling.py now supplies an independent CPU stochastic probability reference,
+with exact rational distribution oracles (11 tests). It has not yet been wired
+to real model/cache execution; see docs/stochastic-sampling.md for the actual-q,
+admission and numerical contracts. scheduler.py is a pure CPU global prefix
+planner; hardware profiling, multi-request execution and asynchronous scheduling
+remain unfinished (docs/dspark-reproduction-scope.md).
 CachedTarget has six CPU FP32 tests and a real same-dtype HF cached greedy
 check (117 tokens on seven pilot prompts). Reports/cached-target-20261008 records
 a BF16 full-recompute/cached near-tie divergence and isolated target costs.

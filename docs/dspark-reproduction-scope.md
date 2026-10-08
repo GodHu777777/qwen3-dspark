@@ -136,7 +136,7 @@ draft 与 target 在不同 CUDA stream 并发运行。本文所核对原文也�
 | Parallel backbone + Markov + confidence | pinned NeMo mask/loss/shift 核对，CPU 真模型测试，单样本对齐轨迹可学到每轮7接受 | 扩数据后的 held-out 质量；与纯 parallel/无 Markov 对照；禁止用单样本拟合代替泛化 |
 | 训练配方与数据 | target 重生成、三 split、严格身份/恢复；扩数据生成与训练准备中 | 实际审计后的可用数量、训练曲线、anchor/批量差距及 warmup 差距，不宣称论文规模 |
 | KV 增量与 rollback | target/draft cache CPU及逐层 KV 内容审查通过 | 真实 dtype/backend correctness gate；BF16 cached-block 3 prompt 中2失败仍是未解决事实 |
-| Stochastic distribution recovery | 尚未实现，仅 greedy 分支 | 实现接受/拒绝残差分布与调度因果性测试；区别概率无损理论与不同 kernel 的数值误差 |
+| Stochastic distribution recovery | 独立 CPU 概率参考已实现；11 项测试含 Fraction 精确分支枚举与非预知 admission 反例；模型解码仍仅 greedy | 接入真实 Markov 抽样 q、target 概率和 KV 回滚，核对随机解码分布及调度因果性；区别概率无损理论与不同 kernel 的数值误差 |
 | Confidence STS | 尚未实现；现 TF MAE 不是 rollout 校准 | 独立 dev 上拟合并冻结逐位置温度，报告 cumprod ECE、Brier、prefix coverage；test 不参与 |
 | R 请求全局 Algorithm1 | 已有独立CPU `scheduler.py` literal planner，输出ell/B/tau/score；7项测试用小R/gamma穷举oracle，保留cliff反例 | 尚未接入解码/engine，没有实际多请求SPS；fixture仅证明算法，不证明性能或因果score来源 |
 | 硬件容量 SPS(B) | 已测单请求 eager target 若干块长；不含 draft、并发或服务管线 | 测真实 batched engine 的 SPS/shape 台阶、上下文/并发敏感性；定义计时边界，验证模型预测误差 |
