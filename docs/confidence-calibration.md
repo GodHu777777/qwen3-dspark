@@ -110,3 +110,64 @@ python3 -m unittest discover -s tests -p test_calibration.py -v
 这同时区分逐位置独立校准（错误目标）与按论文顺序固定前缀的 STS。
 其它检查覆盖 EOS/输出预算/未验证尾部、拒绝负例分母、20-bin 同类规则、端点
 clamp、极端 logits、网格平局、空位置、dev split/重复身份/采样法/指纹边界。
+
+## 已绑定的 fit44/eval43 CPU 工作流
+
+`collect_rollout --group fit` 和 `--group eval` 使用同一份原始 development manifest，
+分别选择其中完整的 44/43 条 case 和原 seed。默认仍为 `quality`，保留旧 quality
+binding 的字段形状；fit/eval 必须把显式 `collection_group` 写入 binding digest。
+历史 `a278e5a` quality32 快照、协议与报告不被新实现替换。原先两个 quality TV
+probe 的 ID 不属于 fit/eval，因此这两组不会自行挑选替代 TV probe。
+
+以下只展示运行接口。真实 fit/eval GPU 采集需要独立审核窗口和已冻结 checkpoint；
+本次 CPU 实现本身不授权或执行采集。独立 decision manifest
+`configs/sts-step1280-selection.json` 已按 root 的选择记录冻结 step1280 权重/metadata、
+原 panel/protocol 与 quality32 决策依据；fit/eval 必须显式传入它，且它的 bytes 和
+digest 进入 collection 与校准 identity。先在同一个不可变新源码快照分别 dry-run：
+
+```sh
+python -m dspark_qwen.collect_rollout --group fit --selection configs/sts-step1280-selection.json --checkpoint /private/frozen-checkpoint --manifest /private/panel.json --output /private/fit-dry --dry-run
+python -m dspark_qwen.collect_rollout --group eval --selection configs/sts-step1280-selection.json --checkpoint /private/frozen-checkpoint --manifest /private/panel.json --output /private/eval-dry --dry-run
+```
+
+获批的两次采集都完成后，纯标准库 CPU CLI 才可以消费各自的 collection 目录：
+
+```sh
+python -m dspark_qwen.calibrate_rollout fit --collection /private/fit/collection --output /private/sts-fit.json
+python -m dspark_qwen.calibrate_rollout eval --artifact /private/sts-fit.json --fit-collection /private/fit/collection --collection /private/eval/collection --output /private/sts-eval.json
+```
+
+CLI 不加载 Torch、模型或 GPU；输出采用排他创建，不覆盖旧 artifact。fit/eval
+collection 必须有完整的 `completed` 结果、`execution_checks_passed=true`、由
+launcher 实际等待的 `worker-exit.json: returncode=0`、全部 44/43 条 case/seed/output，
+以及原始 rounds/blocks。零 block 提示仍必须有其初始输出和完成记录，不能删掉或
+补伪标签。所有提示均无有效位置时 fit 明确拒绝；eval 可以保留零样本指标。
+launcher/controller 自身 OS 退出、timeout 和 GPU 释放仍由外层运行控制器独立归档；
+这个 CPU CLI 不把 worker 的退出冒充为那些进程的退出。
+
+加载时复核源快照文件与 binding、checkpoint 权重/metadata、development records、
+完整 manifest、case/seed/split 和 target 指纹；逐轮重算原始 prefix 标签、每位置分母、
+提交 token、cache 长度及汇总计数。预算尾部必须符合 `min(block_size, remaining)`，
+拒绝后的已验证零标签不可删，接受 EOS 后的尾部不可补。只有显式 fit/eval group
+可用于此 CLI；quality 或重新标记/调换的 group 均拒绝。
+
+冻结 artifact 保存 checkpoint/metadata/data/full-manifest/protocol、全部 collector
+模块 SHA256、Torch/Transformers/HIP/device、fit binding/文件 SHA256、完整 fit prompt
+身份、STS 实现文件 SHA256、温度网格/温度/20 bins 和 fit-only prevalence。它属于
+**私有证据**，不能未经审查直接发布。eval 重新验证原 fit 文件未变、artifact digest
+未变、实现未变、eval 同 checkpoint/协议/源码/runtime，并明确核对 prompt ID 和
+prompt-token hash 与 fit 不相交；eval 不再搜索温度或估计常数。
+
+每位置以同一组 effective prefix 标签比较 unscaled、冻结 STS 和 **只在 fit44
+估计的 prefix prevalence 常数**，报告 ECE/Brier/count、block coverage 和 prompt
+coverage。constant 不做条件概率累乘，它直接估计该位置的累计接受事件率。
+如果 fit 在某位置没有有效标签，常数为 null、`available=false`、预测 count=0，
+并单独保留 eval 的 `observed_label_count`；绝不用 eval prevalence 或零常数填补。
+STS 对应位置保留 T=1 并标记 `fitted_on_fit=false`。所有方法仍用相同 20-bin/clamp
+定义；fit_metrics 始终标记为拟合样本内指标。eval43 只相对 STS fit prompt-held-out，
+不是未参与过模型监测的数据；final test 不进入任何一个阶段。
+
+新增测试覆盖 stdlib dry-run/fit/eval、默认 quality 兼容、完整分组与实际 worker exit
+要求、原始标签/计数篡改、checkpoint/runtime/source/fit 文件/artifact 变更、分组混入、
+零 block 提示、缺失 fit 尾部常数和无替代 TV probe。CPU 检查通过不代表已有真实校准
+结果，也不提供原生 BF16 losslessness 或服务性能证据。

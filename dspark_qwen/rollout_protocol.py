@@ -103,6 +103,22 @@ def verify_manifest(manifest, config):
     return {r['id']: r for r in read_rows(config['records'])}
 
 
+def verify_selection(selection, *, checkpoint_sha256, metadata_sha256, step, manifest):
+    """Validate an explicit checkpoint decision, without authorizing execution."""
+    expected = dict(version=1, kind='frozen_sts_checkpoint_selection',
+        checkpoint_step=step, checkpoint_sha256=checkpoint_sha256,
+        checkpoint_metadata_sha256=metadata_sha256,
+        manifest_sha256=manifest['manifest_sha256'],
+        rollout_protocol_sha256=digest(manifest['protocol']),
+        development_records_sha256=manifest['identity']['development_records_sha256'],
+        groups={'fit':44, 'eval':43})
+    if (type(step) is not int or step < 1 or
+            any(selection.get(key) != value for key, value in expected.items()) or
+            selection.get('selection_sha256') != digest({k:v for k,v in selection.items()
+                                                         if k != 'selection_sha256'})):
+        raise ValueError('Frozen STS checkpoint selection differs from inputs')
+
+
 def prefix_evidence(proposed, verified, accepted, rejected_index, accepted_eos_position):
     """Attempted uniforms and effective cumulative-prefix labels are different populations."""
     if any(type(x) is not int for x in (proposed, verified, accepted)) or not 0 <= accepted <= verified <= proposed:

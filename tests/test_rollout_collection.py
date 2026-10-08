@@ -176,6 +176,16 @@ class CollectionTests(unittest.TestCase):
             self.assertEqual(report['runs'][0]['preselected_probes'],[dict(round=0,status='unreached')])
             self.assertEqual(report['numerical_probes'],[])
 
+    def test_calibration_group_does_not_replace_quality_probe_ids(self):
+        self.binding['collection_group']='fit'
+        self.binding['manifest']['tv_probes']=[dict(id='quality-only',round=0)]
+        with tempfile.TemporaryDirectory() as directory:
+            report=self.run_fixture(Path(directory))
+            self.assertEqual(report['runs'][0]['output_tokens'],6)
+            self.assertEqual(report['runs'][0]['preselected_probes'],[])
+            self.assertEqual(report['numerical_probes'],[])
+            self.assertFalse(list(Path(directory).glob('private-probe-*')))
+
     def test_probe_failure_preserves_rounds_outputs_and_partial_tensor(self):
         original=collector.compare_probe
         def fail(model,ids,output,emitted,payload,temperature,on_row):

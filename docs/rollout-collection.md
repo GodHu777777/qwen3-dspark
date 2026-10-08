@@ -1,7 +1,8 @@
 # Frozen expanded-development rollouts
 
 `rollout_protocol.py` freezes the development panel independently of checkpoint.
-`collect_rollout.py` collects quality32 from any compatible expanded checkpoint.
+`collect_rollout.py` defaults to quality32; explicit `--group fit` / `--group eval`
+collect the original frozen calibration groups and require `--selection`.
 The collector is a native stochastic protocol measurement, not a performance
 benchmark or a proof of sequential-target distribution losslessness. Native BF16
 block probabilities can differ from fresh sequential probabilities.
@@ -79,21 +80,33 @@ with no automatic losslessness verdict.
 
 ## STS follow-up boundary
 
-This milestone implements quality32 only. The frozen fit44/eval43 groups are
-reserved for a later collector/fitting workflow after quality selects and freezes
-one checkpoint. Fit and eval must share that checkpoint and protocol. Compare
-unscaled head, frozen STS and per-position prefix prevalence estimated **only on
-fit44**, applying the same constants on eval43 for ECE/Brier. Do not substitute a
-constant-zero baseline or report fitting ECE as held-out performance. All 119 dev
+The original max_steps1280 training schedule and quality128/512/1280 collections
+are complete. Root selected step1280 for STS research using the unchanged quality
+panel: accepted draft tokens/round increased from 0.4958 at step512 to 0.6930,
+with 28/32 prompt ratios improving. The independent decision manifest is
+`configs/sts-step1280-selection.json`; selection is not a quality, losslessness or
+speedup guarantee. Historical `a278e5a` quality reports remain tied to that source.
+
+New `--group fit` / `--group eval` modes require this frozen selection and preserve
+the original 44/43 cases, seeds, sampling protocol and uncensored labels. They do
+not replace unreachable quality-only TV probes. See
+[confidence-calibration.md](confidence-calibration.md) for stdlib dry-run and
+CPU `calibrate_rollout fit/eval` commands, completion/identity checks and artifacts.
+No real fit44/eval43 collection or STS fit has been executed by this implementation.
+
+The CPU workflow compares unscaled head, frozen STS and per-position prefix
+prevalence estimated only on fit44, applying those constants unchanged to eval43
+with the same 20 bins and effective-label denominators. Missing fit positions
+produce unavailable constants, never eval-derived substitutes. All 119 dev
 prompts already participated in teacher-forced monitoring: eval43 is prompt-held-out
 from STS fit, not untouched model-selection data. Final test stays locked.
 
 ## CPU verification
 
-Nine tests in `tests/test_rollout_collection.py` cover exact grouping/leakage,
+Ten tests in `tests/test_rollout_collection.py` cover exact grouping/leakage,
 seed and identity stability, rejection-tail/EOS denominators, stdlib dry-run,
 source tamper detection, timeout evidence, tiny real Qwen repeatability/actual q,
 bounded TV tensors, budget-one/EOS-first and injected partial probe failure.
 They passed with HIP/CUDA/ROCR devices hidden, OMP threads 2. Real expanded
-step128/step512 binding dry-runs passed on the same frozen manifest. No real
-quality GPU rollout or fitted STS result is claimed by these checks.
+step128/step512 binding dry-runs passed on the same frozen manifest. The CPU checks alone make no GPU or fitted-STS claim; completed quality runs
+have separate immutable source and execution reports.

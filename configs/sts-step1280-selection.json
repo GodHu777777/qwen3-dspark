@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "kind": "frozen_sts_checkpoint_selection",
+  "checkpoint_step": 1280,
+  "checkpoint_sha256": "d6f21ab3af5187ed181efdbde54118a9ada21b458d9957515a17d6b3693d0de4",
+  "checkpoint_metadata_sha256": "8bb0c5113d02decac5b8a64c585284dd1664f1a5f88f13014713ec1facc7ecc5",
+  "manifest_sha256": "fd8efdd09f58c20a24e4c248532bb1460282b6eadb2e73d51754e9acaeeaa2ec",
+  "manifest_file_sha256": "b5119c7f83c1f6d0ea08b58eb795bad2d1475fb6e4b71ece46ed9ae1fe00ee1e",
+  "rollout_protocol_sha256": "8c1f167fc9ccdc3b185d820d94deba3d5892d00661b10c44deb57bd5581da73d",
+  "development_records_sha256": "69daac1d39af961c75fcb0795c12b22d7a9a18d747cd05f0673202060f6914e2",
+  "groups": {
+    "fit": 44,
+    "eval": 43
+  },
+  "training_schedule": {
+    "max_steps": 1280,
+    "completed": true,
+    "source_commit": "796fecc0d9142c1a733ad6df47b105fab4ee9f05",
+    "config_sha256": "ea8091ca8d124434696ccd15f88249839aaf1d71bdf540c3db9142bcbdda4762"
+  },
+  "decision_basis": {
+    "quality_source_commit": "a278e5a5d7d74a1f77f8dcd475700959ee158cb0",
+    "quality_binding_sha256": "2868d52abcc228f929a5dc5ef1a7e4772b2d5cf8e4ae6456e1bd93b92ecf6d7b",
+    "quality_report": "reports/expanded-quality1280-20261009",
+    "compared_checkpoint_steps": [
+      128,
+      512,
+      1280
+    ],
+    "improved_prompts_vs512": 28,
+    "declined_prompts_vs512": 4,
+    "accepted_draft_per_round_step512": 0.49580152671755723,
+    "accepted_draft_per_round_step1280": 0.6929515418502202,
+    "selection": "Root reviewed full-panel results and selected step1280 for STS research; no further training or panel/case changes."
+  },
+  "scope": [
+    "Native-protocol rollout acceptance selection only; not answer-quality, losslessness or speedup assurance.",
+    "Fit44 and eval43 use original manifest groups, cases, seeds and collection protocol.",
+    "Eval43 is prompt-held-out from STS fit only; all119 dev rows were teacher-forced monitored.",
+    "No final-test access, fitting, hyperparameter tuning or evaluation.",
+    "This manifest freezes identity; it does not authorize a GPU collection."
+  ],
+  "selection_sha256": "3810939bb414f3ffcc2eff3e856d8d72d02f910d9ae503ef1845b94564042863"
+}

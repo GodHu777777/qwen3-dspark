@@ -1,4 +1,4 @@
-"""Generic quality32 rollout collector. Dry-run is stdlib-only; GPU runs require coordination."""
+"""Frozen quality32/fit44/eval43 collector; dry-run is stdlib-only."""
 import argparse
 import json
 import os
@@ -10,10 +10,14 @@ import traceback
 
 from .eval_stochastic_gate import (sha256, write_json, append_json, audited_adapters,
                                   audit_observation, check_output, compare_probe)
-from .rollout_protocol import digest, verify_manifest, prefix_evidence, POLICY
+from .rollout_protocol import digest, verify_manifest, verify_selection, prefix_evidence, POLICY
 
 
-def bind_inputs(checkpoint, manifest_path):
+def bind_inputs(checkpoint, manifest_path, *, group='quality', selection_path=None):
+    if group not in ('quality', 'fit', 'eval'):
+        raise ValueError('Only frozen quality, fit and eval development groups are allowed')
+    if (group == 'quality') != (selection_path is None):
+        raise ValueError('fit/eval require --selection; quality does not consume an STS selection')
     checkpoint = Path(checkpoint).resolve()
     metadata_path = checkpoint / 'metadata.json'
     metadata = json.loads(metadata_path.read_text())
@@ -32,15 +36,27 @@ def bind_inputs(checkpoint, manifest_path):
     if model_config.get('model_type') != 'qwen3' or model_config.get('use_sliding_window', False):
         raise ValueError('Dense Qwen3 target required')
     cases = []
-    for index, case in enumerate(manifest['groups']['quality']):
+    for index, case in enumerate(manifest['groups'][group]):
         tokens = rows[case['id']]['prompt_token_ids']
         if len(tokens) > 4096 or any(t >= model_config['vocab_size'] for t in tokens):
             raise ValueError('Prompt exceeds bound or target vocabulary; no silent filtering')
         cases.append(dict(index=index, **case, split='validation', prompt_token_ids=tokens))
-    return dict(checkpoint=str(checkpoint), checkpoint_sha256=weights,
+    binding = dict(checkpoint=str(checkpoint), checkpoint_sha256=weights,
         checkpoint_metadata_sha256=sha256(metadata_path), manifest_path=str(Path(manifest_path).resolve()),
         manifest_file_sha256=sha256(manifest_path), manifest=manifest, model=cfg['model'],
         draft_config=metadata['draft_config'], cases=cases)
+    # Preserve the historical quality binding schema. New calibration groups
+    # must be explicit; changing a group changes the run binding digest.
+    if group != 'quality':
+        binding['collection_group'] = group
+        selection = json.loads(Path(selection_path).read_text())
+        verify_selection(selection, checkpoint_sha256=weights,
+            metadata_sha256=binding['checkpoint_metadata_sha256'], step=metadata.get('step'), manifest=manifest)
+        if selection.get('manifest_file_sha256') != binding['manifest_file_sha256']:
+            raise ValueError('Selection panel bytes differ')
+        binding.update(selection=selection, selection_path=str(Path(selection_path).resolve()),
+                       selection_file_sha256=sha256(selection_path))
+    return binding
 
 
 def snapshot(out):
@@ -67,7 +83,9 @@ def verify_binding(binding, source):
     for name, expected in binding['source_sha256'].items():
         if sha256(source / name) != expected:
             raise ValueError('Source content changed')
-    current = bind_inputs(binding['checkpoint'], binding['manifest_path'])
+    current = bind_inputs(binding['checkpoint'], binding['manifest_path'],
+                          group=binding.get('collection_group', 'quality'),
+                          selection_path=binding.get('selection_path'))
     if current != {k: v for k, v in binding.items() if k not in ('source_sha256', 'binding_sha256')}:
         raise ValueError('Bound inputs changed')
 
@@ -241,6 +259,8 @@ def main(argv=None):
     parser.add_argument('--checkpoint')
     parser.add_argument('--manifest')
     parser.add_argument('--output')
+    parser.add_argument('--group', choices=('quality', 'fit', 'eval'), default='quality')
+    parser.add_argument('--selection', help='Frozen checkpoint selection required for fit/eval')
     parser.add_argument('--timeout-seconds', type=int, default=3600)
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--_worker', help=argparse.SUPPRESS)
@@ -255,7 +275,7 @@ def main(argv=None):
     save(out, report)
     try:
         write_json(out / 'request.json', vars(args))
-        binding = bind_inputs(args.checkpoint, args.manifest)
+        binding = bind_inputs(args.checkpoint, args.manifest, group=args.group, selection_path=args.selection)
         binding['source_sha256'] = snapshot(out)
         binding['binding_sha256'] = digest(binding)
         write_json(out / 'run.json', binding)

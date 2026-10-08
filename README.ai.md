@@ -1,7 +1,8 @@
 # DSpark Qwen training lab
 
-Scope: pilot data regeneration, single-GPU DSpark draft training and a reference
-greedy verifier for frozen dense Qwen3. This directory is an independent Git
+Scope: Qwen3-0.6B data regeneration, bounded DSpark training, audited stochastic
+reference decoding and CPU calibration. The full serving/scheduling system remains
+incomplete. This directory is an independent Git
 repository with origin git@github.com:GodHu777777/qwen3-dspark.git. Read AGENTS.md.
 The enclosing workspace, if present, has its own README.ai.md.
 
@@ -53,10 +54,14 @@ identical sampled tokens; no performance or calibrated scheduling claim. See
 docs/cached-stochastic.md and docs/stochastic-sampling.md. scheduler.py is a pure CPU global prefix
 planner; hardware profiling, multi-request execution and asynchronous scheduling
 remain unfinished (docs/dspark-reproduction-scope.md).
-calibration.py implements CPU sequential temperature scaling of confidence
-logits against realized validation prefix events (8 tests). It requires frozen
-checkpoint/data/protocol identity and uncensored proposal collection. No real
-rollout calibration has been fitted; see docs/confidence-calibration.md.
+calibration.py implements CPU sequential temperature scaling (8 algorithm tests).
+calibrate_rollout.py adds a strict stdlib fit44/eval43 CLI with completed-worker
+evidence, same-checkpoint/data/protocol/source/runtime checks, disjoint prompt
+identities, frozen artifact integrity, and fit-only prefix-prevalence constants.
+It compares unscaled/STS/constants with 20-bin ECE/Brier and coverage. Explicit
+fit/eval collector groups require configs/sts-step1280-selection.json; quality
+remains the default. No real fit44/eval43 or STS fit has run; see
+docs/confidence-calibration.md for interfaces and evidence boundaries.
 packed_target.py executes variable-length request chunks in one Qwen forward,
 with per-request positions, marker-based causal isolation and independent KV
 crop/removal. Five CPU tests check actual KV contents and lifecycle against
@@ -196,8 +201,8 @@ Expanded development rollout collection: rollout_protocol.py freezes exactly
 119 accepted dev prompts into quality32 (export order), fit44/eval43 (fixed salted
 ID hash), checkpoint-independent per-prompt seeds, data/target/generation identity
 and two preselected first-round TV probes. collect_rollout.py provides stdlib-only
-dry-run and a separate bound source worker for quality32 native BF16 stochastic
-collection (temp1, no filtering, float64 actual q,128 tokens, full proposals).
+dry-run and a separate bound source worker for native BF16 stochastic
+collection (quality32 by default; explicit fit44/eval43 require frozen selection) (temp1, no filtering, float64 actual q,128 tokens, full proposals).
 It records four distinct position denominators, rejection-tail prefix zeros,
 accepted-EOS truncation, cache/finite checks and private partial evidence. Nine
 CPU tests and real step128/512 binding dry-runs pass. Expanded step128 quality32
@@ -209,10 +214,14 @@ a sequential-distribution equivalence result. Step512 quality32 completed on the
 1,299 draft tokens (0.4958/round), 3,941 outputs; 31/32 prompt ratios improved.
 One accepted-EOS block excludes five verified tail labels, so effective positions
 are 17,955 versus 17,960 verified. See reports/expanded-quality512-20261009.
-STS fitting remains unexecuted; the frozen1280-step training plan is complete; see
-reports/expanded-training-step1280-20261009. Final checkpoint selection remains pending. Fit/eval execution and
-fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
-selection. See docs/rollout-collection.md; keep final test locked and coordinate
+The original1280-step training plan is complete; see reports/expanded-training-step1280-20261009.
+Quality1280 also completed on unchanged a278e5a/panel/protocol: 2,270 rounds,
+1,573 accepted draft tokens (0.692952/round), 3,856 outputs, 28/32 prompt ratios
+improved versus512. Root froze step1280 for STS research in
+configs/sts-step1280-selection.json; see reports/expanded-quality1280-20261009.
+All16 numerical probe rows still have nonzero TV (max0.0927705), so this is not
+a sequential-target-law or serving-speed guarantee. CPU fit/eval workflow now
+exists; real fit44/eval43 collection, frozen STS and eval metrics remain unexecuted. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.
 
 Experimental native varlen: varlen_target.py adds active-request KV gathering and
@@ -249,7 +258,14 @@ snapshot or reinterpret the old public failure as a pass.
 
 Whole-pretrained-Qwen gate: scripts/probe_qwen_varlen.py and
 docs/whole-qwen-varlen-gate.md define the fixed synthetic-input, three-result-state
-protocol. Eight CPU tests and real-target fingerprint dry-run passed; this is not
-a completed real-device gate. A formal run must use a fresh committed archive,
-recheck GPU/ASR process state, preserve the 300-second limit and original per-layer
-attention thresholds, and report endpoint numerical differences separately.
+protocol. Eight CPU tests and real-target fingerprint dry-run passed. Root reports
+the first formal 7d1fcdb run exited and released the GPU with a layer26 RMS threshold
+failure; its independent report is being finalized. This is not a full native
+correctness pass and does not affect the separate SDPA collector. Preserve the
+300-second bound and original per-layer thresholds; endpoint numerical differences
+remain separate from structural acceptance.
+
+STS workflow CPU verification: 29 tests (8 algorithm,10 collection,11 workflow)
+passed with CUDA/HIP/ROCR devices hidden on the existing remote runtime; real
+step1280 selection-bound dry-runs completed all44 fit and43 eval bindings without
+GPU execution. Private evidence: output/sts-cpu-preflight-20261009-v2.
