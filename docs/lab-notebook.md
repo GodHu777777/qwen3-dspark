@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 00:43（UTC+8）**。本轮直接读取 STS 源码/协议及 8 项 CPU 日志、随机 tensor/cache 协议与 22/76 项 CPU 日志、新的预期拒绝 preflight 留证，以及 packed target 协议、5 项 CPU 日志和执行身份，并直接核正式 generation/audit/runner 终态、重跑结构审计及 batch/export 哈希；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09（UTC+8；补核截至 00:47:59 的 expanded training 证据）**。本轮由专职 experiment_journal 直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，核对身份、指标和计时口径；远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -10,11 +10,11 @@
 
 复盘索引：
 
-- 数据：[pilot 聚合](../reports/pilot-20261008/README.md)、[扩充准备与 smoke](../reports/data-expansion-20261009/README.md)。
-- 训练与对齐：[采样轨迹诊断](../reports/diagnostic-20261008/README.md)、[greedy 对齐诊断](../reports/diagnostic-aligned-20261008/README.md)。
-- 缓存数值：[dynamic BF16 失败](../reports/cached-decode-gate-20261008/README.md)、[canonical 真实 drafter gate](../reports/canonical-real-draft-gate-20261008/README.md)。
-- 调度：[Algorithm 1 与生产异步机制范围](dspark-reproduction-scope.md)。
-- 资源门槛：[M01 的两周期/Pareto 复盘](#memory-gate)。
+- 数据质量/长度：[P06 正式审计与拒绝](#data-final-audit)、[T04 模板与实际输入长度](#expanded-resource-gate)。
+- Hidden-state/训练对齐：[D03 同轨迹学习诊断](#aligned-learning)、[T05 首段训练与 TF 边界](#expanded-step32)。
+- 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)。
+- KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
+- 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -98,6 +98,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **下一步。** 优先交付本版记录机制；后续收到诊断或缓存测量就追加。学习诊断支持扩充后，再实现规范化 prompt 排除、三路 split、不可变选择来源；保存精确 prompt/output IDs、源 revision、模型/配置/脚本身份与整批原子恢复；跑 CPU 选择与泄漏检查，给出生成命令，并协调 GPU 窗口。
 
+<a id="aligned-learning"></a>
 ## 2026-10-08 23:06 起（UTC+8）— D03：对齐轨迹学习诊断，已完成
 
 **问题与修正。** 前次采样回答/稀疏 anchor 与 greedy rollout 的完整前缀覆盖不同，不能把它作为严格同任务过拟合结论。本次先生成同 prompt 的 target-greedy 32-token 轨迹，使用连续 anchors 59–89，覆盖该轨迹所有可能 rollout prefix。每步 196 个有效监督位置，训练 128 step，学习率 0.0006，draft 结构保持不变。
@@ -108,6 +109,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **版本与下一步。** 聚合证据随 `3e4514d8be504050bb2acc03dab68e9c87c0a958` 提交；23:08 左右的 live `git ls-remote` 核实远端 main 同 SHA。该 commit 是归档版本，实际执行身份仍以 source-identity 为准。原采样实验已另有[公开报告](../reports/diagnostic-20261008/README.md)，可核对前述方法混淆。下一步扩大训练样本并测真正的 held-out 质量，同时建立可比较的 cache 语义与成本基线。
 
+<a id="dynamic-numerics"></a>
 ## 2026-10-08 — C02：缓存 benchmark gate 失败与数值调查
 
 **失败记录（协调者转达 direction）。** 初次正式成本测量在第 2 条 prompt 的第 15 个生成 token 发现 cached 与 full-recompute greedy argmax 不同，程序退出，没有正式成本报告。v2 保留第 1 条 prompt 的部分测量（5 trials / 40 blocks），随后释放 GPU；不能把 partial 数据说成成功性能结果。最初怀疑数值 tie，当时尚未证实。
@@ -134,6 +136,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **运行状态与下一步。** 通过全部 smoke 阶段后，bounded runner 自动启动完整 1280 输入生成；runner PID 3402974，generation PID 3405911，运行标签 `expand-20261009`。各阶段留 PID/log/exit-code；任一阶段错误就停止后续，不修改运行身份。当前是“运行中”，不是已完成数据；完整结束后还要自动 audit。持续核对完成 batch、实际接受/拒绝数量和 final-test ≥100 完成回答目标，仅按聚合数据报告。正式运行不混入 smoke completion，不改 pipeline 源码，不停止无关进程。
 
+<a id="kv-correctness"></a>
 ## 2026-10-08 23:30（UTC+8）— C03：缓存原型的逻辑证据与 BF16 真实门槛失败
 
 **目标。** 分开核对 cache bookkeeping、真实逐 token 语义和性能，避免 CPU 通过或 target-only 成本被误读为 speculative BF16 无损。
@@ -196,6 +199,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **下一决策。** 协调者已授权 direction 第二次有界 GPU 窗口执行真实 drafter canonical gate，**目前只记录授权/计划，结果未到，不能写通过**。应复用原 gate 的全部例子和失败位置，分别报告 canonical sequential/speculative、stock target、同 prefix 的 shape/history 分解，后续再测长输入、容量边界和同工作量成本。记录者不启动 GPU、不暂停任何进程。
 
+<a id="scheduler-scope"></a>
 ## 2026-10-08 23:56 起（UTC+8）— S01：Algorithm 1 与生产 stale capacity 的范围复盘
 
 **问题。** 单请求固定 k、confidence 阈值或 target block 耗时表，不足以复现论文的全局资源分配。同步 Algorithm 1 和生产的两步历史容量策略也不是同一算法，不能用一个全局回溯搜索替代并说成更忠实。
@@ -222,6 +226,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **局限与下一决策。** exact-B 与正 survival tests 支持 CPU 论文 planner 的范围，不证明 scores 的采样因果性、异步生产容量搜索或真实硬件收益；SPS fixture 仍是假设曲线。保留反例及早停/正候选限制，后续使用真实离散容量曲线和非预知干预测试，不把忠实性修正为任意全局搜索。
 
+<a id="canonical-drafter-gate"></a>
 ## 2026-10-09 00:01（UTC+8）— C06：真实 drafter canonical gate 完成，独立执行契约通过
 
 **问题。** C04 的 oracle target-only 探针不包含真实 drafter，C05 当时只到 CPU-ready。此次需要把实际 trained draft proposal、target 中间特征和 rollback 接入 canonical 执行契约，并保留 stock 对照与原 dynamic BF16 失败。
@@ -291,6 +296,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **状态来源与下一决策。** 协调者于 00:26 转达 1112/1280，generator 为 Rl、runner 为 S、退出标识未出现；这是转达的运行快照，记录者本轮没有再次 poll，也不由此宣称完整数据审计通过。只有终态 full-generation/full-audit/runner exit 0 与完整 exports 到齐后，才核 audited train/dev 的真实 eligibility/hashes，进入另行协调的 GPU 资源门槛；最终 test 仍不读取用于调参。
 
+<a id="stochastic-cache"></a>
 ## 2026-10-09 00:35（UTC+8）— R04：真实 Markov proposal 与 cached stochastic 的首轮 CPU 集成
 
 **问题与方法。** R02 小词表 sampler 仍需与真实 tensor proposal、Markov q、target 行和两套 KV 提交语义接通。已读[缓存随机路径协议](cached-stochastic.md)及 `tensor_sampling.py`、`cached_sampling.py`：采用独立策略 `float64_softmax_normalize_cdf_v1`，temperature 正且有限、无过滤；model forward dtype 不变，实际 logits 升为 float64、softmax 后一次归一化，保存真正用于抽样的 q。verifier 检查已定义 p/q，不再次归一化，不加 denominator epsilon 或小 residual fallback。
@@ -303,6 +309,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 
 **下一决策。** 保留 target-only 同 probability adapter 的 baseline；同 seed 跨不同算法不要求输出 token 相同，只要求同路径/runtime 重跑语义。真实 GPU stochastic gate、实际 validation rollout、STS 接入及性能都尚未完成；采样、probability transform、verify、KV 与 observer 的物理代价必须完整计入后续比较。
 
+<a id="packed-isolation"></a>
 ## 2026-10-09 00:35（UTC+8）— S03：单次 packed Qwen 前向的多请求 CPU 状态参考
 
 **问题与假设。** 全局 B 分配需要把不同请求的可变新片段放入一次 target forward，且各请求的 position、可见 KV、crop/退出独立。无 query padding 不自动代表 attention 高效，必须把 dense score 域及显式 mask 工作分开披露。
@@ -318,6 +325,7 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **随后版本核实（协调者）。** packed 三文件归档为 `acef238`；Git push exit 0，origin/main 从 `a7abb25` 更新至 `6f8b244`，包含 `4255f23`、`acef238` 与入口/范围文档更新。以上是源码推送证据，最新 CI 尚未核实。
 
 
+<a id="data-final-audit"></a>
 ## 2026-10-09 00:43（UTC+8）— P06：正式 1280 输入生成终态与独立结构复核
 
 **问题与方法。** P05/T02/T03 的进度或 guard 拒绝都不是最终审计。协调者新授权记录者等待约 45 秒后仅查一次 live 终态；本轮直接确认原 generator 3405911 和 runner 3402974 已不存在，full-generation/full-audit/runner exit code 均为 0，六个 stages 全部成功。此前一次 SSH 命令在远端 Python 启动前因 heredoc 换行转义错误失败，未产生 live 查询或更改；随后的正确命令才是这次终态检查，没有重启/信号/GPU 工作。
@@ -331,3 +339,32 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **证据与身份。** 新增[正式 summary](../reports/data-expansion-20261009/full-summary.json)、[最终 audit](../reports/data-expansion-20261009/full-audit.json)、[completion](../reports/data-expansion-20261009/full-completion.json)、[正式 source identity](../reports/data-expansion-20261009/full-source-identity.json)及[长度/batch aggregate](../reports/data-expansion-20261009/full-aggregate.json)；保留原准备/smoke/启动阶段报告。正式 config SHA 为 `042c644900c56c136971d11d94e1a4814b82ccef55b8b6495e7214a937a569d6`，selection SHA 为 `b934967810270f932f915b8eecc74e5d6bce01d8bddea97284aa6fcac9822b40`；model 私有路径在公开 projection 中替换为标签，config hash 绑定原始 bytes。正式 development records SHA 为 `69daac1d39af961c75fcb0795c12b22d7a9a18d747cd05f0673202060f6914e2`，最终 test 独立 exports 哈希齐备。各类完整原件/脚本 collector stdout 保留 ignored，不公开样本。
 
 **下一决策与边界。** 已告知协调者可进入同 immutable 796fecc 快照的 eligibility/resource preflight 协调，但本轮尚未执行 expanded training/GPU memory gate、训练或 STS rollout；新的终态不回改此前真实拒绝。训练数据仅 932 train，dev 119；final test 不参与 checkpoint/policy 选择，权限仍非安全边界。单分片/截断/模板拒绝限制数据代表性。后续实际训练形状/eligible rows/anchor 数由 preflight 再核，真实显存与质量逐门槛推进。记录者没有 commit/push 或调度其他进程。
+
+
+<a id="expanded-resource-gate"></a>
+## 2026-10-09 — T04：完整数据 CPU eligibility、长度口径与真实显存 gate
+
+**问题与假设。** T02/T03 的 completion guard 拒绝是正确的早期门槛行为，完整生成后需重新确认数据身份、实际 eligible rows 与训练形状，再判断累积更新和 Adam 状态常驻时是否能运行。生成 summary 的 training-template 长度不能直接代替训练输入长度。
+
+**方法与解决办法。** 本轮直接读未发布 `output/expanded-training-preflight-20261009/cpu-preflight-execution.json`、`cpu-preflight.json`、`length-convention.json`，以及 `output/expanded-training-memory-gate-20261009/{completion,result,aggregate-summary}.json`。CPU preflight 于 00:39:22 执行 exit 0，source 冻结为 `796fecc0d9142c1a733ad6df47b105fab4ee9f05`，archive SHA 延续 T02；配置 SHA `ea8091ca8d124434696ccd15f88249839aaf1d71bdf540c3db9142bcbdda4762`。本轮独立核本地 config bytes、preflight SHA、gate/run identity 与冻结 package SHA 一致。没有执行 GPU 或重新读取生成记录/test 内容。
+
+**长度观察。** eligible train/dev 为 932/119，train 实际 sequence tokens 总计 **424267**，completion 含 EOS 总计 297385；生成 audit 的 train 模板总计 425199，比实际输入多 932，恰为每条一 token。直接长度结构证据确认最长 accepted train 行实际输入 **2224**（prompt 1588 + completion 含 EOS 636），rendered training field/重分词为 **2225**；generated IDs 是 rendered prefix，EOS 后模板还含 token 198（换行）。这是模板末尾换行与训练实际 IDs 的口径差异，未据此改数据或宣称模板拒绝机制已定位。
+
+**显存与正确性观察。** 00:43:45–00:44:08 memory gate exit 0、未 timeout，runner wall 22.936719 秒。932 行产生一个非支配真实形状 `(sequence=2224, actual anchors=32)`；累积 8，执行两次完整更新周期，分别覆盖首次 Adam 分配及状态常驻。projection/backbone/Markov embedding/Markov projection/confidence gradient checks 均通过，首次更新与第二周期状态常驻通过，target frozen=true。optimizer tensor state 1293537536 bytes，峰值 allocated **5636591616 bytes**，reserved **5827985408 bytes**；runner 启动前设备 free 25246564352 bytes。该 gate 不保存正式 checkpoint，探针自身更新不作为训练质量结果。
+
+**局限与下一决策。** Pareto gate 是实测资源门槛，kernel workspace/allocator 不必随长度或 anchor 数单调，不是全形状最坏显存保证，也不保证未来 co-tenant 内存。wall/显存是资源事实，不能推出 serving SPS、speedup 或训练质量。现有 preflight 与 gate 允许进入另行授权的 step32；此前拒绝条目仍保留原来源和结果。训练/source/config 外的 runtime、模型、数据及 GPU 共用状态仍须在未来执行前核对。
+
+<a id="expanded-step32"></a>
+## 2026-10-09 — T05：expanded training 首段 step32 与 checkpoint 身份核对
+
+**问题与假设。** 显存 gate 通过后，需确认全 eligible 数据配置下真正的 32 optimizer updates、冻结 target 和可恢复 checkpoint 能完成，并观察 dev teacher-forced 学习信号；这不能替代独立 rollout 质量门槛。
+
+**方法与尝试。** 本轮直接读未发布 `output/expanded-training-step32-20261009/{completion,run,result-step-000032,checkpoint-metadata,step32-verification}.json`、`metrics.jsonl`、runner exit，以及冻结源码 `output/expanded-training-preflight-20261009/source/dspark_qwen/train.py`。runner 从 immutable 796fecc snapshot 启动 fresh `--stop-after 32`，没有自动 resume。配置累积 8、LR 0.0006、32 anchors、block 7、BF16 AMP/FP32 trainables；共有 **161692161** trainables、932 train/119 dev。256 microsteps / 932 = **0.2746781116 遍**，不是完整一遍训练；按固定行顺序循环，anchor 重采样。
+
+**正确性与身份观察。** 00:46:57–00:47:59 runner exit 0、未 timeout，result 存在；本轮独立核 optimizer 日志恰为 1–32、全部数值 finite、本地冻结 package SHA、config bytes、run/preflight 的 source/config/data/target/runtime 字段，以及 metadata/run identity 一致。`step32-verification.json` 记录 latest/metadata/resume-state step 都为 32、weights 与 optimizer/RNG resume hashes 匹配、source/config 未变；大型 checkpoint 原件未在本地，本轮 checksum 匹配依据是该留证报告，没有冒称重新 hash 远端权重。target frozen=true，源码检查对应无 target gradients 且 parameter version 未变；这是已实现冻结检查的范围。
+
+**模型质量观察。** 同 119 dev、同 anchor RNG 的逐样本宏平均 teacher-forced loss **3.385942285 → 2.582734973**，CE 11.99816623 → 7.180634186，L1 1.998285316 → 1.957873026；字段 teacher_forced_accept 的软 overlap **0.00085734024 → 0.02106348236**，confidence BCE 0.387668913 → 0.102585854、MAE 0.318861928 → 0.020433038。supervised tokens 的样本均值前后均为 213.8739496。可观察到初期 teacher-forced 学习信号，不能称 2.106% rollout acceptance、confidence 已校准、held-out rollout 已通过或 test 质量提升。
+
+**计时与显存口径。** runner wall **61.78925495 秒**，report elapsed **36.97336006 秒**，allocated 峰值 **5571854848 bytes**。源码 `began` 在 before validation 之后，而 report 在 after validation 与 checkpoint 保存之后计算，所以 36.973 秒包含训练更新、after validation 和 checkpoint 保存；纯更新循环末条 elapsed 为 **20.99824730 秒**，也没有独立逐阶段同步计时。不能将 report elapsed 写成纯 training loop、从 wall 推断训练吞吐或 serving 性能。
+
+**局限、解决办法与下一决策。** 本段无运行失败；用源码纠正 elapsed 名称，用身份/step/hash 留证排除混用源码或配置，用分开记录的 TF 指标避免误读为 rollout。只完成首段执行及初期学习检查；更长训练、恢复实际加载、独立 development rollout、STS 拟合/验证和真实性能仍需各自证据，后续只在新的明确授权下推进。final test 未打开、未做质量分析，未修改训练快照/实现或 commit/push。
