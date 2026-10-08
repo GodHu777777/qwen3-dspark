@@ -1,0 +1,68 @@
+{
+  "status": "Completed final authorized strict resume1024-to1280 segment; planned training schedule complete; no automatic quality or STS",
+  "source_commit": "796fecc0d9142c1a733ad6df47b105fab4ee9f05",
+  "resumed_from": 1024,
+  "step": 1280,
+  "optimizer_steps_in_segment": 256,
+  "cumulative_microsteps": 10240,
+  "effective_train_traversals": 10.987124463519313,
+  "eligible_train": 932,
+  "eligible_validation": 119,
+  "train_sequence_tokens": 424267,
+  "planned_max_steps_unchanged": 1280,
+  "training_exit_code": 0,
+  "runner_os_exit_code": 0,
+  "exit_scope": "Training child exit waited by runner; runner OS exit captured by shell; shell wrapper not independently waited by this verifier",
+  "timed_out": false,
+  "started_utc": "2026-10-08T18:16:24.708853+00:00",
+  "finished_utc": "2026-10-08T18:19:53.916365+00:00",
+  "optimizer_loop_elapsed_seconds": 160.13023931509815,
+  "train_result_elapsed_seconds": 176.85806779004633,
+  "subprocess_wall_seconds": 209.2072820479516,
+  "peak_allocated_bytes": 5632856064,
+  "trainable_parameters": 161692161,
+  "target_frozen_verified": true,
+  "validation_before": {
+    "loss": 2.0641077716811362,
+    "ce": 4.370612416948591,
+    "l1": 1.2930274926313834,
+    "confidence_bce": 0.4633218047498655,
+    "teacher_forced_accept": 0.3534862527568989,
+    "confidence_mae": 0.20860276627941293,
+    "supervised_tokens": 213.87394957983193
+  },
+  "validation_after": {
+    "loss": 2.0294118919292417,
+    "ce": 4.2521412512835335,
+    "l1": 1.253140956413846,
+    "confidence_bce": 0.4763709161461902,
+    "teacher_forced_accept": 0.373429528116679,
+    "confidence_mae": 0.21437595484136535,
+    "supervised_tokens": 213.87394957983193
+  },
+  "timing_scope": {
+    "optimizer_loop_elapsed_seconds": "Last metrics.jsonl elapsed value within each segment; resets after initial validation, includes optimizer-loop Python/logging overhead",
+    "train_result_elapsed_seconds": "Begins after initial validation; includes optimizer loop, final validation and checkpoint saving",
+    "subprocess_wall_seconds": "Bounded controller wall time including child startup, identity checks, loading/resume, both validation passes, training and checkpoint saving"
+  },
+  "validation_scope": "All 119 eligible validation rows, fixed anchor seed at each evaluation; weighted within rows then macro averaged across rows. This is not the separate fixed-dev32 rollout panel.",
+  "confidence_interpretation": {
+    "constant_zero_mae_at_step1280": 0.373429528116679,
+    "learned_mae_at_step1280": 0.21437595484136535,
+    "caveat": "Draft-dependent overlap targets evolve. Raw MAE alone is not a cross-checkpoint calibration comparison; constant-mean/median and rollout calibration are unmeasured."
+  },
+  "raw_evidence_sha256": {
+    "result-step-001280.json": "4a1d6698874123f7025a7b82062dc8c378ca2817ed4d55f4b0f131ec9c5c2817",
+    "completion.json": "40d00f9ec88dbb1e5a8f462474f9e5583d3ea11976768f9f8d1b59d0afe52455",
+    "step1280-verification.json": "3afdce140744f6ecb84eea62acde55d3c9a6dc1097e4a68d7a841e595de4005d",
+    "metrics.jsonl": "a4aaec429f22eb55464fbdea65fe2bcadb5df74808efd0439eb94c515b20d798",
+    "runner.os-exit-code": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  "limits": [
+    "Teacher-forced distribution overlap is not actual rollout acceptance, output quality or speedup.",
+    "Final-test content remains outside training and evaluation.",
+    "The planned max_steps1280 training schedule is complete; overall quality, calibration and system performance work remains incomplete.",
+    "No final checkpoint selection, STS fitting or scheduling benefit is established.",
+    "Earlier training and quality reports are preserved separately."
+  ]
+}

@@ -137,10 +137,10 @@ Its [completed expansion](reports/data-expansion-20261009/README.md) produced
 932 train, 119 dev and 119 final-test responses from 1,280 inputs; 110 were rejected.
 Structural audits passed. Final test remains excluded from development and tuning.
 
-[Expanded training through step1024](reports/expanded-training-step1024-20261009/README.md)
+[Expanded training through step1280](reports/expanded-training-step1280-20261009/README.md)
 uses 32 anchors and accumulation 8, with verified checkpoint/optimizer resumes and
 a frozen target. On the same 119 dev rows, teacher-forced overlap increased from
-0.086% initially to 35.35%; this is not measured rollout acceptance or speedup.
+0.086% initially to 37.34%; this is not measured rollout acceptance or speedup.
 The [resource and first-resume report](reports/expanded-training-20261009/README.md)
 records the two-cycle memory gate and earlier steps.
 

@@ -209,7 +209,8 @@ a sequential-distribution equivalence result. Step512 quality32 completed on the
 1,299 draft tokens (0.4958/round), 3,941 outputs; 31/32 prompt ratios improved.
 One accepted-EOS block excludes five verified tail labels, so effective positions
 are 17,955 versus 17,960 verified. See reports/expanded-quality512-20261009.
-STS fitting remains unexecuted; training has completed step1024 of the frozen1280 plan. Fit/eval execution and
+STS fitting remains unexecuted; the frozen1280-step training plan is complete; see
+reports/expanded-training-step1280-20261009. Final checkpoint selection remains pending. Fit/eval execution and
 fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
 selection. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.
