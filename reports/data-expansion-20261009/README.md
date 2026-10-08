@@ -23,3 +23,19 @@ Astra core 已独立审查三路导出和恢复身份，未发现阻止生成的
 这些文件记录实际 CPU 准备源码哈希；准备时数据脚本尚未提交，不能用后续 commit
 替代执行身份。正式生成前须提交并定点部署源码，先在独立目录做三路小型生成、
 导出、审计和恢复 smoke，然后才在新输出目录生成完整 1280 条。
+
+## 实际生成 smoke 与正式运行启动
+
+正式生成 pipeline 版本为 `d5e1538960afded86d487eab71908ce2c7531a7e`，部署前
+比对全部 5 个脚本的 Git blob、本地与 AMD SHA-256 完全一致。每个 split
+机械选前 2 条，共 6 条，未根据内容作选择。
+
+- [Smoke 首次生成汇总](smoke-summary.json)：6 条全 EOS 完成，2 train / 2 dev / 2 test，2,074 token。
+- [Smoke 审计](smoke-audit.json)：三路身份/来源/token/EOS/预算与输出哈希全部通过。
+- [恢复对照](smoke-resume-equivalence.json)：原命令重复启动，所有导出 SHA-256 不变，再审计通过。
+- [生成执行身份](generation-source-identity.json)：提交、配置/选择/源码/模型哈希与 runtime。
+
+恢复进程会重写 summary 中本次 invocation 的耗时和显存，故首次生成指标从保留的
+原 generation log 提取，不把恢复进程的 0 秒当作实际生成时间。完整 1280 条
+生成在上述 smoke 全部成功后启动；此版本报告只确认启动，尚无完整数据完成结果。
+生成样本与 raw batch 保持 ignored，最终 test 禁止用于选 checkpoint/policy。
