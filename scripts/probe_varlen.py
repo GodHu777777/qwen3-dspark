@@ -42,7 +42,9 @@ PROTOCOL = {
 
 
 def write_json(path, obj):
-    path.write_text(json.dumps(obj, indent=2, allow_nan=False) + '\n')
+    temporary = path.with_suffix(path.suffix + '.tmp')
+    temporary.write_text(json.dumps(obj, indent=2, allow_nan=False) + '\n')
+    temporary.replace(path)
 
 
 def source_identity():
@@ -50,7 +52,21 @@ def source_identity():
     return {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 
 
-def worker(output):
+def protocol_for_backend(backend='public'):
+    if backend == 'public':
+        return PROTOCOL  # Preserve historical public protocol bytes/identity.
+    sys.path.insert(0, str(ROOT))
+    from dspark_qwen.rocm_varlen import BACKEND, RUNTIME_PIN
+    if backend != BACKEND:
+        raise ValueError('Unknown explicit native backend')
+    return dict(PROTOCOL, backend=BACKEND, runtime_pin=RUNTIME_PIN,
+        window_size=[None, None], is_causal=True,
+        private_entry='aten::_flash_attention_forward',
+        gqa_mode='implicit Hq16/Hkv8 in private ATen',
+        original_public_protocol_sha256=hashlib.sha256(json.dumps(PROTOCOL, sort_keys=True).encode()).hexdigest())
+
+
+def worker(output, backend='public'):
     # All non-stdlib/backend imports live behind explicit execution.
     import torch
     from torch.nn.attention import SDPBackend, sdpa_kernel
@@ -65,14 +81,24 @@ def worker(output):
     device, dtype = torch.device('cuda:0'), torch.bfloat16
     torch.cuda.set_device(device)
     torch.cuda.reset_peak_memory_stats(device)
-    result = {'protocol': PROTOCOL, 'source_identity': source_identity(),
+    kernel = native_varlen
+    if backend != 'public':
+        from dspark_qwen.rocm_varlen import BACKEND, PinnedRocmVarlenKernel
+        if backend != BACKEND:
+            raise ValueError('Unknown explicit native backend')
+        kernel = PinnedRocmVarlenKernel(device)
+    protocol = protocol_for_backend(backend)
+    result = {'protocol': protocol, 'backend': backend,
+              'runtime_pin_observed': getattr(kernel, 'runtime', None),
+              'protocol_sha256': hashlib.sha256(json.dumps(protocol, sort_keys=True).encode()).hexdigest(),
+              'source_identity': source_identity(),
               'torch': torch.__version__, 'hip': torch.version.hip,
               'cuda': torch.version.cuda, 'device': torch.cuda.get_device_name(device),
               'device_arch': getattr(torch.cuda.get_device_properties(device), 'gcnArchName', None),
               'rocm_flash_preferred_library': str(torch.backends.cuda.preferred_rocm_fa_library()) if torch.version.hip else None,
               'rocm_flash_prefer_ck_env': os.environ.get('TORCH_ROCM_FA_PREFER_CK'),
               'backend_identity_scope': 'Native ATen flash dispatch recorded; preferred library is a preference, not an independently traced device-kernel identity',
-              'cases': [], 'status': 'running'}
+              'cases': [], 'native_calls': [], 'comparisons': [], 'status': 'running'}
     write_json(output / 'worker-result.json', result)
     started = time.monotonic()
 
@@ -89,10 +115,23 @@ def worker(output):
     key, value = tensor(len(pairs)), tensor(len(pairs))
 
     def native(q, k, v, layout):
+        number = len(result['native_calls'])
+        tensor_path = output / f'private-native-{number:03d}.pt'
+        payload = {name: tensor.detach().cpu().clone() for name, tensor in
+                   dict(q=q, k=k, v=v, cu_query=layout.cu_query, cu_key=layout.cu_key).items()}
+        torch.save(payload, tensor_path)
+        evidence = dict(call=number, case=case['name'], status='inputs_saved', tensor_file=tensor_path.name)
+        result['native_calls'].append(evidence)
+        write_json(output / 'worker-result.json', result)
         with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU]) as profile:
-            out = native_varlen(q, k, v, layout, scale=128 ** -0.5)
+            out = kernel(q, k, v, layout, scale=128 ** -0.5)
             torch.cuda.synchronize(device)
         events = {event.key: event.count for event in profile.key_averages()}
+        payload['output'] = out.detach().cpu().clone()
+        torch.save(payload, tensor_path)
+        evidence.update(status='raw_output_saved', native_operators=events,
+                        tensor_file_sha256=hashlib.sha256(tensor_path.read_bytes()).hexdigest())
+        write_json(output / 'worker-result.json', result)
         if events.get('aten::_flash_attention_forward', 0) != 1:
             raise RuntimeError(f'Expected one native flash operator, got {events}')
         if out.shape != q.shape or out.dtype != q.dtype or out.device != q.device:
@@ -129,6 +168,8 @@ def worker(output):
     def compare(actual, expected):
         error = actual.float() - expected.float()
         stats = {'max_abs': error.abs().max().item(), 'rms': error.square().mean().sqrt().item()}
+        result['comparisons'].append(dict(case=case['name'], comparison=len(result['comparisons']), **stats))
+        write_json(output / 'worker-result.json', result)
         torch.testing.assert_close(actual.float(), expected.float(),
                                    atol=PROTOCOL['atol'], rtol=PROTOCOL['rtol'])
         if stats['rms'] > PROTOCOL['max_rms_error']:
@@ -160,6 +201,8 @@ def worker(output):
         k, v = layout.gather_kv(key, value)
         actual, events = native(q, k, v, layout)
         ref, packed = per_request(q, k, v, layout), dense(q, key, value, qr, qp)
+        torch.save(dict(per_request=ref.detach().cpu(), packed=packed.detach().cpu()),
+                   output / f'private-oracles-case{index}.pt')
         torch.testing.assert_close(ref, packed, atol=2e-6, rtol=1e-5)
         row = {'name': case['name'], 'q_shape': list(q.shape), 'gathered_k_shape': list(k.shape),
                'physical_k': layout.physical_key_tokens, 'native_operators': events,
@@ -195,9 +238,13 @@ def worker(output):
     torch.cuda.synchronize(device)
     if source_identity() != result['source_identity']:
         raise RuntimeError('Probe source changed during execution')
-    implementation = Path(sys.modules['torch.nn.attention.varlen'].__file__).resolve()
-    result['native_implementation'] = {'path': str(implementation),
-        'sha256': hashlib.sha256(implementation.read_bytes()).hexdigest()}
+    if backend == 'public':
+        implementation = Path(sys.modules['torch.nn.attention.varlen'].__file__).resolve()
+        result['native_implementation'] = {'path': str(implementation),
+            'sha256': hashlib.sha256(implementation.read_bytes()).hexdigest()}
+    else:
+        result['native_implementation'] = {'entry': 'aten::_flash_attention_forward',
+            'runtime_pin': kernel.runtime}
     result.update(status='passed', peak_allocated_bytes=torch.cuda.max_memory_allocated(device),
                   elapsed_seconds=time.monotonic()-started,
                   timing_scope='All tensor cases, CPU profiling, oracles and assertions; not a benchmark')
@@ -210,20 +257,22 @@ def main():
     mode.add_argument('--execute', action='store_true')
     mode.add_argument('--dry-run', action='store_true')
     parser.add_argument('--output', type=Path)
+    parser.add_argument('--backend', choices=['public', 'rocm_aten_no_window_pinned_v1'], default='public')
     parser.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.worker:
         if not args.execute or args.output is None:
             parser.error('Internal worker requires execute/output')
         try:
-            worker(args.output)
+            worker(args.output, args.backend)
         except Exception as exc:
             write_json(args.output/'failure.json', {'type': type(exc).__name__, 'error': str(exc)})
             traceback.print_exc()
             return 1
         return 0
-    protocol_hash = hashlib.sha256(json.dumps(PROTOCOL, sort_keys=True).encode()).hexdigest()
-    identity = {'protocol': PROTOCOL, 'protocol_sha256': protocol_hash,
+    protocol = protocol_for_backend(args.backend)
+    protocol_hash = hashlib.sha256(json.dumps(protocol, sort_keys=True).encode()).hexdigest()
+    identity = {'protocol': protocol, 'protocol_sha256': protocol_hash,
                 'source_identity': source_identity()}
     if not args.execute:
         print(json.dumps(dict(identity, status='dry_run_no_torch_import_no_gpu'), indent=2))
@@ -235,7 +284,7 @@ def main():
     write_json(args.output/'identity.json', identity)
     started = time.monotonic()
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', OMP_NUM_THREADS='2')
-    command = [sys.executable, str(Path(__file__).resolve()), '--worker', '--execute', '--output', str(args.output)]
+    command = [sys.executable, str(Path(__file__).resolve()), '--worker', '--execute', '--output', str(args.output), '--backend', args.backend]
     timed_out = False
     with (args.output/'stdout.log').open('w') as stdout, (args.output/'stderr.log').open('w') as stderr:
         process = subprocess.Popen(command, env=env, stdout=stdout, stderr=stderr, start_new_session=True)

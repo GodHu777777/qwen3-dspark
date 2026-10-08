@@ -133,13 +133,20 @@ BACKEND_NAME='dspark_native_varlen'
 
 
 class VarlenPackedTarget(PackedTarget):
-    def __init__(self,model,layer_ids=(),*,test_kernel=None):
+    def __init__(self,model,layer_ids=(),*,test_kernel=None,native_backend='public'):
+        from .rocm_varlen import BACKEND, PUBLIC_BACKEND, PinnedRocmVarlenKernel
+        if native_backend not in (PUBLIC_BACKEND, BACKEND):
+            raise ValueError('Unknown explicit native varlen backend')
+        if test_kernel is not None and native_backend != PUBLIC_BACKEND:
+            raise ValueError('CPU test injection and pinned native selection are mutually exclusive')
         # Parent checks the original supported Qwen/default-RoPE/SDPA model.
         super().__init__(model,layer_ids)
         if test_kernel is not None and self.device.type != 'cpu':
             raise ValueError('Explicit test kernel injection is CPU-only')
-        self._varlen_kernel=native_varlen if test_kernel is None else test_kernel
-        self._backend_label='native_varlen_unverified' if test_kernel is None else 'test_only_cpu_dense_oracle'
+        self._varlen_kernel=(PinnedRocmVarlenKernel(self.device) if native_backend == BACKEND else
+                             native_varlen if test_kernel is None else test_kernel)
+        self._backend_label=(BACKEND+'_unverified' if native_backend == BACKEND else
+                             'native_varlen_unverified' if test_kernel is None else 'test_only_cpu_dense_oracle')
         ALL_ATTENTION_FUNCTIONS.register(BACKEND_NAME,varlen_attention_forward)
         self.model.config._attn_implementation=BACKEND_NAME
 
@@ -155,5 +162,6 @@ class VarlenPackedTarget(PackedTarget):
             varlen_pair_domain_per_head_layer=layout.pair_domain,
             varlen_cross_request_pair_domain=0,
             attention_adapter_calls_per_layer=1,
-            native_varlen_calls_per_layer=int(self._varlen_kernel is native_varlen),
+            native_varlen_calls_per_layer=int(self._varlen_kernel is native_varlen or
+                getattr(self._varlen_kernel,'native_varlen_calls_per_layer',0)==1),
             scope='Metadata-only varlen layout; dense Q*K counts are counterfactual oracle domains. CPU injected kernel is test-only; native execution is not implied.')

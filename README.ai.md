@@ -229,3 +229,17 @@ reports/native-varlen-diagnostic-20261009. This supports explicit-window mapping
 as the cause for this pinned runtime/shape. It neither passes the original failed
 gate nor establishes whole-Qwen correctness. An explicit pinned backend still
 requires the full original tensor cases and whole-model/KV validation.
+
+Explicit private ROCm backend preparation: rocm_varlen.py adds the opt-in
+rocm_aten_no_window_pinned_v1 reference kernel with exact observed runtime/schema
+pinning and BF16 Hq16/Hkv8/D128/input/no-autograd guards. Public remains default;
+no fallback or production-verification claim. Runtime checks are cached at
+construction, layout checks handle normal/no_grad/inference_mode explicitly.
+probe_varlen.py can bind this backend while preserving the original public
+PROTOCOL, cases and thresholds; new raw evidence is saved before assertions.
+25 CPU tests pass, including an11-call CPU substitute of the entire tensor gate.
+No new backend GPU gate has run yet. docs/pinned-rocm-varlen.md defines remaining
+full-tensor and actual-pretrained-Qwen/KV requirements; whole-model structural
+checks and BF16 numerical reporting stay separate, with any numerical acceptance
+threshold requiring a pre-execution decision. Do not edit the frozen training
+snapshot or reinterpret the old public failure as a pass.
