@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 00:11（UTC+8）**。本轮直接读取 reproduction scope、canonical/scheduler 源码、39/44/46 项 CPU 日志、真实 canonical gate 聚合/暂停证据及源码哈希；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 00:35（UTC+8）**。本轮直接读取 STS 源码/协议及 8 项 CPU 日志、随机 tensor/cache 协议与 22/76 项 CPU 日志、新的预期拒绝 preflight 留证，以及 packed target 协议、5 项 CPU 日志和执行身份；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -269,3 +269,50 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **观察与证据等级。** direction 报告远端已部署只读快照，实际 CPU preflight 在 `full-generation` 尚未 complete/successful 处按预期拒绝，没有读取 records、import runtime 或构造模型/GPU。记录者已从代码独立确认：snapshot 完整性及 package membership 后，先检查 full-generation/full-audit/runner exit 0 和先后阶段，再读 audit/config、import runtime 与 development records。当前本地包没有该拒绝执行的独立 log/report，因此实际执行拒绝来自 direction 转达，不虚构一个不存在的成功 preflight JSON。最新 840/1280 也是 direction 报告，**不是记录者新的 live 查询**；本轮未再次 polldata。
 
 **局限与下一决策。** 预期拒绝证明的是门槛拒绝行为，不算 CPU eligibility 通过、GPU resource gate 或训练通过。待完整 generation/audit/runner 成功后，用同快照核真实 eligible train/dev 与 hashes，再按实际 rows 计算各段 traversals；计划 max_steps 1280、accumulation 8、anchors 32，从新 draft 开始，手工分段 32/128/512/1024/1280，不自动启动。真实 Pareto 两周期 GPU memory gate 需另协调并审结果，最终 test 不参与选参；本轮记录者只改日志，未执行这些未来命令。
+
+
+## 2026-10-09 00:35（UTC+8）— R03：STS 的 CPU 算法与 prefix 标签契约
+
+**问题与假设。** 训练中的软 overlap 和 greedy MAE 不能证明随机 rollout 的 confidence 已校准。应先对每位置条件 confidence logit 做 `sigmoid(z[j]/T[j])`，再 cumprod，以真实存活到该位置的二值 prefix event 拟合，而不是独立条件接受标签或已累乘概率的温度变换。
+
+**方法。** 已直接读取 `calibration.py`、[STS 协议](confidence-calibration.md)和原始日志。每条 block 用实际 accepted-prefix length 标记 `int(j < accepted_prefix_length)`；首次拒绝后，已被 target 评分的 suffix 保留零 prefix 标签，未验证/因预算截断的尾部不进入分母，绝不补零。接受 EOS 自身仍是正例，其后全部排除。只接收 validation，拒绝 train/final test；要求同一冻结 checkpoint、development records、rollout protocol SHA 及明确 probability policy，调用方仍须核真实来源与采样因果性。收集采用无 confidence threshold/admission 选择的 `full_proposal`，预算/EOS 截短需披露，greedy/stochastic 不混合。
+
+温度搜索是明确披露的本地约定：默认 61 个 log2 等距点、范围 0.125–8、包含 T=1；从左至右最小化该位置 cumprod ECE，冻结早先温度；精确平局先取 log 空间最接近 1，再取较小值。默认 20 bins，cumprod 后统一 clamp 至 `[1e-8,1-1e-8]`，同时影响 ECE、Brier、pred_mean；无观测位置保存 T=1、fitted=false 和空指标。按 block 而非 prompt 宏平均，多轮相关性不被当成独立置信区间。
+
+**直接观察。** 本地未发布 `output/scope-research/calibration-unit-tests.log` 为 **8 项通过、0.002 秒**；手算 fixture、顺序目标、EOS/拒绝分母、未验证尾部、端点 clamp、极端 logits、平局/空位置及身份边界均有检查。没有真实 rollout 收集、真实温度拟合或 decoder/scheduler 接入。API 的 calibrated ECE 是拟合群体目标值，不能写成独立评估结果或当前 head 已校准。
+
+**版本与下一决策。** 本地 Git 直接确认算法 commit `f54da037174598ce31c092d642bccc4ef1656733` 与文档 commit `a7abb256cefa6e8bb3a0046306c86968ee198673`；协调者报告 push exit 0、从 cbc65b1 更新至 a7abb25，记录者本轮未做远端 refs/CI 查询。后续先冻结实际概率/收集协议，在预划定且 prompt 不重合的 development 子集上分别拟合与评估，再冻结温度；最终 test 不参与选参。immutable expanded training 快照仍是 796fecc，此新模块没有进入该快照。
+
+## 2026-10-09 00:35（UTC+8）— T03：未完成 generation 的新留证拒绝，补充 T02
+
+**问题与方法。** T02 当时的拒绝执行只有 direction 转达、本地独立 log 尚未存在。随后 direction 做了一次新的留证执行；本轮直接读取本地未发布 `output/expanded-training-preflight-20261009/preflight-incomplete-refusal.json` 与 `.log`。这条新证据不回改 T02 的历史来源等级，也不冒称是当时那次执行。
+
+**观察。** JSON 保存精确 argv，exit_code=1、expected_refusal_observed=true；traceback 在 preflight 第 40 行 completion marker guard 抛出 `Not complete/successful: full-generation`。按已读代码顺序，这发生在 import runtime、读 development records 或构造模型/GPU 之前。它确认完成门槛拒绝行为，不是成功 CPU eligibility/preflight、GPU memory gate 或训练。此前 archive SHA 与全部 112 个文件/commit blobs 的独立核对仍适用；只读权限继续仅是同用户工作约定。
+
+**状态来源与下一决策。** 协调者于 00:26 转达 1112/1280，generator 为 Rl、runner 为 S、退出标识未出现；这是转达的运行快照，记录者本轮没有再次 poll，也不由此宣称完整数据审计通过。只有终态 full-generation/full-audit/runner exit 0 与完整 exports 到齐后，才核 audited train/dev 的真实 eligibility/hashes，进入另行协调的 GPU 资源门槛；最终 test 仍不读取用于调参。
+
+## 2026-10-09 00:35（UTC+8）— R04：真实 Markov proposal 与 cached stochastic 的首轮 CPU 集成
+
+**问题与方法。** R02 小词表 sampler 仍需与真实 tensor proposal、Markov q、target 行和两套 KV 提交语义接通。已读[缓存随机路径协议](cached-stochastic.md)及 `tensor_sampling.py`、`cached_sampling.py`：采用独立策略 `float64_softmax_normalize_cdf_v1`，temperature 正且有限、无过滤；model forward dtype 不变，实际 logits 升为 float64、softmax 后一次归一化，保存真正用于抽样的 q。verifier 检查已定义 p/q，不再次归一化，不加 denominator epsilon 或小 residual fallback。
+
+固定 proposal 长度在本轮随机数前承诺，非空 proposal 一次 backbone 后逐位置 Markov，保留当前 token 抽样前 raw confidence。两套 cache 在轮次边界包含 committed prefix、排除最新输出 anchor；首拒绝 crop、全接受 bonus、EOS/预算和异常 reset 依该边界处理。`verified_proposal_length` 表示 target-scored 候选数，`attempted_positions` 仅是已抽接受随机数的位置；STS 不能只用 attempted 作为分母。raw confidence/conditional overlap 仍不是已校准信号或真实 prefix 标签。可选 observer/全词表 trace 有同步、传输与存储成本，私有诊断不能作计时路径或公开样本。
+
+**直接观察。** 首轮 `output/scope-research/tensor-cached-sampling-tests.log` 是 **22 项通过、1.942 秒**（新增 tensor/cached 11 项加既有 sampler 11 项）；另一次 `tensor-cached-sampling-final-tests.log` 为 **22 项通过、1.640 秒**，两个轮次分别保留。`stochastic-full-cpu-suite.log` 为 **76 项通过、5.768 秒**，包含既有 greedy/cache/core、scheduler 和 STS。完整 cached 随机树的 Fraction law oracle 与独立 target 自回归枚举质量相等；tiny Qwen CPU 检查每层 target/projected draft KV 的内容和长度、一次 backbone、实际 Markov q/pre-token confidence、各拒绝位置、EOS/预算、状态隔离和失败 reset。
+
+**身份与局限。** 文档声明独立临时 CPU 目录及隐藏 GPU 的环境，并断言 cuda unavailable；记录者直接核了上述本地原始测试日志，未执行任何 GPU gate。日志不能独立补齐精确执行命令与完整源码/runtime 哈希绑定。当前本地归档 commit 为 `4255f23992cab62c6915eb5428edcaa91abff1c7`（00:28:46）。协调者另核 `stochastic-cpu-manifest.json` 中最终七个交付文件的 SHA 全部与提交前源码相符；这项核对不补成完整运行环境身份。数学 oracle 不是所有浮点边界的形式化证明；float64 概率运算不消除 BF16 不同 kernel 的 logits 差异，原动态 BF16 失败继续成立。
+
+**下一决策。** 保留 target-only 同 probability adapter 的 baseline；同 seed 跨不同算法不要求输出 token 相同，只要求同路径/runtime 重跑语义。真实 GPU stochastic gate、实际 validation rollout、STS 接入及性能都尚未完成；采样、probability transform、verify、KV 与 observer 的物理代价必须完整计入后续比较。
+
+## 2026-10-09 00:35（UTC+8）— S03：单次 packed Qwen 前向的多请求 CPU 状态参考
+
+**问题与假设。** 全局 B 分配需要把不同请求的可变新片段放入一次 target forward，且各请求的 position、可见 KV、crop/退出独立。无 query padding 不自动代表 attention 高效，必须把 dense score 域及显式 mask 工作分开披露。
+
+**方法。** 已读[packed target 协议](packed-target.md)：请求片段拼成 `[1,sum(query_lengths)]`，一次 Qwen backbone 和一次全部新行 LM-head；request marker 与本地 position 形成可见条件 `same_request and key_position <= query_position`。共享 DynamicCache 的物理 KV 可交错；inactive resident 请求无 query 但保留 keys。每请求 crop 逐层 gather，remove 后同外部 ID re-add 使用新 marker/本地位置 0；输入错误保留状态，前向中途失败清空全部请求。仅支持 pinned HF 5.17 dense Qwen/full attention、SDPA、default RoPE。EOS/随机验证/draft KV/预算仍是调用方职责。
+
+**直接观察与身份。** 本地未发布 `output/packed-target-cpu-20261009/tests-final.log` 为 **5 项通过、0.858 秒**；`execution.json` 保存命令、exit 0、CPU FP32、Torch 2.12.0+rocm7.2、Transformers 5.17.0。执行时间为 00:26:47（UTC+8），通过独立临时文件追加 package 搜索路径载入，未改 796fecc 只读快照或 live generation。执行绑定 `packed_target.py` SHA `fece900ab97d4611b093b1ed95263a6b589cf8f99bd704e167884e33c95797ca`、test SHA `cf1321994aa6ec060240a4408cd66238b13cb14bea4dd2e32dedc7c2796f40eb`，本轮另核当前两个本地文件 SHA 与该执行身份一致。日志的两条 `(null): No such file or directory` 原样保留，后续五项均通过；尚无定位该提示原因的证据。
+
+混合 query 长度、次序变化与 inactive keys 均通过 forward hook 确认一次真实调用；每请求 hidden/context/logits 和逐层 KV 内容对照独立 cached/fresh oracle。还覆盖每个 crop 边界、全部拒绝/partial、crop 到 0 后继续、退出/同 ID 重新加入，以及跨请求 KV/new-token 和同请求 future-token poison 隔离、exception reset。CPU FP32 比较容差为 atol=2e-6/rtol=1e-5，不能说成逐 bit 相同。
+
+**物理工作边界与下一决策。** Q 是实际新行之和、无 query padding；K 是包含 inactive keys 的全部 resident KV，当前 dense score 域仍为 Q×K，并分配 `[1,1,Q,K]` boolean mask。allowed/cross-request/future 三类计数相加为 Q×K，不是实测 FLOPs 或高效 varlen kernel 的证据；crop gather 也不是 paged KV/graph stable 管理。此次未读真实数据/test，未用真实 target 权重或 GPU，未测接受率、SPS/吞吐/SLA。后续先用相同状态 oracle 审核实际可用的 ROCm varlen/block-sparse 路径，再测 mask/tile/KV gather 和 context/load 物理代价，不能仅凭 API 存在或 CPU 通过声称生产异步机制完成。
+
+**随后版本核实（协调者）。** packed 三文件归档为 `acef238`；Git push exit 0，origin/main 从 `a7abb25` 更新至 `6f8b244`，包含 `4255f23`、`acef238` 与入口/范围文档更新。以上是源码推送证据，最新 CI 尚未核实。
