@@ -118,11 +118,15 @@ algorithm, public training code and production system. Independent CPU modules
 now cover [stochastic verification](docs/stochastic-sampling.md), global prefix
 allocation and [sequential confidence calibration](docs/confidence-calibration.md).
 Their mathematical tests do not establish trained quality or serving performance.
-The [cached stochastic path](docs/cached-stochastic.md) now retains actual Markov
-proposal probabilities and passes CPU distribution/cache checks. A
+The [cached stochastic path](docs/cached-stochastic.md) retains actual Markov
+proposal probabilities and passes CPU distribution/cache checks. Its
+[real BF16 gate](reports/stochastic-gate-20261009/README.md) passed 9 executions
+and 6 same-path repeat checks, but 47 of 48 same-prefix probability comparisons
+differed (maximum TV 0.04162). Execution reproducibility does not establish
+distribution equivalence to sequential decoding. A
 [packed target reference](docs/packed-target.md) verifies variable-length chunks
 in one model call, with independent request caches; its attention mask remains
-dense. Both await real GPU validation.
+dense and still awaits real GPU validation.
 Real rollout calibration, efficient multi-request execution, hardware capacity
 profiles and asynchronous scheduling remain unfinished. The earlier
 [experiment plan](docs/experiment-plan.md) preserves the initial stage gates.
@@ -132,6 +136,14 @@ immutable selection/resume, and a separate final-test export for expanded traini
 Its [completed expansion](reports/data-expansion-20261009/README.md) produced
 932 train, 119 dev and 119 final-test responses from 1,280 inputs; 110 were rejected.
 Structural audits passed. Final test remains excluded from development and tuning.
+
+[Expanded training through step512](reports/expanded-training-step512-20261009/README.md)
+uses 32 anchors and accumulation 8, with verified checkpoint/optimizer resumes and
+a frozen target. On the same 119 dev rows, teacher-forced overlap increased from
+0.086% initially to 28.73%; this is not measured rollout acceptance or speedup.
+The [resource and first-resume report](reports/expanded-training-20261009/README.md)
+records the two-cycle memory gate and earlier steps. Real dev rollout and
+confidence calibration remain pending.
 
 ## Experiment journal
 
