@@ -56,6 +56,12 @@ calibration.py implements CPU sequential temperature scaling of confidence
 logits against realized validation prefix events (8 tests). It requires frozen
 checkpoint/data/protocol identity and uncensored proposal collection. No real
 rollout calibration has been fitted; see docs/confidence-calibration.md.
+packed_target.py executes variable-length request chunks in one Qwen forward,
+with per-request positions, marker-based causal isolation and independent KV
+crop/removal. Five CPU tests check actual KV contents and lifecycle against
+independent targets. It uses a dense Q*K mask, with explicit work-domain counts;
+this is not yet an efficient varlen kernel or a multi-request decoder/scheduler.
+See docs/packed-target.md. No packed real-GPU results have been measured.
 CachedTarget has six CPU FP32 tests and a real same-dtype HF cached greedy
 check (117 tokens on seven pilot prompts). Reports/cached-target-20261008 records
 a BF16 full-recompute/cached near-tie divergence and isolated target costs.

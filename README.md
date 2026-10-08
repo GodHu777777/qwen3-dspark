@@ -6,7 +6,9 @@ Based on [NVIDIA NeMo AutoModel](https://docs.nvidia.com/nemo/automodel/recipes-
 pinned to commit `2d365eda1050dd80ee9bd3bfc651e9ae9bbe8c68`.
 
 **Research implementation in progress. No inference speedup has been demonstrated.**
-The current verifier recomputes prefixes and is a correctness reference.
+The full-prefix greedy verifier is a correctness reference. Incremental target
+and draft caches are also implemented; their native BF16 equality gate has known
+failures described below.
 
 ## Architecture
 
@@ -100,15 +102,30 @@ The [cached speculative prototype](reports/cached-decode-gate-20261008/README.md
 failed its real BF16 equality gate on two of three prompts, despite passing
 CPU cache invariants; block-versus-sequential numerical fidelity remains unresolved. These measurements do not establish speculative speedup.
 
+An optional [fixed-shape numerical control](docs/canonical-target.md) passed a
+[real-draft comparison](reports/canonical-real-draft-gate-20261008/README.md)
+against its own sequential execution on 3/3 prompts (70 tokens), but matched
+stock decoding on only 2/3. Both held-out prompts accepted zero draft tokens.
+This separate execution policy does not resolve the native BF16 gate or prove speedup.
+
 The five-layer draft has 161,692,161 trainable parameters. Training uses single
 unpadded sequences, dense SDPA, FP32 trainables and BF16 autocast. Four anchors and
 two accumulation microsteps keep the pilot small; this is not paper-scale training.
 The local checkpoint format is not directly compatible with NeMo, vLLM or SGLang.
 
-Next milestones and the criteria for claiming progress are in [the experiment
-plan](docs/experiment-plan.md). Incremental target and draft KV caches are implemented as an experimental path;
-the real BF16 numerical gate above remains unresolved. Stochastic rejection
-sampling, dynamic verification and hardware-aware scheduling remain future work.
+The [reproduction scope](docs/dspark-reproduction-scope.md) separates the paper's
+algorithm, public training code and production system. Independent CPU modules
+now cover [stochastic verification](docs/stochastic-sampling.md), global prefix
+allocation and [sequential confidence calibration](docs/confidence-calibration.md).
+Their mathematical tests do not establish trained quality or serving performance.
+The [cached stochastic path](docs/cached-stochastic.md) now retains actual Markov
+proposal probabilities and passes CPU distribution/cache checks. A
+[packed target reference](docs/packed-target.md) verifies variable-length chunks
+in one model call, with independent request caches; its attention mask remains
+dense. Both await real GPU validation.
+Real rollout calibration, efficient multi-request execution, hardware capacity
+profiles and asynchronous scheduling remain unfinished. The earlier
+[experiment plan](docs/experiment-plan.md) preserves the initial stage gates.
 
 The [three-way data pipeline](docs/data-pipeline.md) adds pilot exclusions,
 immutable selection/resume, and a separate final-test export for expanded training.
@@ -128,6 +145,11 @@ immutable selection/resume, and a separate final-test export for expanded traini
 | `decode.py`, `eval_decode.py` | Full-recompute greedy reference and token comparison |
 | `cached_target.py`, `bench_cached_target.py` | Incremental target cache and isolated cost measurement |
 | `cached_decode.py`, `eval_cached_decode.py` | Experimental draft KV lifecycle and numerical fidelity gate |
+| `canonical_target.py` | Optional fixed-shape numerical control |
+| `sampling.py` | CPU stochastic probability reference and exact-distribution tests |
+| `tensor_sampling.py`, `cached_sampling.py` | Experimental random Markov proposals, residual sampling and cache commits |
+| `scheduler.py`, `calibration.py` | Global prefix planning and sequential confidence temperature fitting |
+| `packed_target.py` | One-forward variable-query target with per-request KV and dense marker mask |
 | `scripts/` | Prompt selection, target regeneration and data auditing |
 | `tests/` | Tensor-level correctness and regression checks |
 
