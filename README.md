@@ -96,8 +96,9 @@ This measures the target alone, without draft or intermediate-feature costs.
 One full-recompute BF16 trace differed near a tie; different kernel shapes are
 not guaranteed to produce identical floating-point argmaxes. Six CPU cache
 regressions cover chunking, rollback, EOS and the HF reference configuration.
-Speculative block-versus-sequential BF16 equality remains a separate unresolved
-gate. These measurements do not establish speculative speedup.
+The [cached speculative prototype](reports/cached-decode-gate-20261008/README.md)
+failed its real BF16 equality gate on two of three prompts, despite passing
+CPU cache invariants; block-versus-sequential numerical fidelity remains unresolved. These measurements do not establish speculative speedup.
 
 The five-layer draft has 161,692,161 trainable parameters. Training uses single
 unpadded sequences, dense SDPA, FP32 trainables and BF16 autocast. Four anchors and
@@ -105,8 +106,9 @@ two accumulation microsteps keep the pilot small; this is not paper-scale traini
 The local checkpoint format is not directly compatible with NeMo, vLLM or SGLang.
 
 Next milestones and the criteria for claiming progress are in [the experiment
-plan](docs/experiment-plan.md). KV-cache management, stochastic rejection sampling,
-dynamic verification and hardware-aware scheduling remain to be implemented.
+plan](docs/experiment-plan.md). Incremental target and draft KV caches are implemented as an experimental path;
+the real BF16 numerical gate above remains unresolved. Stochastic rejection
+sampling, dynamic verification and hardware-aware scheduling remain future work.
 
 The [three-way data pipeline](docs/data-pipeline.md) adds pilot exclusions,
 immutable selection/resume, and a separate final-test export for expanded training.
@@ -125,6 +127,7 @@ immutable selection/resume, and a separate final-test export for expanded traini
 | `train.py`, `checkpoint.py` | Training, evaluation, state and identity checks |
 | `decode.py`, `eval_decode.py` | Full-recompute greedy reference and token comparison |
 | `cached_target.py`, `bench_cached_target.py` | Incremental target cache and isolated cost measurement |
+| `cached_decode.py`, `eval_cached_decode.py` | Experimental draft KV lifecycle and numerical fidelity gate |
 | `scripts/` | Prompt selection, target regeneration and data auditing |
 | `tests/` | Tensor-level correctness and regression checks |
 

@@ -51,3 +51,19 @@ removal count, with an explicit no-op when no suffix needs discarding.
 
 `source-identity.json` binds source, model, input records and private raw evidence
 hashes. Failed partial timings are not mixed into the successful aggregate.
+
+## Independent integrated cache audit
+
+`cpu-cache-content-audit.py` uses synthetic tiny-model inputs only. Run it from
+the repository root with `PYTHONPATH=. python reports/cached-target-20261008/cpu-cache-content-audit.py`.
+It checks the actual projected draft KV at every round against a fresh complete
+committed prefix, rather than checking only recorded cache lengths.
+
+All 42 cases and 429 proposal rounds matched output tokens and cache lengths:
+block sizes 1/3/7, prompt lengths 1/4/9, every rejection offset and full acceptance.
+Maximum absolute projected-KV difference was 1.9446e-6, and maximum draft backbone
+difference was 7.1526e-7. The audit initially encountered one 1.1325e-6 difference
+against a 1e-6 tensor-closeness assertion; it now reports numerical errors directly
+while retaining exact token equality. No epsilon changes token selection.
+This independently supports the cache bookkeeping and supplies no BF16 fidelity
+or speed guarantee.

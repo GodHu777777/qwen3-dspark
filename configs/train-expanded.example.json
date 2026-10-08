@@ -1,0 +1,25 @@
+{
+  "model": "./models/Qwen3-0.6B",
+  "records": "./data/expanded/generated/records.jsonl",
+  "generation_manifest": "./data/expanded/generated/manifest.json",
+  "output_dir": "./runs/train-expanded-32anchors-seed20261008",
+  "device": "cuda",
+  "seed": 20261008,
+  "max_sequence_tokens": 4096,
+  "max_steps": 1280,
+  "gradient_accumulation": 8,
+  "learning_rate": 0.0006,
+  "max_grad_norm": 1.0,
+  "draft": {
+    "layer_ids": [1, 7, 14, 21, 26],
+    "num_layers": 5,
+    "block_size": 7,
+    "markov_rank": 256,
+    "mask_token_id": 151669,
+    "num_anchors": 32,
+    "ce_alpha": 0.1,
+    "l1_alpha": 0.9,
+    "confidence_alpha": 1.0,
+    "loss_decay_gamma": 4.0
+  }
+}

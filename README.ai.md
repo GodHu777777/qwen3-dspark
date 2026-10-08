@@ -109,3 +109,17 @@ identity, atomic batches and final-test export. configs/expand.example.json sele
 explicit source commit plus actual script/helper hashes. final-test is omitted
 from development records, but permissions are a same-user convention, not a
 security boundary; underlying batches contain test. Read docs/data-pipeline.md.
+
+Cached speculative prototype: cached_decode.py maintains both caches as committed
+prefix excluding the latest emitted anchor. Only committed verification features
+are appended to draft per-layer projected K/V. 30 CPU tests pass; independent
+42-case/429-round content audit found no rollback pollution. Real BF16 gate fails
+2/3 prompts (reports/cached-decode-gate-20261008); do not advertise exact BF16
+output or speedup. eval_cached_decode has FP32 control and failed-prefix path
+decomposition; these new GPU experiments have not yet run.
+
+Next training plan: configs/train-expanded.example.json and
+docs/expanded-training-plan.md. Use an immutable source checkout for training,
+because strict resume identity hashes every package module including unused ones.
+The 1280-input data generation is separate; recheck its process/run artifacts
+before claiming completion or starting any conflicting GPU timing work.

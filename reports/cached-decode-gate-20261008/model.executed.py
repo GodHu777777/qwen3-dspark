@@ -174,12 +174,10 @@ class DSparkDraft(nn.Module):
         for k in range(self.spec.block_size):
             emb = self.markov_embedding(prev)
             # Confidence is computed before sampling current token; no look-ahead.
-            confidences.append(self.confidence(torch.cat((hidden[k:k+1], emb), -1)).sigmoid().flatten())
+            confidences.append(self.confidence(torch.cat((hidden[k:k+1], emb), -1)).sigmoid().item())
             prev = (base[k:k+1] + self.markov_projection(emb)).argmax(-1)
-            tokens.append(prev)
-        # Keep the serial Markov recurrence on device; synchronize only once per
-        # returned list, instead of twice for every proposed token.
-        return torch.cat(tokens).tolist(), torch.cat(confidences).tolist()
+            tokens.append(prev.item())
+        return tokens, confidences
 
     def trainable_state(self):
         names = {name for name, p in self.named_parameters() if p.requires_grad}

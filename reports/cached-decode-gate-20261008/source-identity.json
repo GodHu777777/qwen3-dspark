@@ -1,0 +1,27 @@
+{
+  "checkpoint_weights_sha256": "8c634a2e0b9b3b6a46d573836c1e4ab54c810b060affa65a13ea80822cf585ca",
+  "checkpoint_metadata_sha256": "dee6da573676377bc84f2db1f8b4d81f5934703bd83afd9c88ba1284490b3f2a",
+  "source_sha256": {
+    "__init__.py": "bc0e47a109ff9d53f21efbf0b8c02d23ca53ef4658488fba8dd5de037b9b636d",
+    "bench_cached_target.py": "425132af31261bbbcd0e88699a15520e6bff012386d39be74a07f3a0f4224e89",
+    "cached_decode.py": "1b1689b4ce39822a6ffb95295dfa4a64c7aea4b4ab7d62cd7bbc78478d04433c",
+    "cached_target.py": "8534b94b52a8a7327d1360a002dcc41520696a3153ca1adb42eefc584970322b",
+    "checkpoint.py": "06cd16e512c2b90e19ca50faed3f5a9d4d01ded44ea355575d23e87799094635",
+    "config.py": "d27c330979e4c8b94d6509614057ccb1b04df7e61e38a88e453e39525d08cab8",
+    "data.py": "14a33ef586e3e76ffc28177805c91abcea4bd685ef3d9c4e1b26dfe030521fed",
+    "decode.py": "eebfd7c8d7f9cc697f4fa13d5048ec752813c8242882db9b57ff40c90cb6ce9e",
+    "diagnose_learning.py": "738212bc71937a92a34f0aba46ac79cf704073408b06d449ecb7c3267701481c",
+    "eval_cached_decode.py": "ee270279157cf166a651cf1f06dac8fa873bc4d2ed051f1f80f0ca3e4ce5ae10",
+    "eval_decode.py": "248cac7fb4e8eaff468ac5631c1f1aadbcadf1a228b5649e0a4f1a1f0be4bfd7",
+    "losses.py": "25b735023512429e3d2ab5d0661b08708dc10bef69804ee50be324af104348ed",
+    "model.py": "b6779c734a32912cbf0e0b5277f13689e76f5887f1321dda099f1a25b237fc73",
+    "target.py": "9046268d3112085710d78fa6fafbe5e071b358addfc1e620845140b33d1e2797",
+    "train.py": "6e4e7ac514a2592b9a8c212cb41df69a33396cf9d68e4fbb6fc5a5ccdd27c471"
+  },
+  "torch": "2.12.0+rocm7.2",
+  "transformers": "5.17.0",
+  "hip": "7.2.53211",
+  "target_dtype": "bfloat16",
+  "draft_compute": "bfloat16 AMP",
+  "timing": "not measured"
+}

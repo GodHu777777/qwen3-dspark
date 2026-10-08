@@ -23,7 +23,9 @@
   },
   "public_artifacts_sha256": {
     "summary.json": "11c36e61f141dd9cf04c9c9ac35d23e2c1d763ceecac4a5330391f5da7c67bac",
-    "timings.json": "7de3e33880153fe38fee04040d94eea3e8628cb6c601099f4268d4f26af6a2c9"
+    "timings.json": "7de3e33880153fe38fee04040d94eea3e8628cb6c601099f4268d4f26af6a2c9",
+    "cpu-cache-content-audit.py": "84252b79e57a67baa6cdf20e2d50c4f274d04eaa0057e46d8f168e316257cb29",
+    "cpu-cache-content-audit.log": "edd84b1951a7938e0e192bf0589052d684079c40a98e8a4d06ab6c665a8fbd17"
   },
   "privacy": "Prompt strings, prompt identities and generated token IDs are omitted from public artifacts. Raw traces remain in ignored local output storage."
 }

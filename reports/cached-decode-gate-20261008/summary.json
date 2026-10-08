@@ -1,0 +1,139 @@
+{
+  "passed": false,
+  "expected_exit_code": 1,
+  "scope": "Real BF16 cached speculative versus sequential target correctness gate; no performance claim",
+  "checkpoint_kind": "single-record aligned128 overfit",
+  "examples": [
+    {
+      "split": "train",
+      "cached_equal": false,
+      "recompute_equal": false,
+      "sequential_recompute_equal": true,
+      "prompt_tokens": 59,
+      "generated_tokens": 32,
+      "round_count": 12,
+      "round_accepted": [
+        7,
+        7,
+        0,
+        3,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "termination": "max_new_tokens",
+      "first_mismatch_index": 17,
+      "same_prefix_sequential": {
+        "prefix_length": 76,
+        "top_values": [
+          23.5,
+          23.375,
+          21.875,
+          21.0,
+          20.0
+        ]
+      },
+      "same_prefix_block": {
+        "round": 2,
+        "position_in_block": 0,
+        "prefix_length": 76,
+        "top_values": [
+          23.5,
+          23.375,
+          22.0,
+          21.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "split": "validation",
+      "cached_equal": true,
+      "recompute_equal": true,
+      "sequential_recompute_equal": true,
+      "prompt_tokens": 214,
+      "generated_tokens": 6,
+      "round_count": 5,
+      "round_accepted": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "termination": "eos"
+    },
+    {
+      "split": "validation",
+      "cached_equal": false,
+      "recompute_equal": false,
+      "sequential_recompute_equal": false,
+      "prompt_tokens": 149,
+      "generated_tokens": 32,
+      "round_count": 31,
+      "round_accepted": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "termination": "max_new_tokens",
+      "first_mismatch_index": 23,
+      "same_prefix_sequential": {
+        "prefix_length": 172,
+        "top_values": [
+          18.75,
+          18.75,
+          17.375,
+          16.375,
+          15.875
+        ]
+      },
+      "same_prefix_block": {
+        "round": 22,
+        "position_in_block": 0,
+        "prefix_length": 172,
+        "top_values": [
+          18.75,
+          18.625,
+          17.375,
+          16.375,
+          15.875
+        ]
+      }
+    }
+  ],
+  "interpretation": "CPU cache-state logic passed, but BF16 block verification and one-token target execution change close argmax rankings. Do not claim exact cached greedy equivalence or speedup."
+}
