@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:40（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 02:50（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -631,3 +631,29 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **真实文件dry-run与授权边界。** 标准库dry-run状态为dry_run_no_backend_import_no_gpu，真实模型/ tokenizer指纹与T09 target一致、generation manifest绑定一致，protocol SHA独立重算 **d83dfd50…**；不把指纹读取写成pretrained forward。预定300秒、8GiB free门槛、6GiB processallocator cap、三独立实际模型以及外部process/KFD/desktop/ASR pre/post均保留。CPU manifest当时gpu_authorized=false；root随后授权唯一一次wholeQwen GPU，最新交付只到core preflight handle54055、未收到实际启动证据，S09不写执行或通过。后续真实结果另起条；原public失败/小tensorpass/quality/速度各不互代。
 
 **独立的checkpoint决策。** Root与core完成quality1280独立review，已决定冻结 **step1280作为后续STS研究checkpoint**；这是development证据下的研究选择，不是最终产品checkpoint或最优泛化结论。R10当时“未冻结”保留其历史状态，本条记录后续决定。Direction将落盘selection manifest，身份/协议链接待完整交付后补记；STS仍未执行。记录者本轮只核证据和日志，无GPU/进程/实现/提交动作，final test及private样本未读。
+
+
+<a id="whole-qwen-real-gate"></a>
+## 2026-10-09 02:50（UTC+8）— S10：wholeQwen结构通过、固定layer RMS失败，CPU舍入诊断不改判定
+
+**问题与方法。** S09准备之后，唯一获授权的实际Qwen3-0.6B矩阵检验了真实KV/attention；必须保留三个独立状态，不能把执行完成或poison隔离通过写成整体通过。直接读取[九份完整报告](../reports/whole-qwen-varlen-gate-20261009/README.md)和未发布 `output/whole-qwen-varlen-gpu-20261009-7d1fcdb/` 的public-verification、archive、completion/exit及三次CPU审计log。记录者独立核九SHA、archive内 **220文件逐个对7d1fcdb Git blobs**、224layer rows/112normal/252request计数、68结构检查/2poison和67query rows各endpoint；执行source仍 **7d1fcdb**、protocol延续S09，完整身份见[source identity](../reports/whole-qwen-varlen-gate-20261009/source-identity.json)。Root另独立复核同项且直读remote completion/原结果；归档 **08220d5**已直接核Git，root已核push，不与execution身份混同。
+
+**固定门槛失败。** 8native forwards各28flash，共224callbacks，三个结果为 **structural passed / layer_attention failed / numerical_comparison completed**、system_pass_claimed=false。112normal层中3失败、252request中5失败，全部在zero-based decoder **layer26**：prime/B RMS **0.0051563464**；cached-tail/A **0.0051409812**、B **0.0056739500**；crop-exit-readd/A **0.0051131269**、B **0.0058588637**。所有elementwise原0.02/0.02检查满足，但原RMS≤0.005不满足；prime/crop pooled可通过而逐request抓到失败，cached-tail pooled0.005617229也失败。Cropzero全部层通过。三组失败QKV/output/FP32oracle先保存后继续既定finite矩阵，没有松阈值、换backend/source或GPU重跑。
+
+**结构与端点结论。** [68项内容检查](../reports/whole-qwen-varlen-gate-20261009/structural.json)全通过：actual tokens/RoPE/marker独立gather、旧KVprefix/inactive/crop/remove/readd及两个poison pairs的A QKV/hidden/logits/全部KV exact。端点67rows各对densepacked/independentSDPA完成：TV非零 **48/47**，max **0.0229268524/0.0532455264**，argmax changes **1/3**；隐藏态/features/各层KV/logit详见[end-to-end](../reports/whole-qwen-varlen-gate-20261009/end-to-end.json)。这些synthetic cache/attention fixture差异未获新pass阈值，不是quality、losslessness或speed测量。Worker/launcher/controller原OS均 **1**、no timeout，表示完整执行但mandatory gate失败，shell未独立wait。既有postrelease记录四PID退出/KFDonlyASR/ready/notbusy，peakallocated3808959488bytes；45.77555289秒含加载/oracle/留证，不作benchmark。
+
+**CPU诊断与失败审计保留。** 后续仅CPU读取保存tensor，按同savedGPU FP32oracle取nearestBF16，失败5request中 **2/5** 的表示下限RMS已超0.005；其余3下限低于阈值而native超阈值，不能把全部失败归为纯舍入。Native也不等于nearest-rounded oracle；CPU FP32重构与savedGPUoracle最多差0.0000534058，另行报告而不替换原gate。独立审计核9tensor artifacts、1398endpoint scalar、2poison并重算134probability rows。前两次因审计额外probability相等断言过严而失败，原log保留；最终只量化CPU/GPU float64 TV统计差最大 **2.0468124e-8**，未发明新的等价阈值或回写GPU指标。记录者重算公开floor分类/TV差上限，完整private tensor重核依据[CPU audit](../reports/whole-qwen-varlen-gate-20261009/independent-cpu-audit.json)，未声称本轮加载远端raw。
+
+**边界与下一决策。** 原public gate继续失败，pinned小tensor通过不提升为wholeQwen通过，固定RMS原失败不改。下一步需先解释正常层剩余数值误差及门槛适用范围，任何新实验/规则须预声明并另留证；本条不授权自动GPU重跑。独立SDPA STS工作流不因该失败改协议。记录者仅追加日志，无GPU/实现/进程/提交或final-test/private样本动作。
+
+
+<a id="sts-cpu-workflow"></a>
+## 2026-10-09 02:50（UTC+8）— R11：冻结step1280的STS CPU工作流，fit44刚启动尚无结果
+
+**问题与方法。** R10接受量改善与T09 TF零基线优势均不证明真实confidence校准。后续必须先冻结checkpoint，以fit44拟合温度与常数，再在独立eval43比较，不能让eval参与选择。直接读[selection manifest](../configs/sts-step1280-selection.json)、[校准工作流](confidence-calibration.md)、[采集协议](rollout-collection.md)及未发布 `output/sts-cpu-preflight-20261009-v2/` 的handoff、tests、fit/eval dry-run与archive。Source归档 **034064bf8fea7f67c9039c2dd103b65ca12e803a**（02:44:11）已直接核Git，root已核push；记录者核10handoff文件SHA对其Git blobs和archive SHA、selection file SHA及canonical digest通过，详细身份保留在manifest/报告。
+
+**选择、接口与隔离。** S09决策现已落盘：step1280 weights d6f21ab3…/metadata8bb0c511…绑定原panel/protocol、quality1280依据，selection digest **3810939b…**。它只冻结STS研究身份，不表示最优泛化/最终产品或自行授权GPU。Collector显式group与required selection进入binding，历史quality a278报告保持原件。CPU `calibrate_rollout` 核完整44/43、实际workerOS0、rawround/effective/EOS/零block保留及checkpoint/data/source/runtime；fit artifact冻结实现身份、温度、**61grid/20bins**与fit-only prefix prevalence常数，eval复核artifact/fit未变及prompt/token hash不相交，不搜索温度或估计eval常数。Raw、STS、fit-only常数按同ECE/Brier定义比较；全dev已TF监测，eval43仅相对STSfit留出。
+
+**CPU观察与审计口径修正。** GPU隐藏的远程最终 **29tests/6.243秒、exit0**（8算法+10collector+11workflow），root另报告独立local11tests通过。真实step1280 dry-fit44/dry-eval43绑定通过，记录者核44/43数量、group/selection一致，aggregate均0blocks/0completed、execution_checks_passed=null；这不是实采或STS拟合。Root最初把public protocol完整对象直接digest对selection canonical协议hash而assert失败，随后逐字段核fit-run.manifest.protocol一致；public多出的6项描述字段说明了差异，这是审计对象口径错误，未作实现修复或改协议。
+
+**下一决策与执行状态。** Direction获 **fit44采集→CPUfit artifact冻结→eval43采集/冻结artifact评价** 的有序授权，新增任何GPU阶段仍须核窗口。实际fit启动shell4011829/controller4011831/launcher4012129；随后root通过远端ps独立确认worker4012492正在运行且父进程为该launcher，direction亦确认同PID。只记录启动和当时live状态，不写fit完成或pass。尚无真实STS温度、ECE/Brier比较、eval采集、性能或调度收益结果；潜在serving热点只是未测假说，float64采样在tensor device，不误写成CPU逐词表复制。Final test未读；本轮记录者只日志，不开GPU、改实现/进程或提交。
