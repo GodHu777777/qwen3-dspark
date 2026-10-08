@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 00:03（UTC+8）**。本轮直接读取 reproduction scope、canonical/scheduler 源码、39/44/46 项 CPU 日志、真实 canonical gate 聚合/暂停证据及源码哈希；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 00:11（UTC+8）**。本轮直接读取 reproduction scope、canonical/scheduler 源码、39/44/46 项 CPU 日志、真实 canonical gate 聚合/暂停证据及源码哈希；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -237,3 +237,35 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **下一决策。** 保留 canonical 对照与动态 BF16 数值未决主线并列；后续扩大独立 dev 前缀、做同 prefix 的 history/chunk/batch 分解和真实物理工作成本，再按 S01/S02 的分布恢复、全局预算与多请求执行路线推进。报告代码/聚合将由协调者归档提交；本条不臆造新的 commit/push 或 CI 结果。记录者本轮只更新日志，未启动 GPU、发送暂停信号或改生成脚本。
 
 **补充口径修正与版本。** 最新源码/报告归档的本地 commit 为 `796fecc0d9142c1a733ad6df47b105fab4ee9f05`（2026-10-09 00:03:13）；此时未 push，不写已发布。已读最新 README.ai.md 与早期 static probe 的执行源码/summary：该 target-only probe 内还调用了 same-prefix dynamic 四路 helper，但这不是原 native drafter evaluator 的重跑，也不是 native gate 通过。C04 中“各路径 logits 差为 0”应限定于 canonical 路径，不能扩展到该动态 helper；公开 summary 仍保留动态 current-chunk/history/full 路径的非零差异。新的 native 四路字段重跑和全 FP32 cached-block control 仍 pending。索引、数值契约和真实 gate 的归档到此交接；其他工作按下一轮新证据追加。
+
+## 2026-10-09 00:07（UTC+8）— P05：正式生成一次聚合检查，仍在运行
+
+**问题与方法。** 在不干预 generator、不读 test prompt/回答的前提下，核对是否可进入完整审计。记录者只读 generation 的 batch 进度 JSON、batch/checksum 文件名、runner stages/退出标识和进程状态；按冻结的 8 条 batch 与先 128 dev、再 128 test、后 train 顺序累计 stdout 接受计数。
+
+**直接观察。** 最近完成 816/1280 输入，102 个 batch payload 与 102 个 checksum；stdout 聚合累计接受 745、拒绝 71、生成 token 301,027。按 batch 顺序得到已完成部分 train 507 / dev 119 / test 119。这些是运行日志的聚合，不是完整 exports 的审计结论，未读取最终 test 内容。generator PID 3405911 为 `Rl`，runner PID 3402974 为 `S`，分别 elapsed 3122/3183 秒；仍是同进程，未重启。四个 smoke 阶段 exit 0；正式 full-generation/full-audit 尚无结束记录，runner exit code 未出现，summary 与三路完整 exports 均未出现。
+
+**版本核实。** 本轮 live `git ls-remote` 核实 origin/main 为 `60d33c3ba1b5aca32e4dc5c9349daa272dd5198a`；本地相邻历史包含 `796fecc0d9142c1a733ad6df47b105fab4ee9f05`，后续文档/数值 control 版本已推送。数据 generation 仍绑定冻结的 d5e1538，不因后续文档/核心提交更换身份。本轮没有新的性能结论。
+
+**局限与下一决策。** 仅确认目前正常推进，未宣布生成完成、test 最终合格或完整审计通过，不高频轮询、不操作 GPU/信号。已有 runner 会在完整生成成功后自动 audit。后续只有出现终态与完整 exports 才检查 full-generation/full-audit/runner exit code、重新核 source/config/selection/output 哈希、读取 summary/audit 的最终 accepted split/reject 数及 EOS/预算分布，归档仅含 aggregate 的报告；保持 test 不参与选参。core 的 sampler CPU 工具与 direction 的 immutable 训练 snapshot 当时仍在准备，未在本条当作已完成实验。
+
+## 2026-10-09 00:11（UTC+8）— R02：随机 sampler 的 CPU 输出-law 参考
+
+**问题与假设。** Greedy cache 相等检查不验证随机 speculative 的 target 分布恢复；必须用真正采出 proposal 的条件 q、同输出 prefix 的 target p 和非预知 admission。对于给定 p/q，接受质量 `min(p,q)` 加残差质量 `(p-q)+` 应恢复 p，再按实际输出前缀逐位置归纳。
+
+**方法。** 已读[随机采样协议](stochastic-sampling.md)、独立 `sampling.py` 及 Fraction 测试。Proposal 保存每位置实际归一化 q；q 应包括 Markov 条件修正、实际温度/过滤和采样计算 dtype，不能用 backbone base logits 或 greedy token 配原 softmax 冒充。n 个 proposal 对齐 n+1 个 target 行，首拒绝采规范化 `(p-q)+`，全接受采最后行 bonus；EOS/输出预算决定实际提交与随机数消费。Admission 在当前候选采样前调用，但闭包可读什么仍是调用方因果性责任。
+
+**直接观察。** 本地未发布 `output/scope-research/sampling-unit-tests.log` 是 **11 项全过、0.025 秒**；协调者另一次审查重跑报告 11 项全过、0.022 秒，两个计时分开。Fraction oracle 精确枚举全部候选、接受/拒绝、residual/bonus 分支，组合为完整多轮输出 law，并用区间内部点驱动实际实现核 token、接受数、拒绝位置、终止原因和随机数消费。覆盖 225 对三词表有理分布（含零支持、p=q、互不相交支持）、prefix 相关 p/q、adaptive admission、EOS/预算和 2^-40 residual；概率-law 断言不是 Monte Carlo 近似。Hindsight 反例在 p=q=(1/2,1/2) 下先看 X 再只允许 X=0，最终 P(0)=3/4，说明“之后仍 target verify”不能修复选择偏差。
+
+**上游差异与局限。** 固定 DeepSpec evaluator 对选中 q 使用 clamp_min(1e-8)，读取的 helper 对 residual 总质量 ≤1e-8 fallback 到 target；本 CPU reference 保留非零极小 residual，q=0 的已采候选报错，不引入接受 epsilon。upstream 实际 sample_tokens 未显式转 FP32，而 logits_to_probs 先 float；不能沿另一 dtype 路径重建验证 q。当前 input sum 的 1e-12 契约是小词表 Python-float 参考，不是可直接接 GPU BF16 tensor 的接口；Fraction 区间测试也不是所有浮点 CDF 边界的形式化证明。没有 GPU model/cache/scheduler 集成、随机解码结果或速度结论，动态 BF16 失败没有被解除。
+
+**下一决策与版本。** 后续先冻结 logits/temperature/filter/dtype/RNG 契约，保存真实每位置 q 和 pre-token confidence，对 target 行/cache rollback 做独立集成验证，再处理 STS/非预知 scheduler。三个文件归档在 `943f435593ed483bdd2372aa8f855835a991cde1`（00:09:51）；本轮协调者报告该提交待 push，未写已发布或 CI 通过。
+
+**随后推送核实（协调者）。** Git push 已 exit 0，origin/main 从 `60d33c3` 更新至 `6ea2739`，包含上述 `943f435` 及区分 CPU 概率参考和真实模型集成的文档修正。最新 CI 尚未核实。
+
+## 2026-10-09 00:11（UTC+8）— T02：immutable 训练源码部署与未完成数据 guard
+
+**问题与方法。** 长训练 strict resume 哈希包含全部 package 模块，开发中的 sampler/数值工具不能混入既有训练身份。direction 为训练导出独立的已提交 `796fecc0d9142c1a733ad6df47b105fab4ee9f05` 快照；记录者直接核本地 ignored `output/expanded-training-preflight-20261009/` 的 deployment、archive、COMMANDS 和 preflight 代码，**112 个文件全部与 deployment SHA 和该 commit blobs 一致**，archive SHA 为 `52c14bc7d698f53aff46b794d15c3181d14f7ea388651b0bc4dd0351aac32fb0`。只读文件模式是工作约定，不是安全边界；运行时/模型/生成数据/config/GPU co-tenants 在 source snapshot 外，仍需核对。
+
+**观察与证据等级。** direction 报告远端已部署只读快照，实际 CPU preflight 在 `full-generation` 尚未 complete/successful 处按预期拒绝，没有读取 records、import runtime 或构造模型/GPU。记录者已从代码独立确认：snapshot 完整性及 package membership 后，先检查 full-generation/full-audit/runner exit 0 和先后阶段，再读 audit/config、import runtime 与 development records。当前本地包没有该拒绝执行的独立 log/report，因此实际执行拒绝来自 direction 转达，不虚构一个不存在的成功 preflight JSON。最新 840/1280 也是 direction 报告，**不是记录者新的 live 查询**；本轮未再次 polldata。
+
+**局限与下一决策。** 预期拒绝证明的是门槛拒绝行为，不算 CPU eligibility 通过、GPU resource gate 或训练通过。待完整 generation/audit/runner 成功后，用同快照核真实 eligible train/dev 与 hashes，再按实际 rows 计算各段 traversals；计划 max_steps 1280、accumulation 8、anchors 32，从新 draft 开始，手工分段 32/128/512/1024/1280，不自动启动。真实 Pareto 两周期 GPU memory gate 需另协调并审结果，最终 test 不参与选参；本轮记录者只改日志，未执行这些未来命令。
