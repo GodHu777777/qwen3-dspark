@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（UTC+8；补核截至 00:47:59 的 expanded training 证据）**。本轮由专职 experiment_journal 直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，核对身份、指标和计时口径；远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 01:09（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；因当前 agent 唤醒受线程额度限制，本轮由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128及真实GPU gate聚合，保留专职记录角色。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -368,3 +368,56 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **计时与显存口径。** runner wall **61.78925495 秒**，report elapsed **36.97336006 秒**，allocated 峰值 **5571854848 bytes**。源码 `began` 在 before validation 之后，而 report 在 after validation 与 checkpoint 保存之后计算，所以 36.973 秒包含训练更新、after validation 和 checkpoint 保存；纯更新循环末条 elapsed 为 **20.99824730 秒**，也没有独立逐阶段同步计时。不能将 report elapsed 写成纯 training loop、从 wall 推断训练吞吐或 serving 性能。
 
 **局限、解决办法与下一决策。** 本段无运行失败；用源码纠正 elapsed 名称，用身份/step/hash 留证排除混用源码或配置，用分开记录的 TF 指标避免误读为 rollout。只完成首段执行及初期学习检查；更长训练、恢复实际加载、独立 development rollout、STS 拟合/验证和真实性能仍需各自证据，后续只在新的明确授权下推进。final test 未打开、未做质量分析，未修改训练快照/实现或 commit/push。
+
+
+<a id="stochastic-gate-cpu"></a>
+## 2026-10-09 01:02（UTC+8）— R05：bounded stochastic gate 的 CPU 门槛与真实文件 dry-run
+
+**问题与假设。** R04 的随机缓存 CPU 路径要进入真实 BF16 model gate，需先冻结原 case/checkpoint 身份、执行边界和失败留证，避免用新的训练权重或删掉原失败 case 偷换问题。可重现执行、same-prefix 后端数值差异、分布数学证明、模型质量和性能必须分别报告。
+
+**方法。** 直接读取[有界 stochastic gate 协议](stochastic-gate.md)、`eval_stochastic_gate.py`、final CPU tests/dry-run log、final manifest 及其 private run/aggregate 的身份字段。三例固定为原 pilot aligned128 checkpoint 的训练 prompt 和前两条 accepted validation prompt，沿用 prior gate；**这不是新 expanded step128 checkpoint**，不读 final test。checkpoint 权重/metadata、target 文件、development records、prior gate、三个 case 与 dry-run 的 51 个 `*.py` inventory 条目哈希一起绑定；其中 26 个是普通源码，25 个是匹配 glob 的 macOS `._*` sidecar，并非 51 个可执行模块。dry-run 只用标准库，复制源码快照，禁止 import torch/transformers、启动 worker 或接触 GPU；正式执行须另一个 fresh 输出，worker 先重核 binding，不能在训练快照中修改代码。
+
+协议绑定 `float64_softmax_normalize_cdf_v1`、temperature=1、seed=20261009、预算 32、固定 block capped by budget，target BF16/draft FP32+BF16 AMP/SDPA、无过滤；reference/立即 repeat/跨请求 1,0,2 repeat 分开。预先指定 reference 的前两轮，重放同 prompt、committed prefix 和 proposal prefix，逐行比较全部 n+1 行 p/logits（含 bonus），拒绝后的行标为 proposal 路径。Same-prefix probe 混合 history/chunk/current shape 数值影响，不能据此定位单一 kernel 根因；不把非零 TV/logit 差按任意阈值写成无损通过。默认超时 600 秒、上限 1800，只结束自有 worker；6 GiB allocator 上限和启动前 8 GiB free 门槛不保证驱动/workspace/co-tenant 全系统内存。
+
+**直接观察。** `output/scope-research/stochastic-gate-final-cpu-tests.log` 为 **7 项通过、6.308 秒**：标准库 dry-run 禁止 runtime/worker、原输入损坏与 case 漂移拒绝、fresh 输出/source binding、native streams、超时只结束自有 child、partial evidence、tiny Qwen 的 9 次执行/6 次 repeat 比较与全部 same-prefix probe 行。负向 fixture 的 failed/timeout 事件是预期测试，不能写成真实 GPU gate 失败；两条 `(null)` 提示仍保留。真实文件 dry-run log 为 dry_run_complete、cases=3、gpu_touched=false、verified_no_torch_import=True；aggregate completed_runs=0、reproducibility_checks=0、execution_checks_passed=null，native fidelity 为 not_measured/0 rows。它证明原文件身份与流程准备，不证明任何真实 rollout 或数值保真通过。
+
+**版本与独立核对。** 本地确认 commit `d6e385d8c41253de7c37ebb47dd7b16169e6b0b5`（00:57:28）；final manifest 四个交付文件 SHA 都与该 commit blobs 一致，当前 gate 源码/test/协议也一致。当前 README.ai.md 因后续入口更新已不同于当时哈希，未把现有 README 说成执行原件。重新计算 unsigned run JSON 的 binding SHA 为 `b47856093fbc3b4b71d4e55cd3277fa4dd14ccc7a827c64aa099623754e1d132`，与 manifest/log/aggregate 一致。原 aligned 权重 SHA 为 `8c634a2e0b9b3b6a46d573836c1e4ab54c810b060affa65a13ea80822cf585ca`，pilot development records SHA 为 `9bd09a5958c45485f4f7b7fdbb4bd42387d28b6a2bbaa173e20f3f62f15ec247`。记录者核的是本地留证和 hash binding，不虚构本轮重新读取远端大型权重，亦未查询 push/CI。
+
+**局限与下一决策。** 协调者报告 core 正在执行真实 GPU gate，另报告 expanded step32→128 自然 exit 0、其结果还在归档；这里仅记录协调状态，不把 GPU intent 或未到的训练 result 写成通过。真实 gate 有结果后，分开记录 execution/repeat/cache 边界与 native fidelity，同时保留失败 case、private partial traces 和原 dynamic BF16 问题。GPU finite/shape 检查也不替代 tiny CPU 全 KV 内容 oracle。没有 STS 拟合、scheduler/异步 serving 或速度结论；同 seed 跨 speculative/target-only token 相等不被要求。记录者只核证据、改 notebook，未操作 GPU/源码/进程、commit/push 或 final test 质量。
+
+
+<a id="expanded-step128"></a>
+## 2026-10-09 01:04（UTC+8）— T06：expanded strict resume 32→128 与 confidence 指标边界
+
+**问题与方法。** T05 只完成 fresh step32；继续到 128 必须实际加载 weights/optimizer/RNG，而不是从头训练或改变 max_steps/config。记录者直接读取本地 `output/expanded-training-step128-20261009/` 的 completion/result/run/started/checkpoint metadata/latest/metrics/train log/step128-verification，以及[expanded 聚合报告](../reports/expanded-training-20261009/README.md)和[summary](../reports/expanded-training-20261009/summary.json)。train log 明确 resumed_step=32，冻结源码 loader 在恢复前核 weights/resume-state SHA、metadata identity 和 step；原配置 max_steps=1280 不变，执行仅 `--resume --stop-after 128`，timeout 1800，不自动续下一段。
+
+**直接观察与身份。** 00:57:35.979–00:59:23.251（UTC+8）exit 0、timed_out=false；run.json 与 step32 原 run 完全一致，metadata identity 匹配。metrics 恰为 1–128 且全部 scalar finite，最初 32 行与 T05 的解析记录完全相同；33–128 新增 96 updates/768 microsteps，累计 1024 microsteps / 932 = **1.0987124464 遍**，本段增加 0.8240343348 遍。恢复初始 dev 指标与 step32 末次逐字段完全相等，排除换 panel/评估 seed 的该项漂移；仍不是未恢复连续 128-step 的逐 bit 更新等价实验。
+
+留证 verification 记录 latest/metadata/resume-state step 均 128、62 个 optimizer state entries 的 step 全为 128、source files/config bytes 未变、checkpoint/run/preflight identity 一致及 hashes 匹配。weights SHA 为 `5e6c2cbaf9eaca081ba3c598748952bc735e7d8b54ca5ecf77a47a6bf1c561e0`，resume SHA 为 `ea68520d884458e9187cf3a730e53b37a2e48922a7708ca326157994e15b8137`；大文件远端 hash 重算依据该留证报告。记录者另外独立核公开 summary 的 result/completion/verification SHA 与本地三份原始证据一致，不冒称本轮重 hash 远端权重。
+
+**模型指标与失败信号。** 同 119 dev/固定 anchors 宏平均，step32→128 loss **2.582734973→2.525808697**、CE **7.180634186→6.329201546**、L1 **1.957873026→1.812801690**；软 teacher-forced overlap **0.021063482→0.093599154**（2.1063%→9.3599%）。与此同时 confidence BCE **0.102585854→0.261367040**、MAE **0.020433038→0.098902311** 上升。teacher overlap 目标分布也随 draft 改变，因此跨 checkpoint 的误差绝对值上升本身不能证明 head 预测能力退化；应优先比较同 checkpoint 的基线及独立 rollout 校准。按冻结 loss 的同一 weights/宏平均定义，constant-zero confidence 的 MAE 等于 overlap，即 step128 为 0.093599154，仍好于 head 的 0.098902311；这是现有指标与定义推导，非新 rollout 校准实验。不能因 loss/overlap 改善选定 checkpoint，不能将 9.3599% 写成真实接受率或 confidence 已校准。
+
+**资源与计时。** target frozen=true，trainable parameters 161692161，932 train/119 dev，BF16 AMP/FP32 trainables；peak allocated **5633036288 bytes**。controller wall **107.27052365 秒**；result elapsed **76.42861543 秒**仍含末次 validation/checkpoint 保存；末条 optimizer metric elapsed **60.14590007 秒**是本段更新循环及 Python/logging 口径，不是端到端 serving 性能或独立同步阶段计时。controller 的退出后设备内存含此时其他工作，未将其当训练独占实测峰值或实时空闲。
+
+**局限与下一决策。** 此段证明已授权 strict resume 和初期 TF 学习推进；step128 的置信头尚未优于同 checkpoint 恒零 MAE 基线。独立 development rollout、STS 拟合/验证、checkpoint/policy 选择及后续512/1024/1280阶段未由本条执行或宣布完成；真实随机 gate 使用的是 R05 旧 pilot aligned128，不能用其结果代表 expanded step128 质量。保留未校准信号与原 dynamic BF16 数值问题。记录者只读取小型聚合/身份证据并追加日志，未读 final test 质量、运行 GPU、修改源码或 commit/push。
+
+**T06 随后归档核实。** 公开 expanded 五文件报告的本地 commit 为 `4a85847d584b01e2696797c01c7744a04022c07c`（01:04:12），记录者直接核 Git 条目；push/CI 未在本轮查询。协调者随后授权 direction 下一段 128→512，这仅是计划，不在 T06 写成已执行。
+
+
+**R05/T06 随后 CI 证据（01:06）。** 协调者成功请求公开 GitHub API，记录者直接读取 ignored `output/scope-research/github-actions-20261009-0106.json` 及 workflow。`d6e385d` 的 [run 37812874291](https://github.com/GodHu777777/qwen3-dspark/actions/runs/37812874291) 与 `d9289d3e1c871eef8184498ca51e0df86633cd13` 的 [run 37813260774](https://github.com/GodHu777777/qwen3-dspark/actions/runs/37813260774) 为 completed/success；`4a85847` 的 [run 37813847597](https://github.com/GodHu777777/qwen3-dspark/actions/runs/37813847597) 在该快照仍为 in_progress/conclusion=null，不能写通过。该 workflow 在 Ubuntu/Python 3.11 安装 Torch CPU 和 package[data]，执行 unittest discover；只支持这些 commit 的 CPU CI 状态，不支持 GPU gate、AMD 后端数值或后续 head 的 CI 结论。本条修正的是此前未查询的 CI 证据等级，不抹除原时间点的未知状态。
+
+
+<a id="stochastic-native-gate"></a>
+## 2026-10-09 01:09（UTC+8）— R06：真实 BF16 stochastic 执行可复现，native 数值差异仍存在
+
+**问题与方法。** R05 只完成 CPU/真实文件 dry-run；本轮记录者直接读取新公开[aggregate](../reports/stochastic-gate-20261009/aggregate.json)、[运行/复现 audit](../reports/stochastic-gate-20261009/audit.json)、[protocol](../reports/stochastic-gate-20261009/protocol.json)、[runtime](../reports/stochastic-gate-20261009/runtime.json)、[源码身份](../reports/stochastic-gate-20261009/source-identity.json)及[逐行数值探针](../reports/stochastic-gate-20261009/numerical-probes.json)。它们记录 core 在新 source snapshot 的真实 AMD 执行，仍用旧 pilot aligned128 权重/原三 case，不是 expanded128，也未读 final test。target BF16、draft FP32+BF16 AMP、SDPA、float64 law、temperature1、seed20261009、固定32输出预算与前两轮 probe，均未为过 gate 切换 FP32/canonical。
+
+**执行与复现观察。** aggregate 为 completed、execution_checks_passed=true：三 case 各 reference/立即 repeat/跨请求 repeat 共 **9 runs**，六项同路径 target-only/speculative token/round/audit 复现检查全部通过。finite/shape/commit audit 全部通过，确认实际 p/q/confidence、target KV/新 projected draft KV 的有限值、形状与提交边界；不是完整 GPU KV 数值 oracle。Reference 训练 case 输出32、29 rounds、committed draft2；dev case1输出6/EOS、5 rounds、draft0；dev case2输出32/预算、31 rounds、draft1。同算法/runtime 的可复现不要求 speculative 与 target-only 在同 seed 下 token 相同。两条 dev 的0/1接受也不是代表性 rollout 质量结论。
+
+**数值保真观察。** 预设三例前两轮全部 n+1 行，共 **48 probe rows**；47行 TV非零、最大TV **0.04161940616245697**，最大绝对logit差 **0.5**，1行 argmax 改变（case2/round1/position0，TV0.030732573863166624）。记录者独立从逐行 JSON 重算上述计数与 maxima，均与 aggregate 一致；45行有非零logit差，另2行虽logit差0仍有浮点量级非零TV，未把所有非零TV解释成同等大小的模型误差。Probe 重放同语义 prefix，包含拒绝后 proposal 路径与bonus；混合 history/chunk/shape影响，不是单一 kernel 因果定位。CPU residual 数学恢复的是实际 verifier p，不能因执行通过就认为 block p 与 sequential target p 在真实 BF16 下相同；**native模型分布无损没有被证明，原 dynamic BF16 问题未解除**。
+
+**独立身份核对与 dry-run inventory 修正。** 生产绑定为 `81022db4947f68b25c7375350c86284e049e260adde3c69e6f430350f5b4d49c`，commit仍 `d6e385d8c41253de7c37ebb47dd7b16169e6b0b5`；其27个正常package源码SHA逐个与该commit blobs一致，archive SHA `f438f9d257fcf67974603c2a52bd0b0be404aab39af9854e7410667da2526a07` 与本地留存归档相同。它不是 R05 的 b47856 dry-run binding/inventory：dry-run26个普通源码加25个macOS sidecar，共51条，生产去sidecar并包含packed_target.py，共27个普通源码；共有26个普通源码SHA一致。R05此处修正计数含义，不将dry-run称为生产inventory。生产报告仍绑定旧aligned权重8c634a和pilot records9bd09a，私有result/round/probe/stdout只公开哈希。
+
+**终态与证据限制。** audit postcheck 记 worker completed event/result、launcher和worker均已不存在、无launcher/worker error文件；协调者另外live核GPU释放。最初background launcher没有持久化独立OS exit-code文件，**不写“实测exit0”**。ASR HTTP200、ready=true/busy=false，postcheck仅原ASR进程；设备 used before/after均8962179072 bytes，gate peak allocated2260815872 bytes。这些是core/协调者的留证及观察，记录者本轮未重新查询远端进程/endpoint，亦不用于速度结论。runtime为Torch2.12.0+rocm7.2、Transformers5.17.0、HIP7.2.53211；deterministic_algorithms=false，有限复现结果不提升为跨runtime/device保证。
+
+**局限与下一决策。** 此gate完成有界执行/随机状态隔离与后端差异测量，保留执行通过和数值差异两条结论；全词表CPU复制、finite检查、文件写入与fresh sequential探针有显著成本，无性能比较或加速主张。没有用本结果选择expanded checkpoint/采样policy，没有STS拟合或同步/异步scheduler证明。后续用独立development rollout/STS评价训练质量，并按同prefix更细拆分动态BF16数值来源；真实packed/全局预算/物理成本仍待各自门槛。记录者仅改notebook，无GPU/源码/进程/commit/push动作。
