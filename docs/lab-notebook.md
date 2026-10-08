@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 01:09（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；因当前 agent 唤醒受线程额度限制，本轮由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128及真实GPU gate聚合，保留专职记录角色。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 01:19（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；因当前 agent 唤醒受线程额度限制，本轮由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512及真实GPU gate聚合，保留专职记录角色。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -421,3 +421,19 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **终态与证据限制。** audit postcheck 记 worker completed event/result、launcher和worker均已不存在、无launcher/worker error文件；协调者另外live核GPU释放。最初background launcher没有持久化独立OS exit-code文件，**不写“实测exit0”**。ASR HTTP200、ready=true/busy=false，postcheck仅原ASR进程；设备 used before/after均8962179072 bytes，gate peak allocated2260815872 bytes。这些是core/协调者的留证及观察，记录者本轮未重新查询远端进程/endpoint，亦不用于速度结论。runtime为Torch2.12.0+rocm7.2、Transformers5.17.0、HIP7.2.53211；deterministic_algorithms=false，有限复现结果不提升为跨runtime/device保证。
 
 **局限与下一决策。** 此gate完成有界执行/随机状态隔离与后端差异测量，保留执行通过和数值差异两条结论；全词表CPU复制、finite检查、文件写入与fresh sequential探针有显著成本，无性能比较或加速主张。没有用本结果选择expanded checkpoint/采样policy，没有STS拟合或同步/异步scheduler证明。后续用独立development rollout/STS评价训练质量，并按同prefix更细拆分动态BF16数值来源；真实packed/全局预算/物理成本仍待各自门槛。记录者仅改notebook，无GPU/源码/进程/commit/push动作。
+
+
+<a id="expanded-step512"></a>
+## 2026-10-09 01:19（UTC+8）— T07：expanded strict resume 128→512 与同 checkpoint confidence 基线
+
+**问题与方法。** T06 完成 step128 后，只在新授权下恢复到512，不改变训练源码/config/max_steps，需检验旧日志继承、optimizer/RNG恢复和 dev panel 连续性。记录者直接读取[本段公开报告](../reports/expanded-training-step512-20261009/README.md)、[summary](../reports/expanded-training-step512-20261009/summary.json)、[checkpoint核验](../reports/expanded-training-step512-20261009/checkpoint-verification.json)、[source identity](../reports/expanded-training-step512-20261009/source-identity.json)及公开 steps129–512 metrics，另读本地未发布 `output/expanded-training-step512-20261009/` 中 completion/result/run/metrics/latest/metadata/verification 和退出标识。原796fecc快照、配置SHA `ea8091ca8d124434696ccd15f88249839aaf1d71bdf540c3db9142bcbdda4762`、max_steps1280继续绑定，执行仅 strict resume `--stop-after 512`，没有自动推进1024。
+
+**直接观察与身份。** 01:05:05.252–01:09:54.362（UTC+8）process exit0、timed_out=false；本段新增384 updates/3072 microsteps，累计4096/932=**4.3948497854遍**，本段增加3.2961373391遍。直接核完整metrics恰为1–512、全部scalar finite，最初128条解析记录与原step128完全相同；公开metrics恰为129–512并与本地新增部分逐项相同。run identity与step128完全一致，metadata identity匹配；恢复before dev逐字段等于128final，仍用119dev/固定anchor seed、样本内weights加权再宏平均，不是独立rollout panel。
+
+本地verification与公开checkpoint-verification完全一致，记录latest/metadata/resume-state step均512，62个optimizer state entries的step均512，source112/config bytes未变、run/preflight一致、weights/resume hashes通过。权重SHA `667d2dd6e8ad7d11e2115e936af1b6cf7e44357d68e3412f5c9ef433f26690ae`，resume SHA `a8b433cbcee71e73ca32696f1755e18bc41b62618934bff92ba91dacf1a59c73`；记录者独立核metadata中的这两值与verification相同，并核summary的四个raw evidence SHA与本地result/completion/verification/full metrics一致。大文件远端重hash、CPU加载resume-state的事实依据direction留证，没有冒称记录者重新读取远端checkpoint。
+
+**TF结果与confidence比较。** Step128→512，dev loss **2.525808697→2.191068616**、CE **6.329201546→4.807051978**、L1 **1.812801690→1.425409559**；teacher-forced软overlap **0.093599154→0.287295218**（9.3599%→28.7295%）。confidence BCE **0.261367040→0.427494834**、MAE **0.098902311→0.184831666**绝对值上升，但overlap目标随draft变化，不能跨checkpoint单凭这些值宣布预测能力退化。**同step512**的constant-zero MAE按同weights/宏平均定义为 **0.287295218**，learned MAE **0.184831666**较低；只支持优于这个零基线。constant-mean/median基线和真实rollout校准尚未测，TF MAE改善/相对基线优势不能写成confidence已校准或scheduler有效。28.7295%也不是实测连续接受率、答案质量或速度。
+
+**计时与资源。** target frozen=true、161692161 trainables、932train/119dev；本段peak allocated **5632856064 bytes**。optimizer-loop末条elapsed **240.04818938秒**包含Python/logging；result timer **256.27566592秒**从initial dev之后计，含末dev与checkpoint保存；process wall **289.10937890秒**另含startup、identity、模型/strict-resume加载与两次dev。三个口径分别保存，不从它们推serving吞吐或speedup；没有重新测全形状资源保证。
+
+**局限与下一决策。** 本段授权执行/严格恢复与TF学习信号已完成，早期32/128报告保持独立；没有选择checkpoint/policy、做final-test质量、拟合STS或执行独立dev随机rollout。旧pilot R06 GPU gate不能代表expanded512质量，原dynamicBF16问题与高效多请求/异步资源机制仍各需证据。后续1024/1280需另行授权并核身份/状态；当前native varlen最终模块/probe尚未交付，不写提前完成。记录者只核证据与notebook，不开GPU、不改实现/进程/冻结快照，不commit/push。
