@@ -3,7 +3,8 @@
 `tensor_sampling.py`、`cached_sampling.py` 和
 `DSparkDraft.propose_stochastic_cached` 提供独立随机路径；旧 greedy 接口及
 权重结构不变。动态 `CachedTarget` 为主路径，`CanonicalTarget` 仍是单独数值
-控制。没有运行真实 GPU stochastic gate，没有解除已有动态 BF16 数值失败。
+控制。本文记录 CPU 实现阶段；后续 [真实 GPU gate](../reports/stochastic-gate-20261009/README.md)
+已通过执行/复现检查，但保留了非零 TV 和 argmax 差异，没有解除动态 BF16 数值失败。
 数学来源及 residual 推导见 [sampling说明](stochastic-sampling.md)。
 
 ## 明确的概率策略
@@ -114,6 +115,7 @@ ROCR_VISIBLE_DEVICES=""` 运行，并断言 `torch.cuda.is_available()` 为 Fals
 真实 tiny Qwen CPU 测试在每个拒绝位置、全接受、EOS/预算之后，将 target KV
 和 projected draft KV 的**内容及长度**与完整已提交 prefix 重算比较；另检查
 单次 backbone、实际 Markov q/pre-token confidence、seed/request 状态隔离、
-observer 失败 reset 和 canonical 控制。真实 BF16 GPU gate 待协调。
+observer 失败 reset 和 canonical 控制。后续真实 BF16 GPU gate 见上方独立报告；
+不能将此处 CPU 数学测试与真实后端数值保真混为同一个通过结论。
 原始日志在 ignored `output/scope-research/*sampling-tests.log` 与
 `stochastic-full-cpu-suite.log`。

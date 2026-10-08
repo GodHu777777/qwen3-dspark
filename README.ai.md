@@ -46,8 +46,9 @@ with exact rational distribution oracles (11 tests). tensor_sampling.py and
 cached_sampling.py now add a separate float64-law tensor/cached reference with
 real draft Markov sampling, actual q and raw confidence retention, fixed admission,
 strict cache commit/crop and a target-only baseline. The model forward dtype is
-unchanged. 76 CPU tests pass in the integration snapshot; real stochastic GPU
-validation remains pending. Same seed across different algorithms does not imply
+unchanged. 76 CPU tests pass in the integration snapshot. The old pilot aligned128
+real GPU gate completed 9 runs/6 repeat checks, while 47/48 same-prefix rows had
+nonzero TV (max 0.0416194062); see reports/stochastic-gate-20261009. Same seed across different algorithms does not imply
 identical sampled tokens; no performance or calibrated scheduling claim. See
 docs/cached-stochastic.md and docs/stochastic-sampling.md. scheduler.py is a pure CPU global prefix
 planner; hardware profiling, multi-request execution and asynchronous scheduling
@@ -184,6 +185,9 @@ train/two-dev panel and checkpoint, target/data hashes and a fresh source snapsh
 uses a separate snapshot worker, native BF16 forward/float64 probability law,
 same-path seeded repeats, cache/finite/EOS checks, and independently reported
 same-prefix block-vs-sequential probability/logit differences. All traces are
-private except the aggregate candidate; no stochastic GPU result or distribution
-losslessness is claimed yet. See docs/stochastic-gate.md; GPU windows still require
+private except reviewed scalar evidence. reports/stochastic-gate-20261009 records
+execution/reproduction pass, max TV 0.0416194062, max logit difference 0.5, and one
+argmax change. This uses the original pilot aligned128 checkpoint, not expanded
+training weights, and does not establish distribution losslessness or speedup.
+See docs/stochastic-gate.md; GPU windows still require
 coordination with generation, memory gates and training.

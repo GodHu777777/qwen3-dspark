@@ -1,0 +1,25 @@
+{
+  "probability_policy": "float64_softmax_normalize_cdf_v1",
+  "temperature": 1.0,
+  "seeds": [
+    20261009
+  ],
+  "max_new_tokens": 32,
+  "probe_rounds": 2,
+  "target_forward_dtype": "bfloat16",
+  "draft_parameters": "float32",
+  "draft_autocast": "bfloat16",
+  "backend": "sdpa",
+  "filtering": "none",
+  "admission": "fixed block_size capped by remaining budget",
+  "phases": [
+    "reference",
+    "immediate_repeat",
+    "interleaved_reverse"
+  ],
+  "numerical_probe_selection": "first configured rounds of reference phase; all n+1 target rows",
+  "max_process_memory_gib": 6,
+  "minimum_free_memory_gib": 8,
+  "cross_algorithm_token_equality": "not asserted",
+  "timing": "not a performance benchmark"
+}

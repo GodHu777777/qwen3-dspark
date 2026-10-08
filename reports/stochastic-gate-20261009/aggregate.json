@@ -1,0 +1,60 @@
+{
+  "status": "completed",
+  "binding_sha256": "81022db4947f68b25c7375350c86284e049e260adde3c69e6f430350f5b4d49c",
+  "execution_checks_passed": true,
+  "examples": [
+    {
+      "case": 0,
+      "split": "train",
+      "seed": 20261009,
+      "baseline_output_count": 32,
+      "speculative_output_count": 32,
+      "rounds": 29,
+      "committed_draft_tokens": 2,
+      "completed_repeat_checks": 2,
+      "completed_repeat_checks_passed": true,
+      "probed_rows": 16,
+      "max_total_variation": 0.03281854042222311
+    },
+    {
+      "case": 1,
+      "split": "validation",
+      "seed": 20261009,
+      "baseline_output_count": 6,
+      "speculative_output_count": 6,
+      "rounds": 5,
+      "committed_draft_tokens": 0,
+      "completed_repeat_checks": 2,
+      "completed_repeat_checks_passed": true,
+      "probed_rows": 16,
+      "max_total_variation": 0.04161940616245697
+    },
+    {
+      "case": 2,
+      "split": "validation",
+      "seed": 20261009,
+      "baseline_output_count": 32,
+      "speculative_output_count": 32,
+      "rounds": 31,
+      "committed_draft_tokens": 1,
+      "completed_repeat_checks": 2,
+      "completed_repeat_checks_passed": true,
+      "probed_rows": 16,
+      "max_total_variation": 0.038177633044032405
+    }
+  ],
+  "completed_runs": 9,
+  "completed_reproducibility_checks": 6,
+  "all_completed_checks_passed": true,
+  "error_type": null,
+  "native_numerical_fidelity": {
+    "status": "measured",
+    "compared_rows": 48,
+    "max_total_variation": 0.04161940616245697,
+    "max_absolute_logit_difference": 0.5,
+    "nonzero_tv_rows": 47,
+    "argmax_changed_rows": 1,
+    "interpretation": "Measured same-prefix path differences only; no distribution-losslessness verdict"
+  },
+  "scope": "Bounded execution/reproduction gate, not a speed benchmark or proof of lossless model sampling"
+}

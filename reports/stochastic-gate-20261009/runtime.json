@@ -1,0 +1,8 @@
+{
+  "torch": "2.12.0+rocm7.2",
+  "transformers": "5.17.0",
+  "hip": "7.2.53211",
+  "device": "AMD Radeon Graphics",
+  "free_bytes_before_load": 25528631296,
+  "deterministic_algorithms": false
+}

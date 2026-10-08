@@ -1,9 +1,12 @@
-# 有界真实 stochastic gate（GPU 执行待协调）
+# 有界真实 stochastic gate
 
 `python -m dspark_qwen.eval_stochastic_gate` 固定使用 prior private gate 中
 同一个 aligned128 checkpoint、原训练 prompt 和前两个 accepted validation
-prompt。不会筛掉先前失败的 case，也不会读取 final test。当前完成了 CPU 测试
-及原始文件 dry-run；**尚未运行真实 BF16 GPU gate**。
+prompt。不会筛掉先前失败的 case，也不会读取 final test。CPU 测试和原始文件
+dry-run 后，2026-10-09 已完成一次真实 BF16 GPU gate：9 次运行/6 次复现检查
+通过，但同 prefix 的 48 行中 47 行 TV 非零，最大 0.0416194062，最大 logit
+差 0.5，1 行 argmax 改变。[公开报告](../reports/stochastic-gate-20261009/README.md)
+保留这些数值差异；执行通过不是分布无损结论，也不是 expanded checkpoint 质量结果。
 
 ## Dry-run 与独立执行
 
