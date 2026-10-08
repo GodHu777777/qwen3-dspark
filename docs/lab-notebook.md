@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:14（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09/S07/T08，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 02:19（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09/S07/T08/S08，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -567,3 +567,21 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **计时与资源。** target frozen=true、161692161 trainables、932train/119dev、exact train sequence tokens424267、BF16 AMP/FP32 trainables；peakallocated **5632856064 bytes**。optimizer-loop末条elapsed **323.60860635秒**含Python/logging；result **338.22575630秒**从initial dev后开始，含末dev/save；child wall **368.69495988秒**另含startup、identity、模型/strict-resume加载、两次dev及保存。三种计时口径分别保留，无serving吞吐、独占全系统峰值或speedup结论。
 
 **局限与下一决策。** 已完成的仅是本段严格恢复和TF监测；step1024仍为1280计划中间checkpoint，没有rollout1024、checkpoint/policy最终选择、STSfit/eval或scheduler收益。协调者随后授权1024→1280，但本条实际PID/结果未交付，不能把授权写成启动或完成。pinned private backend完整tensor gate据协调者报告已通过、公开报告仍在导出；本条不填初步数值、不替代S04原失败或wholeQwen/KV门槛，完整交付后另起S08。final test未读；记录者仅追加notebook，无GPU、实现/进程、冻结快照或commit/push动作。
+
+
+<a id="pinned-varlen-tensor-gate"></a>
+## 2026-10-09 02:19（UTC+8）— S08：显式 pinned private backend 完整小 tensor gate 通过
+
+**问题与方法。** S07的CPU替身不是nativeGPU证据；本轮需按同三组输入与原阈值完成显式private backend全部11call，同时保持S04 public失败结论。直接读取[六份完整报告](../reports/pinned-varlen-tensor-gate-20261009/README.md)、[aggregate](../reports/pinned-varlen-tensor-gate-20261009/aggregate.json)、[CPU audit](../reports/pinned-varlen-tensor-gate-20261009/audit.json)、[protocol](../reports/pinned-varlen-tensor-gate-20261009/protocol.json)、[runtime](../reports/pinned-varlen-tensor-gate-20261009/runtime.json)、[source identity](../reports/pinned-varlen-tensor-gate-20261009/source-identity.json)，另核未发布 `output/pinned-varlen-tensor-gate-20261009-5281a6a/` 的public-verification、source archive、verification log及三层退出标识。这是唯一获授权的小tensor运行，没有重试、fallback或观察后松阈值。
+
+**保持原协议。** 显式选择 `rocm_aten_no_window_pinned_v1`，runtime/schema pin精确匹配，is_causal=true、window左右均None。原seed20261009、CPU K→V→Q抽样转BF16、Hq16/Hkv8/D128、FP32 MATH per-request及packed bottom-right双oracle、atol0.02/rtol0.02/RMS≤0.005和exact isolation均不变。三组Q/K/inactive lengths为 **[1,8]/[17,29]/13**、**[3,2,1]/[11,5,1]/0**、**[2]/[2]/6**，包含cached tail、crop/exit/re-add和cropzero/append。原public协议SHA仍 **08c501349bb59d30a888f1a5669a6c5bcb0bdfbf5f9e894c409fb2e702d49ff9**，新pinned canonical JSON SHA **f42729a4e857b1e1f0023888ba1f5c0e86602b36e764243d52007f96866cb98a**；记录者重算后者，不混同pretty-printed公开protocol文件bytes SHA。
+
+**真实观察。** **3cases/11nativecalls全部通过**，11call逐项记录恰一次 `aten::_flash_attention_forward`，finite/shape/dtype/device通过，raw先保存。三case对per-request FP32 oracle的maxabs/RMS依次为 **0.0042855740/0.0006106310**、**0.0071058273/0.0008891412**、**0.0077950954/0.0010230795**；packed oracle各也满足同原阈值。三个zero-Q位置ramp均与bottom-right解析均值exact（maxabs/RMS均0）；三项other-request poison和两项适用inactiveKV poison输出均逐bit不变。记录者独立核aggregate的case/call序号、11flash计数、3ramp与3+2isolation计数，不把scalar maxima alone当全元素allclose的独立重演。
+
+**身份与审计证据等级。** 执行source **5281a6af05ddd6b3e80cd3aeded892c61d2c91a5**，archive SHA **233d3f493ce084b18761beccfe34c56f0002a56cd098b9c0c31d1873cbaec38e**，script SHA **0da7f5b52671257a0d33c08b0e55829132c0a3fa5c5753b0aabd7779f802915e**；worker/launcher identity一致、before/after未变。记录者独立重算六public文件SHA与public-verification一致、32个executed script/package SHA逐个等于该commit Git blobs、本地archive SHA相同。GPU-hidden CPU独立审计记录11份raw native tensor-file hash和3个重算FP32oracle通过、CPU/savedGPU MATH oracle一致，并重核ramp/poison exact；verification log保留一条 `(null)` 提示和最终independent_cpu_verification_passed。完整QKV/cu/output/oracle留在远端私有，本轮记录者没有再加载它们。协调者另报告已独立核六report/32Git/counters并直读remote completion及原worker result；其远端检查与本轮本地核验分开。公开归档commit **d35254fbf0ae95a4feef24fe7214e5385a5c424d**（02:17:38）已直接核Git，不冒充execution source或本轮push/CI证据。
+
+**终态、隔离与计时。** Worker completion exit0、launcher return0、controller return0、timed_out=false均有本地标识并逐字段等于runtime。运行pre/post为02:11:32–02:11:44（UTC+8），peakallocated **82391552 bytes**、VRAMused前后 **8962183168 bytes**；既有ASR是唯一KFD compute持有者且HTTP正常/ready/notbusy，desktop render/card使用者记录并保留。全部gate进程退出依据既有postcheck/交付事实，本轮不live操作。Torch2.12.0+rocm7.2、torchgit7661cd9c…、HIP7.2.53211/gfx1201、AOTriton preference与private schema精确符合pin，仍非独立devicekernel binary认证。**10.75362557秒**含profiler/oracles/persistence，不是benchmark。无安装、targetweights或冻结训练快照改动。
+
+**已知失败留证局限。** 实际5281a6a继续使用FP32 error reduction；极大的finite BF16差可能在square/mean等reduction中overflow，继而不能用allow_nan=false序列化scalar报告。raw native tensors在此之前已经保存，但不能因此声称该极端失败会留下完整scalar/oracle终态。本次未触发该局限；没有事后悄悄修改执行代码或将重写后的实现当此次原件。后续健壮化需另留source/检查证据，不改变本次成功范围。
+
+**边界与下一决策。** 仅显式private backend完整小tensor gate通过，**原public S04 gate仍failed**、public默认不因本结果晋升；不证明whole pretrainedQwen/KV、native分布无损、quality、confidence/STS或speedup。WholeQwen尚无GPU执行；实际每层sameQKV固定0.02/0.02/0.005与精确cache/position/isolation的CPU准备仍在另行实现，end-to-end BF16 hidden/KV/logit/TV须分别报告。协调者已收到direction实际1024→1280启动PID（shell3919877/runner3919883/train3920175），训练拥有当前GPU窗口；这是启动证据，不是1280完成，本轮无并发GPU实验。final test未读；记录者只notebook，无GPU/实现/进程/commit/push动作。
