@@ -26,7 +26,8 @@ def save_checkpoint(root, step, draft, optimizer, generator, metadata):
                 "cuda_rng": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else [],
                 "step": step}, temporary / "resume.pt")
     (temporary / "metadata.json").write_text(json.dumps({**metadata, "step": step,
-        "draft_weights_sha256": sha256(temporary / "draft.safetensors")}, indent=2) + "\n")
+        "draft_weights_sha256": sha256(temporary / "draft.safetensors"),
+        "resume_state_sha256": sha256(temporary / "resume.pt")}, indent=2) + "\n")
     os.replace(temporary, destination)
     (root / "latest.tmp").write_text(destination.name)
     os.replace(root / "latest.tmp", root / "latest")
@@ -40,10 +41,19 @@ def load_checkpoint(path, draft, expected_identity=None, optimizer=None, generat
         raise ValueError("Checkpoint identity mismatch (source/config/data/model/runtime)")
     if sha256(path / "draft.safetensors") != metadata["draft_weights_sha256"]:
         raise ValueError("Checkpoint weight hash mismatch")
-    draft.load_trainable_state(load_file(str(path / "draft.safetensors")))
     if optimizer is not None:
+        if generator is None:
+            raise ValueError("Resume requires an anchor generator")
+        if "resume_state_sha256" not in metadata:
+            raise ValueError("Legacy checkpoint has no resume-state checksum; weights-only loading is supported")
+        if sha256(path / "resume.pt") != metadata["resume_state_sha256"]:
+            raise ValueError("Checkpoint resume-state hash mismatch")
         # weights_only refuses arbitrary pickle globals. Only load our local run files.
         state = torch.load(path / "resume.pt", map_location="cpu", weights_only=True)
+        if state["step"] != metadata["step"]:
+            raise ValueError("Checkpoint resume step mismatch")
+    draft.load_trainable_state(load_file(str(path / "draft.safetensors")))
+    if optimizer is not None:
         optimizer.load_state_dict(state["optimizer"])
         generator.set_state(state["anchor_rng"])
         torch.set_rng_state(state["torch_rng"])

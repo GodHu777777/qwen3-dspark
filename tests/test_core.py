@@ -94,6 +94,50 @@ class CoreTests(unittest.TestCase):
         # Confidence labels must not backpropagate into draft probabilities.
         self.assertEqual(out["logits"].grad.abs().sum().item(), 0)
 
+    def test_training_block_matches_inference_prefix_and_serial_markov(self):
+        # Full teacher sequence and truncated inference context must yield the
+        # same backbone; changing future teacher tokens cannot influence it.
+        anchor = 2
+        full = self.target.capture(self.ids)
+        prefix = self.ids[:, :anchor + 1]
+        context = self.target.capture(prefix[:, :-1]).context
+        hidden = self.draft.backbone(self.ids, full.context, torch.tensor([anchor]))[0, 0]
+        inferred = self.draft.backbone(prefix, context, torch.tensor([anchor]))[0, 0]
+        torch.testing.assert_close(hidden, inferred, atol=1e-6, rtol=1e-6)
+        # Greedy proposal k must condition on proposal k-1, not teacher tokens.
+        base = self.draft.lm_head(inferred)
+        previous = prefix[0, -1:]
+        expected, expected_confidence = [], []
+        for k in range(self.spec.block_size):
+            embedding = self.draft.markov_embedding(previous)
+            expected_confidence.append(self.draft.confidence(
+                torch.cat((inferred[k:k+1], embedding), -1)).sigmoid().item())
+            previous = (base[k:k+1] + self.draft.markov_projection(embedding)).argmax(-1)
+            expected.append(previous.item())
+        tokens, confidence = self.draft.propose_greedy(prefix, context)
+        self.assertEqual(tokens, expected)
+        self.assertEqual(confidence, expected_confidence)
+
+    def test_loss_values_match_pinned_nemo_local_terms(self):
+        # Execute the pinned loss implementation, replacing only its type-only
+        # common import; this does not import or install NeMo.
+        path = Path(__file__).resolve().parents[1] / "references/nemo-2d365eda/loss.py"
+        namespace = {"__name__": "nemo_loss_oracle"}
+        source = path.read_text().replace("from .common import DSparkForwardOutput", "from types import SimpleNamespace as DSparkForwardOutput")
+        exec(compile(source, str(path), "exec"), namespace)
+        from types import SimpleNamespace
+        f = self.target.capture(self.ids)
+        out = self.draft(self.ids, f.context, torch.tensor([2, 5]))
+        teacher = self.target.logits(f.last[:, out["label_positions"] - 1])
+        ours, _ = objective(out, teacher, torch.ones_like(self.ids, dtype=torch.bool), self.spec)
+        ref = namespace["compute_dspark_loss"](outputs=SimpleNamespace(
+            draft_logits=out["logits"], target_ids=out["labels"], eval_mask=out["valid"],
+            aligned_target_logits=teacher, confidence_pred=out["confidence"],
+            block_keep_mask=torch.ones(1, 2, dtype=torch.bool)),
+            loss_decay_gamma=self.spec.loss_decay_gamma, ce_loss_alpha=self.spec.ce_alpha,
+            l1_loss_alpha=self.spec.l1_alpha, confidence_head_alpha=self.spec.confidence_alpha)
+        torch.testing.assert_close(ours, ref, atol=2e-6, rtol=2e-6)
+
     def test_checkpoint_roundtrip_and_resume_optimizer(self):
         opt = torch.optim.AdamW([p for p in self.draft.parameters() if p.requires_grad])
         rng = torch.Generator().manual_seed(123)
@@ -119,6 +163,12 @@ class CoreTests(unittest.TestCase):
             for name in uninterrupted:
                 torch.testing.assert_close(uninterrupted[name], resumed[name], rtol=0, atol=0)
             with self.assertRaises(ValueError): load_checkpoint(cp, self.draft, {"test": 2})
+            original = self.draft.fc.weight.detach().clone()
+            with (cp / "resume.pt").open("ab") as f:
+                f.write(b"corruption")
+            with self.assertRaisesRegex(ValueError, "resume-state hash"):
+                load_checkpoint(cp, self.draft, {"test": 1}, opt, rng)
+            torch.testing.assert_close(self.draft.fc.weight, original, rtol=0, atol=0)
 
     def test_greedy_verify_rejection_all_accept_bonus_eos_and_limit(self):
         prompt = self.ids[:, :3]
