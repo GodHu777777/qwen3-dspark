@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 01:19（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；因当前 agent 唤醒受线程额度限制，本轮由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512及真实GPU gate聚合，保留专职记录角色。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 01:32（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；因当前 agent 唤醒受线程额度限制，本轮由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -437,3 +437,32 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **计时与资源。** target frozen=true、161692161 trainables、932train/119dev；本段peak allocated **5632856064 bytes**。optimizer-loop末条elapsed **240.04818938秒**包含Python/logging；result timer **256.27566592秒**从initial dev之后计，含末dev与checkpoint保存；process wall **289.10937890秒**另含startup、identity、模型/strict-resume加载与两次dev。三个口径分别保存，不从它们推serving吞吐或speedup；没有重新测全形状资源保证。
 
 **局限与下一决策。** 本段授权执行/严格恢复与TF学习信号已完成，早期32/128报告保持独立；没有选择checkpoint/policy、做final-test质量、拟合STS或执行独立dev随机rollout。旧pilot R06 GPU gate不能代表expanded512质量，原dynamicBF16问题与高效多请求/异步资源机制仍各需证据。后续1024/1280需另行授权并核身份/状态；当前native varlen最终模块/probe尚未交付，不写提前完成。记录者只核证据与notebook，不开GPU、不改实现/进程/冻结快照，不commit/push。
+
+
+<a id="expanded-rollout-panels"></a>
+## 2026-10-09 01:32（UTC+8）— R07：quality32 collector 与预冻结 development 分组，尚无 GPU rollout
+
+**问题与方法。** 训练TF指标不能直接选出有用的随机drafter，需对兼容expanded checkpoints复用固定development panel/种子，同时将之后STS的fit与eval隔开。直接读取[rollout协议](rollout-collection.md)、`rollout_protocol.py`及本地未发布 `output/rollout-collector-cpu-20261009/` 的verification、final tests、dry128/512 log/aggregate、source SHA与private panel的身份/分组字段，不读final test。实际CPU部署为baseline `8a5d24c50f91ec55d8706b677279942e2c9027f4` 的git archive加三个交付module/test；后续归档commit `a278e5a5d7d74a1f77f8dcd475700959ee158cb0`（01:28:50）。四个module/test/doc执行SHA与该commit blobs独立核对一致。
+
+**冻结选择与身份。** 必须恰为119个accepted validation：immutable records顺序前32为quality，其余87按 `SHA256(salt + NUL + record_id)` 排序，前44为fit、后43为eval；salt固定为dspark-expanded-dev-sts-v1。记录完整row/prompt-token/规范化首user身份唯一性、数据/generation/model哈希及每prompt seed，种子不依赖checkpoint。记录者直接核manifest的32/44/43计数、119 IDs互斥，并重算unsigned canonical JSON SHA为 **`fd8efdd09f58c20a24e4c248532bb1460282b6eadb2e73d51754e9acaeeaa2ec`**。改变rows/split/来源/静默replacement会拒绝；checkpoint weights/metadata另绑定，不能混checkpoint标签。全部119dev已用于TF监测，eval43只是相对STS fit的prompt留出，不是未经模型选择影响的数据。
+
+**协议与分母。** quality执行协议为nativeBF16/SDPA、draftFP32+BF16 AMP、temperature1、无filter、actual float64 q、max128输出、完整block只因预算截短。预选quality rows0/1的round0做same-prefix TV，EOS导致未到时不换例子/轮次。分别保存proposed、target-verified、attempted-uniform与effective prefix-label分母；拒绝后的已验证suffix为零prefix事件，未生成/未评分尾部缺席；accepted EOS自身计入，其后排除，residual/bonus EOS不冒充accepted draft EOS。首token EOS或budget1产生零blocks，不填造零标签。CPU有限/形状/cache/实际q与标签证据不替代真实GPU分布保真或性能。
+
+**直接观察。** final测试 **9项通过、5.517秒**，HIP/CUDA/ROCR隐藏、OMP2；覆盖exact partition/leakage、checkpoint-independent seeds/identity、stdlib dry-run/tamper、真实tinyQwen实际q/repeat/boundedTV、rejection/EOS分母、budget1/firstEOS、timeout与partial probe evidence。真实expanded128/512文件binding dry-run均dry_run_complete、32 prompts、gpu_touched=false，共用上述panel；两次aggregate的completed prompts/blocks/positions均0、execution_checks_passed=null、TV rows0，不能写成32真实rollouts通过。128 binding为052f737b…，512为4a76b220…，不同checkpoint绑定不被说成相同run身份。原始日志中的两条 `(null)` 提示保持记录。
+
+**局限与下一决策。** 交付的是quality32 collector；尚未GPU quality采集或STS拟合。fit44/eval43预留给quality评估后选定并冻结的同一checkpoint/同protocol；必须用fit44估计每位置prefix prevalence常数、在eval43比较unscaled head/frozen STS/fit-prevalence的ECE/Brier，不能用constant-zero替代该校准基线或把fitting ECE当留出性能。选择checkpoint仍待真实quality结果，final test保持锁定。新collector源码在独立执行snapshot，不更改796fecc训练快照；记录者未执行GPU/源码修改/commit/push。
+
+<a id="native-varlen-failure"></a>
+## 2026-10-09 01:32（UTC+8）— S04：varlen CPU adapter通过，唯一真实native首组数值gate失败
+
+**问题与方法。** S03 denseQ×K参考没有实现高效native varlen；新adapter将请求末段query和active KV映射为THD/int32累计长度，在HF attention callback中保留Qwen QKV/QKnorm/RoPE/cache语义，每层一次native varlen调用，无dense fallback。直接读[varlen说明](varlen-target.md)、[不可变失败报告](../reports/native-varlen-probe-20261009/README.md)、[summary](../reports/native-varlen-probe-20261009/summary.json)、[预声明protocol](../reports/native-varlen-probe-20261009/protocol.json)，及CPU/controller/raw failure/completion/worker-result/stderr和pre/postflight小型证据。实现/probecommit `d45442722aecb0f555df35b1f66feb8c7b44c01f`（01:22:59），失败聚合commit `6fa63e5d5d95b0f45a945615c2bcf4a0f6812416`（01:28:50）。
+
+**CPU前提。** CPU FP32显式注入dense oracle kernel，5既有packed+5新增varlen共 **10 tests通过、1.253秒**；另 **3 controller tests通过、0.012秒**，覆盖stdlib dry-run禁backend imports、timeout只结束自有group、interrupt回收。前者核terminal-suffix layout/bottom-right可见性、active gather排除inactiveKV、tinyQwen hidden/context/logits/逐层KV内容、mixed Q/crop/exit/readd/cropzero、poison与kernel异常清状态，仍不是native GPU成功。记录者独立核CPU execution中4个sourceSHA与d454427 blobs相同；gate固定atol0.02/rtol0.02及RMS≤0.005，不因失败调阈值。
+
+**真实尝试与失败。** 早期preflight把现有桌面render/card句柄误判为compute冲突，在native worker创建前拒绝；随后经授权修正guard，只拒绝新增compute owners并保留桌面inventory。原guard失败保留，这不算第二次native尝试；桌面和ASR未停止。真正native仅 **1次**，gfx1201/Torch2.12.0+rocm7.2/HIP7.2.53211，BF16/Hq16/Hkv8/D128/window(-1,0)/GQA。首组query lengths[1,8]、activeK[17,29]、inactive13；queryshape[9,16,128]、gatheredKshape[46,8,128]。native输出shape/dtype/device/finite通过，single `aten::_flash_attention_forward` assertion及两个FP32 MATH oracles彼此一致的检查在数值失败前通过；这些dispatch事实由源码执行顺序/traceback支持，原profiler event map未落盘。AOTriton是ROCm偏好getter结果，不是独立device-kernel trace。
+
+与per-request FP32 MATH oracle比较时，**17841/18432=96.7936%**元素超fixed tolerance，max绝对差 **3.7750649452209473**、max相对差33742.24609375；raw traceback/failure JSON与公开summary一致。process **exit1、no timeout**，controller wall11.59582493秒。尚未到RMS assertion、native-versus-packed独立比较、causal ramp sentinel、active/inactive poison、crop-exit-readd和cropzero两组；RMS与peak allocation为null，不能填造测量。误差幅度本身不定位causal alignment、kernel或layout根因，也不宣称算子普遍不可用。
+
+**身份与终态。** 本地source archive SHA `9114c062aab7586bb906ca1df27ca21d57892e164c96da7279def9eac857a8c5`与summary一致；九个raw evidence SHA均有对应本地文件且一致（guard-rejection SHA对应最初controller log，不是preflight JSON）。completion和failure确定已终止失败；worker-result保留初始running/empty cases是尚未append便抛异常的partial文件，不能当正在运行。postflight留证worker PID已不存在、compute句柄只剩原ASR、ASRready=true/busy=false、原PID保留；before/after VRAMused均8947318784bytes。post-integrity记录157个archive文件不变，796fecc训练源码/config未改；本轮记录者未再live查设备/ASR。
+
+**局限与下一决策。** 不重跑、不fallback、不松阈值、不安装环境，不从11.6秒推性能；此native路径未通过correctness，不能用于后续质量或速度主张。保留CPU语义通过与native数值失败两层，不把缺失ramp/poison/crop证据说成通过。下一次诊断须新协议/另协调GPU，在原同输入双oracle上拆分数值与dispatch原因，最终仍需full-Qwen/KV/物理gather-attention-crop门槛；没有checkpoint、final-test、校准或async调度收益结论。记录者仅追加日志，无GPU/实现/进程/commit/push操作。
