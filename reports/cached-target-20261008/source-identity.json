@@ -1,0 +1,29 @@
+{
+  "source_sha256": {
+    "bench_cached_target.py": "425132af31261bbbcd0e88699a15520e6bff012386d39be74a07f3a0f4224e89",
+    "cached_target.py": "8534b94b52a8a7327d1360a002dcc41520696a3153ca1adb42eefc584970322b"
+  },
+  "test_source_sha256": "ec26221920b337ccd8e89adb715051e0371944afd0f2e82a91d753b01b2d06fe",
+  "model_sha256": {
+    "config.json": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd",
+    "configuration.json": "f888421726665e8a84b738eed42a64875aed79de8be7daade851ac8bf4c0cef9",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "records_sha256": "9bd09a5958c45485f4f7b7fdbb4bd42387d28b6a2bbaa173e20f3f62f15ec247",
+  "private_evidence_sha256": {
+    "real-cost-v4.json": "38291780900b10179379e82609b1560ba154e82ec33101a4b33bfa61d2ff5a58",
+    "real-cost-v2.partial.json": "bce8dc42a3e0a3efbc7d2512fcbb11fd73ded3ef4959c610b0cc2169af6c8820",
+    "real-numerics.json": "003efb24d53ab2dc58b2da2f97cf766dc6f586abfbdbc833030a84f0175d3b5e",
+    "real-bf16-first-failure.txt": "7b9dfaa6db86f400a969da62dfe7adff58435997e93412115eff621720f6ca50",
+    "tests-final.log": "e5fbd7dc5086251536679a102b78c8dcfbbebcfc491b2add86c56b8efb187175"
+  },
+  "public_artifacts_sha256": {
+    "summary.json": "11c36e61f141dd9cf04c9c9ac35d23e2c1d763ceecac4a5330391f5da7c67bac",
+    "timings.json": "7de3e33880153fe38fee04040d94eea3e8628cb6c601099f4268d4f26af6a2c9"
+  },
+  "privacy": "Prompt strings, prompt identities and generated token IDs are omitted from public artifacts. Raw traces remain in ignored local output storage."
+}

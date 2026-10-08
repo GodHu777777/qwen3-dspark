@@ -42,9 +42,11 @@ Do not mutate a completed run manifest to get past resume checks. New source or
 config requires a new run; checkpoint formats are local, not NeMo-compatible.
 decode.py supports exact greedy acceptance logic only, full-prefix recomputation;
 stochastic sampling and hardware scheduling remain future work.
-CachedTarget is under active validation: CPU FP32 chunk/crop tests pass, but a
-real BF16 full-recompute/cached greedy near-tie mismatch is being investigated.
-Do not claim bit-identical cross-kernel behavior from the CPU checks.
+CachedTarget has six CPU FP32 tests and a real same-dtype HF cached greedy
+check (117 tokens on seven pilot prompts). Reports/cached-target-20261008 records
+a BF16 full-recompute/cached near-tie divergence and isolated target costs.
+Cached speculative block vs sequential BF16 equality is still unresolved.
+Do not claim bit-identical cross-kernel behavior or speculative speedup.
 
 The first-shard pilot is not a representative full-dataset reproduction. Clean
 train/validation exports contain only EOS-completed nonempty answers fitting the

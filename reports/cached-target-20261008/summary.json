@@ -1,0 +1,238 @@
+{
+  "scope": "cached target-only baseline and isolated verification cost; no speculative correctness or speedup claim",
+  "correctness_scope": "CPU FP32 tests establish cache/rollback behavior; same-dtype HF cached greedy is the real-model token gate. Full-recompute comparisons are recorded separately without epsilon or sample exclusion. BF16 kernel-shape changes can alter argmax near ties; cached-block versus cached-sequential verification remains a separate gate.",
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "device": "cuda",
+    "dtype": "torch.bfloat16",
+    "attention_backend": "sdpa",
+    "execution": "eager Transformers; no compile or CUDA graph",
+    "device_name": "AMD Radeon Graphics",
+    "hip": "7.2.53211",
+    "cuda": null,
+    "threads": 4
+  },
+  "hardware": {
+    "pci_name": "AMD Navi 48 [Radeon AI PRO R9700]",
+    "pci_device_id": "1002:7551",
+    "gfx_version": "gfx1201",
+    "source": "read-only lspci -nn and rocm-smi product query"
+  },
+  "conditions": {
+    "batch_size": 1,
+    "warmup_per_prompt": 2,
+    "repeats_per_prompt": 5,
+    "max_new_tokens": 64,
+    "hf_and_full_recompute_check_limit": 24,
+    "verification_new_token_lengths": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "resident_asr_vram_bytes_before_run": 8581451776,
+    "gpu_busy_percent_at_initial_preflight": 3,
+    "unrelated_asr_service_preserved": true,
+    "fixed_gpu_clocks": false
+  },
+  "prompt_checks": [
+    {
+      "prompt_index": 1,
+      "prompt_tokens": 214,
+      "timed_output_tokens": 6,
+      "ended_eos": true,
+      "hf_checked_tokens": 6,
+      "hf_cached_equal": true,
+      "full_recompute_equal": true,
+      "first_full_recompute_divergence_index": null
+    },
+    {
+      "prompt_index": 2,
+      "prompt_tokens": 149,
+      "timed_output_tokens": 64,
+      "ended_eos": false,
+      "hf_checked_tokens": 24,
+      "hf_cached_equal": true,
+      "full_recompute_equal": false,
+      "first_full_recompute_divergence_index": 14
+    },
+    {
+      "prompt_index": 3,
+      "prompt_tokens": 785,
+      "timed_output_tokens": 7,
+      "ended_eos": true,
+      "hf_checked_tokens": 7,
+      "hf_cached_equal": true,
+      "full_recompute_equal": true,
+      "first_full_recompute_divergence_index": null
+    },
+    {
+      "prompt_index": 4,
+      "prompt_tokens": 75,
+      "timed_output_tokens": 64,
+      "ended_eos": false,
+      "hf_checked_tokens": 24,
+      "hf_cached_equal": true,
+      "full_recompute_equal": true,
+      "first_full_recompute_divergence_index": null
+    },
+    {
+      "prompt_index": 5,
+      "prompt_tokens": 144,
+      "timed_output_tokens": 8,
+      "ended_eos": true,
+      "hf_checked_tokens": 8,
+      "hf_cached_equal": true,
+      "full_recompute_equal": true,
+      "first_full_recompute_divergence_index": null
+    },
+    {
+      "prompt_index": 6,
+      "prompt_tokens": 62,
+      "timed_output_tokens": 64,
+      "ended_eos": false,
+      "hf_checked_tokens": 24,
+      "hf_cached_equal": true,
+      "full_recompute_equal": true,
+      "first_full_recompute_divergence_index": null
+    },
+    {
+      "prompt_index": 7,
+      "prompt_tokens": 51,
+      "timed_output_tokens": 64,
+      "ended_eos": false,
+      "hf_checked_tokens": 24,
+      "hf_cached_equal": true,
+      "full_recompute_equal": true,
+      "first_full_recompute_divergence_index": null
+    }
+  ],
+  "total_hf_checked_tokens": 117,
+  "summary": {
+    "e2e_ms": {
+      "count": 35,
+      "median": 2049.1379119921476,
+      "p95": 2238.284121011384,
+      "min": 191.44077703822404,
+      "max": 2277.7501640375704
+    },
+    "prefill_first_logit_ms": {
+      "count": 35,
+      "median": 36.29051800817251,
+      "p95": 51.41584202647208,
+      "min": 33.003603923134506,
+      "max": 71.7100859619677
+    },
+    "aggregate_e2e_tokens_per_second": 29.921518048382705,
+    "aggregate_decode_tokens_per_second": 30.038702259632124,
+    "verify_ms_by_new_tokens": {
+      "1": {
+        "count": 35,
+        "median": 32.901654951274395,
+        "p95": 38.99098924593999,
+        "min": 30.79598001204431,
+        "max": 42.46020200662315
+      },
+      "2": {
+        "count": 35,
+        "median": 37.76331199333072,
+        "p95": 43.54235026985406,
+        "min": 33.82667701225728,
+        "max": 58.4238120354712
+      },
+      "3": {
+        "count": 35,
+        "median": 37.01009298674762,
+        "p95": 43.13878306420519,
+        "min": 34.039309015497565,
+        "max": 44.465589919127524
+      },
+      "4": {
+        "count": 35,
+        "median": 37.43727400433272,
+        "p95": 43.808479665312916,
+        "min": 33.807840081863105,
+        "max": 52.78065998572856
+      },
+      "5": {
+        "count": 35,
+        "median": 37.82535996288061,
+        "p95": 44.607804727274925,
+        "min": 34.77774607017636,
+        "max": 46.00231407675892
+      },
+      "6": {
+        "count": 35,
+        "median": 37.45079704094678,
+        "p95": 45.76650207163766,
+        "min": 33.983959001488984,
+        "max": 51.418212009593844
+      },
+      "7": {
+        "count": 35,
+        "median": 38.00534491892904,
+        "p95": 43.23396288091317,
+        "min": 34.84130895230919,
+        "max": 44.756466057151556
+      },
+      "8": {
+        "count": 35,
+        "median": 36.543446010909975,
+        "p95": 47.053399507422,
+        "min": 33.82014890667051,
+        "max": 47.43803199380636
+      }
+    },
+    "peak_allocated_bytes": 1475758080
+  },
+  "same_prefix_numerical_diagnostic": [
+    {
+      "dtype": "torch.bfloat16",
+      "steps": 24,
+      "mismatch_indices": [
+        14
+      ],
+      "max_hidden_abs_diff": 1.5,
+      "max_logit_abs_diff": 0.40625,
+      "mismatches": [
+        {
+          "index": 14,
+          "prefix_length": 163,
+          "cache_length": 163,
+          "hidden_max_abs": 0.8125,
+          "logit_max_abs": 0.21875,
+          "logit_mean_abs": 0.04460223391652107,
+          "full_top2_margin": 0.0,
+          "cached_top2_margin": 0.0,
+          "fp32_head_full_top2_margin": 0.022726058959960938,
+          "fp32_head_cached_top2_margin": 0.014047622680664062,
+          "fp32_head_top1_matches": false
+        }
+      ]
+    },
+    {
+      "dtype": "torch.float32",
+      "steps": 24,
+      "mismatch_indices": [],
+      "max_hidden_abs_diff": 0.000194549560546875,
+      "max_logit_abs_diff": 0.00011587142944335938,
+      "mismatches": []
+    }
+  ],
+  "measurement": "perf_counter with device synchronization; e2e includes phase sync overhead; prefill_first_logit_ms includes LM head and argmax; decode measures remaining emitted tokens; verification includes append, all chunk logits, argmax and host copy; crop timed separately; verification lengths are new target inputs (anchor plus proposed tokens), not draft lengths; warmup excluded, block order shuffled at each repeat, fixed prompt prefixes; batch size 1; no intermediate target feature capture or draft costs included",
+  "warnings": [
+    "This is eager Transformers performance, not an optimized serving-engine comparison.",
+    "No draft execution, intermediate-feature capture, or speculative acceptance is measured.",
+    "Block verification output equivalence to cached sequential BF16 decoding is an outstanding separate gate.",
+    "One of seven BF16 full-recompute traces differed; no prompts were skipped and no epsilon was applied.",
+    "The resident ASR service was not stopped; background load and dynamic clocks may affect timing.",
+    "Verification medians are not monotone in block length; these few repeats do not establish a fine-grained optimal scheduler.",
+    "p50/p95 are descriptive repeated measurements, not independent-prompt confidence intervals.",
+    "Peak allocated memory covers the evaluation including untimed correctness checks; it excludes the resident ASR process and is not total VRAM."
+  ]
+}

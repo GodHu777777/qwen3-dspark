@@ -1,0 +1,13 @@
+(null): No such file or directory
+(null): No such file or directory
+test_crop_rejected_suffix_and_replacement_at_every_boundary (test_cached_target.CachedTargetTests.test_crop_rejected_suffix_and_replacement_at_every_boundary) ... ok
+test_greedy_exact_tokens_eos_and_output_limits (test_cached_target.CachedTargetTests.test_greedy_exact_tokens_eos_and_output_limits) ... ok
+test_hf_cached_policy_and_full_recompute_diagnostic (test_cached_target.CachedTargetTests.test_hf_cached_policy_and_full_recompute_diagnostic) ... ok
+test_invalid_operations_do_not_mutate_valid_cache (test_cached_target.CachedTargetTests.test_invalid_operations_do_not_mutate_valid_cache) ... ok
+test_prefill_incremental_and_block_logits_match_full_recompute (test_cached_target.CachedTargetTests.test_prefill_incremental_and_block_logits_match_full_recompute) ... ok
+test_repeated_rollbacks_and_prefill_reset (test_cached_target.CachedTargetTests.test_repeated_rollbacks_and_prefill_reset) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.810s
+
+OK
