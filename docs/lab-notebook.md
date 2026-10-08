@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:02（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 02:10（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；experiment_journal 已成功唤醒并恢复专职续记 R08/S05；本轮再次受 thread limit 限制，sol_data 按协调者授权临时代记 S06/R09/S07，保留专职角色与全部交接事实。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -535,3 +535,19 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **数值保真。** 预选cases0/1 round0共16rows，记录者逐行重算 **16行TV全非零、maxTV0.05288759555199574、argmaxchanges0**，与aggregate相同。128maxTV0.0457641418对应另一组sampledprefix，不能把max差写成checkpoint对target数值稳定性的受控因果作用。argmax不变不等于随机law不变；execution通过仍不证明nativeBF16 block p等于freshsequential p。未解除旧数值问题，也不是新pinned varlen backend的gate。
 
 **局限与下一决策。** Step512仍是max1280训练计划的中间checkpoint；只支持复核下一段有界训练，不将它写成最终选定checkpoint，不改变panel/seed/policy。协调者已授权strict512→1024，但本条实际启动PID/结果尚未交付，授权不作完成证据；1024/1280在本条未记录启动，后续训练另起T08。fit44/eval43采集与STS/fit-prevalence常数留出比较仍待后续冻结选择。全部development已用于TF监测，eval43只是相对STSfit留出；final test未读。性能、native分布无损、outputquality及全局异步调度收益未测。记录者仅改notebook，不运行GPU、改实现/进程或commit/push。
+
+
+<a id="pinned-varlen-cpu"></a>
+## 2026-10-09 02:10（UTC+8）— S07：显式 pinned private backend 的 CPU 准备与 inference-mode guard 修复
+
+**问题与方法。** S06诊断支持原shape/window mapping解释，但不能靠private control将原S04 gate改成成功。新backend必须显式opt-in、保留public默认/旧失败，并先核精确runtime/input契约和原完整三组tensor gate的控制流。直接读[pinned backend说明](pinned-rocm-varlen.md)、`rocm_varlen.py`对应guard/test、未发布 `output/pinned-rocm-varlen-cpu-20261009/` 的manifest、final tests、pinned-protocol，以及direction独立review目录的pinned/new-public guarded dry-run输出。源码归档 `5281a6af05ddd6b3e80cd3aeded892c61d2c91a5`（02:07:47）；记录者独立核manifest五个sourceSHA逐个与该commit blobs相同、final tests log SHA一致，并重算pinned protocol JSON SHA。
+
+**显式契约。** 默认仍public `native_varlen`；`rocm_aten_no_window_pinned_v1`只经显式选择进入。pin Torch2.12.0+rocm7.2、torch git7661cd9c…、HIP7.2.53211、gfx1201、AOTriton preference、未设置CK preference环境及精确privateATen schema，不匹配即拒绝；pin不是独立devicekernel binary认证。只接收selectedGPU contiguous BF16 THD/Hq16/Hkv8/D128、int32累计长度、非空terminal suffix、scale1/√128、无autograd，调用privateflash dropout0/is_causal=true/windows=None及其余optional controls=None。异常直接传播，不mutate backend preference、不重试或fallback；CPU注入与private显式选择互斥。
+
+**发现的合法推理误拒与修复。** 协调者review发现原guard直接读tensor `_version`，而`torch.inference_mode`创建的张量没有version counter，会使合法推理在native调用前意外抛错。修复后normal/no_grad累计tensor仅在同layout/同version时复用校验，inference tensor读version的RuntimeError转为“无version”，每call重新核累计values/metadata，不把它默认为immutable cache。只留最近layout、不无限增长。直接读新增normal/no_grad/inference-mode测试，三模式合法两次调用后mutation被拒；requires_grad guard另测拒绝。这里修复的是输入校验与运行契约，不证明native attention数值或原模型问题已经修复。
+
+**CPU与独立dry-run观察。** final **25tests通过、0.530秒**，HIP/CUDA/ROCR隐藏、OMP2：10新pinned tests+5varlen+3controller+7diagnostic；覆盖所有runtime pin字段、exactATen参数、tensor/scale/cu/autograd边界、version/inference mutation、public默认与选择互斥、operator异常无fallback、原完整gate **11-call CPU替身**和首失败raw output/oracle/metric保留。两条 `(null)` 提示保留，最终全部OK。direction独立review报告stdlib guard禁backend imports的dry-run通过、无阻断；本地pinned/public输出status均 `dry_run_no_torch_import_no_gpu`，记录者直接读取，不冒称是真privateGPU execution。
+
+**协议身份与证据顺序。** 原public protocol SHA **08c501349bb59d30a888f1a5669a6c5bcb0bdfbf5f9e894c409fb2e702d49ff9**未变；新pinned SHA **f42729a4e857b1e1f0023888ba1f5c0e86602b36e764243d52007f96866cb98a**显式绑定backend/runtime/windowNone/privateentry及旧protocol hash。原三组shapes/draw顺序、FP32双oracle、atol0.02/rtol0.02/RMS≤0.005、ramp/active/inactivepoison/crop检查都保留；11次native调用只在真实原assertions全部通过时发生。新增atomicJSON与每call先保存QKV/cu/raw output、oracle/scalar再assert，是失败留证修复，不松数值标准，不重写旧archives。CPU替身11-call通过不能代替真实full tensor gate。
+
+**局限与下一决策。** 协调者报告1024训练当时仍live，完整tensorGPU仅获等待释放后的条件授权；manifest GPU_executed=false，S07不写已跑。原S04失败和S06的production_gate_passed=false保持原结论，显式新backend没有生产晋升或wholeQwen/KV通过。后续先按新绑定/原阈值执行完整tensor gate，再冻结实际pretrainedQwen/KV的结构与数值报告协议；拟议wholemodel synthetic schedule不是已交付/已运行结果，观察后不得临时发明BF16pass阈值。没有quality/STS/性能或final-test结论；记录者只notebook，无GPU/实现/进程/commit/push动作，实际tensor结果另记新条。
