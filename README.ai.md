@@ -158,8 +158,13 @@ verification budget or hide physical work/SPS(B) boundaries. No speedup is measu
 Next training plan: configs/train-expanded.example.json and
 docs/expanded-training-plan.md. Use an immutable source checkout for training,
 because strict resume identity hashes every package module including unused ones.
-The 1280-input data generation is separate; recheck its process/run artifacts
-before claiming completion or starting any conflicting GPU timing work.
+The 1280-input expansion completed with generation/audit/runner exit 0 and an
+independent structural re-audit: 932 train, 119 dev, 119 final test, 110 rejects.
+See reports/data-expansion-20261009/full-*.json. Summary training_tokens includes
+rendered templates across all accepted splits, not actual train-only input IDs.
+The training preflight counts 424267 exact train sequence tokens, maximum 2224;
+template metadata includes a trailing newline after EOS. Final test is locked.
+Recheck current training/evaluation jobs before any conflicting GPU timing work.
 
 Expanded training preflight: memory_gate.py probes non-dominated real
 (sequence length, actual anchor count) shapes for two full accumulation/update

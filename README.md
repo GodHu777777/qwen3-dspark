@@ -129,6 +129,9 @@ profiles and asynchronous scheduling remain unfinished. The earlier
 
 The [three-way data pipeline](docs/data-pipeline.md) adds pilot exclusions,
 immutable selection/resume, and a separate final-test export for expanded training.
+Its [completed expansion](reports/data-expansion-20261009/README.md) produced
+932 train, 119 dev and 119 final-test responses from 1,280 inputs; 110 were rejected.
+Structural audits passed. Final test remains excluded from development and tuning.
 
 ## Experiment journal
 

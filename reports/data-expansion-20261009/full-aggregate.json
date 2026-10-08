@@ -1,0 +1,172 @@
+{
+  "checked_utc": "2026-10-08T16:39:09.888889+00:00",
+  "scope": "Structural audit and aggregate lengths only; final test content is not quality-scored or used for checkpoint/policy selection.",
+  "splits": {
+    "train": {
+      "selected": 1024,
+      "accepted": 932,
+      "rejected": 92,
+      "finish_reasons": {
+        "eos": 955,
+        "length": 69
+      },
+      "rejection_reasons": {
+        "truncated": 69,
+        "template_token_mismatch": 23
+      },
+      "accepted_lengths": {
+        "prompt_tokens": {
+          "count": 932,
+          "min": 16,
+          "p50": 75,
+          "p90": 331,
+          "p95": 498,
+          "p99": 808,
+          "max": 1709,
+          "sum": 126882
+        },
+        "generated_tokens": {
+          "count": 932,
+          "min": 2,
+          "p50": 278,
+          "p90": 633,
+          "p95": 728,
+          "p99": 941,
+          "max": 1020,
+          "sum": 297385
+        },
+        "training_tokens": {
+          "count": 932,
+          "min": 28,
+          "p50": 379,
+          "p90": 847,
+          "p95": 1013,
+          "p99": 1462,
+          "max": 2225,
+          "sum": 425199
+        }
+      },
+      "accepted_terminal_eos": {
+        "151645": 932
+      }
+    },
+    "validation": {
+      "selected": 128,
+      "accepted": 119,
+      "rejected": 9,
+      "finish_reasons": {
+        "eos": 123,
+        "length": 5
+      },
+      "rejection_reasons": {
+        "template_token_mismatch": 4,
+        "truncated": 5
+      },
+      "accepted_lengths": {
+        "prompt_tokens": {
+          "count": 119,
+          "min": 20,
+          "p50": 73,
+          "p90": 271,
+          "p95": 571,
+          "p99": 992,
+          "max": 1597,
+          "sum": 15797
+        },
+        "generated_tokens": {
+          "count": 119,
+          "min": 3,
+          "p50": 268,
+          "p90": 696,
+          "p95": 828,
+          "p99": 904,
+          "max": 998,
+          "sum": 38692
+        },
+        "training_tokens": {
+          "count": 119,
+          "min": 77,
+          "p50": 347,
+          "p90": 884,
+          "p95": 975,
+          "p99": 1856,
+          "max": 2000,
+          "sum": 54608
+        }
+      },
+      "accepted_terminal_eos": {
+        "151645": 119
+      }
+    },
+    "test": {
+      "selected": 128,
+      "accepted": 119,
+      "rejected": 9,
+      "finish_reasons": {
+        "eos": 122,
+        "length": 6
+      },
+      "rejection_reasons": {
+        "template_token_mismatch": 3,
+        "truncated": 6
+      },
+      "accepted_lengths": {
+        "prompt_tokens": {
+          "count": 119,
+          "min": 18,
+          "p50": 80,
+          "p90": 251,
+          "p95": 524,
+          "p99": 1147,
+          "max": 1428,
+          "sum": 16255
+        },
+        "generated_tokens": {
+          "count": 119,
+          "min": 10,
+          "p50": 272,
+          "p90": 749,
+          "p95": 831,
+          "p99": 943,
+          "max": 960,
+          "sum": 40748
+        },
+        "training_tokens": {
+          "count": 119,
+          "min": 44,
+          "p50": 368,
+          "p90": 888,
+          "p95": 1197,
+          "p99": 1653,
+          "max": 2153,
+          "sum": 57122
+        }
+      },
+      "accepted_terminal_eos": {
+        "151645": 119
+      }
+    }
+  },
+  "percentile_rule": "nearest rank ceil(p*n), one vote per accepted record",
+  "batch_checksums": {
+    "passed": true,
+    "batches": 160,
+    "records": 1280,
+    "exact_batch_vs_export_records": true
+  },
+  "selected_sources": {
+    "mlabonne/ultrachat_200k_sft": 168,
+    "openbmb/UltraInteract_sft": 255,
+    "meta-math/MetaMathQA": 346,
+    "mlabonne/lmsys-arena-human-preference-55k-sharegpt": 47,
+    "Post-training-Data-Flywheel/AutoIF-instruct-61k": 56,
+    "theblackcat102/evol-codealpaca-v1": 98,
+    "HuggingFaceH4/orca-math-word-problems-200k": 168,
+    "HuggingFaceH4/ultrafeedback_binarized": 142
+  },
+  "selected_splits": {
+    "validation": 128,
+    "test": 128,
+    "train": 1024
+  }
+}

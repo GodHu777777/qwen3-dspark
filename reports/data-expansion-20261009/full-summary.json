@@ -1,0 +1,36 @@
+{
+  "total": 1280,
+  "accepted": 1170,
+  "accepted_splits": {
+    "validation": 119,
+    "test": 119,
+    "train": 932
+  },
+  "finish_reasons": {
+    "eos": 1200,
+    "length": 80
+  },
+  "rejection_reasons": {
+    "template_token_mismatch": 30,
+    "truncated": 80
+  },
+  "generated_tokens": 469958,
+  "training_tokens": 536929,
+  "current_invocation_seconds": 4853.66,
+  "max_gpu_memory_allocated_bytes": 3863313920,
+  "eos_token_ids": [
+    151643,
+    151645
+  ],
+  "final_test_locked": true,
+  "output_sha256": {
+    "records.jsonl": "69daac1d39af961c75fcb0795c12b22d7a9a18d747cd05f0673202060f6914e2",
+    "rejected.jsonl": "4df6c3aafeba685195401b2efd99e633abe490601c2cb6d90d07df9ab4aad483",
+    "train.jsonl": "8768373eb4bc613208651096696076fb86f25ad6bfd62882adb23af53cd151bf",
+    "validation.jsonl": "673d56ca6835ee2b027e35571efe7bfe4ef846c978dc016a8bd8229badd35eec",
+    "final-test/records.jsonl": "bd500f93451c59dc8bda4af31e36e5d759656633e62ed8a1f289561df7b552c2",
+    "final-test/test.jsonl": "79db8e8eaedadb1f5e229b8d2145f41d41ee15822b169c327e3e9a93b87afbbb",
+    "final-test/rejected.jsonl": "b2474ba24bb19e7bd815057a412de829dd39578e8185a2bac7901856e0fe3e63",
+    "final-test/lock.json": "cf8c405b478ebdefe026a29c74f00443a49c47b45364c384436697734ab4e6c6"
+  }
+}

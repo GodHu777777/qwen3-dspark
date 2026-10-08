@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 00:35（UTC+8）**。本轮直接读取 STS 源码/协议及 8 项 CPU 日志、随机 tensor/cache 协议与 22/76 项 CPU 日志、新的预期拒绝 preflight 留证，以及 packed target 协议、5 项 CPU 日志和执行身份；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09 00:43（UTC+8）**。本轮直接读取 STS 源码/协议及 8 项 CPU 日志、随机 tensor/cache 协议与 22/76 项 CPU 日志、新的预期拒绝 preflight 留证，以及 packed target 协议、5 项 CPU 日志和执行身份，并直接核正式 generation/audit/runner 终态、重跑结构审计及 batch/export 哈希；其他条目也分别注明直接读取的聚合证据、实时检查或协调者转达。并非所有后续进度都是转达。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -316,3 +316,18 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **物理工作边界与下一决策。** Q 是实际新行之和、无 query padding；K 是包含 inactive keys 的全部 resident KV，当前 dense score 域仍为 Q×K，并分配 `[1,1,Q,K]` boolean mask。allowed/cross-request/future 三类计数相加为 Q×K，不是实测 FLOPs 或高效 varlen kernel 的证据；crop gather 也不是 paged KV/graph stable 管理。此次未读真实数据/test，未用真实 target 权重或 GPU，未测接受率、SPS/吞吐/SLA。后续先用相同状态 oracle 审核实际可用的 ROCm varlen/block-sparse 路径，再测 mask/tile/KV gather 和 context/load 物理代价，不能仅凭 API 存在或 CPU 通过声称生产异步机制完成。
 
 **随后版本核实（协调者）。** packed 三文件归档为 `acef238`；Git push exit 0，origin/main 从 `a7abb25` 更新至 `6f8b244`，包含 `4255f23`、`acef238` 与入口/范围文档更新。以上是源码推送证据，最新 CI 尚未核实。
+
+
+## 2026-10-09 00:43（UTC+8）— P06：正式 1280 输入生成终态与独立结构复核
+
+**问题与方法。** P05/T02/T03 的进度或 guard 拒绝都不是最终审计。协调者新授权记录者等待约 45 秒后仅查一次 live 终态；本轮直接确认原 generator 3405911 和 runner 3402974 已不存在，full-generation/full-audit/runner exit code 均为 0，六个 stages 全部成功。此前一次 SSH 命令在远端 Python 启动前因 heredoc 换行转义错误失败，未产生 live 查询或更改；随后的正确命令才是这次终态检查，没有重启/信号/GPU 工作。
+
+**独立复核。** 先将远端 prepare/generate/audit/data_pipeline 四个实际脚本 SHA 与冻结 `d5e1538960afded86d487eab71908ce2c7531a7e` 的 Git blobs 比较，全部一致；再调用其 stdlib `audit_run`，不覆盖 runner 原 audit、不 import model runtime。复核结果与 runner audit 相同：规范化 prompt/排除身份、来源、split/export 顺序、精确 token/EOS/预算、三路隔离及所有 output SHA 通过。另核全部 160 个 batch 的 payload/checksum、1280 条记录与 exports 内容一致；没有读 test 做质量判断或调参。
+
+**观察。** 输入 1280，接受 1170：train 932 / validation 119 / final test 119；拒绝 110：train 92（截断 69、模板 token 不匹配 23）、dev 9（5、4）、test 9（6、3）。全体 finish reasons 为 EOS 1200、length 80，故 EOS 完成不等于接受，30 条 EOS 回答仍因模板不匹配拒绝；全部接受记录终止 EOS 151645。不修补或重生成来掩盖拒绝，模板不匹配机制尚未定位。
+
+精确 accepted output token 为 train 297385 / dev 38692 / test 40748。accepted training-template token 为 425199 / 54608 / 57122；summary 的 training_tokens 536929 包含三路，不能称 train-only token。train/dev/test 最大模板长度分别 2225/2000/2153。全生成 token 469958 含拒绝；invocation 4853.66 秒、峰值 allocated 3863313920 bytes 只记录造数据资源，包含暂停与运行开销，不是 serving 性能。每 split 的长度 min/nearest-rank p50/p90/p95/p99/max/sum 与来源聚合另存公开报告。
+
+**证据与身份。** 新增[正式 summary](../reports/data-expansion-20261009/full-summary.json)、[最终 audit](../reports/data-expansion-20261009/full-audit.json)、[completion](../reports/data-expansion-20261009/full-completion.json)、[正式 source identity](../reports/data-expansion-20261009/full-source-identity.json)及[长度/batch aggregate](../reports/data-expansion-20261009/full-aggregate.json)；保留原准备/smoke/启动阶段报告。正式 config SHA 为 `042c644900c56c136971d11d94e1a4814b82ccef55b8b6495e7214a937a569d6`，selection SHA 为 `b934967810270f932f915b8eecc74e5d6bce01d8bddea97284aa6fcac9822b40`；model 私有路径在公开 projection 中替换为标签，config hash 绑定原始 bytes。正式 development records SHA 为 `69daac1d39af961c75fcb0795c12b22d7a9a18d747cd05f0673202060f6914e2`，最终 test 独立 exports 哈希齐备。各类完整原件/脚本 collector stdout 保留 ignored，不公开样本。
+
+**下一决策与边界。** 已告知协调者可进入同 immutable 796fecc 快照的 eligibility/resource preflight 协调，但本轮尚未执行 expanded training/GPU memory gate、训练或 STS rollout；新的终态不回改此前真实拒绝。训练数据仅 932 train，dev 119；final test 不参与 checkpoint/policy 选择，权限仍非安全边界。单分片/截断/模板拒绝限制数据代表性。后续实际训练形状/eligible rows/anchor 数由 preflight 再核，真实显存与质量逐门槛推进。记录者没有 commit/push 或调度其他进程。

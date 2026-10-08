@@ -1,0 +1,59 @@
+{
+  "exit_codes": {
+    "full-generation": 0,
+    "full-audit": 0,
+    "runner": 0
+  },
+  "stages": [
+    {
+      "stage": "smoke-generation",
+      "pid": 3402981,
+      "exit_code": 0,
+      "log": "generation.log",
+      "finished_unix": 1791472537.2061675
+    },
+    {
+      "stage": "smoke-audit",
+      "pid": 3405215,
+      "exit_code": 0,
+      "log": "audit.log",
+      "finished_unix": 1791472537.2878206
+    },
+    {
+      "stage": "smoke-resume",
+      "pid": 3405239,
+      "exit_code": 0,
+      "log": "resume.log",
+      "finished_unix": 1791472551.7807899
+    },
+    {
+      "stage": "smoke-resume-audit",
+      "pid": 3405907,
+      "exit_code": 0,
+      "log": "resume-audit.log",
+      "finished_unix": 1791472551.8327506
+    },
+    {
+      "stage": "full-generation",
+      "pid": 3405911,
+      "exit_code": 0,
+      "log": "generation.log",
+      "finished_unix": 1791477419.9990408
+    },
+    {
+      "stage": "full-audit",
+      "pid": 3629969,
+      "exit_code": 0,
+      "log": "audit.log",
+      "finished_unix": 1791477420.6344912
+    }
+  ],
+  "checked_utc": "2026-10-08T16:39:09.888889+00:00",
+  "original_generator_pid_absent": 3405911,
+  "original_runner_pid_absent": 3402974,
+  "independent_structural_audit": {
+    "passed": true,
+    "matched_runner_audit": true,
+    "method": "stdlib audit_run with four remote scripts SHA256-checked against source commit d5e1538; no model loading or GPU; no overwrite of runner audit.json"
+  }
+}

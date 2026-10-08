@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "records": 1280,
+  "train": 932,
+  "validation": 119,
+  "test": 119,
+  "rejected": 110,
+  "excluded_prompt_count": 64,
+  "final_test_locked": true,
+  "checks": [
+    "normalized prompt/exclusion identity and disjoint three-way splits",
+    "source provenance",
+    "no final test in training records",
+    "exact tokens, EOS, sequence budget",
+    "export populations and SHA256"
+  ],
+  "accepted_sources": {
+    "mlabonne/ultrachat_200k_sft": 140,
+    "openbmb/UltraInteract_sft": 232,
+    "meta-math/MetaMathQA": 336,
+    "Post-training-Data-Flywheel/AutoIF-instruct-61k": 53,
+    "HuggingFaceH4/orca-math-word-problems-200k": 162,
+    "HuggingFaceH4/ultrafeedback_binarized": 130,
+    "theblackcat102/evol-codealpaca-v1": 74,
+    "mlabonne/lmsys-arena-human-preference-55k-sharegpt": 43
+  }
+}

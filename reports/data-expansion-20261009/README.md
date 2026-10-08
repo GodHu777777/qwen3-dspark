@@ -39,3 +39,47 @@ Astra core 已独立审查三路导出和恢复身份，未发现阻止生成的
 原 generation log 提取，不把恢复进程的 0 秒当作实际生成时间。完整 1280 条
 生成在上述 smoke 全部成功后启动；此版本报告只确认启动，尚无完整数据完成结果。
 生成样本与 raw batch 保持 ignored，最终 test 禁止用于选 checkpoint/policy。
+
+
+## 正式生成完成与最终结构审计（2026-10-09）
+
+上述准备、smoke 与启动记录是当时的阶段结论。随后原 generator 和 runner 自然结束；
+正式 generation、full audit 和 runner 退出码全部为 0，六个阶段记录均 exit 0。
+记录者直接核实终态，并用与冻结 commit Git blobs SHA-256 相同的四个脚本，
+独立调用 stdlib `audit_run`；结果与 runner 的审计完全一致，没有加载模型或启动 GPU。
+160 个 batch payload/checksum 全部匹配，1280 条 batch 记录与导出记录逐项一致。
+
+| Split | 输入 | 接受 | 拒绝 | 截断 | 模板 token 不匹配 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Train | 1024 | 932 | 92 | 69 | 23 |
+| Validation / dev | 128 | 119 | 9 | 5 | 4 |
+| Final test | 128 | 119 | 9 | 6 | 3 |
+| 合计 | 1280 | 1170 | 110 | 80 | 30 |
+
+原始生成 finish reason 为 EOS 1200、length 80；30 条 EOS 完成回答仍因模板 token
+不匹配而拒绝。全部 1170 条接受记录终止于 EOS 151645。没有按答案正确性过滤，
+也没有为消除拒绝而重生成、修补 token 或改变冻结脚本。模板不匹配原因尚未在此
+结果中定位；这些记录保持隔离。单分片与长度/模板拒绝仍会限制代表性。
+
+- [正式生成 summary](full-summary.json)：最终输出哈希、生成循环时间与显存记录。
+- [完整 audit](full-audit.json)：规范化身份、64 条 pilot 排除、split 互斥、来源、
+  token/EOS/预算和 exports SHA-256 检查通过。
+- [终态与独立复核](full-completion.json)：各阶段退出状态与独立结构审计口径。
+- [正式 generation 身份](full-source-identity.json)：d5e1538、实际 1280 输入的配置/选择/源码/
+  模型/runtime 哈希；与上面的六条 smoke identity 分开。私有模型路径替换为标签，
+  config SHA 仍绑定原始配置 bytes。
+- [split 长度与 batch 聚合](full-aggregate.json)：接受记录的 prompt/output/template 长度
+  min、nearest-rank p50/p90/p95/p99、max、sum，及来源/batch 完整性。
+
+训练可用数据是 932 train、119 validation；最终 test 的 119 接受记录只用于后续
+冻结方案的最终评估。训练用 records 不含 test。此轮仅做 test 格式、长度、EOS 和
+完整性统计，未做质量评估或选 checkpoint/policy。权限/lock 仍是同用户约定。
+
+`generated_tokens=469958` 包含被拒绝的输出；summary 的 `training_tokens=536929`
+是三个 accepted splits 的模板总 token，并非 train-only 数量。真正 train accepted
+模板总量为 425199、dev 54608、test 57122；精确 output token 分别为
+297385、38692、40748。train 最大模板长度 2225，dev 2000；后续 eligibility 与实际
+anchor/内存形状仍须由 immutable training preflight 重新核对，不以此替代 GPU gate。
+生成 invocation 4853.66 秒、峰值 allocated 3863313920 bytes 是造数据的运行记录，
+包含本轮暂停/运行开销，不能据此计算 serving speedup。原始 prompt、回答、token
+序列和机器路径未公开；完整生成数据仍在 ignored/远端目录。
