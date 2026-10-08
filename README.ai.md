@@ -246,3 +246,10 @@ docs/pinned-rocm-varlen.md defines actual-pretrained-Qwen/KV requirements; whole
 checks and BF16 numerical reporting stay separate, with any numerical acceptance
 threshold requiring a pre-execution decision. Do not edit the frozen training
 snapshot or reinterpret the old public failure as a pass.
+
+Whole-pretrained-Qwen gate: scripts/probe_qwen_varlen.py and
+docs/whole-qwen-varlen-gate.md define the fixed synthetic-input, three-result-state
+protocol. Eight CPU tests and real-target fingerprint dry-run passed; this is not
+a completed real-device gate. A formal run must use a fresh committed archive,
+recheck GPU/ASR process state, preserve the 300-second limit and original per-layer
+attention thresholds, and report endpoint numerical differences separately.
