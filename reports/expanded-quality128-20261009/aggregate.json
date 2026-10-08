@@ -1,0 +1,81 @@
+{
+  "status": "completed",
+  "binding_sha256": "df2366c25b0ef9c2e72136ef1dd32b1cb4c092ba0412ab58bbb137f1004e7a24",
+  "blocks": 3268,
+  "proposed_positions": 22415,
+  "verified_positions": 22415,
+  "attempted_positions": 3842,
+  "effective_positions": 22415,
+  "accepted_draft_tokens": 581,
+  "per_position": [
+    {
+      "position": 0,
+      "count": 3268,
+      "accepted_prefix_events": 519
+    },
+    {
+      "position": 1,
+      "count": 3247,
+      "accepted_prefix_events": 58
+    },
+    {
+      "position": 2,
+      "count": 3223,
+      "accepted_prefix_events": 4
+    },
+    {
+      "position": 3,
+      "count": 3202,
+      "accepted_prefix_events": 0
+    },
+    {
+      "position": 4,
+      "count": 3181,
+      "accepted_prefix_events": 0
+    },
+    {
+      "position": 5,
+      "count": 3159,
+      "accepted_prefix_events": 0
+    },
+    {
+      "position": 6,
+      "count": 3135,
+      "accepted_prefix_events": 0
+    }
+  ],
+  "execution_checks_passed": true,
+  "error_type": null,
+  "completed_prompts": 32,
+  "output_tokens": 3874,
+  "eos_prompts": 5,
+  "numerical_fidelity": {
+    "rows": 16,
+    "max_total_variation": 0.045764141753646695,
+    "nonzero_tv_rows": 16,
+    "argmax_changed_rows": 0,
+    "scope": "Native block versus fresh sequential same-prefix differences; no losslessness verdict"
+  },
+  "scope": "Native-protocol quality only. Not a speed benchmark or untouched model-selection holdout.",
+  "accepted_prefix_length_histogram": {
+    "0": 2749,
+    "1": 461,
+    "2": 54,
+    "3": 4
+  },
+  "mean_accepted_draft_tokens_per_round": 0.17778457772337822,
+  "all_proposed_tokens_accepted_blocks": 7,
+  "proposal_length_histogram": {
+    "1": 21,
+    "2": 24,
+    "3": 21,
+    "4": 21,
+    "5": 22,
+    "6": 24,
+    "7": 3135
+  },
+  "verification_query_rows": 25683,
+  "verification_query_row_convention": "Each round scores old anchor plus all proposal tokens (n+1 rows); initial prompt prefill excluded.",
+  "committed_tokens_after_initial_draw": 3842,
+  "mean_committed_tokens_per_round": 1.175642594859241
+}

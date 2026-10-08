@@ -200,8 +200,13 @@ dry-run and a separate bound source worker for quality32 native BF16 stochastic
 collection (temp1, no filtering, float64 actual q,128 tokens, full proposals).
 It records four distinct position denominators, rejection-tail prefix zeros,
 accepted-EOS truncation, cache/finite checks and private partial evidence. Nine
-CPU tests and real step128/512 binding dry-runs pass; no expanded quality GPU
-execution or STS fitting has run through this collector. Fit/eval execution and
+CPU tests and real step128/512 binding dry-runs pass. Expanded step128 quality32
+completed with worker/launcher/controller exit 0: 3,268 rounds, 581 accepted draft
+tokens (0.1778/round), 3,874 output tokens, and longest accepted prefix 3. All 16
+preselected same-prefix TV rows differ (max 0.04576414), with no argmax change;
+see reports/expanded-quality128-20261009. This is neither a speed benchmark nor
+a sequential-distribution equivalence result. Step512 quality and STS fitting
+remain unexecuted at this snapshot. Fit/eval execution and
 fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
 selection. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.

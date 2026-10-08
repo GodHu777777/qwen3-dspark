@@ -1,0 +1,649 @@
+{
+  "status": "completed",
+  "cases": [
+    {
+      "case": 0,
+      "seed": 6970766484985318104,
+      "output_tokens": 96,
+      "ended_eos": true,
+      "rounds": 92,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 3,
+      "proposed_positions": 644,
+      "verified_positions": 644,
+      "attempted_positions": 95,
+      "effective_positions": 644,
+      "preselected_probes": [
+        {
+          "round": 0,
+          "status": "collected"
+        }
+      ],
+      "accepted_prefix_length_histogram": {
+        "0": 89,
+        "1": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.03260869565217391
+    },
+    {
+      "case": 1,
+      "seed": 8155477605896205020,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 111,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 16,
+      "proposed_positions": 756,
+      "verified_positions": 756,
+      "attempted_positions": 127,
+      "effective_positions": 756,
+      "preselected_probes": [
+        {
+          "round": 0,
+          "status": "collected"
+        }
+      ],
+      "accepted_prefix_length_histogram": {
+        "0": 95,
+        "1": 16
+      },
+      "mean_accepted_draft_tokens_per_round": 0.14414414414414414
+    },
+    {
+      "case": 2,
+      "seed": 2700486023258584992,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 110,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 17,
+      "proposed_positions": 758,
+      "verified_positions": 758,
+      "attempted_positions": 127,
+      "effective_positions": 758,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 94,
+        "1": 15,
+        "2": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.15454545454545454
+    },
+    {
+      "case": 3,
+      "seed": 1296646395717983295,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 104,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 24,
+      "proposed_positions": 715,
+      "verified_positions": 715,
+      "attempted_positions": 127,
+      "effective_positions": 715,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 83,
+        "1": 18,
+        "2": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.23076923076923078
+    },
+    {
+      "case": 4,
+      "seed": 2165770553868521278,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 113,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 14,
+      "proposed_positions": 773,
+      "verified_positions": 773,
+      "attempted_positions": 127,
+      "effective_positions": 773,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 101,
+        "1": 10,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.12389380530973451
+    },
+    {
+      "case": 5,
+      "seed": 1142872706571744867,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 105,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 23,
+      "proposed_positions": 717,
+      "verified_positions": 717,
+      "attempted_positions": 127,
+      "effective_positions": 717,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 84,
+        "1": 19,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.21904761904761905
+    },
+    {
+      "case": 6,
+      "seed": 6892836572577282677,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 110,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 18,
+      "proposed_positions": 753,
+      "verified_positions": 753,
+      "attempted_positions": 127,
+      "effective_positions": 753,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 92,
+        "1": 18
+      },
+      "mean_accepted_draft_tokens_per_round": 0.16363636363636364
+    },
+    {
+      "case": 7,
+      "seed": 9037714630912292472,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 112,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 15,
+      "proposed_positions": 771,
+      "verified_positions": 771,
+      "attempted_positions": 127,
+      "effective_positions": 771,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 97,
+        "1": 15
+      },
+      "mean_accepted_draft_tokens_per_round": 0.13392857142857142
+    },
+    {
+      "case": 8,
+      "seed": 2149761458258495495,
+      "output_tokens": 108,
+      "ended_eos": true,
+      "rounds": 84,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 23,
+      "proposed_positions": 588,
+      "verified_positions": 588,
+      "attempted_positions": 107,
+      "effective_positions": 588,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 65,
+        "1": 15,
+        "2": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.27380952380952384
+    },
+    {
+      "case": 9,
+      "seed": 6524746090492272587,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 102,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 25,
+      "proposed_positions": 693,
+      "verified_positions": 693,
+      "attempted_positions": 127,
+      "effective_positions": 693,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 81,
+        "1": 17,
+        "2": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.24509803921568626
+    },
+    {
+      "case": 10,
+      "seed": 8270680081713326464,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 106,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 21,
+      "proposed_positions": 721,
+      "verified_positions": 721,
+      "attempted_positions": 127,
+      "effective_positions": 721,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 89,
+        "1": 14,
+        "2": 2,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.19811320754716982
+    },
+    {
+      "case": 11,
+      "seed": 3337390025776080470,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 107,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 20,
+      "proposed_positions": 737,
+      "verified_positions": 737,
+      "attempted_positions": 127,
+      "effective_positions": 737,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 89,
+        "1": 16,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.18691588785046728
+    },
+    {
+      "case": 12,
+      "seed": 280096661183931534,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 99,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 28,
+      "proposed_positions": 672,
+      "verified_positions": 672,
+      "attempted_positions": 127,
+      "effective_positions": 672,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 73,
+        "1": 24,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.2828282828282828
+    },
+    {
+      "case": 13,
+      "seed": 4829497446826972576,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 118,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 9,
+      "proposed_positions": 805,
+      "verified_positions": 805,
+      "attempted_positions": 127,
+      "effective_positions": 805,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 110,
+        "1": 7,
+        "2": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.07627118644067797
+    },
+    {
+      "case": 14,
+      "seed": 2403213926561755704,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 113,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 14,
+      "proposed_positions": 775,
+      "verified_positions": 775,
+      "attempted_positions": 127,
+      "effective_positions": 775,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 101,
+        "1": 11,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.12389380530973451
+    },
+    {
+      "case": 15,
+      "seed": 4633488372108513915,
+      "output_tokens": 64,
+      "ended_eos": true,
+      "rounds": 59,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 4,
+      "proposed_positions": 413,
+      "verified_positions": 413,
+      "attempted_positions": 63,
+      "effective_positions": 413,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 55,
+        "1": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.06779661016949153
+    },
+    {
+      "case": 16,
+      "seed": 3827985708991746022,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 107,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 20,
+      "proposed_positions": 736,
+      "verified_positions": 736,
+      "attempted_positions": 127,
+      "effective_positions": 736,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 88,
+        "1": 18,
+        "2": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.18691588785046728
+    },
+    {
+      "case": 17,
+      "seed": 2152921185415924791,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 103,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 24,
+      "proposed_positions": 700,
+      "verified_positions": 700,
+      "attempted_positions": 127,
+      "effective_positions": 700,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 82,
+        "1": 18,
+        "2": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.23300970873786409
+    },
+    {
+      "case": 18,
+      "seed": 2297157748513906994,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 108,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 20,
+      "proposed_positions": 739,
+      "verified_positions": 739,
+      "attempted_positions": 127,
+      "effective_positions": 739,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 88,
+        "1": 20
+      },
+      "mean_accepted_draft_tokens_per_round": 0.18518518518518517
+    },
+    {
+      "case": 19,
+      "seed": 4191551199247432745,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 119,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 8,
+      "proposed_positions": 817,
+      "verified_positions": 817,
+      "attempted_positions": 127,
+      "effective_positions": 817,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 111,
+        "1": 8
+      },
+      "mean_accepted_draft_tokens_per_round": 0.06722689075630252
+    },
+    {
+      "case": 20,
+      "seed": 3687898782942832448,
+      "output_tokens": 26,
+      "ended_eos": true,
+      "rounds": 24,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 1,
+      "proposed_positions": 168,
+      "verified_positions": 168,
+      "attempted_positions": 25,
+      "effective_positions": 168,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 23,
+        "1": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.041666666666666664
+    },
+    {
+      "case": 21,
+      "seed": 2759486034696196321,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 103,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 24,
+      "proposed_positions": 705,
+      "verified_positions": 705,
+      "attempted_positions": 127,
+      "effective_positions": 705,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 82,
+        "1": 18,
+        "2": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.23300970873786409
+    },
+    {
+      "case": 22,
+      "seed": 3290074806028060599,
+      "output_tokens": 124,
+      "ended_eos": true,
+      "rounds": 92,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 31,
+      "proposed_positions": 643,
+      "verified_positions": 643,
+      "attempted_positions": 123,
+      "effective_positions": 643,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 66,
+        "1": 22,
+        "2": 3,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.33695652173913043
+    },
+    {
+      "case": 23,
+      "seed": 8054245664576210487,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 110,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 17,
+      "proposed_positions": 753,
+      "verified_positions": 753,
+      "attempted_positions": 127,
+      "effective_positions": 753,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 96,
+        "1": 11,
+        "2": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.15454545454545454
+    },
+    {
+      "case": 24,
+      "seed": 8768462176938422226,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 103,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 24,
+      "proposed_positions": 706,
+      "verified_positions": 706,
+      "attempted_positions": 127,
+      "effective_positions": 706,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 79,
+        "1": 24
+      },
+      "mean_accepted_draft_tokens_per_round": 0.23300970873786409
+    },
+    {
+      "case": 25,
+      "seed": 6062884801732605924,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 96,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 31,
+      "proposed_positions": 657,
+      "verified_positions": 657,
+      "attempted_positions": 127,
+      "effective_positions": 657,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 67,
+        "1": 27,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.3229166666666667
+    },
+    {
+      "case": 26,
+      "seed": 1187194232501608785,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 101,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 27,
+      "proposed_positions": 692,
+      "verified_positions": 692,
+      "attempted_positions": 127,
+      "effective_positions": 692,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 79,
+        "1": 17,
+        "2": 5
+      },
+      "mean_accepted_draft_tokens_per_round": 0.26732673267326734
+    },
+    {
+      "case": 27,
+      "seed": 3809948146833308067,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 112,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 15,
+      "proposed_positions": 764,
+      "verified_positions": 764,
+      "attempted_positions": 127,
+      "effective_positions": 764,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 99,
+        "1": 11,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.13392857142857142
+    },
+    {
+      "case": 28,
+      "seed": 2941274361068497804,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 120,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 8,
+      "proposed_positions": 823,
+      "verified_positions": 823,
+      "attempted_positions": 127,
+      "effective_positions": 823,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 112,
+        "1": 8
+      },
+      "mean_accepted_draft_tokens_per_round": 0.06666666666666667
+    },
+    {
+      "case": 29,
+      "seed": 6880470647718267291,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 104,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 23,
+      "proposed_positions": 712,
+      "verified_positions": 712,
+      "attempted_positions": 127,
+      "effective_positions": 712,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 87,
+        "1": 12,
+        "2": 4,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.22115384615384615
+    },
+    {
+      "case": 30,
+      "seed": 8381922382667116242,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 109,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 19,
+      "proposed_positions": 743,
+      "verified_positions": 743,
+      "attempted_positions": 127,
+      "effective_positions": 743,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 93,
+        "1": 13,
+        "2": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.1743119266055046
+    },
+    {
+      "case": 31,
+      "seed": 5009819181907025834,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 112,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 15,
+      "proposed_positions": 766,
+      "verified_positions": 766,
+      "attempted_positions": 127,
+      "effective_positions": 766,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 99,
+        "1": 11,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.13392857142857142
+    }
+  ],
+  "scope": "Ordinal quality-panel cases only; private identities and sampled outputs remain remote."
+}
