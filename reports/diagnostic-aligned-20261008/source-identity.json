@@ -1,0 +1,31 @@
+{
+  "source_sha256": {
+    "__init__.py": "bc0e47a109ff9d53f21efbf0b8c02d23ca53ef4658488fba8dd5de037b9b636d",
+    "bench_cached_target.py": "a85eaf79fb50f13ab767ae594d6f59743376f62b6c324947d1c8081f809728bb",
+    "cached_target.py": "8534b94b52a8a7327d1360a002dcc41520696a3153ca1adb42eefc584970322b",
+    "checkpoint.py": "06cd16e512c2b90e19ca50faed3f5a9d4d01ded44ea355575d23e87799094635",
+    "config.py": "d27c330979e4c8b94d6509614057ccb1b04df7e61e38a88e453e39525d08cab8",
+    "data.py": "14a33ef586e3e76ffc28177805c91abcea4bd685ef3d9c4e1b26dfe030521fed",
+    "decode.py": "eebfd7c8d7f9cc697f4fa13d5048ec752813c8242882db9b57ff40c90cb6ce9e",
+    "diagnose_learning.py": "738212bc71937a92a34f0aba46ac79cf704073408b06d449ecb7c3267701481c",
+    "eval_decode.py": "248cac7fb4e8eaff468ac5631c1f1aadbcadf1a228b5649e0a4f1a1f0be4bfd7",
+    "losses.py": "25b735023512429e3d2ab5d0661b08708dc10bef69804ee50be324af104348ed",
+    "model.py": "7888d282babf6c1de7c67b5ae16758756bef8b14ca71868c7484d7d0be38ecb4",
+    "target.py": "9046268d3112085710d78fa6fafbe5e071b358addfc1e620845140b33d1e2797",
+    "train.py": "6e4e7ac514a2592b9a8c212cb41df69a33396cf9d68e4fbb6fc5a5ccdd27c471"
+  },
+  "records_sha256": "9bd09a5958c45485f4f7b7fdbb4bd42387d28b6a2bbaa173e20f3f62f15ec247",
+  "target_fingerprint": {
+    "config.json": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd",
+    "configuration.json": "f888421726665e8a84b738eed42a64875aed79de8be7daade851ac8bf4c0cef9",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "torch": "2.12.0+rocm7.2",
+  "transformers": "5.17.0",
+  "hip": "7.2.53211"
+}

@@ -1,0 +1,557 @@
+{
+  "scope": "Single-record greedy-trajectory contiguous-anchor overfit. Mechanism learning diagnostic only; no held-out quality or speed claim.",
+  "training": {
+    "steps": 128,
+    "record_count": 1,
+    "trajectory": "target-greedy",
+    "trajectory_new_tokens": 32,
+    "anchor_coverage": "contiguous",
+    "anchors": [
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89
+    ],
+    "learning_rate": 0.0006,
+    "seed": 20261008,
+    "draft": {
+      "layer_ids": [
+        1,
+        7,
+        14,
+        21,
+        26
+      ],
+      "num_layers": 5,
+      "block_size": 7,
+      "markov_rank": 256,
+      "mask_token_id": 151669,
+      "num_anchors": 4,
+      "ce_alpha": 0.1,
+      "l1_alpha": 0.9,
+      "confidence_alpha": 1.0,
+      "loss_decay_gamma": 4.0
+    },
+    "trainable_parameters": 161692161
+  },
+  "evaluation": [
+    {
+      "step": 0,
+      "loss": 3.4488279819488525,
+      "ce": 12.409757614135742,
+      "l1": 1.998746395111084,
+      "confidence_bce": 0.4089806377887726,
+      "teacher_forced_accept": 0.0006267823628149927,
+      "confidence_mae": 0.3346349000930786,
+      "teacher_top1_agreement": 0.0,
+      "label_top1_accuracy": 0.0,
+      "teacher_top1_by_position": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "supervised_tokens": 196,
+      "accepted_per_round": 0.0,
+      "rollout_equal": true,
+      "elapsed_seconds": 3.0963814329588786,
+      "first_position_top1": 0.0,
+      "rollout_token_count": 32,
+      "round_count": 31,
+      "verified_accepted_total": 0,
+      "committed_accepted_total": 0,
+      "committed_accepted_per_round": 0.0,
+      "termination": "max_new_tokens",
+      "eos_observed": false,
+      "round_boundaries": [
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 0,
+          "committed_accepted": 0,
+          "committed_total": 1,
+          "target_correction_or_bonus_committed": 1
+        }
+      ]
+    },
+    {
+      "step": 32,
+      "loss": 1.1512227058410645,
+      "ce": 0.5820744037628174,
+      "l1": 0.6068712472915649,
+      "confidence_bce": 0.5468311309814453,
+      "teacher_forced_accept": 0.6965643167495728,
+      "confidence_mae": 0.1770179122686386,
+      "teacher_top1_agreement": 0.795918345451355,
+      "label_top1_accuracy": 0.795918345451355,
+      "teacher_top1_by_position": [
+        1.0,
+        0.7333333492279053,
+        0.7586206793785095,
+        0.7500000596046448,
+        0.7777777910232544,
+        0.7307692766189575,
+        0.7999999523162842
+      ],
+      "supervised_tokens": 196,
+      "accepted_per_round": 2.5555555555555554,
+      "rollout_equal": true,
+      "elapsed_seconds": 6.295371860032901,
+      "first_position_top1": 1.0,
+      "rollout_token_count": 32,
+      "round_count": 9,
+      "verified_accepted_total": 23,
+      "committed_accepted_total": 23,
+      "committed_accepted_per_round": 2.5555555555555554,
+      "termination": "max_new_tokens",
+      "eos_observed": false,
+      "round_boundaries": [
+        {
+          "verified_accepted": 1,
+          "committed_accepted": 1,
+          "committed_total": 2,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 1,
+          "committed_accepted": 1,
+          "committed_total": 2,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 2,
+          "committed_accepted": 2,
+          "committed_total": 3,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 1,
+          "committed_accepted": 1,
+          "committed_total": 2,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 1,
+          "committed_accepted": 1,
+          "committed_total": 2,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 5,
+          "committed_accepted": 5,
+          "committed_total": 6,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 3,
+          "committed_accepted": 3,
+          "committed_total": 4,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 2,
+          "committed_accepted": 2,
+          "committed_total": 2,
+          "target_correction_or_bonus_committed": 0
+        }
+      ]
+    },
+    {
+      "step": 64,
+      "loss": 0.5637001991271973,
+      "ce": 0.01414989959448576,
+      "l1": 0.29441776871681213,
+      "confidence_bce": 0.29730919003486633,
+      "teacher_forced_accept": 0.8527910709381104,
+      "confidence_mae": 0.0181373693048954,
+      "teacher_top1_agreement": 1.0,
+      "label_top1_accuracy": 1.0,
+      "teacher_top1_by_position": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "supervised_tokens": 196,
+      "accepted_per_round": 7.0,
+      "rollout_equal": true,
+      "elapsed_seconds": 8.598225581925362,
+      "first_position_top1": 1.0,
+      "rollout_token_count": 32,
+      "round_count": 4,
+      "verified_accepted_total": 28,
+      "committed_accepted_total": 28,
+      "committed_accepted_per_round": 7.0,
+      "termination": "max_new_tokens",
+      "eos_observed": false,
+      "round_boundaries": [
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 7,
+          "target_correction_or_bonus_committed": 0
+        }
+      ]
+    },
+    {
+      "step": 96,
+      "loss": 0.5549153089523315,
+      "ce": 0.004940258339047432,
+      "l1": 0.2937684953212738,
+      "confidence_bce": 0.2900296747684479,
+      "teacher_forced_accept": 0.8531157374382019,
+      "confidence_mae": 0.008352044969797134,
+      "teacher_top1_agreement": 1.0,
+      "label_top1_accuracy": 1.0,
+      "teacher_top1_by_position": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "supervised_tokens": 196,
+      "accepted_per_round": 7.0,
+      "rollout_equal": true,
+      "elapsed_seconds": 10.876654224935919,
+      "first_position_top1": 1.0,
+      "rollout_token_count": 32,
+      "round_count": 4,
+      "verified_accepted_total": 28,
+      "committed_accepted_total": 28,
+      "committed_accepted_per_round": 7.0,
+      "termination": "max_new_tokens",
+      "eos_observed": false,
+      "round_boundaries": [
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 7,
+          "target_correction_or_bonus_committed": 0
+        }
+      ]
+    },
+    {
+      "step": 128,
+      "loss": 0.538915753364563,
+      "ce": 0.023289190605282784,
+      "l1": 0.27723756432533264,
+      "confidence_bce": 0.287073016166687,
+      "teacher_forced_accept": 0.8613811731338501,
+      "confidence_mae": 0.023318324238061905,
+      "teacher_top1_agreement": 1.0,
+      "label_top1_accuracy": 1.0,
+      "teacher_top1_by_position": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "supervised_tokens": 196,
+      "accepted_per_round": 7.0,
+      "rollout_equal": true,
+      "elapsed_seconds": 13.165974725037813,
+      "first_position_top1": 1.0,
+      "rollout_token_count": 32,
+      "round_count": 4,
+      "verified_accepted_total": 28,
+      "committed_accepted_total": 28,
+      "committed_accepted_per_round": 7.0,
+      "termination": "max_new_tokens",
+      "eos_observed": false,
+      "round_boundaries": [
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 8,
+          "target_correction_or_bonus_committed": 1
+        },
+        {
+          "verified_accepted": 7,
+          "committed_accepted": 7,
+          "committed_total": 7,
+          "target_correction_or_bonus_committed": 0
+        }
+      ]
+    }
+  ],
+  "target_frozen_verified": true,
+  "peak_allocated_bytes": 5179751936,
+  "elapsed_seconds": 21.495363701018505,
+  "mechanism_gate": {
+    "required_mean_committed_accepted": 3,
+    "observed_final": 7.0,
+    "passed": true
+  },
+  "source_snapshot_all_modules_verified": false
+}

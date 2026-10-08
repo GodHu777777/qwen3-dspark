@@ -73,6 +73,22 @@ Two real prompts produced 30 tokens identical to target-only greedy, with **zero
 accepted draft tokens**. These are execution/correctness checks, not quality or
 performance results.
 
+A subsequent [aligned single-record learning diagnostic](reports/diagnostic-aligned-20261008/README.md)
+used one target-greedy trajectory and all possible rollout anchors. At steps
+64, 96 and 128, all seven draft positions matched the teacher and all seven
+proposals per round were accepted (32 output tokens exactly matched the target).
+The [earlier sampled-trajectory diagnostic](reports/diagnostic-20261008/README.md)
+exposed a confound: its training and rollout prefixes did not match. The aligned
+result establishes learnability on seen prefixes, **not held-out quality or speed**.
+
+Run the bounded diagnostic after generating the pilot data:
+
+```bash
+python -m dspark_qwen.diagnose_learning --config configs/train-pilot.local.json \
+  --output runs/diagnostic-aligned --steps 128 --eval-every 32 \
+  --rollout-tokens 32 --trajectory target-greedy --anchor-coverage contiguous
+```
+
 The five-layer draft has 161,692,161 trainable parameters. Training uses single
 unpadded sequences, dense SDPA, FP32 trainables and BF16 autocast. Four anchors and
 two accumulation microsteps keep the pilot small; this is not paper-scale training.

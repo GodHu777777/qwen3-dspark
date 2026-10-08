@@ -41,7 +41,10 @@ Checkpoint identity binds source, target/tokenizer hashes, data, config and runt
 Do not mutate a completed run manifest to get past resume checks. New source or
 config requires a new run; checkpoint formats are local, not NeMo-compatible.
 decode.py supports exact greedy acceptance logic only, full-prefix recomputation;
-stochastic sampling, KV cache lifecycle and hardware scheduling remain future work.
+stochastic sampling and hardware scheduling remain future work.
+CachedTarget is under active validation: CPU FP32 chunk/crop tests pass, but a
+real BF16 full-recompute/cached greedy near-tie mismatch is being investigated.
+Do not claim bit-identical cross-kernel behavior from the CPU checks.
 
 The first-shard pilot is not a representative full-dataset reproduction. Clean
 train/validation exports contain only EOS-completed nonempty answers fitting the
@@ -84,3 +87,16 @@ commits/configurations and aggregate evidence; do not reconstruct undocumented
 history as fact. User requested a dedicated 6.1 Sol recording role; currently
 sol_data owns the log because the sub-agent thread limit prevented another agent.
 Astra owns correctness/training/result review and periodic direction review.
+
+Checkpoint integrity update (96b8fd3): new checkpoints hash both trainable weights
+and optimizer/RNG state, and check step consistency before loading parameters.
+Legacy checkpoints without resume checksums support weights-only loading; do not
+add a fabricated checksum to bypass the legacy resume refusal.
+
+2026-10-08 bounded learning diagnostic: reports/diagnostic-aligned-20261008
+records one greedy32 trajectory with all31 rollout anchor positions; at steps
+64/96/128, 4 rounds each accept7, yielding exactly32 target tokens. This verifies
+learnability on seen prefixes only. The earlier sampled/spaced diagnostic had
+no complete rollout-prefix overlap and is preserved separately. Use
+diagnose_learning --trajectory target-greedy --anchor-coverage contiguous for
+the aligned protocol. Execution source hashes and historical script are retained.
