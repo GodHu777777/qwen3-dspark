@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 02:50（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 03:00（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -657,3 +657,17 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **CPU观察与审计口径修正。** GPU隐藏的远程最终 **29tests/6.243秒、exit0**（8算法+10collector+11workflow），root另报告独立local11tests通过。真实step1280 dry-fit44/dry-eval43绑定通过，记录者核44/43数量、group/selection一致，aggregate均0blocks/0completed、execution_checks_passed=null；这不是实采或STS拟合。Root最初把public protocol完整对象直接digest对selection canonical协议hash而assert失败，随后逐字段核fit-run.manifest.protocol一致；public多出的6项描述字段说明了差异，这是审计对象口径错误，未作实现修复或改协议。
 
 **下一决策与执行状态。** Direction获 **fit44采集→CPUfit artifact冻结→eval43采集/冻结artifact评价** 的有序授权，新增任何GPU阶段仍须核窗口。实际fit启动shell4011829/controller4011831/launcher4012129；随后root通过远端ps独立确认worker4012492正在运行且父进程为该launcher，direction亦确认同PID。只记录启动和当时live状态，不写fit完成或pass。尚无真实STS温度、ECE/Brier比较、eval采集、性能或调度收益结果；潜在serving热点只是未测假说，float64采样在tensor device，不误写成CPU逐词表复制。Final test未读；本轮记录者只日志，不开GPU、改实现/进程或提交。
+
+
+<a id="packed-draft-cpu"></a>
+## 2026-10-09 03:00（UTC+8）— S11：真正flattened packed draft的CPU实现、AMP与原子提交修复
+
+**问题与方法。** 多请求draft必须共享一次flattened backbone，不能用逐request forward伪装batch，也不能用target causal kernel改变draft整块双向语义。直接读取[packed draft说明](packed-draft.md)、module/test及未发布 `output/packed-draft-cpu-20261009/` 的manifest/四tests日志。记录者独立核三文件SHA对 **ac64e7d6416371f2306a83c2380fbd9c10970554**（02:57:46）Git blobs、四log及base08220d5 archive SHA；root已核commit/push。CPU实际执行为base archive加三overlay，不重写冻结训练/wholeQwen快照。完整hash及失败原件留在manifest/log，未读final test/private样本。
+
+**机制与物理工作。** `append_committed`先验证所有chunks，一次contextFC/norm/RoPE、每层一次全newcontext KVprojection。Backbone把active anchors一次embedding/RoPE，每层一次全batch Q/blockKV/attention/o_proj/MLP；request loops只做metadata/gather。每request看到自身committed context及**全部own draft block**，显式新noncausal/no-window privatebackend，无fallback；target的causal gate不能验证它。Persistent cache仅存已提交target features，不含新emitanchor或拒绝tail，blockKV临时不提交，backbone失败也不改cache。Admission截短proposal不减少整块计算。记录fullquery/gather/pairdomain和concat/gather/castbytes，inactive context仍进入当前physical concat成本；这些是工作域计数，不是实测流量/速度。Markov heads、stochastic draws、verify loop、globalallocator/async尚未接入。
+
+**失败与两项修复。** 最早8FP32tests/0.177秒通过；新增AMP后，9tests/0.355秒和原子修复后的10tests/0.159秒均有1项AMP error，原log保留。原断言错假定K/V同dtype，而未改的cached backbone在FP32 RMSNorm下可为 **KFP32/VBF16**；privateATen又不能假定SDPA autocast自动处理输入。最终保留各cache component dtype与FP32权重/RoPE，在attention边界按active autocast显式cast QKV，cast工作另计、finalhidden可仍FP32，未靠downcast训练参数规避错误。Root同时发现投影完成后先赋cache、再分配metadata会在late allocation失败时半提交；修成全部candidate cache/metadata/work构造且验证后一次commit，crop也先验证candidate。注入late metadata/crop validation失败核旧引用、内容、marker均不变，不限于早期projection异常。
+
+**CPU结果与边界。** 最终 **10/10通过、0.331秒**，GPU三设备隐藏/cuda_available=false，两条 `(null)` 提示保留。涵盖独立single-request cached/fullbackbone的实际KV/hidden、不同position/order、零context/cropzero/exitreadd、active/inactivepoison、fullblock双向可见、module callcounts、原子失败和AMP精度；native spy只核literal noncausal/no-window参数。AMP与原cachedSDPA的fixture-only0.02/0.02比较不是正式GPU阈值或分布等价证明。新noncausalGPU未验证，无quality/speedup结论；wholeQwen原layer26失败保持独立。Fit/eval尚等完整报告，本条不提前写结果。
+
+**另行只读baseline盘点。** 已完成的私有 `output/target-baseline-inventory-20261009/` inventory/notes确认现有vLLM0.30.0+rocm723 metadata、offlineLLM与bench latency/throughput/serve源码入口和gfx1201/R9700识别；入口存在不等于GPU实际load/kernel/graph成功，也不写“无支持”。隐藏GPU的CLIhelp在25秒退出124，停止该路径、未重试或修环境；精确自有help/timeout进程检查为空，本地父进程已返回。参数/ASR共存预算/关闭instrumentation的baseline提案有file:line，比例及KVbytes不冒称硬全系统cap，性能与采样law仍未测。该盘点未启动server/GPU、调用podman、安装或读凭据。S11本轮仅日志，无实现/进程/GPU/提交动作。
