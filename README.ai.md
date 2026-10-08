@@ -42,9 +42,14 @@ Do not mutate a completed run manifest to get past resume checks. New source or
 config requires a new run; checkpoint formats are local, not NeMo-compatible.
 decode.py supports exact greedy acceptance logic only, full-prefix recomputation;
 sampling.py now supplies an independent CPU stochastic probability reference,
-with exact rational distribution oracles (11 tests). It has not yet been wired
-to real model/cache execution; see docs/stochastic-sampling.md for the actual-q,
-admission and numerical contracts. scheduler.py is a pure CPU global prefix
+with exact rational distribution oracles (11 tests). tensor_sampling.py and
+cached_sampling.py now add a separate float64-law tensor/cached reference with
+real draft Markov sampling, actual q and raw confidence retention, fixed admission,
+strict cache commit/crop and a target-only baseline. The model forward dtype is
+unchanged. 76 CPU tests pass in the integration snapshot; real stochastic GPU
+validation remains pending. Same seed across different algorithms does not imply
+identical sampled tokens; no performance or calibrated scheduling claim. See
+docs/cached-stochastic.md and docs/stochastic-sampling.md. scheduler.py is a pure CPU global prefix
 planner; hardware profiling, multi-request execution and asynchronous scheduling
 remain unfinished (docs/dspark-reproduction-scope.md).
 calibration.py implements CPU sequential temperature scaling of confidence

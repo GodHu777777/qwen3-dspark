@@ -168,6 +168,45 @@ class DSparkDraft(nn.Module):
         hidden = self.backbone_cached(anchor_token, context_kv, context_length)
         return self._sample_greedy(hidden, anchor_token[0])
 
+    @torch.no_grad()
+    def propose_stochastic_cached(self, anchor_token, context_kv, context_length,
+                                  *, temperature, rng, max_draft_tokens=None):
+        """One parallel backbone, serial Markov sampling, exact sampled q retained.
+
+        Admission is a fixed length chosen before the block's random draws. Raw
+        confidence logits are captured before each current token; no uncalibrated
+        head is used for scheduling. Probability arithmetic is float64 even when
+        backbone/head logits are produced under BF16 autocast.
+        """
+        from .tensor_sampling import TensorProposal, validate_temperature
+        validate_temperature(temperature)
+        length = self.spec.block_size if max_draft_tokens is None else max_draft_tokens
+        if type(length) is not int or not 0 <= length <= self.spec.block_size:
+            raise ValueError("max_draft_tokens must lie in [0, block_size]")
+        if length == 0:
+            return TensorProposal(anchor_token.new_empty((0,)),
+                torch.empty((0, self.lm_head.out_features), dtype=torch.float64, device=anchor_token.device),
+                torch.empty((0,), dtype=torch.float32, device=anchor_token.device))
+        hidden = self.backbone_cached(anchor_token, context_kv, context_length)
+        return self._sample_stochastic(hidden, anchor_token[0], length, temperature, rng)
+
+    def _sample_stochastic(self, hidden, prev, length, temperature, rng):
+        from .tensor_sampling import TensorProposal, logits_to_probabilities, sample_categorical
+        base = self.lm_head(hidden)
+        tokens, rows, confidence = [], [], []
+        for k in range(length):
+            emb = self.markov_embedding(prev)
+            raw_confidence = self.confidence(torch.cat((hidden[k:k+1], emb), -1)).flatten()
+            if not bool(torch.isfinite(raw_confidence).all()):
+                raise ValueError("Non-finite pre-token confidence logits")
+            confidence.append(raw_confidence.float())
+            logits = base[k:k+1] + self.markov_projection(emb)
+            row = logits_to_probabilities(logits, temperature)[0]
+            prev = sample_categorical(row, rng).reshape(1)
+            tokens.append(prev)
+            rows.append(row)
+        return TensorProposal(torch.cat(tokens), torch.stack(rows), torch.cat(confidence))
+
     def _sample_greedy(self, hidden, prev):
         base = self.lm_head(hidden)
         tokens, confidences = [], []
