@@ -174,3 +174,13 @@ not a formal worst-case guarantee. eval_dev_tf.py uses a fixed validation panel
 and per-position denominators; experiment_inputs rejects final test, duplicate
 identities and mismatched data/model fingerprints before model loading. CPU tools
 are tested, but the expanded-data GPU memory gate is pending generation completion.
+
+Bounded stochastic gate CLI: eval_stochastic_gate.py binds the original prior
+train/two-dev panel and checkpoint, target/data hashes and a fresh source snapshot.
+--dry-run is stdlib-only and does not import torch or touch CUDA. A real execution
+uses a separate snapshot worker, native BF16 forward/float64 probability law,
+same-path seeded repeats, cache/finite/EOS checks, and independently reported
+same-prefix block-vs-sequential probability/logit differences. All traces are
+private except the aggregate candidate; no stochastic GPU result or distribution
+losslessness is claimed yet. See docs/stochastic-gate.md; GPU windows still require
+coordination with generation, memory gates and training.
