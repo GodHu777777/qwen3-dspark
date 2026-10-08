@@ -1,0 +1,23 @@
+{
+  "status": "completed",
+  "execution_checks_passed": true,
+  "observed_blocks": 2620,
+  "all_round_finite_shape_checked": true,
+  "actual_q_dtypes": [
+    "torch.float64"
+  ],
+  "max_q_normalization_error": 6.661338147750939e-16,
+  "max_p_normalization_error": 5.551115123125783e-16,
+  "independent_label_and_counter_recheck": true,
+  "cache_commit_delta_recheck": true,
+  "accepted_draft_eos_blocks": 1,
+  "rejected_blocks": 2602,
+  "residual_eos_blocks": 3,
+  "bonus_eos_blocks": 0,
+  "accepted_eos_verified_tail_positions_excluded": 5,
+  "fully_accepted_seven_token_blocks": 8,
+  "full_proposal_blocks_without_bonus_at_budget": 9,
+  "bonus_draws": 8,
+  "independent_source_git_blob_checks": 30,
+  "independent_manifest_protocol_case_seed_comparison": true
+}

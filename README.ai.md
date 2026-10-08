@@ -205,8 +205,11 @@ completed with worker/launcher/controller exit 0: 3,268 rounds, 581 accepted dra
 tokens (0.1778/round), 3,874 output tokens, and longest accepted prefix 3. All 16
 preselected same-prefix TV rows differ (max 0.04576414), with no argmax change;
 see reports/expanded-quality128-20261009. This is neither a speed benchmark nor
-a sequential-distribution equivalence result. Step512 quality and STS fitting
-remain unexecuted at this snapshot. Fit/eval execution and
+a sequential-distribution equivalence result. Step512 quality32 completed on the exact same source/panel/protocol: 2,620 rounds,
+1,299 draft tokens (0.4958/round), 3,941 outputs; 31/32 prompt ratios improved.
+One accepted-EOS block excludes five verified tail labels, so effective positions
+are 17,955 versus 17,960 verified. See reports/expanded-quality512-20261009.
+STS fitting remains unexecuted; training is still at step512 of the frozen1280 plan. Fit/eval execution and
 fit44-prevalence constant ECE/Brier comparison remain a follow-up after checkpoint
 selection. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.

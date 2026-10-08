@@ -1,0 +1,1000 @@
+{
+  "status": "completed",
+  "cases": [
+    {
+      "case": 0,
+      "seed": 6970766484985318104,
+      "output_tokens": 109,
+      "ended_eos": true,
+      "rounds": 88,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 20,
+      "proposed_positions": 616,
+      "verified_positions": 616,
+      "attempted_positions": 108,
+      "effective_positions": 616,
+      "preselected_probes": [
+        {
+          "round": 0,
+          "status": "collected"
+        }
+      ],
+      "accepted_prefix_length_histogram": {
+        "0": 72,
+        "1": 13,
+        "2": 2,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.22727272727272727,
+      "step128_comparison": {
+        "accepted_draft_tokens": 3,
+        "rounds": 92,
+        "mean_accepted_draft_tokens_per_round": 0.03260869565217391,
+        "accepted_draft_per_round_delta": 0.19466403162055335,
+        "output_tokens": 96,
+        "ended_eos": true,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 1,
+      "seed": 8155477605896205020,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 82,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 46,
+      "proposed_positions": 563,
+      "verified_positions": 563,
+      "attempted_positions": 127,
+      "effective_positions": 563,
+      "preselected_probes": [
+        {
+          "round": 0,
+          "status": "collected"
+        }
+      ],
+      "accepted_prefix_length_histogram": {
+        "0": 47,
+        "1": 25,
+        "2": 9,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5609756097560976,
+      "step128_comparison": {
+        "accepted_draft_tokens": 16,
+        "rounds": 111,
+        "mean_accepted_draft_tokens_per_round": 0.14414414414414414,
+        "accepted_draft_per_round_delta": 0.4168314656119535,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 2,
+      "seed": 2700486023258584992,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 80,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 47,
+      "proposed_positions": 552,
+      "verified_positions": 552,
+      "attempted_positions": 127,
+      "effective_positions": 552,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 54,
+        "1": 14,
+        "2": 5,
+        "3": 6,
+        "5": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5875,
+      "step128_comparison": {
+        "accepted_draft_tokens": 17,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.15454545454545454,
+        "accepted_draft_per_round_delta": 0.4329545454545455,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 3,
+      "seed": 1296646395717983295,
+      "output_tokens": 126,
+      "ended_eos": true,
+      "rounds": 76,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 49,
+      "proposed_positions": 522,
+      "verified_positions": 522,
+      "attempted_positions": 125,
+      "effective_positions": 522,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 51,
+        "1": 12,
+        "2": 7,
+        "3": 3,
+        "4": 2,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6447368421052632,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 104,
+        "mean_accepted_draft_tokens_per_round": 0.23076923076923078,
+        "accepted_draft_per_round_delta": 0.4139676113360324,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 4,
+      "seed": 2165770553868521278,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 90,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 37,
+      "proposed_positions": 617,
+      "verified_positions": 617,
+      "attempted_positions": 127,
+      "effective_positions": 617,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 62,
+        "1": 23,
+        "2": 2,
+        "3": 2,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.4111111111111111,
+      "step128_comparison": {
+        "accepted_draft_tokens": 14,
+        "rounds": 113,
+        "mean_accepted_draft_tokens_per_round": 0.12389380530973451,
+        "accepted_draft_per_round_delta": 0.2872173058013766,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 5,
+      "seed": 1142872706571744867,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 66,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 61,
+      "proposed_positions": 442,
+      "verified_positions": 442,
+      "attempted_positions": 126,
+      "effective_positions": 442,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 35,
+        "1": 15,
+        "2": 8,
+        "3": 6,
+        "5": 1,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.9242424242424242,
+      "step128_comparison": {
+        "accepted_draft_tokens": 23,
+        "rounds": 105,
+        "mean_accepted_draft_tokens_per_round": 0.21904761904761905,
+        "accepted_draft_per_round_delta": 0.7051948051948052,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 6,
+      "seed": 6892836572577282677,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 90,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 37,
+      "proposed_positions": 612,
+      "verified_positions": 612,
+      "attempted_positions": 127,
+      "effective_positions": 612,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 66,
+        "1": 16,
+        "2": 5,
+        "3": 1,
+        "4": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.4111111111111111,
+      "step128_comparison": {
+        "accepted_draft_tokens": 18,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.16363636363636364,
+        "accepted_draft_per_round_delta": 0.24747474747474746,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 7,
+      "seed": 9037714630912292472,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 80,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 47,
+      "proposed_positions": 549,
+      "verified_positions": 549,
+      "attempted_positions": 127,
+      "effective_positions": 549,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 55,
+        "1": 14,
+        "2": 4,
+        "3": 5,
+        "4": 1,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5875,
+      "step128_comparison": {
+        "accepted_draft_tokens": 15,
+        "rounds": 112,
+        "mean_accepted_draft_tokens_per_round": 0.13392857142857142,
+        "accepted_draft_per_round_delta": 0.4535714285714286,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 8,
+      "seed": 2149761458258495495,
+      "output_tokens": 97,
+      "ended_eos": true,
+      "rounds": 62,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 35,
+      "proposed_positions": 434,
+      "verified_positions": 434,
+      "attempted_positions": 96,
+      "effective_positions": 429,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 38,
+        "1": 17,
+        "2": 3,
+        "3": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5645161290322581,
+      "step128_comparison": {
+        "accepted_draft_tokens": 23,
+        "rounds": 84,
+        "mean_accepted_draft_tokens_per_round": 0.27380952380952384,
+        "accepted_draft_per_round_delta": 0.2907066052227343,
+        "output_tokens": 108,
+        "ended_eos": true,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 9,
+      "seed": 6524746090492272587,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 76,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 52,
+      "proposed_positions": 516,
+      "verified_positions": 516,
+      "attempted_positions": 126,
+      "effective_positions": 516,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 45,
+        "1": 19,
+        "2": 8,
+        "3": 2,
+        "4": 1,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6842105263157895,
+      "step128_comparison": {
+        "accepted_draft_tokens": 25,
+        "rounds": 102,
+        "mean_accepted_draft_tokens_per_round": 0.24509803921568626,
+        "accepted_draft_per_round_delta": 0.4391124871001032,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 10,
+      "seed": 8270680081713326464,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 85,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 42,
+      "proposed_positions": 579,
+      "verified_positions": 579,
+      "attempted_positions": 127,
+      "effective_positions": 579,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 52,
+        "1": 28,
+        "2": 2,
+        "3": 2,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.49411764705882355,
+      "step128_comparison": {
+        "accepted_draft_tokens": 21,
+        "rounds": 106,
+        "mean_accepted_draft_tokens_per_round": 0.19811320754716982,
+        "accepted_draft_per_round_delta": 0.2960044395116537,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 11,
+      "seed": 3337390025776080470,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 79,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 48,
+      "proposed_positions": 538,
+      "verified_positions": 538,
+      "attempted_positions": 127,
+      "effective_positions": 538,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 52,
+        "1": 13,
+        "2": 9,
+        "3": 3,
+        "4": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6075949367088608,
+      "step128_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 107,
+        "mean_accepted_draft_tokens_per_round": 0.18691588785046728,
+        "accepted_draft_per_round_delta": 0.42067904885839347,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 12,
+      "seed": 280096661183931534,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 65,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 63,
+      "proposed_positions": 449,
+      "verified_positions": 449,
+      "attempted_positions": 127,
+      "effective_positions": 449,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 34,
+        "1": 14,
+        "2": 9,
+        "3": 4,
+        "4": 2,
+        "5": 1,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.9692307692307692,
+      "step128_comparison": {
+        "accepted_draft_tokens": 28,
+        "rounds": 99,
+        "mean_accepted_draft_tokens_per_round": 0.2828282828282828,
+        "accepted_draft_per_round_delta": 0.6864024864024865,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 13,
+      "seed": 4829497446826972576,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 103,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 24,
+      "proposed_positions": 707,
+      "verified_positions": 707,
+      "attempted_positions": 127,
+      "effective_positions": 707,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 83,
+        "1": 16,
+        "2": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+      "step128_comparison": {
+        "accepted_draft_tokens": 9,
+        "rounds": 118,
+        "mean_accepted_draft_tokens_per_round": 0.07627118644067797,
+        "accepted_draft_per_round_delta": 0.1567385222971861,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 14,
+      "seed": 2403213926561755704,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 95,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 32,
+      "proposed_positions": 657,
+      "verified_positions": 657,
+      "attempted_positions": 127,
+      "effective_positions": 657,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 70,
+        "1": 19,
+        "2": 5,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.3368421052631579,
+      "step128_comparison": {
+        "accepted_draft_tokens": 14,
+        "rounds": 113,
+        "mean_accepted_draft_tokens_per_round": 0.12389380530973451,
+        "accepted_draft_per_round_delta": 0.21294829995342338,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 15,
+      "seed": 4633488372108513915,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 121,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 6,
+      "proposed_positions": 831,
+      "verified_positions": 831,
+      "attempted_positions": 127,
+      "effective_positions": 831,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 117,
+        "1": 2,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.049586776859504134,
+      "step128_comparison": {
+        "accepted_draft_tokens": 4,
+        "rounds": 59,
+        "mean_accepted_draft_tokens_per_round": 0.06779661016949153,
+        "accepted_draft_per_round_delta": -0.01820983330998739,
+        "output_tokens": 64,
+        "ended_eos": true,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 16,
+      "seed": 3827985708991746022,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 87,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 40,
+      "proposed_positions": 595,
+      "verified_positions": 595,
+      "attempted_positions": 127,
+      "effective_positions": 595,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 59,
+        "1": 18,
+        "2": 8,
+        "3": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.45977011494252873,
+      "step128_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 107,
+        "mean_accepted_draft_tokens_per_round": 0.18691588785046728,
+        "accepted_draft_per_round_delta": 0.2728542270920614,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 17,
+      "seed": 2152921185415924791,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 81,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 47,
+      "proposed_positions": 548,
+      "verified_positions": 548,
+      "attempted_positions": 127,
+      "effective_positions": 548,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 54,
+        "1": 14,
+        "2": 9,
+        "3": 2,
+        "4": 1,
+        "5": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5802469135802469,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "accepted_draft_per_round_delta": 0.34723720484238285,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 18,
+      "seed": 2297157748513906994,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 89,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 39,
+      "proposed_positions": 607,
+      "verified_positions": 607,
+      "attempted_positions": 127,
+      "effective_positions": 607,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 58,
+        "1": 24,
+        "2": 6,
+        "3": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.43820224719101125,
+      "step128_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 108,
+        "mean_accepted_draft_tokens_per_round": 0.18518518518518517,
+        "accepted_draft_per_round_delta": 0.2530170620058261,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 19,
+      "seed": 4191551199247432745,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 110,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 18,
+      "proposed_positions": 755,
+      "verified_positions": 755,
+      "attempted_positions": 127,
+      "effective_positions": 755,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 93,
+        "1": 16,
+        "2": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.16363636363636364,
+      "step128_comparison": {
+        "accepted_draft_tokens": 8,
+        "rounds": 119,
+        "mean_accepted_draft_tokens_per_round": 0.06722689075630252,
+        "accepted_draft_per_round_delta": 0.09640947288006112,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 20,
+      "seed": 3687898782942832448,
+      "output_tokens": 25,
+      "ended_eos": true,
+      "rounds": 19,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 5,
+      "proposed_positions": 133,
+      "verified_positions": 133,
+      "attempted_positions": 24,
+      "effective_positions": 133,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 14,
+        "1": 5
+      },
+      "mean_accepted_draft_tokens_per_round": 0.2631578947368421,
+      "step128_comparison": {
+        "accepted_draft_tokens": 1,
+        "rounds": 24,
+        "mean_accepted_draft_tokens_per_round": 0.041666666666666664,
+        "accepted_draft_per_round_delta": 0.22149122807017543,
+        "output_tokens": 26,
+        "ended_eos": true,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 21,
+      "seed": 2759486034696196321,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 79,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 48,
+      "proposed_positions": 542,
+      "verified_positions": 542,
+      "attempted_positions": 127,
+      "effective_positions": 542,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 50,
+        "1": 17,
+        "2": 6,
+        "3": 5,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6075949367088608,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "accepted_draft_per_round_delta": 0.3745852279709967,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 22,
+      "seed": 3290074806028060599,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 66,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 61,
+      "proposed_positions": 449,
+      "verified_positions": 449,
+      "attempted_positions": 124,
+      "effective_positions": 449,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 39,
+        "1": 12,
+        "2": 9,
+        "3": 2,
+        "4": 1,
+        "7": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.9242424242424242,
+      "step128_comparison": {
+        "accepted_draft_tokens": 31,
+        "rounds": 92,
+        "mean_accepted_draft_tokens_per_round": 0.33695652173913043,
+        "accepted_draft_per_round_delta": 0.5872859025032937,
+        "output_tokens": 124,
+        "ended_eos": true,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 23,
+      "seed": 8054245664576210487,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 77,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 50,
+      "proposed_positions": 527,
+      "verified_positions": 527,
+      "attempted_positions": 127,
+      "effective_positions": 527,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 48,
+        "1": 15,
+        "2": 9,
+        "3": 3,
+        "4": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6493506493506493,
+      "step128_comparison": {
+        "accepted_draft_tokens": 17,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.15454545454545454,
+        "accepted_draft_per_round_delta": 0.4948051948051948,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 24,
+      "seed": 8768462176938422226,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 58,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 70,
+      "proposed_positions": 401,
+      "verified_positions": 401,
+      "attempted_positions": 126,
+      "effective_positions": 401,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 24,
+        "1": 16,
+        "2": 10,
+        "3": 3,
+        "4": 2,
+        "5": 2,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.206896551724138,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "accepted_draft_per_round_delta": 0.9738868429862738,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 25,
+      "seed": 6062884801732605924,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 71,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 56,
+      "proposed_positions": 497,
+      "verified_positions": 497,
+      "attempted_positions": 125,
+      "effective_positions": 497,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 42,
+        "1": 20,
+        "2": 4,
+        "3": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.7887323943661971,
+      "step128_comparison": {
+        "accepted_draft_tokens": 31,
+        "rounds": 96,
+        "mean_accepted_draft_tokens_per_round": 0.3229166666666667,
+        "accepted_draft_per_round_delta": 0.46581572769953045,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 26,
+      "seed": 1187194232501608785,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 83,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 44,
+      "proposed_positions": 561,
+      "verified_positions": 561,
+      "attempted_positions": 127,
+      "effective_positions": 561,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 58,
+        "1": 11,
+        "2": 11,
+        "3": 2,
+        "5": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5301204819277109,
+      "step128_comparison": {
+        "accepted_draft_tokens": 27,
+        "rounds": 101,
+        "mean_accepted_draft_tokens_per_round": 0.26732673267326734,
+        "accepted_draft_per_round_delta": 0.26279374925444354,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 27,
+      "seed": 3809948146833308067,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 109,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 18,
+      "proposed_positions": 742,
+      "verified_positions": 742,
+      "attempted_positions": 127,
+      "effective_positions": 742,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 93,
+        "1": 14,
+        "2": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.1651376146788991,
+      "step128_comparison": {
+        "accepted_draft_tokens": 15,
+        "rounds": 112,
+        "mean_accepted_draft_tokens_per_round": 0.13392857142857142,
+        "accepted_draft_per_round_delta": 0.031209043250327667,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 28,
+      "seed": 2941274361068497804,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 95,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 32,
+      "proposed_positions": 648,
+      "verified_positions": 648,
+      "attempted_positions": 127,
+      "effective_positions": 648,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 74,
+        "1": 16,
+        "3": 4,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.3368421052631579,
+      "step128_comparison": {
+        "accepted_draft_tokens": 8,
+        "rounds": 120,
+        "mean_accepted_draft_tokens_per_round": 0.06666666666666667,
+        "accepted_draft_per_round_delta": 0.27017543859649124,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 29,
+      "seed": 6880470647718267291,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 78,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 50,
+      "proposed_positions": 543,
+      "verified_positions": 543,
+      "attempted_positions": 127,
+      "effective_positions": 543,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 50,
+        "1": 17,
+        "2": 3,
+        "3": 5,
+        "4": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6410256410256411,
+      "step128_comparison": {
+        "accepted_draft_tokens": 23,
+        "rounds": 104,
+        "mean_accepted_draft_tokens_per_round": 0.22115384615384615,
+        "accepted_draft_per_round_delta": 0.41987179487179493,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 30,
+      "seed": 8381922382667116242,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 79,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 49,
+      "proposed_positions": 541,
+      "verified_positions": 541,
+      "attempted_positions": 127,
+      "effective_positions": 541,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 45,
+        "1": 24,
+        "2": 6,
+        "3": 3,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.620253164556962,
+      "step128_comparison": {
+        "accepted_draft_tokens": 19,
+        "rounds": 109,
+        "mean_accepted_draft_tokens_per_round": 0.1743119266055046,
+        "accepted_draft_per_round_delta": 0.4459412379514574,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 31,
+      "seed": 5009819181907025834,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 101,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 26,
+      "proposed_positions": 687,
+      "verified_positions": 687,
+      "attempted_positions": 127,
+      "effective_positions": 687,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 80,
+        "1": 16,
+        "2": 5
+      },
+      "mean_accepted_draft_tokens_per_round": 0.25742574257425743,
+      "step128_comparison": {
+        "accepted_draft_tokens": 15,
+        "rounds": 112,
+        "mean_accepted_draft_tokens_per_round": 0.13392857142857142,
+        "accepted_draft_per_round_delta": 0.12349717114568601,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    }
+  ],
+  "scope": "Ordinal quality-panel cases only; private identities and sampled outputs remain remote."
+}

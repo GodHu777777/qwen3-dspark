@@ -1,0 +1,44 @@
+{
+  "torch": "2.12.0+rocm7.2",
+  "transformers": "5.17.0",
+  "hip": "7.2.53211",
+  "device": "AMD Radeon Graphics",
+  "free_bytes_before_load": 25528631296,
+  "peak_allocated_bytes": 2267403776,
+  "worker_exit": {
+    "returncode": 0
+  },
+  "launcher_exit": {
+    "returncode": 0,
+    "timed_out": false,
+    "utc": 1791482125.7205994
+  },
+  "controller_exit": {
+    "returncode": 0,
+    "timed_out": false,
+    "utc": 1791482132.5029113
+  },
+  "pre": {
+    "utc": "2026-10-08T17:51:11Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_dri_occupancy_recorded_privately": true
+  },
+  "post": {
+    "utc": "2026-10-08T17:55:32Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_dri_occupancy_recorded_privately": true
+  },
+  "scope": "Runtime provenance and resource isolation only; no performance measurement."
+}

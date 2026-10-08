@@ -1,0 +1,24 @@
+{
+  "probability_policy": "float64_softmax_normalize_cdf_v1",
+  "temperature": 1.0,
+  "filtering": "none",
+  "max_new_tokens": 128,
+  "block_size": 7,
+  "collection_policy": "full_proposal",
+  "sampling_mode": "stochastic",
+  "target_forward_dtype": "bfloat16",
+  "draft_parameters": "float32",
+  "draft_autocast": "bfloat16",
+  "backend": "sdpa",
+  "admission": "full block capped only by remaining output budget",
+  "base_seed": 20261009,
+  "group_counts": {
+    "quality": 32,
+    "fit": 44,
+    "eval": 43
+  },
+  "scope": "Quality selects checkpoint. STS eval is prompt-held-out from fit only; all dev used in teacher-forced monitoring. Final test locked.",
+  "quality_order": "first 32 accepted validation rows in immutable export order",
+  "seed_rule": "(base_seed + integer SHA256 UTF8 record ID) modulo 2**63",
+  "numerical_probe_selection": "first 2 quality cases, round 0; all n+1 target rows"
+}

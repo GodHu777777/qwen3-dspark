@@ -1,0 +1,138 @@
+{
+  "status": "completed",
+  "binding_sha256": "41d39d07cd6c8a55efab5ea2ddd75e39f55e7a570e3de264ae7c278379db4b56",
+  "blocks": 2620,
+  "proposed_positions": 17960,
+  "verified_positions": 17960,
+  "attempted_positions": 3901,
+  "effective_positions": 17955,
+  "accepted_draft_tokens": 1299,
+  "per_position": [
+    {
+      "position": 0,
+      "count": 2620,
+      "accepted_prefix_events": 806
+    },
+    {
+      "position": 1,
+      "count": 2602,
+      "accepted_prefix_events": 291
+    },
+    {
+      "position": 2,
+      "count": 2580,
+      "accepted_prefix_events": 118
+    },
+    {
+      "position": 3,
+      "count": 2563,
+      "accepted_prefix_events": 44
+    },
+    {
+      "position": 4,
+      "count": 2547,
+      "accepted_prefix_events": 20
+    },
+    {
+      "position": 5,
+      "count": 2529,
+      "accepted_prefix_events": 12
+    },
+    {
+      "position": 6,
+      "count": 2514,
+      "accepted_prefix_events": 8
+    }
+  ],
+  "execution_checks_passed": true,
+  "error_type": null,
+  "completed_prompts": 32,
+  "output_tokens": 3941,
+  "eos_prompts": 4,
+  "numerical_fidelity": {
+    "rows": 16,
+    "max_total_variation": 0.05288759555199574,
+    "nonzero_tv_rows": 16,
+    "argmax_changed_rows": 0,
+    "scope": "Native block versus fresh sequential same-prefix differences; no losslessness verdict"
+  },
+  "scope": "Native-protocol quality only. Not a speed benchmark or untouched model-selection holdout.",
+  "accepted_prefix_length_histogram": {
+    "0": 1814,
+    "1": 515,
+    "2": 173,
+    "3": 74,
+    "4": 24,
+    "5": 8,
+    "6": 4,
+    "7": 8
+  },
+  "mean_accepted_draft_tokens_per_round": 0.49580152671755723,
+  "all_proposed_tokens_accepted_blocks": 17,
+  "proposal_length_histogram": {
+    "1": 18,
+    "2": 21,
+    "3": 17,
+    "4": 16,
+    "5": 18,
+    "6": 15,
+    "7": 2515
+  },
+  "verification_query_rows": 20580,
+  "verification_query_row_convention": "Each round scores old anchor plus all proposal tokens (n+1 rows); initial prompt prefill excluded.",
+  "committed_tokens_after_initial_draw": 3909,
+  "mean_committed_tokens_per_round": 1.4919847328244276,
+  "comparison_to_step128": {
+    "checkpoint_step": 128,
+    "checkpoint_sha256": "5e6c2cbaf9eaca081ba3c598748952bc735e7d8b54ca5ecf77a47a6bf1c561e0",
+    "source_panel_protocol_exactly_equal": true,
+    "paired_case_seeds_exactly_equal": true,
+    "metric_pairs": {
+      "blocks": {
+        "step128": 3268,
+        "step512": 2620,
+        "delta": -648
+      },
+      "accepted_draft_tokens": {
+        "step128": 581,
+        "step512": 1299,
+        "delta": 718
+      },
+      "mean_accepted_draft_tokens_per_round": {
+        "step128": 0.17778457772337822,
+        "step512": 0.49580152671755723,
+        "delta": 0.318016948994179
+      },
+      "mean_committed_tokens_per_round": {
+        "step128": 1.175642594859241,
+        "step512": 1.4919847328244276,
+        "delta": 0.3163421379651865
+      },
+      "verification_query_rows": {
+        "step128": 25683,
+        "step512": 20580,
+        "delta": -5103
+      },
+      "output_tokens": {
+        "step128": 3874,
+        "step512": 3941,
+        "delta": 67
+      },
+      "eos_prompts": {
+        "step128": 5,
+        "step512": 4,
+        "delta": -1
+      }
+    },
+    "macro_prompt_mean_accepted_draft_per_round": {
+      "step128": 0.17653309819638185,
+      "step512": 0.5289435520409891
+    },
+    "prompts_improved": 31,
+    "prompts_declined": 1,
+    "prompts_equal": 0,
+    "median_paired_accepted_per_round_delta": 0.32162082217701826,
+    "eos_outcome_changed_cases": 3,
+    "scope": "Fixed-panel native-protocol behavior; no independent-round confidence intervals, speedup or final checkpoint selection"
+  }
+}

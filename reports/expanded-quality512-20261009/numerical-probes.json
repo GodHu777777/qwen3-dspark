@@ -1,0 +1,182 @@
+{
+  "selection": "quality cases 0 and 1, round 0, frozen before rollout",
+  "rows": [
+    {
+      "case": 0,
+      "round": 0,
+      "position": 0,
+      "semantic_prefix_length": 152,
+      "total_variation": 2.901446721344117e-05,
+      "max_absolute_logit_difference": 0.375,
+      "mean_absolute_logit_difference": 0.05561200157945572,
+      "max_probability_difference": 2.4292324829700007e-05,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 1,
+      "semantic_prefix_length": 153,
+      "total_variation": 0.05288759555199574,
+      "max_absolute_logit_difference": 0.28125,
+      "mean_absolute_logit_difference": 0.042210203567998386,
+      "max_probability_difference": 0.050571994674840026,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 2,
+      "semantic_prefix_length": 154,
+      "total_variation": 0.01715683347198428,
+      "max_absolute_logit_difference": 0.265625,
+      "mean_absolute_logit_difference": 0.04596555558454619,
+      "max_probability_difference": 0.012780101792387415,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 3,
+      "semantic_prefix_length": 155,
+      "total_variation": 0.002188450421248137,
+      "max_absolute_logit_difference": 0.1875,
+      "mean_absolute_logit_difference": 0.031298597896410416,
+      "max_probability_difference": 0.0021207882373734943,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 4,
+      "semantic_prefix_length": 156,
+      "total_variation": 0.014362933963299835,
+      "max_absolute_logit_difference": 0.23046875,
+      "mean_absolute_logit_difference": 0.039998572461758974,
+      "max_probability_difference": 0.008598255770928542,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 5,
+      "semantic_prefix_length": 157,
+      "total_variation": 0.011647796071786612,
+      "max_absolute_logit_difference": 0.203125,
+      "mean_absolute_logit_difference": 0.02920477632072259,
+      "max_probability_difference": 0.011586422454795353,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 6,
+      "semantic_prefix_length": 158,
+      "total_variation": 0.024427251021060508,
+      "max_absolute_logit_difference": 0.15625,
+      "mean_absolute_logit_difference": 0.025059309015999898,
+      "max_probability_difference": 0.024424971376026616,
+      "argmax_equal": true
+    },
+    {
+      "case": 0,
+      "round": 0,
+      "position": 7,
+      "semantic_prefix_length": 159,
+      "total_variation": 0.02069239133302171,
+      "max_absolute_logit_difference": 0.21875,
+      "mean_absolute_logit_difference": 0.039339816551412304,
+      "max_probability_difference": 0.010278299622954956,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 0,
+      "semantic_prefix_length": 201,
+      "total_variation": 0.0003552185876607837,
+      "max_absolute_logit_difference": 0.18896484375,
+      "mean_absolute_logit_difference": 0.0331339515108543,
+      "max_probability_difference": 0.00021875932963998004,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 1,
+      "semantic_prefix_length": 202,
+      "total_variation": 0.005716703183554581,
+      "max_absolute_logit_difference": 0.25,
+      "mean_absolute_logit_difference": 0.035393534242328516,
+      "max_probability_difference": 0.005675719400590529,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 2,
+      "semantic_prefix_length": 203,
+      "total_variation": 0.0001944785519614789,
+      "max_absolute_logit_difference": 0.21875,
+      "mean_absolute_logit_difference": 0.03130215369325787,
+      "max_probability_difference": 0.00019288837663026864,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 3,
+      "semantic_prefix_length": 204,
+      "total_variation": 0.027311181921003756,
+      "max_absolute_logit_difference": 0.15625,
+      "mean_absolute_logit_difference": 0.02323968535981187,
+      "max_probability_difference": 0.0241616390939218,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 4,
+      "semantic_prefix_length": 205,
+      "total_variation": 0.028145251589937102,
+      "max_absolute_logit_difference": 0.25,
+      "mean_absolute_logit_difference": 0.04143948503083407,
+      "max_probability_difference": 0.019228848724078706,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 5,
+      "semantic_prefix_length": 206,
+      "total_variation": 0.006295912987878687,
+      "max_absolute_logit_difference": 0.3125,
+      "mean_absolute_logit_difference": 0.06567030441464751,
+      "max_probability_difference": 0.0054153547863625695,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 6,
+      "semantic_prefix_length": 207,
+      "total_variation": 0.007005765122304849,
+      "max_absolute_logit_difference": 0.25,
+      "mean_absolute_logit_difference": 0.05536176591465075,
+      "max_probability_difference": 0.006589555560464699,
+      "argmax_equal": true
+    },
+    {
+      "case": 1,
+      "round": 0,
+      "position": 7,
+      "semantic_prefix_length": 208,
+      "total_variation": 0.015708185847065646,
+      "max_absolute_logit_difference": 0.25,
+      "mean_absolute_logit_difference": 0.052510561865598285,
+      "max_probability_difference": 0.009126567024887233,
+      "argmax_equal": true
+    }
+  ],
+  "scope": "Native BF16 block versus fresh sequential same-prefix probabilities; not losslessness."
+}

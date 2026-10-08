@@ -142,8 +142,18 @@ uses 32 anchors and accumulation 8, with verified checkpoint/optimizer resumes a
 a frozen target. On the same 119 dev rows, teacher-forced overlap increased from
 0.086% initially to 28.73%; this is not measured rollout acceptance or speedup.
 The [resource and first-resume report](reports/expanded-training-20261009/README.md)
-records the two-cycle memory gate and earlier steps. Real dev rollout and
-confidence calibration remain pending.
+records the two-cycle memory gate and earlier steps.
+
+[Fixed-panel stochastic rollouts](reports/expanded-quality512-20261009/README.md)
+compare step128 and step512 on the same 32 prompts, source and sampling protocol.
+Accepted draft tokens per round increased from 0.1778 to 0.4958, improving on
+31 of 32 prompts. This is acceptance evidence, not a speedup measurement;
+BF16 block/sequential probability differences remain, and STS is not fitted.
+
+A [six-call ROCm diagnostic](reports/native-varlen-diagnostic-20261009/README.md)
+identified a causal-window alignment mismatch in the tested public varlen path.
+An explicit private-ATen control produced the required alignment on that shape.
+The original native gate remains failed; full adapter/model validation is pending.
 
 ## Experiment journal
 
