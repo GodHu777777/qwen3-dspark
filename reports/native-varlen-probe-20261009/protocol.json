@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "seed": 20261009,
+  "dtype": "bfloat16",
+  "query_heads": 16,
+  "kv_heads": 8,
+  "head_dim": 128,
+  "window_size": [
+    -1,
+    0
+  ],
+  "enable_gqa": true,
+  "timeout_seconds": 120,
+  "atol": 0.02,
+  "rtol": 0.02,
+  "max_rms_error": 0.005,
+  "isolation_atol": 0.0,
+  "cases": [
+    {
+      "name": "interleaved_cached_tail",
+      "markers": [
+        1,
+        2
+      ],
+      "q": [
+        1,
+        8
+      ],
+      "k": [
+        17,
+        29
+      ],
+      "inactive_k": 13
+    },
+    {
+      "name": "crop_exit_readd",
+      "markers": [
+        1,
+        2,
+        4
+      ],
+      "q": [
+        3,
+        2,
+        1
+      ],
+      "k": [
+        11,
+        5,
+        1
+      ],
+      "inactive_k": 0
+    },
+    {
+      "name": "crop_zero_then_append",
+      "markers": [
+        1
+      ],
+      "q": [
+        2
+      ],
+      "k": [
+        2
+      ],
+      "inactive_k": 6
+    }
+  ],
+  "oracles": [
+    "FP32 MATH per-request SDPA with explicit bottom-right mask",
+    "FP32 MATH packed SDPA using PackedTarget._attention_payload"
+  ],
+  "checks": [
+    "finite shape/dtype/device",
+    "fixed elementwise and RMS limits",
+    "zero-Q position-ramp causal sentinel",
+    "inactive KV poison",
+    "other active request QKV poison with unchanged first request",
+    "exactly one aten::_flash_attention_forward per native call"
+  ],
+  "scope": "Small tensor backend support/numerical gate only; not full model, losslessness, calibration or performance evidence"
+}

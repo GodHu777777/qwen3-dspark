@@ -1,0 +1,117 @@
+{
+  "status": "failed_numerical_gate",
+  "native_attempts": 1,
+  "native_calls_completed_before_failure": 1,
+  "source_commit": "d45442722aecb0f555df35b1f66feb8c7b44c01f",
+  "source_archive_sha256": "9114c062aab7586bb906ca1df27ca21d57892e164c96da7279def9eac857a8c5",
+  "probe_source_sha256": "b3d4b91ee93526583bdab8f4a871a52cffe685dfdc60b7bebbd7747f1e530a43",
+  "protocol_sha256": "08c501349bb59d30a888f1a5669a6c5bcb0bdfbf5f9e894c409fb2e702d49ff9",
+  "native_python_source_sha256": "2f5384e0bc8ce371d00a1c09d38ad019517009798e7cb3434f56cf4b9fa351ea",
+  "torch": "2.12.0+rocm7.2",
+  "hip": "7.2.53211",
+  "device": "AMD Radeon Graphics",
+  "device_arch": "gfx1201",
+  "rocm_flash_preferred_library": "_ROCmFABackend.AOTriton",
+  "rocm_flash_prefer_ck_env": null,
+  "backend_identity_scope": "Native wrapper single-flash-op assertion passed before failure; raw event map was not persisted. AOTriton preference is not independently traced device-kernel identity.",
+  "exit_code": 1,
+  "timed_out": false,
+  "controller_wall_seconds": 11.595824930001982,
+  "timing_scope": "Child startup/imports, one native call with CPU profiling, two FP32 oracles, and assertion failure; not a performance benchmark",
+  "failing_case": "interleaved_cached_tail",
+  "query_shape": [
+    9,
+    16,
+    128
+  ],
+  "gathered_key_shape": [
+    46,
+    8,
+    128
+  ],
+  "query_lengths": [
+    1,
+    8
+  ],
+  "key_lengths": [
+    17,
+    29
+  ],
+  "inactive_keys": 13,
+  "dtype": "bfloat16",
+  "atol": 0.02,
+  "rtol": 0.02,
+  "rms_threshold": 0.005,
+  "mismatched_elements": 17841,
+  "total_elements": 18432,
+  "mismatched_fraction": 0.9679361979166666,
+  "max_absolute_error": 3.7750649452209473,
+  "max_absolute_error_index": [
+    1,
+    14,
+    106
+  ],
+  "max_relative_error": 33742.24609375,
+  "max_relative_error_index": [
+    7,
+    10,
+    19
+  ],
+  "observed_rms_error": null,
+  "peak_allocated_bytes": null,
+  "passed_before_failure": [
+    "native call returned correct shape/dtype/device and finite output",
+    "single aten::_flash_attention_forward assertion",
+    "independent per-request FP32 MATH and packed FP32 MATH oracles agreed at atol2e-6/rtol1e-5"
+  ],
+  "not_reached": [
+    "RMS threshold assertion",
+    "separate native-versus-packed assertion",
+    "bottom-right ramp sentinel",
+    "active request poison",
+    "inactive KV poison",
+    "crop exit readd case",
+    "crop-zero case"
+  ],
+  "partial_worker_status_note": "worker-result retains initial running status and empty cases because failure occurred before case append; failure.json and completion.json establish terminated failure",
+  "preflight_guard_rejections_before_native": 1,
+  "preflight_guard_note": "Initial guard rejected existing desktop render/card handles before worker creation. Authorized guard correction excluded desktop-only handles from compute-conflict rejection while retaining their inventory. This was not a second native attempt.",
+  "desktop_gpu_activity_retained": true,
+  "preflight_kfd_processes": 1,
+  "postflight_kfd_processes": 1,
+  "vram_before": {
+    "total_bytes": 34208743424,
+    "used_bytes": 8947318784,
+    "free_bytes": 25261424640
+  },
+  "vram_after": {
+    "total_bytes": 34208743424,
+    "used_bytes": 8947318784,
+    "free_bytes": 25261424640
+  },
+  "asr_ready_before": true,
+  "asr_busy_before": false,
+  "asr_ready_after": true,
+  "asr_busy_after": false,
+  "worker_exited_verified": true,
+  "asr_pid_preserved": true,
+  "source_archive_files_verified_after": 157,
+  "all_source_files_unchanged_after": true,
+  "limits": [
+    "Cause is not identified by this failed run; do not infer a causal-alignment diagnosis from magnitude alone.",
+    "No fallback, native retry, threshold relaxation, package installation or further GPU run.",
+    "No full-model correctness, BF16 losslessness, speedup or quality conclusion.",
+    "Frozen expanded-training source/config were not changed; no resume1024."
+  ],
+  "private_evidence_sha256": {
+    "native_stderr": "5cfe1decf7a29557d04c5ee0d3d17a0a1420f5586a7fffd8be66cc4f391da4ac",
+    "native_stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native_failure": "223c255feca66a7cf9408842a6af867eef6327a38468db0057cbf510d5a8019a",
+    "native_completion": "958b2167b346d478a6ba9c2ea661085736661b5f98f651eb4717f2d977668bf9",
+    "partial_worker_result": "df6a7e5a54abfbdc4d9dd1f1fd2e1f235ebe036dd7c32f4d9a05071783357946",
+    "launch_preflight": "5d6e315f40b8a1992245b0b9a1912bebe5537525748d791ce87876d420f19709",
+    "postflight": "265009f7b41ee6825a2251e90c177e4eb275508b1981b4c38ae8c2489465624e",
+    "post_integrity": "8ac18820b579d87e0007f7ab88b59f8981891cd446e1dca9e693320a4e7251b2",
+    "guard_rejection": "e55634e39cd4b78ae8c4d3159cd82e2982daf70e71cf3f8c0768ea143b3c191f"
+  }
+}
