@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 01:32（UTC+8）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；因当前 agent 唤醒受线程额度限制，本轮由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
+最近记录核对：**2026-10-09（UTC+8；本轮补核截至 01:36:46 的 quality128 与 varlen CPU 准备证据）**。专职 experiment_journal 已直接读取本地 CPU preflight、显存 gate、step32 报告与冻结训练源码，形成 T04/T05；此前因 agent 唤醒受线程额度限制，由 sol_data 临时代为续记 stochastic gate 的 CPU/dry-run、expanded step128/512、真实GPU gate、quality collector CPU/dry-run及native varlen失败，保留专职记录角色；本轮 experiment_journal 已成功唤醒并恢复专职续记 R08/S05，此前临时代记事实保留。远端 checkpoint 哈希核对结果引用已有留证报告。此前 STS、随机缓存、packed target 和正式数据审计的检查来源保留在各自条目中。本文持续追加；旧结论若被修正，保留原结论并说明修正依据。历史实验与实时进程状态分开记录。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -12,7 +12,7 @@
 
 - 数据质量/长度：[P06 正式审计与拒绝](#data-final-audit)、[T04 模板与实际输入长度](#expanded-resource-gate)。
 - Hidden-state/训练对齐：[D03 同轨迹学习诊断](#aligned-learning)、[T05 首段训练与 TF 边界](#expanded-step32)。
-- 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)。
+- 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 
@@ -466,3 +466,34 @@ teacher top-1、采样轨迹 label top-1、分布 overlap、实际 rollout 接�
 **身份与终态。** 本地source archive SHA `9114c062aab7586bb906ca1df27ca21d57892e164c96da7279def9eac857a8c5`与summary一致；九个raw evidence SHA均有对应本地文件且一致（guard-rejection SHA对应最初controller log，不是preflight JSON）。completion和failure确定已终止失败；worker-result保留初始running/empty cases是尚未append便抛异常的partial文件，不能当正在运行。postflight留证worker PID已不存在、compute句柄只剩原ASR、ASRready=true/busy=false、原PID保留；before/after VRAMused均8947318784bytes。post-integrity记录157个archive文件不变，796fecc训练源码/config未改；本轮记录者未再live查设备/ASR。
 
 **局限与下一决策。** 不重跑、不fallback、不松阈值、不安装环境，不从11.6秒推性能；此native路径未通过correctness，不能用于后续质量或速度主张。保留CPU语义通过与native数值失败两层，不把缺失ramp/poison/crop证据说成通过。下一次诊断须新协议/另协调GPU，在原同输入双oracle上拆分数值与dispatch原因，最终仍需full-Qwen/KV/物理gather-attention-crop门槛；没有checkpoint、final-test、校准或async调度收益结论。记录者仅追加日志，无GPU/实现/进程/commit/push操作。
+
+
+<a id="expanded-quality128"></a>
+## 2026-10-09 — R08：expanded step128 quality32 真实随机 rollout 完成
+
+**问题与假设。** R07 的 CPU collector/dry-run 与训练 TF overlap 不足以判断实际连续 draft 接受；需对预冻结 quality32 真正运行同协议，分别记录执行正确性、模型质量和 native BF16 数值保真。
+
+**方法与身份核查。** 本轮直接读取[八份公开聚合报告入口](../reports/expanded-quality128-20261009/README.md)及 aggregate/audit/per-prompt/numerical-probes/protocol/runtime/source-identity，核八份文件 SHA 全部等于本地未发布 `output/expanded-quality128-20261009-a278e5a/public-verification.json`。30个package SHA 独立与 `a278e5a5d7d74a1f77f8dcd475700959ee158cb0` Git blobs 比较全部一致，worker/package inventory 一致；协调者另行独立核查也一致。公开报告归档commit为 `6e5c777`（协调者报告，本轮尚待push），执行source仍为a278e5a，归档提交不冒充执行身份；远端实际 deployment 比较及私有字段扫描依据 verification 留证，不冒称记录者重新查远端。archive SHA `669b48cd2a11693422f34b798607dbae307bafd6de0af2d2b461fdf3afc636bf`、panel manifest `fd8efdd09f58c20a24e4c248532bb1460282b6eadb2e73d51754e9acaeeaa2ec`、binding `df2366c25b0ef9c2e72136ef1dd32b1cb4c092ba0412ab58bbb137f1004e7a24` 固定；实际是 expanded step128 权重，不是旧pilot aligned128。沿用 native BF16/SDPA、draft FP32+BF16 AMP、temperature1/无filter、实际float64 q、block7仅预算截短、max128及checkpoint无关prompt seeds。
+
+**执行正确性观察。** 已完成32 prompts，worker/launcher/controller均有exit0留证；全部observed finite/shape/cache/probability/EOS/budget checks通过，独立标签/计数及cache delta复核通过。actual q 为float64，最大q/p归一化误差分别6.66134e-16/5.55112e-16。runtime pre/post记录01:31:35–01:36:46，ASR HTTP成功/ready/not busy、原compute occupancy保留、设备used VRAM前后均8962183168 bytes，peak allocated2267426816 bytes；这是已有留证，本轮未做live查询。没有运行失败，执行通过与数值保真问题分别保留。
+
+**模型质量与分母。** 32例共输出 **3874 tokens**（5例EOS），**3268 rounds**、**581 accepted draft tokens**，平均 **0.17778458 draft/round**。本轮从per-prompt重算输出、draft和各位置分母，与aggregate一致。proposed/target-verified/effective prefix labels各 **22415**，attempted acceptance uniforms **3842**；首拒绝后的已验证suffix是零prefix事件，不能以attempted分母替代effective。accepted-prefix长度0/1/2/3的round数为2749/461/54/4，4–7均0；位置1/2/3存活事件为519/58/4，分母3268/3247/3223，位置4–7均0。7个全接受block都是预算截短，没有全接受7-token block。全部5个EOS来自residual、accepted draft EOS与bonus EOS均0。每例接受draft为1–31；每轮提交均值3842/3268=1.17564259，含预算缺失bonus，不能机械写为1+draft/round。验证query rows为25683，含old anchor+n proposals，排除prefill。
+
+**数值观察与未解决问题。** 预冻结quality cases0/1 round0的16个n+1行，本轮重算 **16行TV全非零、max TV=0.045764141753646695、argmax改变0行**，与aggregate一致。同semantic prefix的native block和fresh sequential概率存在差异；argmax相同不等于随机law相同，CPU residual恢复实际verifier p不证明其等于sequential target p。此次没有解决dynamic BF16数值问题，也不是varlen失败的复测。
+
+**局限与下一决策。** 这是native协议下的有界quality32观察，不是speed benchmark、答案事实质量或native distribution无损证明；rounds不当作独立统计重复，未给置信区间。fit44/eval43未采集/拟合；全部development已用于TF监测，eval43仅对STS fit留出。该窗口未启动step512 collection，不能写已有128/512 rollout比较或已选checkpoint。后续以同冻结panel/protocol比较另checkpoint，再冻结选择并分别采fit/eval做STS及fit-prevalence基线。final test未读，未公开私有样本/机器路径；本轮仅改notebook。
+
+<a id="native-varlen-diagnostic-cpu"></a>
+## 2026-10-09 — S05：六调用 native varlen 对齐诊断的 CPU 准备，GPU 未执行
+
+**问题与假设。** S04 原生首组数值gate失败需定位原因，不能改阈值或fallback掩盖。直接读[独立诊断计划](native-varlen-diagnostic-plan.md)、本地未发布 `output/native-varlen-diagnostic-cpu-20261009/{manifest,dry-run}.json` 与 tests-final.log。静态源码链从Torch wrapper window(-1,0)、adapter window转换到AOTriton literal right=0，预测public cached suffix可能使用upper-left而非lower-right边界；这是待检验假设，revision对应源码不证明实际binary输出或失败根因。
+
+**方法与身份。** 新诊断独立于生产adapter与原失败gate，冻结protocol SHA `c370831c863364f0da90a658e7bb2935ec937293016a95ba0f5393967bff8de8`。本轮独立核manifest中script/test/plan三个SHA均与当前文件一致，tests_log SHA匹配tests-final.log；较早tests.log不匹配该最终日志SHA，保留两份而不混称同一次测试。manifest保存installed/static upstream source SHA与revision，记录者未重新获取/运行这些backend源文件。dry-run status为 `dry_run_no_backend_import_no_gpu`，manifest gpu_executed=false。
+
+**六调用固定矩阵。** 复现原seed/FP32 K→V→Q抽样顺序，再转BF16；Q长度[1,8]、active K[17,29]、inactive13、Hq16/Hkv8/D128。三variant各跑random与zero-Q/position-ramp一次：public GQA、public复制KV到16heads/noGQA、private ATen causal且windows=None。每个输出同时对照FP32 MATH upper-left/lower-right，ramp另记full-attention fingerprint；private variant是独立mapping control，不是失败后fallback。保持atol0.02/rtol0.02/RMS≤0.005与120秒timeout；先保存identity/dispatch，再保存每调用tensor/errors，数值不匹配继续预声明矩阵，backend异常/nonfinite/timeout则失败退出。FP64 error reduction与固定1e-30相对误差floor只用于诊断标量，不改变FP32 oracle。
+
+**CPU观察与失败保留。** final日志 **7 tests通过、5.326秒**，GPU可见变量隐藏；覆盖stdlib默认guard、timeout/interrupt只回收自有child、原seed/draw顺序、GQA与复制KV同reference、ramp区分边界、大finite error可JSON保存、数值失败仍保留raw tensors/metrics。日志两条 `(null): No such file or directory` 未定位，原样保留；七项最终均OK。这些是CPU oracle/controller准备证据，没有六次native GPU输出、profiling或alignment结论。
+
+**局限与下一决策。** 原S04 failed gate仍失败；不将源码推测写成已确认upper-left，也不把private control写成修复方案。只有另行GPU授权、独立source/archive身份与新证据目录齐备后才执行矩阵；public对upper-left而private对lower-right仅支持该runtime/shape的mapping解释，GQA差异或两oracle皆不符需继续定位。诊断完成也不自动提升为full-Qwen/KV正确性或性能成功。无模型/checkpoint/final-test输入，本轮未启动GPU/训练/部署、未改实现或commit/push。
+
+**归档与独立复核补记。** 诊断源码、测试与协议已归档为 `cd317f7`。Astra core 独立复核报告无阻断项；隐藏 GPU 重跑 7/7 CPU tests 通过，额外 CPU 替身 worker 检查六调用顺序/参数、数值 mismatch 后继续矩阵、原始证据先保存及 production_gate_passed 保持 false。证据保存在未发布 `output/native-varlen-independent-review-20261009/`。本补记引用独立审查交付，未把 CPU 替身称为原生 GPU 验证；本轮仍未启动新 GPU 诊断。
