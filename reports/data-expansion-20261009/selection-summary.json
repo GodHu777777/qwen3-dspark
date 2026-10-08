@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "samples": 1280,
+  "splits": {
+    "validation": 128,
+    "test": 128,
+    "train": 1024
+  },
+  "excluded_pilot_prompts": 64,
+  "pilot_overlap": 0,
+  "parquet_sha256": "06d223e493c9e3822c7862ae0705c1a0e4705fd21385276917fc8348e7ce7b0f",
+  "prompts_sha256": "777e883a373cfb22cd4aaf47c5ed9441e410cc4e5e29380ed60b2254942292d3",
+  "config_sha256": "042c644900c56c136971d11d94e1a4814b82ccef55b8b6495e7214a937a569d6",
+  "skipped": {
+    "long_prompt": 1,
+    "duplicate_prompt": 3
+  },
+  "exact_prompt_ids_retained": true,
+  "prompt_token_min": 16,
+  "prompt_token_max": 1845,
+  "final_test_policy": "locked; excluded from training records and checkpoint selection",
+  "generation_started": false,
+  "prompt_lengths": {
+    "median": 78.0,
+    "p90": 329,
+    "p95": 531,
+    "mean": 142.1515625,
+    "bins": {
+      "0-127": 959,
+      "128-255": 157,
+      "256-511": 94,
+      "512-1023": 58,
+      "1024-2048": 12
+    }
+  },
+  "excluded_sources": {
+    "purpose": "all initial pilot inputs, including length rejects",
+    "files": [
+      {
+        "sha256": "29e039d4c697cb732dcd6ef360a2c5514600472d6499b9ad1abc651cdab2d408",
+        "records": 64
+      }
+    ]
+  },
+  "dataset": {
+    "dataset": "mlabonne/open-perfectblend",
+    "dataset_revision": "af60f3c18201652a83a93f46fcfee1b646ba3df7",
+    "shard": "data/train-00000-of-00006.parquet"
+  },
+  "selection_output_sha256": {
+    "prompts.jsonl": "777e883a373cfb22cd4aaf47c5ed9441e410cc4e5e29380ed60b2254942292d3",
+    "excluded-prompt-ids.json": "87920f2fc1ef4a93ba293d1547385d09bcf371ec90042b1f61049d2fb70cca38"
+  }
+}

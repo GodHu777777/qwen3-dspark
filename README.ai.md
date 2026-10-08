@@ -100,3 +100,10 @@ learnability on seen prefixes only. The earlier sampled/spaced diagnostic had
 no complete rollout-prefix overlap and is preserved separately. Use
 diagnose_learning --trajectory target-greedy --anchor-coverage contiguous for
 the aligned protocol. Execution source hashes and historical script are retained.
+
+Expanded data: scripts/data_pipeline.py centralizes normalized exclusions, split
+identity, atomic batches and final-test export. configs/expand.example.json selects
+1024train/128dev/128test, excluding all64 pilot prompts. Generation binds the
+explicit source commit plus actual script/helper hashes. final-test is omitted
+from development records, but permissions are a same-user convention, not a
+security boundary; underlying batches contain test. Read docs/data-pipeline.md.

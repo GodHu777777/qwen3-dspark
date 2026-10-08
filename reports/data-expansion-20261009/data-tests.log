@@ -1,0 +1,13 @@
+test_audit_detects_eos_and_export_identity_damage (test_data_pipeline.DataPipelineTests.test_audit_detects_eos_and_export_identity_damage) ... ok
+test_audit_detects_same_length_prompt_token_substitution (test_data_pipeline.DataPipelineTests.test_audit_detects_same_length_prompt_token_substitution) ... ok
+test_audit_detects_test_leak_even_when_rehashed (test_data_pipeline.DataPipelineTests.test_audit_detects_test_leak_even_when_rehashed) ... ok
+test_audit_rejects_exclusion_leak_and_selection_mutation (test_data_pipeline.DataPipelineTests.test_audit_rejects_exclusion_leak_and_selection_mutation) ... ok
+test_batch_crash_resume_and_corruption (test_data_pipeline.DataPipelineTests.test_batch_crash_resume_and_corruption) ... ok
+test_invalid_split_population_rejected (test_data_pipeline.DataPipelineTests.test_invalid_split_population_rejected) ... ok
+test_normalized_exclusions_and_duplicate_differing_system (test_data_pipeline.DataPipelineTests.test_normalized_exclusions_and_duplicate_differing_system) ... ok
+test_three_way_export_removes_test_from_training_records (test_data_pipeline.DataPipelineTests.test_three_way_export_removes_test_from_training_records) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.023s
+
+OK

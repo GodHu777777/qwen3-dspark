@@ -1,0 +1,23 @@
+{
+  "dataset": "mlabonne/open-perfectblend",
+  "dataset_revision": "af60f3c18201652a83a93f46fcfee1b646ba3df7",
+  "shard": "data/train-00000-of-00006.parquet",
+  "parquet_sha256": "06d223e493c9e3822c7862ae0705c1a0e4705fd21385276917fc8348e7ce7b0f",
+  "model": "./models/Qwen3-0.6B",
+  "seed": 20261009,
+  "samples": 1280,
+  "validation_samples": 128,
+  "test_samples": 128,
+  "require_exclusions": true,
+  "max_prompt_tokens": 2048,
+  "max_sequence_tokens": 4096,
+  "max_new_tokens": 1024,
+  "batch_size": 8,
+  "temperature": 0.7,
+  "top_p": 0.8,
+  "top_k": 20,
+  "min_p": 0.0,
+  "enable_thinking": false,
+  "dtype": "bfloat16",
+  "attention_backend": "sdpa"
+}

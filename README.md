@@ -98,6 +98,9 @@ Next milestones and the criteria for claiming progress are in [the experiment
 plan](docs/experiment-plan.md). KV-cache management, stochastic rejection sampling,
 dynamic verification and hardware-aware scheduling remain to be implemented.
 
+The [three-way data pipeline](docs/data-pipeline.md) adds pilot exclusions,
+immutable selection/resume, and a separate final-test export for expanded training.
+
 ## Experiment journal
 
 [实验复盘日志](docs/lab-notebook.md)记录问题、假设、处理方法、验证结果、
