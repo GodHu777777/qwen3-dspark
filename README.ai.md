@@ -172,8 +172,11 @@ Expanded training preflight: memory_gate.py probes non-dominated real
 cycles, including Adam state already resident. It is an empirical resource gate,
 not a formal worst-case guarantee. eval_dev_tf.py uses a fixed validation panel
 and per-position denominators; experiment_inputs rejects final test, duplicate
-identities and mismatched data/model fingerprints before model loading. CPU tools
-are tested, but the expanded-data GPU memory gate is pending generation completion.
+identities and mismatched data/model fingerprints before model loading. Expanded
+data CPU preflight and the real two-cycle memory gate passed; peak allocated was
+5,636,591,616 bytes at the observed (2224 tokens,32 anchors) shape. Fresh training
+through step32 passed identity/checkpoint/frozen-target checks. See notebook
+T04/T05 for evidence and timing boundaries; recheck live state for later segments.
 
 Bounded stochastic gate CLI: eval_stochastic_gate.py binds the original prior
 train/two-dev panel and checkpoint, target/data hashes and a fresh source snapshot.
