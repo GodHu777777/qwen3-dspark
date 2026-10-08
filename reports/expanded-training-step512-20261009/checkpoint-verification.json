@@ -1,0 +1,27 @@
+{
+  "latest": "step-000512",
+  "metadata_step": 512,
+  "resume_state_step": 512,
+  "optimizer_step_values": [
+    512.0
+  ],
+  "optimizer_state_entries": 62,
+  "optimizer_steps_all_512": true,
+  "weights_sha256": "667d2dd6e8ad7d11e2115e936af1b6cf7e44357d68e3412f5c9ef433f26690ae",
+  "weights_hash_matches": true,
+  "resume_sha256": "a8b433cbcee71e73ca32696f1755e18bc41b62618934bff92ba91dacf1a59c73",
+  "resume_hash_matches": true,
+  "metadata_identity_matches_run": true,
+  "run_identity_matches_preflight_fields": true,
+  "source_files_unchanged": true,
+  "config_bytes_unchanged": true,
+  "optimizer_steps_exactly_1_to_512": true,
+  "all_logged_scalars_finite": true,
+  "weights_bytes": 646774924,
+  "resume_bytes": 1293596226,
+  "training_records": 932,
+  "validation_records": 119,
+  "resumed_initial_validation_matches_step128_final": true,
+  "resumed_initial_validation_max_abs_difference": 0.0,
+  "max_steps_config": 1280
+}

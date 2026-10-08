@@ -1,0 +1,64 @@
+{
+  "status": "Completed authorized resume128-to512 only; no further resume executed by this stage",
+  "source_commit": "796fecc0d9142c1a733ad6df47b105fab4ee9f05",
+  "resumed_from": 128,
+  "step": 512,
+  "optimizer_steps_in_segment": 384,
+  "cumulative_microsteps": 4096,
+  "effective_train_traversals": 4.394849785407725,
+  "eligible_train": 932,
+  "eligible_validation": 119,
+  "train_sequence_tokens": 424267,
+  "planned_max_steps_unchanged": 1280,
+  "exit_code": 0,
+  "timed_out": false,
+  "started_utc": "2026-10-08T17:05:05.251523+00:00",
+  "finished_utc": "2026-10-08T17:09:54.361582+00:00",
+  "optimizer_loop_elapsed_seconds": 240.04818937799428,
+  "train_result_elapsed_seconds": 256.2756659190636,
+  "subprocess_wall_seconds": 289.1093788960716,
+  "peak_allocated_bytes": 5632856064,
+  "trainable_parameters": 161692161,
+  "target_frozen_verified": true,
+  "validation_before": {
+    "loss": 2.5258086969872484,
+    "ce": 6.329201546035895,
+    "l1": 1.8128016896608496,
+    "confidence_bce": 0.2613670398645541,
+    "teacher_forced_accept": 0.0935991536160665,
+    "confidence_mae": 0.09890231070648722,
+    "supervised_tokens": 213.87394957983193
+  },
+  "validation_after": {
+    "loss": 2.191068616233954,
+    "ce": 4.807051978191407,
+    "l1": 1.4254095594422156,
+    "confidence_bce": 0.4274948343258946,
+    "teacher_forced_accept": 0.2872952178997152,
+    "confidence_mae": 0.18483166559403683,
+    "supervised_tokens": 213.87394957983193
+  },
+  "timing_scope": {
+    "optimizer_loop_elapsed_seconds": "Last metrics.jsonl elapsed value within each segment; resets after initial validation, includes optimizer-loop Python/logging overhead",
+    "train_result_elapsed_seconds": "Begins after initial validation; includes optimizer loop, final validation and checkpoint saving",
+    "subprocess_wall_seconds": "Bounded controller wall time including child startup, identity checks, loading/resume, both validation passes, training and checkpoint saving"
+  },
+  "validation_scope": "All 119 eligible validation rows, fixed anchor seed at each evaluation; weighted within rows then macro averaged across rows. This is not the separate fixed-dev32 rollout panel.",
+  "confidence_interpretation": {
+    "constant_zero_mae_at_step512": 0.2872952178997152,
+    "learned_mae_at_step512": 0.18483166559403683,
+    "caveat": "Targets change as the draft changes; cross-checkpoint raw MAE alone does not establish confidence deterioration. Constant-mean/median baselines and real rollout calibration remain unmeasured."
+  },
+  "raw_evidence_sha256": {
+    "result-step-000512.json": "a2eac2757e19da3f726c587eb34d1d7d7b640bbde6a2db2c4cea6a0ad60401d5",
+    "completion.json": "7fce64c039d7859ee0c9afd1be06e8576c145076f36340be150f6d3aa044f9c5",
+    "step512-verification.json": "433493d3f4b3c3c58f52670156f619a050d2cb6d209156584b9dd933f02ca906",
+    "metrics.jsonl": "1d305e9d85b0ad33b62aa350649584ee60c0f1978edbc30501472e8f4e14c2bb"
+  },
+  "limits": [
+    "Teacher-forced overlap is distribution overlap, not measured rollout acceptance, output quality or speedup.",
+    "No final-test content used or inspected for training/evaluation.",
+    "No confidence calibration, BF16 distribution losslessness or scheduler benefit is established.",
+    "Earlier step32/128 report is preserved unchanged."
+  ]
+}
