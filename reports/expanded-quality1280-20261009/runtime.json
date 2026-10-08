@@ -1,0 +1,60 @@
+{
+  "torch": "2.12.0+rocm7.2",
+  "transformers": "5.17.0",
+  "hip": "7.2.53211",
+  "device": "AMD Radeon Graphics",
+  "free_bytes_before_load": 25528631296,
+  "peak_allocated_bytes": 2266962944,
+  "worker_exit": {
+    "returncode": 0
+  },
+  "launcher_exit": {
+    "returncode": 0,
+    "timed_out": false,
+    "utc": 1791484063.4952323
+  },
+  "controller_exit": {
+    "returncode": 0,
+    "timed_out": false,
+    "utc": 1791484070.3204825
+  },
+  "controller_os_exit_code": 0,
+  "exit_scope": "Worker OS exit waited by launcher; launcher OS exit waited by controller; controller OS exit captured by shell. Shell itself not independently waited.",
+  "pre": {
+    "utc": "2026-10-08T18:23:56Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_dri_occupancy_recorded_privately": true
+  },
+  "post": {
+    "utc": "2026-10-08T18:27:49Z",
+    "kfd_pids": [
+      1208354
+    ],
+    "vram_used_bytes": 8962183168,
+    "asr_http_ok": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "desktop_dri_occupancy_recorded_privately": true
+  },
+  "scope": "Runtime provenance and resource isolation only; no performance measurement.",
+  "postrelease_verification": {
+    "utc": "2026-10-08T18:27:54Z",
+    "all_four_owned_pids_gone": true,
+    "kfd_only_preserved_asr": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "vram": [
+      {
+        "total_bytes": 34208743424,
+        "used_bytes": 8962183168,
+        "free_bytes": 25246560256
+      }
+    ]
+  }
+}

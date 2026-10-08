@@ -1,0 +1,1308 @@
+{
+  "status": "completed",
+  "cases": [
+    {
+      "case": 0,
+      "seed": 6970766484985318104,
+      "output_tokens": 89,
+      "ended_eos": true,
+      "rounds": 74,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 15,
+      "proposed_positions": 518,
+      "verified_positions": 518,
+      "attempted_positions": 88,
+      "effective_positions": 513,
+      "preselected_probes": [
+        {
+          "round": 0,
+          "status": "collected"
+        }
+      ],
+      "accepted_prefix_length_histogram": {
+        "0": 63,
+        "1": 7,
+        "2": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.20270270270270271,
+      "step128_comparison": {
+        "accepted_draft_tokens": 3,
+        "rounds": 92,
+        "mean_accepted_draft_tokens_per_round": 0.03260869565217391,
+        "output_tokens": 96,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.1700940070505288,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 88,
+        "mean_accepted_draft_tokens_per_round": 0.22727272727272727,
+        "output_tokens": 109,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": -0.02457002457002455,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 1,
+      "seed": 8155477605896205020,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 74,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 54,
+      "proposed_positions": 505,
+      "verified_positions": 505,
+      "attempted_positions": 127,
+      "effective_positions": 505,
+      "preselected_probes": [
+        {
+          "round": 0,
+          "status": "collected"
+        }
+      ],
+      "accepted_prefix_length_histogram": {
+        "0": 42,
+        "1": 19,
+        "2": 9,
+        "4": 3,
+        "5": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.7297297297297297,
+      "step128_comparison": {
+        "accepted_draft_tokens": 16,
+        "rounds": 111,
+        "mean_accepted_draft_tokens_per_round": 0.14414414414414414,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.5855855855855856,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 46,
+        "rounds": 82,
+        "mean_accepted_draft_tokens_per_round": 0.5609756097560976,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.1687541199736321,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 2,
+      "seed": 2700486023258584992,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 79,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 48,
+      "proposed_positions": 540,
+      "verified_positions": 540,
+      "attempted_positions": 127,
+      "effective_positions": 540,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 51,
+        "1": 19,
+        "2": 4,
+        "3": 1,
+        "4": 2,
+        "5": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6075949367088608,
+      "step128_comparison": {
+        "accepted_draft_tokens": 17,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.15454545454545454,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.45304948216340624,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 47,
+        "rounds": 80,
+        "mean_accepted_draft_tokens_per_round": 0.5875,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.020094936708860756,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 3,
+      "seed": 1296646395717983295,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 57,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 71,
+      "proposed_positions": 390,
+      "verified_positions": 390,
+      "attempted_positions": 126,
+      "effective_positions": 390,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 30,
+        "1": 9,
+        "2": 7,
+        "3": 5,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.2456140350877194,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 104,
+        "mean_accepted_draft_tokens_per_round": 0.23076923076923078,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 1.0148448043184886,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 49,
+        "rounds": 76,
+        "mean_accepted_draft_tokens_per_round": 0.6447368421052632,
+        "output_tokens": 126,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.6008771929824562,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 4,
+      "seed": 2165770553868521278,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 82,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 46,
+      "proposed_positions": 565,
+      "verified_positions": 565,
+      "attempted_positions": 127,
+      "effective_positions": 565,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 54,
+        "1": 15,
+        "2": 8,
+        "3": 5
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5609756097560976,
+      "step128_comparison": {
+        "accepted_draft_tokens": 14,
+        "rounds": 113,
+        "mean_accepted_draft_tokens_per_round": 0.12389380530973451,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.43708180444636313,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 37,
+        "rounds": 90,
+        "mean_accepted_draft_tokens_per_round": 0.4111111111111111,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.14986449864498652,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 5,
+      "seed": 1142872706571744867,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 66,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 62,
+      "proposed_positions": 453,
+      "verified_positions": 453,
+      "attempted_positions": 127,
+      "effective_positions": 453,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 35,
+        "1": 15,
+        "2": 7,
+        "3": 6,
+        "4": 1,
+        "5": 1,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.9393939393939394,
+      "step128_comparison": {
+        "accepted_draft_tokens": 23,
+        "rounds": 105,
+        "mean_accepted_draft_tokens_per_round": 0.21904761904761905,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.7203463203463204,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 61,
+        "rounds": 66,
+        "mean_accepted_draft_tokens_per_round": 0.9242424242424242,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.015151515151515249,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 6,
+      "seed": 6892836572577282677,
+      "output_tokens": 99,
+      "ended_eos": true,
+      "rounds": 60,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 39,
+      "proposed_positions": 420,
+      "verified_positions": 420,
+      "attempted_positions": 97,
+      "effective_positions": 418,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 38,
+        "1": 15,
+        "2": 3,
+        "3": 2,
+        "5": 1,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.65,
+      "step128_comparison": {
+        "accepted_draft_tokens": 18,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.16363636363636364,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.4863636363636364,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 37,
+        "rounds": 90,
+        "mean_accepted_draft_tokens_per_round": 0.4111111111111111,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.23888888888888893,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 7,
+      "seed": 9037714630912292472,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 77,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 50,
+      "proposed_positions": 528,
+      "verified_positions": 528,
+      "attempted_positions": 126,
+      "effective_positions": 528,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 50,
+        "1": 15,
+        "2": 7,
+        "3": 2,
+        "4": 2,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.6493506493506493,
+      "step128_comparison": {
+        "accepted_draft_tokens": 15,
+        "rounds": 112,
+        "mean_accepted_draft_tokens_per_round": 0.13392857142857142,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.515422077922078,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 47,
+        "rounds": 80,
+        "mean_accepted_draft_tokens_per_round": 0.5875,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.06185064935064932,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 8,
+      "seed": 2149761458258495495,
+      "output_tokens": 90,
+      "ended_eos": true,
+      "rounds": 44,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 46,
+      "proposed_positions": 308,
+      "verified_positions": 308,
+      "attempted_positions": 89,
+      "effective_positions": 303,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 24,
+        "1": 8,
+        "2": 5,
+        "3": 3,
+        "4": 1,
+        "5": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 1.0454545454545454,
+      "step128_comparison": {
+        "accepted_draft_tokens": 23,
+        "rounds": 84,
+        "mean_accepted_draft_tokens_per_round": 0.27380952380952384,
+        "output_tokens": 108,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.7716450216450216,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 35,
+        "rounds": 62,
+        "mean_accepted_draft_tokens_per_round": 0.5645161290322581,
+        "output_tokens": 97,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.4809384164222873,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 9,
+      "seed": 6524746090492272587,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 60,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 68,
+      "proposed_positions": 412,
+      "verified_positions": 412,
+      "attempted_positions": 127,
+      "effective_positions": 412,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 31,
+        "1": 10,
+        "2": 10,
+        "3": 2,
+        "4": 4,
+        "5": 2,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.1333333333333333,
+      "step128_comparison": {
+        "accepted_draft_tokens": 25,
+        "rounds": 102,
+        "mean_accepted_draft_tokens_per_round": 0.24509803921568626,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.888235294117647,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 52,
+        "rounds": 76,
+        "mean_accepted_draft_tokens_per_round": 0.6842105263157895,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.4491228070175438,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 10,
+      "seed": 8270680081713326464,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 71,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 57,
+      "proposed_positions": 487,
+      "verified_positions": 487,
+      "attempted_positions": 127,
+      "effective_positions": 487,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 32,
+        "1": 26,
+        "2": 8,
+        "3": 5
+      },
+      "mean_accepted_draft_tokens_per_round": 0.8028169014084507,
+      "step128_comparison": {
+        "accepted_draft_tokens": 21,
+        "rounds": 106,
+        "mean_accepted_draft_tokens_per_round": 0.19811320754716982,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.6047036938612809,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 42,
+        "rounds": 85,
+        "mean_accepted_draft_tokens_per_round": 0.49411764705882355,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.3086992543496272,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 11,
+      "seed": 3337390025776080470,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 85,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 42,
+      "proposed_positions": 588,
+      "verified_positions": 588,
+      "attempted_positions": 127,
+      "effective_positions": 588,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 56,
+        "1": 20,
+        "2": 5,
+        "3": 4
+      },
+      "mean_accepted_draft_tokens_per_round": 0.49411764705882355,
+      "step128_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 107,
+        "mean_accepted_draft_tokens_per_round": 0.18691588785046728,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.30720175920835624,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 48,
+        "rounds": 79,
+        "mean_accepted_draft_tokens_per_round": 0.6075949367088608,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": -0.11347728965003723,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 12,
+      "seed": 280096661183931534,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 49,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 79,
+      "proposed_positions": 337,
+      "verified_positions": 337,
+      "attempted_positions": 126,
+      "effective_positions": 337,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 14,
+        "1": 17,
+        "2": 5,
+        "3": 4,
+        "4": 7,
+        "5": 1,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.6122448979591837,
+      "step128_comparison": {
+        "accepted_draft_tokens": 28,
+        "rounds": 99,
+        "mean_accepted_draft_tokens_per_round": 0.2828282828282828,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 1.3294166151309008,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 63,
+        "rounds": 65,
+        "mean_accepted_draft_tokens_per_round": 0.9692307692307692,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.6430141287284145,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 13,
+      "seed": 4829497446826972576,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 94,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 33,
+      "proposed_positions": 641,
+      "verified_positions": 641,
+      "attempted_positions": 127,
+      "effective_positions": 641,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 74,
+        "1": 9,
+        "2": 9,
+        "3": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.35106382978723405,
+      "step128_comparison": {
+        "accepted_draft_tokens": 9,
+        "rounds": 118,
+        "mean_accepted_draft_tokens_per_round": 0.07627118644067797,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.27479264334655606,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.11805412104936996,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 14,
+      "seed": 2403213926561755704,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 97,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 31,
+      "proposed_positions": 662,
+      "verified_positions": 662,
+      "attempted_positions": 127,
+      "effective_positions": 662,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 75,
+        "1": 16,
+        "2": 4,
+        "3": 1,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.31958762886597936,
+      "step128_comparison": {
+        "accepted_draft_tokens": 14,
+        "rounds": 113,
+        "mean_accepted_draft_tokens_per_round": 0.12389380530973451,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.19569382355624484,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 32,
+        "rounds": 95,
+        "mean_accepted_draft_tokens_per_round": 0.3368421052631579,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": -0.01725447639717853,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 15,
+      "seed": 4633488372108513915,
+      "output_tokens": 97,
+      "ended_eos": true,
+      "rounds": 82,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 15,
+      "proposed_positions": 574,
+      "verified_positions": 574,
+      "attempted_positions": 96,
+      "effective_positions": 569,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 73,
+        "1": 7,
+        "2": 1,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.18292682926829268,
+      "step128_comparison": {
+        "accepted_draft_tokens": 4,
+        "rounds": 59,
+        "mean_accepted_draft_tokens_per_round": 0.06779661016949153,
+        "output_tokens": 64,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.11513021909880115,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 6,
+        "rounds": 121,
+        "mean_accepted_draft_tokens_per_round": 0.049586776859504134,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.13334005240878855,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 16,
+      "seed": 3827985708991746022,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 75,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 53,
+      "proposed_positions": 514,
+      "verified_positions": 514,
+      "attempted_positions": 127,
+      "effective_positions": 514,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 42,
+        "1": 18,
+        "2": 11,
+        "3": 3,
+        "4": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.7066666666666667,
+      "step128_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 107,
+        "mean_accepted_draft_tokens_per_round": 0.18691588785046728,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.5197507788161994,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 40,
+        "rounds": 87,
+        "mean_accepted_draft_tokens_per_round": 0.45977011494252873,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.24689655172413794,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 17,
+      "seed": 2152921185415924791,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 74,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 53,
+      "proposed_positions": 504,
+      "verified_positions": 504,
+      "attempted_positions": 127,
+      "effective_positions": 504,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 47,
+        "1": 13,
+        "2": 9,
+        "3": 2,
+        "4": 1,
+        "6": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.7162162162162162,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.48320650747835214,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 47,
+        "rounds": 81,
+        "mean_accepted_draft_tokens_per_round": 0.5802469135802469,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.1359693026359693,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 18,
+      "seed": 2297157748513906994,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 66,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 61,
+      "proposed_positions": 443,
+      "verified_positions": 443,
+      "attempted_positions": 127,
+      "effective_positions": 443,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 36,
+        "1": 13,
+        "2": 7,
+        "3": 7,
+        "4": 2,
+        "5": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.9242424242424242,
+      "step128_comparison": {
+        "accepted_draft_tokens": 20,
+        "rounds": 108,
+        "mean_accepted_draft_tokens_per_round": 0.18518518518518517,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.739057239057239,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 39,
+        "rounds": 89,
+        "mean_accepted_draft_tokens_per_round": 0.43820224719101125,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.48604017705141295,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 19,
+      "seed": 4191551199247432745,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 87,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 41,
+      "proposed_positions": 594,
+      "verified_positions": 594,
+      "attempted_positions": 126,
+      "effective_positions": 594,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 60,
+        "1": 20,
+        "2": 4,
+        "3": 2,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.47126436781609193,
+      "step128_comparison": {
+        "accepted_draft_tokens": 8,
+        "rounds": 119,
+        "mean_accepted_draft_tokens_per_round": 0.06722689075630252,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.40403747705978943,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 18,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.16363636363636364,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.3076280041797283,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 20,
+      "seed": 3687898782942832448,
+      "output_tokens": 25,
+      "ended_eos": true,
+      "rounds": 16,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 8,
+      "proposed_positions": 112,
+      "verified_positions": 112,
+      "attempted_positions": 24,
+      "effective_positions": 112,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 8,
+        "1": 8
+      },
+      "mean_accepted_draft_tokens_per_round": 0.5,
+      "step128_comparison": {
+        "accepted_draft_tokens": 1,
+        "rounds": 24,
+        "mean_accepted_draft_tokens_per_round": 0.041666666666666664,
+        "output_tokens": 26,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.4583333333333333,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 5,
+        "rounds": 19,
+        "mean_accepted_draft_tokens_per_round": 0.2631578947368421,
+        "output_tokens": 25,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 0.2368421052631579,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 21,
+      "seed": 2759486034696196321,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 57,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 70,
+      "proposed_positions": 392,
+      "verified_positions": 392,
+      "attempted_positions": 127,
+      "effective_positions": 392,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 30,
+        "1": 5,
+        "2": 8,
+        "3": 10,
+        "4": 2,
+        "5": 1,
+        "6": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.2280701754385965,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.9950604667007324,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 48,
+        "rounds": 79,
+        "mean_accepted_draft_tokens_per_round": 0.6075949367088608,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.6204752387297358,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 22,
+      "seed": 3290074806028060599,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 53,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 74,
+      "proposed_positions": 365,
+      "verified_positions": 365,
+      "attempted_positions": 125,
+      "effective_positions": 365,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 20,
+        "1": 13,
+        "2": 10,
+        "3": 6,
+        "4": 1,
+        "5": 1,
+        "7": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 1.3962264150943395,
+      "step128_comparison": {
+        "accepted_draft_tokens": 31,
+        "rounds": 92,
+        "mean_accepted_draft_tokens_per_round": 0.33695652173913043,
+        "output_tokens": 124,
+        "ended_eos": true,
+        "accepted_draft_per_round_delta": 1.0592698933552092,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 61,
+        "rounds": 66,
+        "mean_accepted_draft_tokens_per_round": 0.9242424242424242,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.47198399085191534,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 23,
+      "seed": 8054245664576210487,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 68,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 60,
+      "proposed_positions": 466,
+      "verified_positions": 466,
+      "attempted_positions": 127,
+      "effective_positions": 466,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 35,
+        "1": 15,
+        "2": 13,
+        "3": 2,
+        "4": 2,
+        "5": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 0.8823529411764706,
+      "step128_comparison": {
+        "accepted_draft_tokens": 17,
+        "rounds": 110,
+        "mean_accepted_draft_tokens_per_round": 0.15454545454545454,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.727807486631016,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 50,
+        "rounds": 77,
+        "mean_accepted_draft_tokens_per_round": 0.6493506493506493,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.23300229182582122,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 24,
+      "seed": 8768462176938422226,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 73,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 55,
+      "proposed_positions": 500,
+      "verified_positions": 500,
+      "attempted_positions": 127,
+      "effective_positions": 500,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 45,
+        "1": 15,
+        "2": 6,
+        "3": 2,
+        "4": 3,
+        "5": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.7534246575342466,
+      "step128_comparison": {
+        "accepted_draft_tokens": 24,
+        "rounds": 103,
+        "mean_accepted_draft_tokens_per_round": 0.23300970873786409,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.5204149487963825,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 70,
+        "rounds": 58,
+        "mean_accepted_draft_tokens_per_round": 1.206896551724138,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": -0.4534718941898913,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 25,
+      "seed": 6062884801732605924,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 56,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 72,
+      "proposed_positions": 385,
+      "verified_positions": 385,
+      "attempted_positions": 126,
+      "effective_positions": 385,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 26,
+        "1": 11,
+        "2": 8,
+        "3": 4,
+        "4": 4,
+        "5": 2,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.2857142857142858,
+      "step128_comparison": {
+        "accepted_draft_tokens": 31,
+        "rounds": 96,
+        "mean_accepted_draft_tokens_per_round": 0.3229166666666667,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.9627976190476191,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 56,
+        "rounds": 71,
+        "mean_accepted_draft_tokens_per_round": 0.7887323943661971,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.4969818913480887,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 26,
+      "seed": 1187194232501608785,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 71,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 57,
+      "proposed_positions": 476,
+      "verified_positions": 476,
+      "attempted_positions": 127,
+      "effective_positions": 476,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 43,
+        "1": 7,
+        "2": 15,
+        "3": 4,
+        "4": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.8028169014084507,
+      "step128_comparison": {
+        "accepted_draft_tokens": 27,
+        "rounds": 101,
+        "mean_accepted_draft_tokens_per_round": 0.26732673267326734,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.5354901687351834,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 44,
+        "rounds": 83,
+        "mean_accepted_draft_tokens_per_round": 0.5301204819277109,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.27269641948073986,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 27,
+      "seed": 3809948146833308067,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 99,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 28,
+      "proposed_positions": 672,
+      "verified_positions": 672,
+      "attempted_positions": 127,
+      "effective_positions": 672,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 80,
+        "1": 13,
+        "2": 3,
+        "3": 3
+      },
+      "mean_accepted_draft_tokens_per_round": 0.2828282828282828,
+      "step128_comparison": {
+        "accepted_draft_tokens": 15,
+        "rounds": 112,
+        "mean_accepted_draft_tokens_per_round": 0.13392857142857142,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.1488997113997114,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 18,
+        "rounds": 109,
+        "mean_accepted_draft_tokens_per_round": 0.1651376146788991,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.11769066814938373,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 28,
+      "seed": 2941274361068497804,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 89,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 38,
+      "proposed_positions": 602,
+      "verified_positions": 602,
+      "attempted_positions": 127,
+      "effective_positions": 602,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 68,
+        "1": 13,
+        "2": 1,
+        "3": 5,
+        "4": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.42696629213483145,
+      "step128_comparison": {
+        "accepted_draft_tokens": 8,
+        "rounds": 120,
+        "mean_accepted_draft_tokens_per_round": 0.06666666666666667,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.3602996254681648,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 32,
+        "rounds": 95,
+        "mean_accepted_draft_tokens_per_round": 0.3368421052631579,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.09012418687167356,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 29,
+      "seed": 6880470647718267291,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 75,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 53,
+      "proposed_positions": 513,
+      "verified_positions": 513,
+      "attempted_positions": 127,
+      "effective_positions": 513,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 43,
+        "1": 20,
+        "2": 7,
+        "3": 3,
+        "5": 2
+      },
+      "mean_accepted_draft_tokens_per_round": 0.7066666666666667,
+      "step128_comparison": {
+        "accepted_draft_tokens": 23,
+        "rounds": 104,
+        "mean_accepted_draft_tokens_per_round": 0.22115384615384615,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.4855128205128205,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 50,
+        "rounds": 78,
+        "mean_accepted_draft_tokens_per_round": 0.6410256410256411,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.06564102564102559,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 30,
+      "seed": 8381922382667116242,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 61,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 66,
+      "proposed_positions": 415,
+      "verified_positions": 415,
+      "attempted_positions": 126,
+      "effective_positions": 415,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 26,
+        "1": 19,
+        "2": 8,
+        "3": 5,
+        "4": 1,
+        "5": 1,
+        "7": 1
+      },
+      "mean_accepted_draft_tokens_per_round": 1.0819672131147542,
+      "step128_comparison": {
+        "accepted_draft_tokens": 19,
+        "rounds": 109,
+        "mean_accepted_draft_tokens_per_round": 0.1743119266055046,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.9076552865092495,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 49,
+        "rounds": 79,
+        "mean_accepted_draft_tokens_per_round": 0.620253164556962,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.4617140485577922,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    },
+    {
+      "case": 31,
+      "seed": 5009819181907025834,
+      "output_tokens": 128,
+      "ended_eos": false,
+      "rounds": 99,
+      "execution_invariants_passed": true,
+      "accepted_draft_tokens": 28,
+      "proposed_positions": 682,
+      "verified_positions": 682,
+      "attempted_positions": 127,
+      "effective_positions": 682,
+      "preselected_probes": [],
+      "accepted_prefix_length_histogram": {
+        "0": 76,
+        "1": 18,
+        "2": 5
+      },
+      "mean_accepted_draft_tokens_per_round": 0.2828282828282828,
+      "step128_comparison": {
+        "accepted_draft_tokens": 15,
+        "rounds": 112,
+        "mean_accepted_draft_tokens_per_round": 0.13392857142857142,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.1488997113997114,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      },
+      "step512_comparison": {
+        "accepted_draft_tokens": 26,
+        "rounds": 101,
+        "mean_accepted_draft_tokens_per_round": 0.25742574257425743,
+        "output_tokens": 128,
+        "ended_eos": false,
+        "accepted_draft_per_round_delta": 0.025402540254025385,
+        "scope": "Same ordinal prompt and seed; generated prefixes/output horizons can differ"
+      }
+    }
+  ],
+  "scope": "Ordinal quality-panel cases only; private identities and sampled outputs remain remote."
+}
