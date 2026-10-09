@@ -630,3 +630,19 @@ trained draft/confidence/capacity scheduling, measure SPS/speed or demonstrate
 overlap. Prior numerical-law limits, same-stack slowdown and separate vLLM
 baseline remain unchanged. Next cost measurements must charge actual shapes and
 the full end-to-end round, including eager and host work.
+
+
+R2 complete-session benchmark preparation: `scripts/benchmark_paired_r2.py` adds
+a single original R2/C256 workload with target-only, fixed-gamma7 full shadow and
+zero-admission full shadow arms. It reuses optional R1 runner interfaces; original
+R1 defaults and observer entry points remain intact. See docs/paired-r2-benchmark.md.
+Declare R2/B2..16 and R1/B1..8 families; capture only R2/B2 and R2/B16. All other
+verification work, including R1 tails, remains explicitly eager and timed. Validate
+both hot graphs at initial C256/256 and committed C368/375, with pooled and
+per-request raw-layer, norm, logits and all-layer scratch-KV limits unchanged.
+The 27 complete batches use original seeds and 128 outputs per request.
+The zero arm consumes proposal RNG and measures whole-path overhead, not isolated
+draft latency. Fixed draft cost cannot be cancelled when maximizing E/(D+V+H).
+No new Profile/SPS, confidence admission, training or overlap is introduced.
+Related local CPU tests passed 32 with two Linux-only skips; device execution and
+performance remain pending. Deploy only reviewed immutable source with fresh guards.

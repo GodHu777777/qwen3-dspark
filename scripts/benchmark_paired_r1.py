@@ -65,7 +65,7 @@ def identities(manifest):
             for p, r, c, a in schedule(manifest)]
 
 
-def baseline_reference(workload_sha, target_fingerprint):
+def baseline_reference(workload_sha, target_fingerprint, *, case_ids=CASE_IDS, request_count=1):
     """Bind frozen strong baseline and recompute its matched primary rates."""
     source = json.loads((BASELINE/'source-identity.json').read_text())
     if (source['workload_sha256'] != workload_sha or
@@ -74,9 +74,9 @@ def baseline_reference(workload_sha, target_fingerprint):
     raw = [json.loads(line) for line in (BASELINE/'scalar-samples.jsonl').read_text().splitlines()]
     published = {c['case_id']: c for c in json.loads((BASELINE/'primary-metrics.json').read_text())['cells']}
     cells = []
-    for case_id in CASE_IDS:
+    for case_id in case_ids:
         rows = [x for x in raw if x['phase'] == 'primary' and x['case_id'] == case_id]
-        if [x['repeat'] for x in rows] != list(range(5)) or any(x['output_tokens'] != 128 for x in rows):
+        if [x['repeat'] for x in rows] != list(range(5)) or any(x['output_tokens'] != 128*request_count for x in rows):
             raise ValueError('Frozen vLLM five-repeat R1 panel incomplete')
         seconds = [x['batch_wall_seconds'] for x in rows]
         if any(not math.isfinite(x) or x <= 0 for x in seconds):
@@ -158,7 +158,8 @@ def save_setup_tensors(directory, q, tensors):
 
 class PairedFactory:
     """One real persistent target/loaded draft; production and CPU-test factory."""
-    def __init__(self, model, draft, *, target_builder=None, draft_builder=None):
+    def __init__(self, model, draft, *, target_builder=None, draft_builder=None,
+                 protocol=None, buckets=None, arms=None, graph_shapes=None):
         from dspark_qwen.persistent_qwen_target import PersistentQwenTarget
         from dspark_qwen.persistent_qwen_graph import TorchGraphBackend
         from dspark_qwen.target_strategy import PersistentTargetStrategy
@@ -170,14 +171,18 @@ class PairedFactory:
             target_builder = lambda m, ids, **kw: PersistentQwenTarget(m, ids, native_backend=BACKEND, **kw)
         self.draft_builder = draft_builder or (lambda d: PackedDraft(d, native_backend=DRAFT_BACKEND))
         self.draft = draft
-        self.buckets = finite_buckets()
+        self.protocol = PROTOCOL if protocol is None else protocol
+        self.arms = ARMS if arms is None else arms
+        self.buckets = finite_buckets() if buckets is None else buckets
         self.target = target_builder(model, draft.spec.layer_ids, graph_backend=TorchGraphBackend(),
-            **{k: PROTOCOL[k] for k in ('slots', 'context_capacity', 'max_query_tokens', 'max_buckets',
+            **{k: self.protocol[k] for k in ('slots', 'context_capacity', 'max_query_tokens', 'max_buckets',
                 'max_graph_buckets', 'graph_byte_budget', 'workspace_byte_budget')})
         PersistentTargetStrategy(self.target, self.buckets)  # Register exactly ten finite workspaces.
         for bucket in self.buckets.verification:
-            if bucket.query_tokens in PROTOCOL['graph_query_lengths']:
-                self.target.register_graph_bucket(bucket, reserve_bytes=PROTOCOL['graph_reservation_bytes'])
+            selected = (bucket.query_tokens in PROTOCOL['graph_query_lengths'] if graph_shapes is None
+                        else (bucket.request_count, bucket.query_tokens) in graph_shapes)
+            if selected:
+                self.target.register_graph_bucket(bucket, reserve_bytes=self.protocol['graph_reservation_bytes'])
         self.witness = ForwardWitness(model)
         self.ready = False
 
@@ -301,7 +306,7 @@ class PairedFactory:
         from dspark_qwen.packed_sampling import PackedSpeculativeSession
         from dspark_qwen.packed_target_sampling import PackedTargetOnlySession
         from dspark_qwen.target_strategy import PersistentTargetStrategy
-        if not self.ready or arm not in ARMS:
+        if not self.ready or arm not in self.arms:
             raise ValueError('Both explicit captures and a declared arm required')
         self.target.reset()  # Charged inside every batch, including after the other arm.
         strategy = PersistentTargetStrategy(self.target, self.buckets)
@@ -338,11 +343,13 @@ def execution_record(target_work, q, before, after, device_type):
         eager_tail=not registered)
 
 
-def batch(factory, device, case, manifest, arm, *, diagnostic=False, deadline=None):
+def batch(factory, device, case, manifest, arm, *, diagnostic=False, deadline=None, experiment=None):
     import torch
     from dspark_qwen.packed_sampling import RequestSpec
     from dspark_qwen.tensor_sampling import TensorRandom
-    if case['case_id'] not in CASE_IDS or case['request_count'] != 1 or arm not in ARMS:
+    cases, arms = (CASE_IDS, ARMS) if experiment is None else (experiment.CASE_IDS, experiment.ARMS)
+    count = 1 if experiment is None else experiment.PROTOCOL['request_count']
+    if case['case_id'] not in cases or case['request_count'] != count or arm not in arms:
         raise ValueError('Declared R1 pair required')
     prepared = time.perf_counter()
     specs = {r['request']: RequestSpec(torch.tensor([r['prompt_token_ids']], dtype=torch.long, device=device),
@@ -368,8 +375,9 @@ def batch(factory, device, case, manifest, arm, *, diagnostic=False, deadline=No
             raise TimeoutError('Cooperative paired deadline; incomplete batch is not a sample')
         active = [r for r, s in session.requests.items() if not s['finished']]
         before = factory.witness.snapshot()
-        if arm == 'fixed_gamma7_full_shadow':
-            allocations = {r: max(0, min(7, session.requests[r]['budget']-len(session.requests[r]['output'])-1)) for r in active}
+        if arm != 'target_only':
+            allocations = {r: (0 if arm == 'full_shadow_zero_admission' else
+                max(0, min(7, session.requests[r]['budget']-len(session.requests[r]['output'])-1))) for r in active}
             policy = NATIVE.FixedPrefix(session, allocations)
             issued = session.propose(active, mode='shadow')
             result = session.verify_commit(issued.proposals, allocations, allocation_policy=policy)
@@ -378,8 +386,11 @@ def batch(factory, device, case, manifest, arm, *, diagnostic=False, deadline=No
             allocations = {r: 0 for r in active}
             result = session.step(active)
         q = len(active)+sum(allocations.values())
-        execution = execution_record(result['work']['target'], q, before,
-                                     factory.witness.snapshot(), device.type)
+        if experiment is None:
+            execution = execution_record(result['work']['target'], q, before, factory.witness.snapshot(), device.type)
+        else:
+            execution = experiment.execution_record(result['work']['target'], q, before,
+                factory.witness.snapshot(), device.type, active_count=len(active))
         rounds.append(dict(active_requests=active, allocation=allocations, requests=result['requests'],
             work=result['work'], actual_logical_b=q, actual_physical_b=result['work']['target']['physical_query_tokens'],
             resident_requests=len(session.requests), **execution))
@@ -412,7 +423,7 @@ def batch(factory, device, case, manifest, arm, *, diagnostic=False, deadline=No
         actual_gpu_graph_query_rows=sum(x['query_tokens'] for x in rounds if x['actual_gpu_graph']),
         eager_tail_rounds=sum(x['eager_tail'] for x in rounds),
         eager_tail_query_rows=sum(x['query_tokens'] for x in rounds if x['eager_tail']),
-        prefill_eager_calls=1, prefill_eager_rows=case['prompt_length'])
+        prefill_eager_calls=1, prefill_eager_rows=case['prompt_length']*count)
     row = dict(arm=arm, batch_wall_seconds=elapsed, output_tokens=output_count, requests=records,
         preparation_seconds=preparation_seconds, rounds=rounds, execution_coverage=coverage,
         admission_output_tokens=admission, committed_round_output_tokens=committed,
@@ -423,6 +434,8 @@ def batch(factory, device, case, manifest, arm, *, diagnostic=False, deadline=No
         time_scope='fresh session/reset, admission/first draw, complete native graph/eager rounds, full shadow for speculative arm, original FP64 validation/sampling, commit/projection/release and final synchronization',
         memory_scope='same loaded target/draft and both graph pools; pre-reset through completion including prepared inputs and inherited resident KV',
         all_graph=False, full_six_case_panel=False, capacity_scheduler_integrated=False)
+    if experiment is not None:
+        experiment.extend_sample(row)
     if device.type == 'cuda':
         row.update(**memory, whole_operation_peak_allocated_bytes=torch.cuda.max_memory_allocated(device),
                    whole_operation_peak_reserved_bytes=torch.cuda.max_memory_reserved(device))
@@ -465,26 +478,27 @@ def verify_complete(samples, manifest, baseline=None):
     return summarize(samples, manifest, baseline)
 
 
-def run(factory, device, manifest, out, *, deadline=None, setup=None, baseline=None):
+def run(factory, device, manifest, out, *, deadline=None, setup=None, baseline=None, experiment=None):
+    api = runner_api() if experiment is None else experiment
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     if (out/'samples.jsonl').exists(): raise ValueError('Fresh paired sample output required')
     samples = []
-    specification = dict(protocol=PROTOCOL, expected_samples=identities(manifest),
+    specification = dict(protocol=api.PROTOCOL, expected_samples=api.identities(manifest),
         frozen_vllm_reference=baseline, full_six_case_panel=False)
     GUARD.write(out/'specification.json', specification)
     if setup is not None: GUARD.write(out/'runtime.json', setup)
     GUARD.write(out/'result.json', dict(status='running', sample_count=0))
     try:
-        for phase, repeat, case, arm in schedule(manifest):
+        for phase, repeat, case, arm in api.schedule(manifest):
             if deadline is not None and time.monotonic() >= deadline:
                 raise TimeoutError('Cooperative deadline before next paired batch')
-            sample = batch(factory, device, case, manifest, arm, diagnostic=phase == 'diagnostic', deadline=deadline)
-            sample.update(phase=phase, repeat=repeat, case_id=case['case_id'], request_count=1, prompt_length=case['prompt_length'])
+            sample = api.batch(factory, device, case, manifest, arm, diagnostic=phase == 'diagnostic', deadline=deadline)
+            sample.update(phase=phase, repeat=repeat, case_id=case['case_id'], request_count=case['request_count'], prompt_length=case['prompt_length'])
             samples.append(sample)
             with (out/'samples.jsonl').open('a') as stream:
                 stream.write(json.dumps(sample, allow_nan=False)+'\n')
-        result = dict(status='completed', sample_count=len(samples), aggregates=verify_complete(samples, manifest, baseline),
+        result = dict(status='completed', sample_count=len(samples), aggregates=api.verify_complete(samples, manifest, baseline),
             all_graph=False, full_six_case_panel=False, capacity_scheduler_integrated=False,
             prior_target_numerical_gate='failed_unchanged', distribution_equivalence_claimed=False)
         GUARD.write(out/'result.json', result)
@@ -492,16 +506,17 @@ def run(factory, device, manifest, out, *, deadline=None, setup=None, baseline=N
     except BaseException as exc:
         GUARD.write(out/'result.json', dict(status='partial_deadline' if isinstance(exc, TimeoutError) else 'failed',
             error_type=type(exc).__name__, error=str(exc), sample_count=len(samples),
-            aggregates=summarize(samples, manifest, baseline), expected_samples=specification['expected_samples'],
+            aggregates=api.summarize(samples, manifest, baseline), expected_samples=specification['expected_samples'],
             all_graph=False, full_six_case_panel=False, distribution_equivalence_claimed=False))
         raise
 
 
-def worker(binding_path, out):
+def worker(binding_path, out, *, experiment=None):
+    api = runner_api() if experiment is None else experiment
     started = time.monotonic()
-    deadline = started+PROTOCOL['timeout_seconds']-PROTOCOL['cooperative_reserve_seconds']
+    deadline = started+api.PROTOCOL['timeout_seconds']-api.PROTOCOL['cooperative_reserve_seconds']
     binding = json.loads(Path(binding_path).read_text())
-    if bind(binding['model'], binding['generation_manifest'], binding['checkpoint'], binding['workloads']) != binding:
+    if api.bind(binding['model'], binding['generation_manifest'], binding['checkpoint'], binding['workloads']) != binding:
         raise ValueError('Frozen paired source/input changed before loading')
     manifest, workload_sha = SHARED.load_workloads(binding['workloads'])
     import torch
@@ -518,8 +533,8 @@ def worker(binding_path, out):
     torch.cuda.set_device(device)
     runtime = PinnedRocmVarlenKernel(device).runtime
     free, total = torch.cuda.mem_get_info()
-    if free < PROTOCOL['minimum_free_bytes']: raise RuntimeError('8 GiB free guard failed')
-    torch.cuda.set_per_process_memory_fraction(PROTOCOL['process_allocation_cap_bytes']/total)
+    if free < api.PROTOCOL['minimum_free_bytes']: raise RuntimeError('8 GiB free guard failed')
+    torch.cuda.set_per_process_memory_fraction(api.PROTOCOL['process_allocation_cap_bytes']/total)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     GUARD.write(out/'result.json', dict(status='running', stage='model_load', sample_count=0))
@@ -527,7 +542,7 @@ def worker(binding_path, out):
         dtype=torch.bfloat16, attn_implementation='sdpa').to(device).eval()
     draft = DSparkDraft(model, DraftConfig.from_dict(binding['draft_config'])).to(device).eval()
     load_checkpoint(binding['checkpoint'], draft)
-    factory = PairedFactory(model, draft)
+    factory = api.PairedFactory(model, draft)
     def progress(captures):
         GUARD.write(out/'capture-progress.json', dict(status='preparing', captures=captures))
     capture = factory.capture(manifest, deadline=deadline, progress=progress, evidence_dir=out/'setup-validation')
@@ -535,17 +550,26 @@ def worker(binding_path, out):
     setup = dict(runtime=runtime, setup_seconds=time.monotonic()-started, capture=capture,
         model_loads=1, draft_loads=1, workload_sha256=workload_sha,
         torch=torch.__version__, transformers=transformers.__version__,
-        shared_resident_cost=PROTOCOL['resident_cost'], runtime_scope='actual_pretrained_trained_GPU')
-    result = run(factory, device, manifest, out, deadline=deadline, setup=setup,
+        shared_resident_cost=api.PROTOCOL['resident_cost'], runtime_scope='actual_pretrained_trained_GPU')
+    result = api.run(factory, device, manifest, out, deadline=deadline, setup=setup,
                  baseline=binding['frozen_vllm_reference'])
-    if bind(binding['model'], binding['generation_manifest'], binding['checkpoint'], binding['workloads']) != binding:
+    if api.bind(binding['model'], binding['generation_manifest'], binding['checkpoint'], binding['workloads']) != binding:
         raise ValueError('Frozen paired source/input changed during benchmark')
     GUARD.write(out/'post-input-integrity.json', dict(passed=True))
     factory.close()
     return 0 if result['status'] == 'completed' else 1
 
 
-def main(argv=None):
+def runner_api():
+    """Explicit runner seams; defaults resolve live globals for existing observers."""
+    from types import SimpleNamespace
+    names = ('PROTOCOL', 'bind', 'identities', 'schedule', 'batch', 'summarize',
+             'verify_complete', 'run', 'worker', 'PairedFactory')
+    return SimpleNamespace(**{name: globals()[name] for name in names})
+
+
+def main(argv=None, *, experiment=None, script=None):
+    api = runner_api() if experiment is None else experiment
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('model', 'generation-manifest', 'checkpoint', 'workloads', 'asr-url'):
         p.add_argument('--'+name)
@@ -557,7 +581,7 @@ def main(argv=None):
     args = p.parse_args(argv)
     if args.worker_binding:
         try:
-            return worker(args.worker_binding, args.output)
+            return api.worker(args.worker_binding, args.output)
         except BaseException as exc:
             args.output.mkdir(parents=True, exist_ok=True)
             (args.output/'error.txt').write_text(traceback.format_exc())
@@ -573,7 +597,7 @@ def main(argv=None):
             return 1
     if not all((args.model, args.generation_manifest, args.checkpoint)):
         p.error('Actual pinned model, generation manifest and trained step1280 checkpoint required')
-    binding = bind(args.model, args.generation_manifest, args.checkpoint, args.workloads)
+    binding = api.bind(args.model, args.generation_manifest, args.checkpoint, args.workloads)
     if not args.execute:
         print(json.dumps(dict(status='dry_run_no_backend_import_no_gpu', binding=binding), indent=2))
         return 0
@@ -582,18 +606,18 @@ def main(argv=None):
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False, mode=0o700)
     GUARD.write(out/'binding.json', binding)
-    guard = GUARD.ASRGuard(args.asr_pid, args.asr_url, pre_free_bytes=PROTOCOL['minimum_free_bytes'])
-    command = [sys.executable, '-u', str(Path(__file__).resolve()), '--worker-binding', str(out/'binding.json'),
+    guard = GUARD.ASRGuard(args.asr_pid, args.asr_url, pre_free_bytes=api.PROTOCOL['minimum_free_bytes'])
+    command = [sys.executable, '-u', str(Path(script or __file__).resolve()), '--worker-binding', str(out/'binding.json'),
                '--output', str(out/'worker')]
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', OMP_NUM_THREADS='2')
     env.pop('PYTHONPATH', None)
-    status = GUARD.supervise(command, out/'supervision', guard, timeout=PROTOCOL['timeout_seconds'], env=env)
-    intact = bind(args.model, args.generation_manifest, args.checkpoint, args.workloads) == binding
+    status = GUARD.supervise(command, out/'supervision', guard, timeout=api.PROTOCOL['timeout_seconds'], env=env)
+    intact = api.bind(args.model, args.generation_manifest, args.checkpoint, args.workloads) == binding
     GUARD.write(out/'post-input-integrity.json', dict(passed=intact))
     if not intact or status['status'] != 'completed' or not status['released']: return 1
     manifest, _ = SHARED.load_workloads(binding['workloads'])
     samples = [json.loads(line) for line in (out/'worker/samples.jsonl').read_text().splitlines()]
-    recomputed = verify_complete(samples, manifest, binding['frozen_vllm_reference'])
+    recomputed = api.verify_complete(samples, manifest, binding['frozen_vllm_reference'])
     result = json.loads((out/'worker/result.json').read_text())
     if recomputed != result['aggregates'] or result['sample_count'] != len(binding['expected_samples']):
         raise ValueError('Controller paired raw sample/aggregate mismatch')
