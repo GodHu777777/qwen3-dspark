@@ -510,3 +510,15 @@ numerical comparisons (all torch.equal and storage-byte equal; frozen limits
 unchanged). See reports/full-target-graph-20261009-3829d53 and notebook S30.
 This supersedes the preparation-only status for this finite same-backend family;
 cross-backend RMS/TV failures, E2E performance, capacity and overlap remain open.
+
+Paired R1 attribution preparation: scripts/benchmark_paired_r1.py compares the
+same persistent target-only stack with trained fixed-gamma7 full-shadow decoding
+on the original C64/C256 requests, 128 output tokens, 36 ordered batches. Both
+arms share resident target/draft weights and Q1/Q8 graphs; Q2..7 tails explicitly
+run native eager inside the timer. Startup validates the new graph shapes at
+unchanged numerical limits and preserves failure tensors. Original FP64 sampling,
+the frozen vLLM baseline and prior numerical limitations remain unchanged.
+Eleven focused CPU tests and independent host/sampling composition checks passed;
+these are not GPU throughput evidence. Read docs/paired-r1-benchmark.md for the
+fixed 1800-second supervision and memory bounds before execution. This two-case
+attribution experiment does not complete multi-request capacity or overlap.
