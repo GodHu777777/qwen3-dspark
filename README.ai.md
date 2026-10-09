@@ -823,3 +823,26 @@ Existing natural1280 first-prefix843/2270=.371366 and26/32 below.5 describe broa
 early rejection only; do not equate TF.373430 or transfer synthetic3.1% acceptance.
 This accepted direction has not been executed; selected-token risk is not full-law
 overlap, and different checkpoint trajectories are not matched-prefix causal controls.
+
+
+Existing quality32 first-risk CPU reanalysis (S47):
+`scripts/analyze_natural_first_risk.py` is a stdlib-only reader of recovered historical
+step128/512/1280 artifacts. All8158 first selected p/q pairs were valid and all32
+ordinals retained per step. Pooled alpha=min(1,p0/q0) was.158279/.308461/.372736;
+equal-prompt alpha.155778/.324532/.397361. Step1280 has26/32 prompt means below.5
+and all four fixed progress-bin pooled means below.40;25 ordinals remain below.5
+across all checkpoints. 512→1280 alpha changed26 up/6 down; observed first-prefix
+changed27 up/4 down/1 tie (correcting an earlier oral5-down report).
+See reports/natural-first-risk-20261009. Five frozen tests passed (.661 s, OS0);
+one actual analysis exited0 with36 input hashes unchanged. Independent98691 raw
+assertions and110698 per-value checks/8158 rows passed; aggregates were shared
+before core finished, so no fully blinded double-analysis claim. No analysis/test
+failure occurred; an overbroad publication term check was fixed without changing
+analysis content. Current recovered raw hashes are not historical precommit hashes;
+original a278e5a source/binding/panel/aggregate/exit provenance reconciles.
+These are distinct sampled trajectories, not matched-prefix causal effects. Selected
+alpha is not full-vocabulary overlap or a calibration result; no data-mismatch/
+exposure-bias attribution, independent-round CI, new rollout or speed claim follows.
+Root accepted only designing a bounded matched-prefix quality/objective diagnostic;
+no new execution/training/generation/GPU/final-test or policy search is authorized by
+these results. Keep original sampler and frozen step1280/STS state and prior limits.

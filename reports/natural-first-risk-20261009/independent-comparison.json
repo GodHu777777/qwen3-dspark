@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "checks": 110698,
+  "private_rows_compared": 8158,
+  "summary_sha256": "8d81544d20c6fab739ba6bd42ce26d73ecd5d2d2c3c76bf5a2ac96d96e026c60",
+  "private_risk_sha256": "6d170b09dc57a2ae767f86fc7d6e73ccf176c335b3451bb74f6949e14e7443b3",
+  "analyzer_sha256": "589cd731c4add26982b16e5e45abd86ac61721f66ac67b7773a7ae6925419738",
+  "independent_raw_review_sha256": "7b6f53a8a066ad7427c2bc5e48b8afd3ca33c7c7bc6c65f41f6a34bac716256c",
+  "float_tolerance": {
+    "relative": 1e-12,
+    "absolute": 1e-14
+  },
+  "scope": "Independent full raw reconstruction and per-row plus pooled/equal-prompt/prompt/bin/coverage/change comparison; source review complete. No GPU or new collection.",
+  "independence": "Independent result saved before core completion, then aggregate values shared; no fully blinded double-analysis claim."
+}

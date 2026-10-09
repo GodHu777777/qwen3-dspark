@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（S46 categorical native A/B语义通过但两臂实用筛选失败，保留原默认）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32及后续轮次的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S47 既有quality32首位置风险CPU重析与独立复核完成，无新rollout或速度结论）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32及后续轮次的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,7 +16,7 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
-- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)、[S34 signature成本与缓存安全否决](#signature-cpu-safety)、[S35 finite actual-Q family的CPU基础与兼容失败修复](#query-family-cpu-foundation)、[S36 full-shadow capacity/family同步CPU桥接](#capacity-query-family-cpu)、[S39 R2三臂完整请求比较的CPU准备](#paired-r2-cpu-preparation)、[S40 R2三臂完整请求负收益与独立审计](#paired-r2-native-result)、[S41 六batch粗区间诊断的CPU准备与清理失败修复](#paired-r2-coarse-cpu-preparation)、[S42 六batch native粗区间诊断与观察扰动](#paired-r2-coarse-native-result)、[S43 shadow内部诊断的CPU准备、测试预期失败与三态判据](#shadow-inner-r2-cpu-preparation)、[S44 shadow内部native诊断的扰动超限与inconclusive结果](#shadow-inner-r2-native-result)、[S45 categorical固定形状候选CPU契约gate与coverage失败修复](#categorical-fixed-shape-cpu-gate)、[S46 categorical无observer native A/B实用筛选失败](#categorical-fallback-r2-native-result)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)、[S34 signature成本与缓存安全否决](#signature-cpu-safety)、[S35 finite actual-Q family的CPU基础与兼容失败修复](#query-family-cpu-foundation)、[S36 full-shadow capacity/family同步CPU桥接](#capacity-query-family-cpu)、[S39 R2三臂完整请求比较的CPU准备](#paired-r2-cpu-preparation)、[S40 R2三臂完整请求负收益与独立审计](#paired-r2-native-result)、[S41 六batch粗区间诊断的CPU准备与清理失败修复](#paired-r2-coarse-cpu-preparation)、[S42 六batch native粗区间诊断与观察扰动](#paired-r2-coarse-native-result)、[S43 shadow内部诊断的CPU准备、测试预期失败与三态判据](#shadow-inner-r2-cpu-preparation)、[S44 shadow内部native诊断的扰动超限与inconclusive结果](#shadow-inner-r2-native-result)、[S45 categorical固定形状候选CPU契约gate与coverage失败修复](#categorical-fixed-shape-cpu-gate)、[S46 categorical无observer native A/B实用筛选失败](#categorical-fallback-r2-native-result)、[S47 既有自然quality32首位置风险CPU重析与恢复身份界限](#natural-first-risk-cpu-result)。
 - 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)、[S31 配对R1完整请求负收益](#paired-r1-result)、[S37 native variable-Q full-target gate的CPU准备](#query-family-graph-cpu-preparation)、[S38 native variable-Q finite-family真实capture/replay结果](#query-family-graph-native-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
@@ -1302,3 +1302,25 @@ Shadow虽最大，但包含内部backbone、heads、Markov、FP64 laws/draws、v
 
 
 **已接受下一单任务，尚未执行。** 仅核验/恢复既有自然quality32 steps128/512/1280的bound原始round证据，CPU重析first selected p0/q0与min(1,p0/q0)，按预定输出进度bins **0–31/32–63/64–95/96–127**，保留32prompts、pooled/equal-prompt汇总及EOS/budget/缺失覆盖。Raw或来源缺失则记明确gap，不重采样/生成/训练/GPU/final-test，也不搜gamma/策略或重校准。既有step1280首prefix **843/2270=.371366、26/32prompt<.5**只描述早拒广泛，不是本轮新rollout结果或原因归属；不能与TF macro overlap .373430等价比较，也不能迁移synthetic selected acceptance3.1%。Checkpoint轨迹不同，不作matched-prefix因果比较；selected-token风险不是全vocab overlap，round相关，不编独立round置信区间。只产一次现有证据报告，本段是方向接受记录，未有该重析结果。
+
+
+<a id="natural-first-risk-cpu-result"></a>
+## 2026-10-09 — S47：既有自然quality32首位置风险CPU重析完成，早拒广泛但原因未归属
+
+**执行范围与恢复身份。** 实现S46已接受的单次只读证据重析。Root恢复steps128/512/1280已有quality32 **36files/12701811bytes**，inventory/fetch实际SSH OS0；provenance脚本实际OS0核原collector **a278e5a5d7d74a1f77f8dcd475700959ee158cb0** archive/30package、三run与原公开source identity、binding/panel digest/file bytes/32cases、原aggregate及完成exits一致。恢复archive SHA **c27dbe81…4ef09d**与provenance audit **016859b3…10103**已核；**恢复时完整raw哈希是现时字节身份，不是历史预提交哈希**。未重开权重、shared generation或final-test，未新生成/训练/GPU，也不是新rollout。
+
+**方法与真实验证。** 新增[stdlib analyzer](natural-first-risk.md)及测试/说明三文件，以保存的first selected p0/q0求 **alpha=min(1,p0/q0)**，拒绝风险1−alpha，二元observed first-prefix为accepted≥1并核原label。Proposal前进度=初始target输出1+此前committed长度，与cache_before−prompt_length+1/最终输出独立核；bins固定0–31/32–63/64–95/96–127，实际首proposal从进度1开始。Pooled按round加权，equal-prompt先每prompt平均再等权，逐项报available/32；invalid/missing不充0，EOS提前终止的后续bin留无round。首 **5项/.642秒/OS0**，冻结 **5项/.661秒/OS0**，唯一实际分析OS0，**36输入哈希前后一致**；无测试/分析失败。开发期已统一跨checkpoint runtime版本/backend/device身份（不比较free-memory快照）、保留有限p/q除法overflow时alpha1并检查checkpoint step，均在冻结测试/实际执行前完成。
+
+**总体结果。** **8158/8158round**首selected p/q有效、无missing/invalid或zero-round prompt，每checkpoint保留32ordinal；未截断p/q均值不能代替alpha。
+
+| Step | Rounds | Pooled mean alpha | Equal-prompt mean alpha（32/32） | Observed first-prefix | Mean alpha<.5 prompts | EOS / 达预算 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 3268 | 15.828% | 15.578% | 519/3268＝15.881% | 32/32 | 5 / 27 |
+| 512 | 2620 | 30.846% | 32.453% | 806/2620＝30.763% | 30/32 | 4 / 28 |
+| 1280 | 2270 | 37.274% | 39.736% | 843/2270＝37.137% | 26/32 | 5 / 27 |
+
+Step1280四bins pooled alpha依次 **34.897/37.036/38.346/39.349%**，rounds **621/598/561/490**，有round prompts **32/31/31/27**；后段人群因EOS改变，不作同状态进度因果推断。25ordinal在三checkpoint mean alpha均<.5，低首位接受并非只由极少prompt或一个预定bin构成，但没有经验证的预测分组/策略。512→1280 mean alpha **26升6降**，observed first-prefix **27升4降1平**，与既有accepted draft tokens/round的28升口径不同；Direction早期口头把5个未升误称5降，已复核更正，原raw audit只报升数且不受影响。全32ordinal及下降记录见[公开报告](../reports/natural-first-risk-20261009/README.md)/[summary](../reports/natural-first-risk-20261009/summary.json)，不筛掉不利prompt。
+
+**独立复核、来源与实际小问题。** Direction先独立保存raw-derived结果，再分享aggregate给core；独立 **98691 raw invariant assertions**和随后 **110698逐值checks/8158row**核结果/pooled/equal-prompt/prompt/bin/coverage/changes通过，浮点对照rtol1e−12/atol1e−14，**不声称两个全盲实现**。Core handoff SHA **21924426…6738dc**，summary **8d81544d…026c60**，source freeze manifest **82238efc…b0d7fb**、analyzer **589cd731…19738**已核（base **78a85d2**加三文件）；记录者核三current/frozen source、8份artifact/6份logs及36input字节哈希，未重算分析或读private round内容。Direction raw/core对照/方向SHA **7b6f53a8…716256c / c5744a54…23c617 / 6b3f861e…f4e962**及live哈希已核。Root发布检查初版过宽substring把说明术语committed_tokens误报为private内容，改JSON递归禁字段+真实private ID/machine path检查后通过，**未删改分析内容**；见本地publication-audit，这不是测试/分析失败。公开6文件不含raw token/seed/ID/机器路径，逐round p/q仅留ignored evidence。
+
+**当时观察与下一界限。** Direction本轮唯一实时只读AMD检查为**23:34:47.344330（UTC+8）**，proc/listener身份稳定、ASR ready/nonbusy、可见KFD仅原ASR、free25241772032bytes；仅当时可见状态，记录者未重复remote。Root接受下一步**仅设计**有界matched-prefix质量/训练目标诊断，先明确可比状态/位置权重/原numerical-law controls/停止规则，尚无新执行。不同checkpoint的prefix/输出horizon是不同采样轨迹，结果仅描述、非训练因果；selected alpha不是full-vocab per-state overlap，round相关，不作独立round CI。不能直接归因数据不匹配/曝光偏差，alpha与observed接近也不是新confidence校准结果，更不与TF.373430等价或迁移synthetic3.1%。原sampler A和冻结step1280/STS状态保留，不自动训练/生成/校准/重选checkpoint/策略搜寻/速度推演；S46分支关闭及旧numerical-law/TV/vLLM边界继续有效。记录者仅改本日志/README.ai，未remote/tensor/model/test/分析复跑、改实现/报告或commit/push。

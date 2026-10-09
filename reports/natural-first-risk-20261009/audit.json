@@ -1,0 +1,70 @@
+{
+  "artifact_sha256": {
+    "cpu-tests.log": "d5d6879c579991ac31600cce8c5180002226bcb3dc3da65c8679fa85a3dff3c0",
+    "independent-comparison.json": "c5744a541d0d63bd07ef1b99fc04b74c4e346185bb96a91da438b4d0d423c617",
+    "source-identity.json": "82238efcdafc4cbf935d7f3b8f4d90aa9b593d03c3e0331d522deb2423b0d7fb",
+    "summary.json": "8d81544d20c6fab739ba6bd42ce26d73ecd5d2d2c3c76bf5a2ac96d96e026c60"
+  },
+  "collections": [
+    {
+      "binding_digest_verified": true,
+      "completion_exits_verified": true,
+      "historical_public_aggregate_equal": true,
+      "original_quality_cases_equal": true,
+      "package_files": 30,
+      "panel_digest_and_file_bytes_verified": true,
+      "source_commit": "a278e5a5d7d74a1f77f8dcd475700959ee158cb0",
+      "step": 128
+    },
+    {
+      "binding_digest_verified": true,
+      "completion_exits_verified": true,
+      "historical_public_aggregate_equal": true,
+      "original_quality_cases_equal": true,
+      "package_files": 30,
+      "panel_digest_and_file_bytes_verified": true,
+      "source_commit": "a278e5a5d7d74a1f77f8dcd475700959ee158cb0",
+      "step": 512
+    },
+    {
+      "binding_digest_verified": true,
+      "completion_exits_verified": true,
+      "historical_public_aggregate_equal": true,
+      "original_quality_cases_equal": true,
+      "package_files": 30,
+      "panel_digest_and_file_bytes_verified": true,
+      "source_commit": "a278e5a5d7d74a1f77f8dcd475700959ee158cb0",
+      "step": 1280
+    }
+  ],
+  "historical_archive_sha256": "669b48cd2a11693422f34b798607dbae307bafd6de0af2d2b461fdf3afc636bf",
+  "historical_collector_commit": "a278e5a5d7d74a1f77f8dcd475700959ee158cb0",
+  "independence": "Direction independent raw script preceded this implementation, then shared aggregate numbers before core finished; core code/tests use raw-derived invariants and synthetic fixtures, not those numbers. Final row-by-row cross-check passed; not claimed fully blind.",
+  "limitations": [
+    "Recovery-time hashes authenticate transferred present bytes, not a previously published full raw-round digest.",
+    "Original published binding/source/checkpoint/panel/aggregate identities reconcile; model weights and shared generation files were not reopened, and no new rollout was run."
+  ],
+  "recovered_archive_sha256": "c27dbe813d458d15735260d722bac5527a43b9bfec3298219054bba3b04ef09d",
+  "recovered_input_files": 36,
+  "recovery_os_exits": [
+    0,
+    0
+  ],
+  "root_provenance_audit_sha256": "016859b3d028ae9cc683808432f9f28c91675e22e22a853b0e18cf1921b10103",
+  "source_sha256": {
+    "docs/natural-first-risk.md": "52b3d54e3ad6060010e8682931433b2d331c50ac8ae80c5a3b3c50479067eea9",
+    "scripts/analyze_natural_first_risk.py": "589cd731c4add26982b16e5e45abd86ac61721f66ac67b7773a7ae6925419738",
+    "tests/test_analyze_natural_first_risk.py": "4e5e1964fccb91ee8b13a4758023b77a9dd8bb06059344326088946a82f0a3fb"
+  },
+  "status": "passed",
+  "validation": {
+    "analysis_executions": 1,
+    "analysis_os_exit": 0,
+    "comparison_checks": 110698,
+    "cpu_test_os_exit": 0,
+    "cpu_tests": 5,
+    "independent_raw_checks": 98691,
+    "inputs_unchanged": true,
+    "private_rows_compared": 8158
+  }
+}

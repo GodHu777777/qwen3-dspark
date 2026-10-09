@@ -1,0 +1,10 @@
+test_cache_output_label_and_aggregate_tampering_rejected (test_analyze_natural_first_risk.FirstRiskTests.test_cache_output_label_and_aggregate_tampering_rejected) ... ok
+test_missing_or_invalid_risk_retains_labels_and_finite_overflow_alpha (test_analyze_natural_first_risk.FirstRiskTests.test_missing_or_invalid_risk_retains_labels_and_finite_overflow_alpha) ... ok
+test_progress_boundaries_pooled_equal_prompt_initial_eos_and_privacy (test_analyze_natural_first_risk.FirstRiskTests.test_progress_boundaries_pooled_equal_prompt_initial_eos_and_privacy) ... ok
+test_source_binding_and_duplicate_json_key_rejected (test_analyze_natural_first_risk.FirstRiskTests.test_source_binding_and_duplicate_json_key_rejected) ... ok
+test_stdlib_three_steps_identity_gap_and_all32_missing_coverage (test_analyze_natural_first_risk.FirstRiskTests.test_stdlib_three_steps_identity_gap_and_all32_missing_coverage) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.661s
+
+OK

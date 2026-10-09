@@ -1,0 +1,9 @@
+{
+  "base_commit": "78a85d20ef9472d2cf22fb4aff397fa362f4f148",
+  "scope": "Three additive analyzer/test/doc files; stdlib only, read-only historical quality32 analysis",
+  "source_sha256": {
+    "docs/natural-first-risk.md": "52b3d54e3ad6060010e8682931433b2d331c50ac8ae80c5a3b3c50479067eea9",
+    "scripts/analyze_natural_first_risk.py": "589cd731c4add26982b16e5e45abd86ac61721f66ac67b7773a7ae6925419738",
+    "tests/test_analyze_natural_first_risk.py": "4e5e1964fccb91ee8b13a4758023b77a9dd8bb06059344326088946a82f0a3fb"
+  }
+}
