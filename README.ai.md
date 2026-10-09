@@ -318,6 +318,11 @@ Target-only engine preparation: probe_vllm_offline.py and guard_vllm_smoke.py
 provide a bounded, identity-aware offline smoke. The first e0f5ce8 run stopped
 before engine initialization because distribution and module versions were
 incorrectly equated; reports/vllm-offline-smoke-20261009-e0f5ce8 preserves that
-failure. The03b80a2 correction pins both fields separately. Reuse this tested
+failure. The03b80a2 correction pins both fields separately and completed an
+actual35-prompt-token/128-output-token smoke with worker/controller OS0 and
+verified release. The engine reported FULL_AND_PIECEWISE graph capture and
+ROCM_ATTN with its internal Triton fallback. Replay was not independently
+instrumented; this single request is not a benchmark. See
+reports/vllm-offline-smoke-20261009-03b80a2. Reuse this tested
 supervisor for future experiments; the already-executed packed gate used an older
 external bare-PID controller and cannot establish PID-reuse-safe supervision.

@@ -1,0 +1,42 @@
+{
+  "source_commit": "03b80a2b573d42cb9c90a573e1ecdd1bd12f1d17",
+  "archive_sha256": "6a596f800509689a47e118d5a355d2cb1c76392ef716412457b386163e5f15cc",
+  "source_file_count": 266,
+  "installed_vllm_file_count": 3147,
+  "binding_file_count": 3434,
+  "binding_sha256": "2f584334a2d15ebfc0682e59a4f0703f4776958ea3bafb45307c665ad6b0833e",
+  "controller_sha256": "78e4c69c947cd20a03f4cd39e5dadb6c387d8d5fc01077e9bac522c03a9d1c2e",
+  "worker_sha256": "2bbef1f8cc596a77f5bf6af667f016693aaeb3c6e27b90dcacd9f2a2ec9eadd4",
+  "request_sha256": "8b676c697dd4abf77294f61c8b8bb7b2a7ad70ad92c26c7b5ce41863e8625237",
+  "versions": {
+    "vllm": "0.30.0+rocm723",
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0"
+  },
+  "version_guard": {
+    "distribution_metadata": {
+      "actual": "0.30.0+rocm723",
+      "expected": "0.30.0+rocm723",
+      "matches": true
+    },
+    "elapsed_seconds": 13.301728944061324,
+    "module": {
+      "actual": "0.30.0",
+      "expected": "0.30.0",
+      "matches": true
+    },
+    "stage": "version_identity_checked",
+    "verified": true
+  },
+  "target_model_tokenizer_sha256": {
+    "config.json": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd",
+    "configuration.json": "f888421726665e8a84b738eed42a64875aed79de8be7daade851ac8bf4c0cef9",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "installed_manifest_sha256": "2b212afa537e623e2f7694e57963f0ed3598d99d5e09b5921aebced16e60cf50"
+}

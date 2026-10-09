@@ -1,0 +1,21 @@
+{
+  "default_engine_configuration_preserved": true,
+  "configured_attention_backend": "ROCM_ATTN",
+  "paged_attention_implementation_reported": "Triton",
+  "paged_attention_log": "Cannot use ROCm custom paged attention kernel, falling back to Triton implementation.",
+  "manual_backend_override": false,
+  "manual_eager_fallback": false,
+  "configured_graph_mode": "FULL_AND_PIECEWISE",
+  "configured_graph_capture_sizes": [
+    1,
+    2
+  ],
+  "graph_capture_log_summaries": [
+    "Graph capturing finished in 8 secs, took 0.09 GiB",
+    "Graph capturing finished in 2 secs, took 0.10 GiB"
+  ],
+  "graph_capture_reported_by_engine": true,
+  "graph_replay_independently_verified": false,
+  "default_initialization_compile_and_jit_cache_side_effects": true,
+  "environment_package_installation_or_patch": false
+}

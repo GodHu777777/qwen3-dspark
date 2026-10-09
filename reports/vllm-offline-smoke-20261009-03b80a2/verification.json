@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "scope": "Functional request completion, frozen identity and release; no throughput/fidelity proof",
+  "checks": {
+    "source_archive_and_266_files_verified_before_launch": true,
+    "installed_3147_files_and_model_tokenizer_verified_before_launch": true,
+    "all_3434_binding_files_unchanged_after_execution": true,
+    "distribution_and_module_versions_separately_verified": true,
+    "frozen_35_token_prompt_unchanged": true,
+    "exact_128_output_tokens_and_length_finish": true,
+    "worker_and_controller_actual_os_zero": true,
+    "no_timeout_or_automatic_retry": true,
+    "all_thirteen_owned_pids_independently_absent": true,
+    "kfd_asr_only_ready_not_busy": true,
+    "vram_pre_post_equal": true
+  },
+  "private_evidence_sha256": {
+    "execution/controller-result.json": "7c4ed119ce4d55d07829ae5218982d2d551fc53634ce049bf35237465d09f77b",
+    "execution/worker-exit.json": "6b54b527fe94cb273d14dc7cd8dbf7e95580f9ae22fa7f3f119ec85099a49485",
+    "controller-os-exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "execution/worker/stages.jsonl": "e8de4d85ce09e3140348571866b3865a58bdad80a16bfd230d186c4c849524d0",
+    "execution/worker/result.json": "6cc673861c06bd18f6ad0e18861f8feb441cab2cad35f2cca5a9cb06b11323bc",
+    "execution/worker.log": "560380d9dc946ef35a3854d573c7737fea69a32dcf652f883a14cf7b64f7b979",
+    "execution/health.jsonl": "22f4c6dbf3c2dde2be27383e1a338fea39418497b5c535fc6cd5e3e7b8fe8f95",
+    "execution/prestate.json": "6cac4adce7281980d8915475c1ff736e699a854dc992085beaf452334beb3833",
+    "execution/poststate.json": "1cc2bc6eb1f0ffbd40f9e65178bc5b95d1b51bab10e190281469f76031332e45",
+    "execution/post-input-integrity.json": "989d588e7364e4d8a2e0d8d1c6e5156c41f171b8275eae1445d6a13a35bad7b0",
+    "independent-release.json": "50fcdceb61966c7d63bb1a40ff17acc33980ffe43e149d1f058ce8fdec1de9a8"
+  }
+}

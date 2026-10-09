@@ -2,7 +2,9 @@
 
 The first authorized execution stopped at a runner version-contract check before
 engine initialization; see [the retained failure report](../reports/vllm-offline-smoke-20261009-e0f5ce8/README.md).
-The corrected protocol below still has no completed engine/request result. Source inventory
+The corrected03b80a2 run subsequently initialized the engine and generated128
+tokens; see [the functional result](../reports/vllm-offline-smoke-20261009-03b80a2/README.md).
+This single smoke is not a performance benchmark. Source inventory
 found vLLM 0.30.0+rocm723 with offline `LLM.generate`, Qwen3 registration and graph
 configuration support. Hidden-GPU `vllm --help` timed out after 25 seconds; no
 process remained. That observation does not establish a kernel/engine failure.

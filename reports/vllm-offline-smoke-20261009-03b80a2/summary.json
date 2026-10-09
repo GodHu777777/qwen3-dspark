@@ -1,0 +1,20 @@
+{
+  "status": "completed_functional_smoke",
+  "source_commit": "03b80a2b573d42cb9c90a573e1ecdd1bd12f1d17",
+  "worker_os_exit": 0,
+  "controller_os_exit": 0,
+  "timed_out": false,
+  "released": true,
+  "prompt_tokens": 35,
+  "output_tokens": 128,
+  "finish_reason": "length",
+  "output_token_sha256": "deb11630621c39222ceeeadfae176e7ce0002f2af681a62fa9801547ac1e5842",
+  "configured_cudagraph_mode": "FULL_AND_PIECEWISE",
+  "enforce_eager": false,
+  "graph_capture_reported_by_engine": true,
+  "graph_replay_independently_verified": false,
+  "performance_claim": false,
+  "fidelity_claim": false,
+  "controller_lifecycle_seconds": 127.93096609890927,
+  "timing_scope": "Diagnostic single-run lifecycle, not repeated performance measurement"
+}
