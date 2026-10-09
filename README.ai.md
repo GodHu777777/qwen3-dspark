@@ -67,8 +67,10 @@ packed_target.py executes variable-length request chunks in one Qwen forward,
 with per-request positions, marker-based causal isolation and independent KV
 crop/removal. Five CPU tests check actual KV contents and lifecycle against
 independent targets. It uses a dense Q*K mask, with explicit work-domain counts;
-this is not yet an efficient varlen kernel or a multi-request decoder/scheduler.
-See docs/packed-target.md. No packed real-GPU results have been measured.
+this dense oracle is not an efficient varlen kernel. The separate packed_sampling
+module now supplies a CPU-validated multi-request decoder; serving remains incomplete.
+See docs/packed-target.md. Native target GPU evidence is reported separately
+below; the integrated packed decoder has no GPU execution result yet.
 CachedTarget has six CPU FP32 tests and a real same-dtype HF cached greedy
 check (117 tokens on seven pilot prompts). Reports/cached-target-20261008 records
 a BF16 full-recompute/cached near-tie divergence and isolated target costs.
@@ -285,5 +287,25 @@ projected-context KV. Native noncausal ROCm selection is explicit and unverified
 on GPU. Ten CPU tests cover actual KV, lifecycle/isolation, batched module calls,
 transaction failures and BF16 AMP boundaries. Projected K/V may have different
 dtypes; preserve their representation and cast at the attention boundary, not
-by downcasting trainables/RoPE. See docs/packed-draft.md. Batched Markov sampling,
-multi-request verification and asynchronous scheduling are still separate work.
+by downcasting trainables/RoPE. See docs/packed-draft.md.
+Packed Markov sampling and multi-request verification are now connected in
+packed_sampling.py (docs/packed-sampling.md). Eleven new CPU tests, plus ten draft
+and five target tests, passed with GPUs hidden. One batch invokes one backbone,
+batched heads, one target verification and one committed-feature projection;
+actual q and original pre-token confidence remain session-owned. Prefill projects
+only R final hidden rows. GPU sessions require the explicit pinned causal target
+and noncausal draft backends; neither this entry guard nor CPU tests resolve the
+whole-Qwen RMS failure. Native integrated GPU execution, measured capacity and
+actual asynchronous overlap remain unverified.
+
+Two-step capacity CPU reference: async_capacity.py freezes absolute K from exactly
+t-2 history and allocates using current calibrated prefix scores; scheduler.py's
+literal synchronous early-stop algorithm remains unchanged. Full shadow drafting
+runs during cold start and zero allocation. Historical search crosses all SPS
+cliffs; profile/calibration/request incarnations and private confidence provenance
+are bound. Output-budget marginal benefit stops at remaining-1 because the last
+accepted token cannot produce a bonus. async_round.CapacityRoundDriver enforces
+freeze -> propose -> bind -> verify/commit -> finish and charges synchronous host
+copies, calibration and hashing. Twenty hidden-GPU tests passed, including real
+three-round tiny-Qwen KV reconstruction. Profiles are synthetic; CPU ordering is
+not evidence of GPU overlap, graph replay or measured SPS. See docs/async-capacity.md.

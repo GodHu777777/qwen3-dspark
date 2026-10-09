@@ -10,6 +10,11 @@ The full-prefix greedy verifier is a correctness reference. Incremental target
 and draft caches are also implemented; their native BF16 equality gate has known
 failures described below.
 
+A [packed multi-request decoder](docs/packed-sampling.md) and a
+[two-step capacity reference](docs/async-capacity.md) now run together on tiny CPU
+models, with per-request KV reconstruction and confidence-source checks. Native
+GPU integration, measured hardware profiles and execution overlap remain open.
+
 ## Architecture
 
 ```mermaid

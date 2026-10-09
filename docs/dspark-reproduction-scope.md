@@ -150,8 +150,8 @@ draft 与 target 在不同 CUDA stream 并发运行。本文所核对原文也�
 | Confidence STS | CPU算法与独立fit/eval CLI已实现，绑定冻结1280选择、checkpoint/data/source/runtime及fit身份，真实fit44/eval43/default61-grid STS已完成，含fit-only常数和EOS/截断分母；STS ECE在1/2/5劣于unscaled、Brier在1–6更差，constant ECE在1–5更好 | 保留冻结方法和baseline，不用eval再调参；尾部正例稀疏，仍需因果scheduler/engine检验；test不参与 |
 | R 请求全局 Algorithm1 | 已有独立CPU `scheduler.py` literal planner，输出ell/B/tau/score；7项测试用小R/gamma穷举oracle，保留cliff反例 | 尚未接入解码/engine，没有实际多请求SPS；fixture仅证明算法，不证明性能或因果score来源 |
 | 硬件容量 SPS(B) | 已测单请求 eager target 若干块长；不含 draft、并发或服务管线 | 测真实 batched engine 的 SPS/shape 台阶、上下文/并发敏感性；定义计时边界，验证模型预测误差 |
-| 两步历史异步容量 K | 尚未实现 | 两步历史状态、因果隔离、当前top-K、启动/新旧请求映射、离散容量 cliffs、调度延迟隐藏 |
-| 可变长度批验证执行 | PackedTarget 单次 Qwen forward 无 query padding；5 项 CPU 测试覆盖 marker 隔离、每请求 KV 内容/crop/生命周期；仍为 dense Q×K mask；原公开native GPU数值gate失败；六调用诊断支持显式窗口对齐原因；显式pinned backend三case/11调用完整tensor gate已通过，whole-Qwen独立门禁首次运行报告layer26 RMS门限失败，不能称整个native修复完成 | 接入多请求 draft/verify 循环，实现高效 varlen/block-sparse attention、graph shape 策略，测真实物理工作与 KV gather 成本 |
+| 两步历史异步容量 K | CPU reference已实现精确t−2容量、当前分配、全离散搜索、完整shadow冷启动、请求incarnation与private confidence绑定；同步round driver接通真实tiny模型并重建KV，20项CPU检查通过 | 真实硬件SPS、异步buffer/执行重叠、graph shape及调度延迟隐藏；同步driver不等于异步引擎 |
+| 可变长度批验证执行 | PackedTarget 单次 Qwen forward 无 query padding；5 项 CPU 测试覆盖 marker 隔离、每请求 KV 内容/crop/生命周期；仍为 dense Q×K mask；原公开native GPU数值gate失败；六调用诊断支持显式窗口对齐原因；显式pinned backend三case/11调用完整tensor gate已通过，whole-Qwen独立门禁首次运行报告layer26 RMS门限失败，不能称整个native修复完成 | packed draft/Markov/verify/commit循环已接通，26项CPU检查通过；仍需真实native集成验证、高效 varlen/block-sparse attention与graph shape策略，测真实物理工作与KV gather成本 |
 | 吞吐—交互性 frontier | 尚未测 | 多并发/到达负载下 aggregate tok/s、per-user TPS、TTFT/ITL分位数和SLA达成率；与强target-only serving engine基线在相同context/request/load下比较 |
 
 单请求固定 k 和 cost lookup 仍有价值：它们是基线、成本界和开发步骤。它们不构成
@@ -276,5 +276,5 @@ Markov/vocabulary 投影、float64 GPU softmax/CDF、多次 bool/item/tolist CPU
 observer 拷贝/JSON、增长式 KV cat 以及 native varlen 每层 active KV gather。
 这些是代码可见的待测热点，不是已完成的 profiling 结论。不能把这个 reference
 与刻意慢的 HF baseline 比较后宣称加速，也不能从验证 query 行数或两个 CUDA
-stream 推断服务收益。真正的多请求 draft/verify、全局容量分配、请求生命周期和
-rollback、两步历史异步依赖/缓冲管理及吞吐—交互性 frontier 仍保留在主目标内。
+stream 推断服务收益。多请求draft/verify与两步历史容量已接通CPU同步参考，尚需真实GPU执行验证；
+异步依赖/缓冲管理、实测硬件容量及吞吐—交互性frontier仍保留在主目标内。
