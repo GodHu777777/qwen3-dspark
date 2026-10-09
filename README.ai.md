@@ -326,3 +326,16 @@ instrumented; this single request is not a benchmark. See
 reports/vllm-offline-smoke-20261009-03b80a2. Reuse this tested
 supervisor for future experiments; the already-executed packed gate used an older
 external bare-PID controller and cannot establish PID-reuse-safe supervision.
+
+CPU-prepared performance tools: `performance_workloads.py` and
+`configs/performance-workloads.example.json` define shared exact synthetic
+R=1/2/4, prompt64/256, output128 workloads. `benchmark_vllm_offline.py` measures
+one-engine fixed batches with separate diagnostic event timing;
+`guard_vllm_benchmark.py` reuses identity-aware supervision.
+`profile_packed_decoder.py` separately measures all64 R2/C128 full-shadow
+allocations from restored real caches/RNG. Its local round rates explicitly
+exclude planner/history cost and are ineligible as full CapacityRoundDriver
+profiles. Both default to CPU binding/preflight; preparation is not a GPU
+benchmark result. Read docs/vllm-offline-benchmark.md and
+docs/packed-performance-plan.md before execution. Do not mix output tokens/s,
+local rounds/s and end-to-end serving capacity.
