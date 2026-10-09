@@ -21,12 +21,12 @@ each size it maximizes expected prefix progress by cumulative-score rank, then
 maximizes expected progress times SPS. Exact objective ties choose smaller K.
 Historical departed requests still participate; no new request borrows a previous
 incarnation's score row. Historical remaining output budgets cap useful prefixes at
-`min(gamma, remaining−1)`. With acceptance-prefix length A, actual progress is
+`min(gamma, remaining−1)`. With no EOS stopping and acceptance-prefix length A, actual progress is
 `min(1+A, remaining)`: its expectation is `1 + sum(P(A >= j))` only through
 `j <= remaining−1`. The final budget position has no bonus-token benefit and is
 excluded from both historical capacity candidates and current verification
 admission, while full shadow proposals still contain all gamma positions. An
-independent rejection-path enumeration checks this rule, including remaining=1. Zero-score extensions remain in this historical full search, so an
+independent rejection-path enumeration checks this rule, including remaining=1. This progress objective ignores random EOS stopping; the budget oracle uses no EOS. A sampled EOS must not be used retroactively to change its own admission. Zero-score extensions remain in this historical full search, so an
 unusual rising SPS curve can reserve them. Every discrete SPS value and physical
 bucket must be supplied; no interpolation is performed.
 

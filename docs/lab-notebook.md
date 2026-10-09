@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 10:40（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 10:52（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -694,3 +694,33 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 这里ECE是位置ECE的count加权均值，未把不同位置合并为pooled-bin ECE；小幅均值下降不抵消各位置失败或Brier变差。最终采集/拟合没有执行失败、重试或实现修复；被证据修正的是“STS应普遍改善”的预期，保留不利结果，不据eval调整grid/温度/checkpoint/sampler/admission。尾部eval位置6/7仅 **19/9正例**（3159/3135labels），位置3–7只有42/43prompt有观测，round相关性与稀疏事件限制外推，不能用尾部低ECE泛称校准可靠。完整position/bin/coverage见[eval metrics](../reports/sts-step1280-20261009/eval-metrics.json)。
 
 **下一决策与记录责任。** 保留冻结STS作为论文方法分支，同时保留raw/fit-only constant对照；未来scheduler还须验证因果集成与实测成本，不因本轮低ECE/Brier宣布系统收益。Eval43仅相对STSfit prompt-held-out，全部119dev已用于TF监测；final test未使用，既有native数值差异/wholeQwen固定失败不解除，无答案质量/无损/性能结论。专职独立experiment_journal创建仍遭系统thread limit拒绝，继续由现存sol_data承担6.1 Sol专职记录；本轮同步修正README.ai.md的当前角色描述和顶部STS索引，旧历史条目保留。记录者只日志及入口角色说明，无GPU/实现/进程/提交动作。
+
+
+<a id="packed-sampling-cpu"></a>
+## 2026-10-09 10:50（UTC+8）— S12：packed proposal/verify/commit 的同步 CPU 集成通过
+
+**问题与假设。** S11只有flat draft backbone，仍需连接真正批量Markov heads、实际q采样、一次packed target验证与一次draft提交，并证明跨request没有KV污染。直接读[集成说明](packed-sampling.md)、源码/tests及未发布 `output/packed-sampling-cpu-20261009/` 的manifest、overlay-verification和测试日志。假设是复用已有stochastic verifier，在批量执行中仍保持每个request的独立采样law与“已提交prefix减最新anchor”缓存边界；这不预设native GPU数值等价或加速。
+
+**批量路径与工作口径。** Admission一次packed prefill，只选每request最后hidden row，调用一次 **R-row target LM head**，不对整段prompt做vocab投影；全部已提交prompt features一次投影进draft KV。Proposal一次flat backbone/base LM head，每位置对仍需该位置的request批量调用Markov embedding/projection与confidence head，request循环只做RNG draw。Confidence在当前token抽样前计算，实际q保留原float64 law。Verify一次packed append `[旧anchor,选择的proposal prefix]` 和一次logits投影，按request执行既有接受/residual/bonus/EOS逻辑；裁剪target后全部committed features一次投影进draft。拒绝tail与最新输出不进入persistent KV。默认shadow即使后续allocation为0仍付全block工作，只有抽样前冻结长度的fixed-budget允许zero-skip；fullshadow/basehead/serialheads/targetrows/commit/copies分别计数，不当作耗时或速度。
+
+**身份、私有来源与拒绝机制。** Issued handle绑定request/incarnation/session mutation epoch/cache length/nonce/limit/mode及精确对象身份；移除后同名重加取得新incarnation/markers，stale/foreign/reused或非法prefix在target forward前拒绝。Admission/commit/remove推进的session epoch不是planner的连续t−2 round clock。原tokens/q/confidence由session私有保留，改公开observation copy不能替换verification q或policy score。Typed validator收到原始confidence的immutable CPU tuples、roster/remaining budget及七字段身份，拒绝也发生在target前；external nonanticipating只是caller声明，`planner_causality_proven=False`仍保留。执行/draw/copy/commit异常清空两套cache、使session失效并拒绝后续操作，不承诺RNG replay或事务回滚。
+
+**CPU证据与边界。** 最终 **26/26通过、1.869秒**（11新sampling+10draft+5target），三设备隐藏/cuda_available=false；此前8/10/25项阶段也通过，原log及两条 `(null)` 提示保留。实际tiny Qwen多request rollout对照独立single-request cached reference，每轮从完整committed prefix重建并比较各层target/draft KV；另核实际q/pre-token confidence、inactive exact isolation、R-row/head callcounts、public-copy篡改、生命周期、typed拒绝、BF16 AMP mixed KV/FP32 trainable与失败后关闭。受控每个拒绝位置/fullaccept/EOS分支仍运行真实models/cache，仅替换acceptance决策，验证集成commit边界，不冒称新的独立接受law证明。GPU入口测试是metadata-only，要求target causal与draft noncausal两侧显式pinned backend并拒绝public default；没有执行GPU。
+
+**身份核对与下一决策。** 记录者独立核manifest SHA **366bc955…**、三交付文件对 **ba3fa56575697bda5bd6c4a3b24bf3053a7aad36**（10:46:58）Git blobs、六log SHA及overlay身份表；最终log **ddf53928…**与26项计数相符，root已核push。CPU执行为manifest所记 **08220d5 archive+明确overlay**，还含packed_draft/async_capacity/async_round；不把三新交付或当前整树冒充完整tested snapshot。Trained noncausal draft与integrated native GPU仍未验证，wholeQwen固定layer26 RMS失败不变；没有overlap/graph/真实SPS或性能结果。同步driver smoke不提升为实际异步，正式planner/driver交付另记S13；本条未开启新GPU，记录者只改日志，无实现/进程/提交或final-test/private样本动作。
+
+
+<a id="two-step-capacity-cpu"></a>
+## 2026-10-09 10:52（UTC+8）— S13：t−2容量与同步driver CPU通过，修正输出预算末位收益
+
+**问题与假设。** S12已打通packed sampling，但current proposal对own future的干预可能污染容量/接纳，冷启动若永远target-only且不产shadow history也会死锁。新[两步容量说明](async-capacity.md)把历史absolute K搜索与当前prefix接纳分开：连续planner round严格取 **t−2** sealed frame，对全部可行离散SPS大小搜索expected progress×SPS，包含cliff/zero-score扩展、exact tie取较小K；当前只在draw前冻结的K内按cumprod score接纳positive prefix。原scheduler的同步first-non-improvement规则未修改。这是CPU参考策略；SPS曲线与physical bucket需完整供给，不能插值或当作实测硬件。
+
+**review发现的失败假设与修复。** Root发现旧预算收益会把remaining=1时接受最后一位算为额外output；实际每轮进度是 **E[min(1+A,remaining)] = 1 + sum(P(A≥j))**，求和只到 **j≤min(length,remaining−1)**。Direction据此把historical候选与current admission均截到remaining−1，remaining=1只保留一个baseline token；fullshadow仍包含全部gamma位置。独立oracle逐一枚举reject paths/fullaccept，覆盖remaining1/2/3及所有prefix长度，与公式和容量/接纳一致。这个修复纠正收益与预算边界，未改sampler law或裁掉shadow成本；root另报告本地18项review检查通过，工具输出无独立文件，本日志不将其冒充额外GPU或另份归档实验。
+
+**实际调用顺序与校准来源。** `CapacityRoundDriver`强制 **freeze→full shadow propose→bind→private validate/verify/commit→finish**，拒绝已有outstanding draws，partial failure后拒绝复用；planner round与session mutation epoch分开。Calibration是只读temperature tuple/source-artifact SHA身份，draw前固定，默认raw transform亦有独立身份；本轮未声称实际接入R12的trained STS artifact。Bind核精确handles、七字段identity/cache/budget/epoch，verify从session私有原confidence重算score digest与allocation，公开copy篡改不可替换来源。前两round本地cold-start只接纳baseline，但每轮照付 **R×gamma全shadow**并封存history，第三round才能取frame0；这只是显式reference startup选择，不宣称论文exact startup。Current roster/budget在draw前clamp旧absolute K，departed history仍参加旧搜索，新incarnation不继承旧score，profile/context不兼容则拒绝。Reserved K、actual logical B与physical bucket分别报告。
+
+**证据、结果与独立集成。** 直接读未发布 `output/async-capacity-cpu-20261009/{handoff.json,runtime.json,real-tests.log}`，正式 **20/20、0.234秒、OS0**（11planner+2真实tiny Qwen driver+7原scheduler），cuda_available=false。三轮用实际target/draft重建全部committed KV，事件严格freeze/propose交替；前两轮B=3/alloc0仍各付9shadow positions与9private confidence host values，第三轮history0/B=12，同样付9shadow。测试另覆盖jagged exhaustive allocation、own-token later-score干预、tie/zero underfill、churn/budget clamp、growth/empty roster、stale/profile/context与partial failure。记录者独立核五交付文件对 **6b1c2bca15d2f6802c2dd6404a04c87f6ceb2ca2**（10:49:52）Git blobs、runtime六源码SHA，handoff SHA **4c9d2dd4…**；root已核push。
+
+Root随后在该immutable source archive运行完整unittest suite，未发布 `output/integration-cpu-6b1c2bc/{verification.json,tests.log}` 记录 **176/176、10.878秒、SSH实际OS0、120秒bound**，三GPU环境变量为空。记录者独立核log SHA **e624d933…**、176test entries、最终Ran/OK及source identity；archive SHA依据root verification，未在本轮重复解包。日志有用例JSON/stdout穿插，不能仅按同一行“... ok”计数；所有原输出保留。GitHub Actions API本轮HTTP403 rate limit使CI状态未核，不写CI失败，也不把CPU suite替代CI状态。
+
+**边界与下一决策。** Driver全round计入calibration/host copies/hash/private验证/model work与显式device sync，各stage时间都属同步开销；fixture用synthetic SPS/test-only dense kernels，`hardware_overlap_proven=False`。Progress公式/预算oracle固定无EOS，真实随机EOS停机尚未建模，也不能用当前sampled EOS事后改变自身admission；root随后在说明文档补记该局限，原五文件handoff仍绑定6b1c2bc blobs。数值干预与provenance只验证这份参考集成，不是模型losslessness因果定理、实际异步buffer/overlap、graph或speedup。wholeQwen固定RMS失败与trained noncausal/integrated GPU未验证状态均保留。后续需分别解决native gate、测量真实capacity及同物理成本baseline，不能据本条自动开GPU。本轮记录者只追加日志，无实现/进程/GPU/提交或final-test/private样本动作。
