@@ -43,9 +43,11 @@ class PackedTargetOnlyTests(unittest.TestCase):
             (Bucket((4,2,3),(0,0,0),'CPU prompt fixture'), Bucket((4,),(0,),'CPU re-admission fixture')),
             tuple(Bucket((1,)*r,(20,)*r,'CPU anchor-only fixture') for r in (1,2,3)))
 
-    def session(self, *, buckets=None, eos_ids=(), temperature=.8):
+    def session(self, *, buckets=None, eos_ids=(), temperature=.8, graph_backend=None):
+        graph_options = (dict(graph_backend=graph_backend,max_graph_buckets=1,graph_byte_budget=1024**2)
+                         if graph_backend is not None else {})
         target = PersistentQwenTarget(copy.deepcopy(self.model),(0,2),slots=3,context_capacity=24,
-            max_query_tokens=9,test_kernel=test_only_persistent_sdpa)
+            max_query_tokens=9,test_kernel=test_only_persistent_sdpa,**graph_options)
         return PackedTargetOnlySession(target,target_strategy=PersistentTargetStrategy(target,buckets or self.buckets),
                                        eos_ids=eos_ids,temperature=temperature)
 
@@ -197,6 +199,59 @@ class PackedTargetOnlyTests(unittest.TestCase):
             PackedTargetOnlySession(target,target_strategy=strategy)
         target._varlen_kernel.backend_name=BACKEND
         self.assertIs(PackedTargetOnlySession(target,target_strategy=strategy).target,target)
+
+    def test_real_target_only_session_emulator_two_rounds_match_eager_laws_rng_and_lease(self):
+        # The actual session and full tiny-Qwen body run; CPU emulation does not
+        # establish device capture support or actual CUDA stream ordering.
+        from dspark_qwen.persistent_qwen_graph import CPUReplayEmulator
+        eager=self.session();replay=self.session(graph_backend=CPUReplayEmulator())
+        bucket=replay.target_strategy.buckets.verification[1]
+        replay.target.register_graph_bucket(bucket,reserve_bytes=65536)
+        self.admit(eager);self.admit(replay)
+        self.assertEqual(eager.outputs(),replay.outputs())
+        chunks={r:torch.tensor([[replay.requests[r]['output'][-1]]]) for r in ('A','B')}
+        replay.target.capture_graph(chunks,bucket=bucket)
+        pointers=replay.target._graphs[bucket].pointers()
+        inactive=replay.target.request_kv('C');positions=[];events=[]
+        commit=replay.target.commit;release=replay.target.release_features
+        def checked_commit(features,counts):
+            self.assertIs(replay.target._feature_lease,features)
+            self.assertEqual(counts,{'A':1,'B':1})
+            # Both categorical draws consumed the real graph output before any
+            # target write; the old cache lengths still match prior outputs.
+            for r in counts:
+                self.assertEqual(len(replay.requests[r]['rng'].values),len(replay.requests[r]['output'])+1)
+                self.assertEqual(replay.target.lengths[r],replay.requests[r]['prompt_length']+len(replay.requests[r]['output'])-1)
+            result=commit(features,counts)
+            self.assertIs(replay.target._feature_lease,features)
+            events.append('commit');return result
+        def checked_release(features):
+            self.assertEqual(events[-1],'commit');self.assertIs(replay.target._feature_lease,features)
+            result=release(features);self.assertIsNone(replay.target._feature_lease)
+            events.append('release');return result
+        with patch.object(replay.target,'commit',side_effect=checked_commit), \
+                patch.object(replay.target,'release_features',side_effect=checked_release):
+            for _ in range(2):
+                expected=eager.step(('A','B'));actual=replay.step(('A','B'))
+                self.assertEqual(actual['requests'],expected['requests'])
+                self.assertEqual(actual['work']['target']['execution_kind'],'cpu_replay_emulator_not_gpu_graph')
+                self.assertEqual(actual['work']['target']['physical_query_tokens'],2)
+                self.assertEqual(replay.outputs(),eager.outputs())
+                for r in ('A','B'):
+                    self.assertTrue(torch.equal(actual['target_probs'][r],expected['target_probs'][r]))
+                    self.assertEqual(replay.requests[r]['rng'].values,eager.requests[r]['rng'].values)
+                    for a,b in zip(replay.requests[r]['rng'].laws,eager.requests[r]['rng'].laws):
+                        self.assertTrue(torch.equal(a,b))
+                positions.append(replay.target.pool._workspaces[bucket].positions.tolist())
+                self.assertEqual(replay.target._graphs[bucket].pointers(),pointers)
+                self.assert_prefix(replay)
+        self.assertEqual(events,['commit','release','commit','release'])
+        self.assertEqual(positions,[[4,2],[5,3]])
+        self.assertEqual(replay.target.lengths,{'A':6,'B':4,'C':3})
+        self.assertTrue(replay.requests['A']['finished'])
+        for a,b in zip(inactive,replay.target.request_kv('C')):
+            for x,y in zip(a,b):self.assertTrue(torch.equal(x,y))
+        replay.target.close();eager.target.close()
 
 
 if __name__=='__main__':unittest.main()

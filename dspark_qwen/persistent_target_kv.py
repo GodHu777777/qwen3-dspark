@@ -1,8 +1,9 @@
 """Persistent target KV and speculative scratch, independent of model/sampling.
 
-This is a CPU-validated storage/data-movement candidate, NOT a captured graph or
-native attention adapter. Metadata preparation and commit stay outside a future
-captured deterministic layer. Existing numerical oracles are not modified.
+This store does not execute attention or capture graphs. Metadata preparation and
+commit stay outside captured execution. A registered external-write capability
+can publish scratch readiness after backend-owned completion; it trusts that
+program's all-layer signature rather than proving device execution independently.
 """
 from dataclasses import dataclass
 from typing import Mapping
@@ -52,6 +53,25 @@ class Transaction:
     slots: tuple
     context_lengths: tuple
     bucket: Bucket
+
+
+@dataclass(frozen=True)
+class ExternalWriter:
+    """Registered backend signature; authority is exact object identity.
+
+    Completion attests that this trusted fixed program finished. It is not an
+    independent proof that the device executed every intended layer correctly.
+    """
+    bucket: Bucket
+    layers: tuple
+    scratch_pointers: tuple
+
+
+@dataclass(frozen=True)
+class ExternalWrite:
+    writer: ExternalWriter
+    transaction: Transaction
+    generation: int
 
 
 class _Workspace:
@@ -113,6 +133,9 @@ class PersistentTargetKV:
         self._sequence = 0
         self._pending = None
         self._staged = set()
+        self._writers = {}
+        self._external = None
+        self._submission_generation = 0
         self.failed = False
 
     def _healthy(self):
@@ -189,6 +212,66 @@ class PersistentTargetKV:
         if bucket not in self._workspaces:
             self._workspaces[bucket] = _Workspace(bucket, self.heads, self.dim, self.dtype, self.device)
 
+    def workspace_bytes(self, bucket):
+        """Exact tensor allocation size before registering a workspace."""
+        n, r, q = bucket.key_capacity, len(bucket.query_lengths), bucket.query_tokens
+        return 6*n*self.heads*self.dim*self.keys.element_size() + 18*n + 8*(r+1) + 8*q
+
+    def register_external_writer(self, bucket, layers, completion_check):
+        self._idle()
+        if bucket not in self._workspaces or tuple(layers) != tuple(range(self.layers)) or not callable(completion_check):
+            raise ValueError('Registered bucket, complete ordered layer signature and completion checker required')
+        writer = ExternalWriter(bucket, tuple(layers),
+            (self.scratch_keys.data_ptr(), self.scratch_values.data_ptr()))
+        self._writers[id(writer)] = (writer, completion_check)
+        return writer
+
+    def prepare_external_write(self, tx, writer):
+        self._transaction(tx)
+        registered = self._writers.get(id(writer))
+        if (registered is None or registered[0] is not writer or writer.bucket != tx.bucket
+                or self._staged or self._external is not None):
+            raise ValueError('Fresh transaction and exact registered external writer required')
+        self._submission_generation += 1
+        receipt = ExternalWrite(writer, tx, self._submission_generation)
+        self._external = dict(receipt=receipt, state='prepared', event=None)
+        return receipt
+
+    def _external_write(self, receipt):
+        if self._external is None or self._external['receipt'] is not receipt:
+            raise ValueError('Stale, copied or foreign external write receipt')
+        self._transaction(receipt.transaction)
+        if receipt.writer.scratch_pointers != (self.scratch_keys.data_ptr(), self.scratch_values.data_ptr()):
+            self.failed = True
+            raise RuntimeError('Registered scratch allocation changed')
+        return self._external
+
+    def submit_external_write(self, receipt, event):
+        state = self._external_write(receipt)
+        if state['state'] != 'prepared':
+            raise ValueError('External write must be submitted exactly once')
+        state.update(state='submitted', event=event)
+
+    def complete_external_write(self, receipt):
+        state = self._external_write(receipt)
+        if state['state'] != 'submitted':
+            raise ValueError('Submitted, unpublished external write required')
+        checker = self._writers[id(receipt.writer)][1]
+        if not self._check_external_completion(checker,state['event'],receipt):
+            raise RuntimeError('External write completion has not been observed')
+        self._staged = set(receipt.writer.layers)
+        state['state'] = 'completed'
+
+    def _check_external_completion(self, checker, event, receipt):
+        try:return bool(checker(event,receipt))
+        except BaseException:
+            self.failed=True
+            raise
+
+    def invalidate(self):
+        """Fail closed after uncertain external/device writes; never reuse buffers."""
+        self.failed = True
+
     @torch.no_grad()
     def begin(self, handles, bucket):
         """Prepare host metadata before any future captured layer execution.
@@ -247,6 +330,8 @@ class PersistentTargetKV:
     def stage_layer(self, tx, layer, keys, values):
         """Copy real model's new KV only into independent scratch."""
         self._transaction(tx)
+        if self._external is not None:
+            raise ValueError('Cannot mix eager and registered external scratch writes')
         if type(layer) is not int or not 0 <= layer < self.layers or layer in self._staged:
             raise ValueError('Each model layer must stage exactly once')
         q = tx.bucket.query_tokens
@@ -304,13 +389,17 @@ class PersistentTargetKV:
         except Exception:
             self.failed = True
             raise
-        self._pending, self._staged = None, set()
+        self._pending, self._staged, self._external = None, set(), None
         return dict(committed_tokens=sum(committed_query_lengths.values()),
                     copied_kv_bytes=2*self.layers*self.heads*self.dim*self.keys.element_size()*sum(committed_query_lengths.values()))
 
     def abort(self, tx):
         self._transaction(tx)
-        self._pending, self._staged = None, set()
+        if self._external is not None and self._external['state'] == 'submitted':
+            receipt = self._external['receipt']
+            if not self._check_external_completion(self._writers[id(receipt.writer)][1],self._external['event'],receipt):
+                raise RuntimeError('Cannot abort buffers with an unfinished external write')
+        self._pending, self._staged, self._external = None, set(), None
 
     def request_kv(self, handle):
         i = self._slot(handle); n = self._lengths[i]

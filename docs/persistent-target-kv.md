@@ -203,3 +203,27 @@ not affect outputs; replay matched eager outputs bit-for-bit. This answers the
 bounded operator question above through a separate experimental adapter. The
 existing exact-K wrapper and full decoder are unchanged; full-model capture,
 graph selection from global K and scheduling overlap still require integration.
+
+## Registered external scratch writes
+
+The pool now has an explicit trusted-program completion boundary for the prepared
+full-target graph adapter. `register_external_writer` binds an exact capability
+to a registered bucket, all ordered layers and scratch addresses. A fresh
+`prepare_external_write` receipt binds the current transaction/incarnations and
+pool-owned submission generation. The completion callback receives the exact
+receipt object, and backend events bind that object plus the matching captured
+writer/program; matching generations across pools are insufficient. Only submitted
+backend-owned completion can
+publish readiness through `complete_external_write`; unsubmitted, unfinished,
+stale, copied, foreign or address-changed receipts are rejected. Eager writes
+cannot mix with that external transaction. Unfinished external work cannot be
+aborted into reusable storage. A completion callback returning false leaves work
+pending; an exception poisons the pool in both completion and abort paths, even
+if a subsequent query could recover.
+
+This trusts a registered fixed backend program and its completion event. It is
+not independent evidence that device kernels wrote each layer correctly. The
+existing eager storage tests and graph host-lifecycle tests establish their
+respective CPU contracts; actual full-target GPU evidence is still pending. See
+[persistent-qwen-graph.md](persistent-qwen-graph.md) for finite budgets, fixed
+buffers, same-stream feature lifetime and explicit prepare/submit/finish APIs.

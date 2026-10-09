@@ -418,9 +418,9 @@ attention callback. Its prefill/verify/commit/abort interface separates speculat
 KV from committed state; selected raw block outputs remain distinct from final
 normalized features. Four local tiny-Qwen tests cover all-layer KV, features,
 logits, partial commits, failed-forward recovery and inactive-request isolation.
-This is currently explicit CPU-only, not a PackedSpeculativeSession drop-in,
-full-model native path or captured graph. Read docs/persistent-qwen-target.md
-for the required sampling interface migration and external replay bookkeeping.
+The initial f46e63f candidate was CPU-only and required an explicit session
+interface migration. The subsequent session and graph implementations are
+described below; read docs/persistent-qwen-target.md for the current interface.
 Immutable f46e63f also passed the complete 230-test CPU suite on pinned AMD
 Torch 2.12.0+rocm7.2 / Transformers 5.17.0 with GPUs hidden (13.647 s, actual
 SSH/test exit 0); all 334 archive files were verified. Evidence is under
@@ -452,4 +452,28 @@ rows, RNG traces, outputs and all-layer KV against the independent cached target
 reference, including EOS, budgets, inactive requests and cleanup failures.
 See docs/packed-target-only.md and output/packed-target-only-cpu-20261009.
 This is preparation for paired E2E attribution, not a performance result or a
-replacement for the strong vLLM baseline. Graph composition is separately tested.
+replacement for the strong vLLM baseline. A subsequent ninth test exercises two
+real target-only session rounds with the CPU replay emulator, matching actual
+probabilities, RNG, outputs and all-layer KV; it is not GPU graph evidence.
+
+Full-target graph implementation: `persistent_qwen_graph.py` captures the original
+HF embedding, all decoder layers (including QKV/RoPE/MLP), final norm, scratch KV
+and selected raw feature copies; LM head, sampling and commit stay outside.
+Native eager and graph backends are explicit and pinned. CPU replay is separately
+named and is not GPU evidence. Review found and repaired shared-backend cross-pool
+event confusion, missing poison on cancellation-check exceptions, and undercounted
+private graph-pool memory. Events now bind exact receipts and registered programs;
+retained memory charges private-pool segment sizes, including inactive blocks.
+Feature leases survive commit until same-stream consumers finish enqueueing reads.
+Finite bucket counts and byte reservations are enforced without capture-on-miss.
+Frozen 21ce2bb plus seven overlays passed 260 local CPU tests (256 passed, four
+Linux-only skips), including real speculative-session/emulator composition.
+Evidence: output/persistent-qwen-graph-cpu-20261009/repair and the independent
+review under output/persistent-qwen-graph-review-20261009. Independent focused
+repair checks reject the original event/cancellation counterexamples and verify
+inactive private-pool accounting; no blocker remains in that CPU review scope.
+Pinned Torch 2.12 API
+inspection confirms pool-scoped memory_snapshot exists, but actual GPU pool
+accounting, full-model capture/replay and speed remain unverified. See
+docs/persistent-qwen-graph.md. Exact ordered-Q buckets are a bounded first step;
+general finite physical-B families, calibrated capacity and overlap remain open.
