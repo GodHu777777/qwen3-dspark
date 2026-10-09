@@ -421,3 +421,8 @@ logits, partial commits, failed-forward recovery and inactive-request isolation.
 This is currently explicit CPU-only, not a PackedSpeculativeSession drop-in,
 full-model native path or captured graph. Read docs/persistent-qwen-target.md
 for the required sampling interface migration and external replay bookkeeping.
+Immutable f46e63f also passed the complete 230-test CPU suite on pinned AMD
+Torch 2.12.0+rocm7.2 / Transformers 5.17.0 with GPUs hidden (13.647 s, actual
+SSH/test exit 0); all 334 archive files were verified. Evidence is under
+output/persistent-qwen-pinned-cpu-20261009-f46e63f. No tested HF API incompatibility
+was observed, and this CPU result makes no native or full-model graph claim.

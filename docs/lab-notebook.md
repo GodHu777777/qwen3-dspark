@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 12:39（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 12:51（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -17,7 +17,7 @@
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 - 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)。
-- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)。
+- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -919,3 +919,21 @@ S24公开报告与项目状态入口已由root提交并推送 **2934342114b99943
 **结论边界与下一决策。** 这解除S23在该固定first-layer shape上的native tail与局部capture能力未知，但 **不是whole-layer/whole-model graph、sampling-law pass或加速结果**。Ordered Q=(1,4)已知且不变；当前ell依赖当前confidence，所以不能从t−2 global K单独预选该graph，也未实现zero-overhead scheduling。未来还需确定full-target deterministic边界、有限bucket cache/总workspace预算、sampling/commit与resident所有权，再测double-bank+events及CPU/GPU overlap；这些不由pointer稳定自动成立。S24的无加速结果没有被本probe改写，旧whole-pretrained-Qwen固定layer26 RMS失败及cross-backend law/endpoint TV限制仍保留。下一步是有界集成和独立验证，不把这次disk-heavy能力probe转换成SPS或serving吞吐。
 
 S25报告与项目入口已由root提交/推送 **51d1c3d**。Root另在本地CPU重跑公开tensor verifier，实际OS0，输出与core原audit逐字节一致；运行证据保存在同一私有目录的 `root-rerun-public-tensor-verifier.json`。
+
+
+<a id="persistent-full-qwen-cpu"></a>
+## 2026-10-09 12:51（UTC+8）— S26：完整HF Qwen层接入persistent事务，CPU语义与固定5.17接口验证通过
+
+**问题与方法。** S25只capture首层gather+attention；要形成完整target路径，还需各layer将新KV写入scratch、继续原模型计算并保留正确的draft上下文特征。S26的[CPU集成候选](persistent-qwen-target.md)直接复用HF Qwen原embedding、全部decoder layers的QKV/QK norm/RoPE/output projection/MLP、final model norm与LM head，新增Cache.update与request-local causal callback把存储边界接到真实层执行，避免另写一份模型算术。它仍是eager、opt-in、明确CPU-only；constructor要求CPU model和显式CPU test kernel，GPU被拒绝，S25局部native成功不被当作全target native授权或证据。
+
+**缓存、位置与特征为何分开。** 每layer真实已RoPE K/V由Cache.update复制到该layer scratch，gather committed prefix+scratch后返回同一HF attention层，模型继续执行原残差/MLP与后续层。Explicit per-request position IDs来自事务各自C，不能使用flattened resident总长度作为各request RoPE位置；mask mapping由callback显式处理，generic mask推断被拒绝。Cache明确 `is_compileable=False`，空layers列表不成为可编译/可capture声明。Selected-layer hooks在取得model所有权时注册一次，按layer-ID顺序收raw block outputs；最后decoder block的raw输出若被选中，也不能与final-normalized `features.last`混同。独立tiny Qwen测试选择了最后block并核两者不同，logits始终来自原LM head对final norm输出。
+
+**显式事务与失败边界。** `prefill`只接受新admission的空request，执行完整forward后提交全部prompt；`verify`执行全部层但仅写scratch，返回严格对象身份绑定的features capability；`commit`整组验证输入前缀计数后才写resident，计数包含旧anchor，不是accepted draft数。`abort`或ordinary layer-forward失败丢弃scratch事务，保留所有resident K/V和lengths以便retry；pending时第二forward、admission/removal/reset被拒绝。Resident copy/device失败仍可poison pool，不承诺跨layer原子rollback或与draft cache的联合事务。Inactive resident保留并收费；request复用slot时incarnation更新，reset释放requests而保留bucket allocations，close移除hooks并恢复原backend。Work里的scratch-only write policy是契约字段，实际pre/post双K/V检查来自CPU测试，不把字符串当runtime全pool审计。
+
+**本地CPU证据与冻结提交。** 实际随机初始化 **四layer tiny Qwen** 与独立逐request HF forward比较全部四层KV、selected raw block features、final norm及full/last-row logits，检查不等context的prefill、两次增长context partial/full commit、pending resident双KV不变、非法/复制features、abort及layer1注入failure后的retry。Changing inactive request内容时，active features/logits **bit-identical**；另核inactive KV保留、slot reuse/reset stable pointers与精确bucket/input拒绝。初始 **4tests/0.052秒** 后的最终 **4tests/0.066秒、OS0** 使用现存本地 **Torch2.11.0/Transformers5.4.0、CPU、三GPU visibility隐藏**，没有预训练target/fullnative/graph或性能验证。Root审查后提交/推送 **f46e63f554f7144738e72accc37eb6836103c469**（12:46:42）。记录者核 `output/persistent-qwen-cpu-20261009/` final log **b7092b75…** 与handoff一致，三文件current/handoff/Git blob SHA一致：module **015a21ed…**、test **5d0dcc79…**、doc **27062511…**；旧initial log原样留存。
+
+**固定版本的后续验证。** 初次本地通过尚不能证明固定5.17接口兼容，core随后在immutable f46e63f AMD archive上用 **Torch2.12.0+rocm7.2/Transformers5.17.0** 跑完整suite，实际 **230tests/13.647秒、SSH OS0**；CUDA/HIP/ROCR变量均空，`cuda_available=False/device_count0`。记录者直接核本地 `output/persistent-qwen-pinned-cpu-20261009-f46e63f/` 的final summary、versions、source verification、full suite log与OS code：summary六evidence SHA全一致，分别明记test process与实际SSH OS0；archive **073edbb4…** 的334文件逐SHA/Git blobs一致，full log **3c25570f…** 明记230/13.647/OK；原 `(null)` stderr保留，不猜原因。固定5.17 API留证显示model接收explicit mask dict/per-request positions，attention在原RoPE后调用Cache.update再走registered callback，decoder block raw输出后另执行final model norm；本次suite实跑通过，未观察到需要修复的版本兼容失败。它解决此CPU candidate在固定依赖上的未测状态，不能外推为完整预训练模型或GPU路径已通过。
+
+**尚未接入与下一决策。** 当前不是旧append/crop drop-in：session的admission需明确改走prefill，verification改走verify，并在所有决策确定后一次target commit，而不能沿用逐request crop。Direction已开始该接入，但本条没有完成或集成测试证据；实际q、FP64 law、RNG、EOS/output budget及committed context排除最新anchor的约束继续原样保留。当前 `predict(last_only=True)`仍先投影全部Q行；未来admission必须维持先选R末行再LM head的优化，不能新增full-prompt vocab projection费用。Full-model graph也未实现：Python Cache.update的staged-set/hook bookkeeping只在capture时执行，replay不会重新发布新事务；还需外部staging/feature所有权、persistent outputs及stream/events证明完成后才能commit。Exact ordered-Q不能仅由t−2 K确定，bucket预算和双bank/overlap仍未解决。旧target RMS失败、cross-backend law限制和S24无加速结果均保留；四CPU测试与230suite不解除这些边界。
+
+**工作协调续记（不作实验结果）。** Root核现有 `dspark-astra` 30分钟ACTIVE heartbeat，并把prompt里已不存在的experiment_journal改为现存sol_data，要求继续保留vLLM强baseline及同backend control的区分；周期与通知规则未变。此处只记录root的协调状态，不新增实验、GPU授权或性能结论；记录者没有修改automation、远端环境或实现。
