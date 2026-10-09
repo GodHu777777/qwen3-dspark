@@ -1,0 +1,555 @@
+{
+  "status": "completed_audited",
+  "source": {
+    "commit": "192a3578eb71527e02fded28a3beaf487d53859a",
+    "source_archive_sha256": "ad853b239f9f33fcc554f91bf0fadbbe3ebab372985d1b33f5deddcd07a20a30",
+    "source_files": 352,
+    "workloads_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+    "protocol_sha256": "d4d011dbf71cfa2ba104b43373d05631fbe2a12bdf1f17bc3d2bbeda3f412472",
+    "generation_manifest_sha256": "e7f52f37495387fa3d06a60131508b833f3383a4ae818351e7ab8cebadb73287",
+    "checkpoint_weights_sha256": "d6f21ab3af5187ed181efdbde54118a9ada21b458d9957515a17d6b3693d0de4",
+    "checkpoint_metadata_sha256": "8bb0c5113d02decac5b8a64c585284dd1664f1a5f88f13014713ec1facc7ecc5",
+    "checkpoint_step": 1280,
+    "training_source_commit": "796fecc",
+    "runtime": {
+      "torch": "2.12.0+rocm7.2",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "hip": "7.2.53211",
+      "device_arch": "gfx1201",
+      "flash_preference": "_ROCmFABackend.AOTriton",
+      "flash_prefer_ck_env": null,
+      "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+    },
+    "transformers": "5.17.0"
+  },
+  "protocol": {
+    "version": 1,
+    "method": "paired_r1_two_graphs_and_explicit_eager_tails",
+    "case_ids": [
+      "r1-c64",
+      "r1-c256"
+    ],
+    "arms": [
+      "target_only",
+      "fixed_gamma7_full_shadow"
+    ],
+    "output_tokens": 128,
+    "gamma": 7,
+    "allocation": "max(0,min(7,remaining_output_budget-1)) chosen before full shadow",
+    "proposal_mode": "shadow; all seven positions even when allocation is zero",
+    "graph_query_lengths": [
+      1,
+      8
+    ],
+    "eager_query_lengths": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "prefill_query_lengths": [
+      64,
+      256
+    ],
+    "verification_key_capacity": 383,
+    "slots": 1,
+    "context_capacity": 384,
+    "max_query_tokens": 256,
+    "max_buckets": 10,
+    "max_graph_buckets": 2,
+    "graph_reservation_bytes": 536870912,
+    "graph_byte_budget": 1342177280,
+    "workspace_byte_budget": 67108864,
+    "temperature": 1.0,
+    "eos_ids": [],
+    "probability_policy": "float64_softmax_normalize_cdf_v1",
+    "timeout_seconds": 1800,
+    "cooperative_reserve_seconds": 10,
+    "minimum_free_bytes": 8589934592,
+    "process_allocation_cap_bytes": 6442450944,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "selected_layers": "same trained draft layer IDs in both arms",
+    "setup_validation_limits": {
+      "atol": 0.02,
+      "rtol": 0.02,
+      "max_rms": 0.005
+    },
+    "setup_validation": "once per Q1/Q8: native eager versus first replay, raw selected/final norm/logits/all-layer scratch KV; resident unchanged",
+    "measurement": {
+      "warmup_batches_per_case": 2,
+      "measured_batches_per_case": 5,
+      "diagnostic_batches_per_case": 2
+    },
+    "pair_order": "original two-case schedule; within each pair canonical arms for even repeat, reversed for odd repeat",
+    "setup_scope": "load/register/prime/two captures outside batch timings; reported separately",
+    "resident_cost": "same target, both graph pools and trained draft weights remain resident in both arms",
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "distribution_equivalence_claimed": false
+  },
+  "sample_count": 36,
+  "primary": {
+    "arms": {
+      "target_only": [
+        {
+          "case_id": "r1-c64",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 44.80493242218613,
+          "batch_latency_mean_seconds": 2.8568283240310848,
+          "batch_latency_median_seconds": 2.8376049840589985,
+          "batch_latency_min_seconds": 2.7339018780039623,
+          "batch_latency_max_seconds": 3.031948719988577,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        },
+        {
+          "case_id": "r1-c256",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 44.18171990260759,
+          "batch_latency_mean_seconds": 2.897125786007382,
+          "batch_latency_median_seconds": 2.896087376982905,
+          "batch_latency_min_seconds": 2.84264886402525,
+          "batch_latency_max_seconds": 2.934599853004329,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        }
+      ],
+      "fixed_gamma7_full_shadow": [
+        {
+          "case_id": "r1-c64",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 23.103708135361327,
+          "batch_latency_mean_seconds": 5.54023619282525,
+          "batch_latency_median_seconds": 5.529362536035478,
+          "batch_latency_min_seconds": 5.418119333102368,
+          "batch_latency_max_seconds": 5.665428470005281,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        },
+        {
+          "case_id": "r1-c256",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 19.274349862097893,
+          "batch_latency_mean_seconds": 6.64095032599289,
+          "batch_latency_median_seconds": 6.645158623927273,
+          "batch_latency_min_seconds": 6.475655850954354,
+          "batch_latency_max_seconds": 6.805081131053157,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        }
+      ]
+    },
+    "primary_execution": {
+      "target_only": [
+        {
+          "case_id": "r1-c64",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            2.7339018780039623,
+            2.922128266072832,
+            2.758557772031054,
+            3.031948719988577,
+            2.8376049840589985
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 635,
+            "actual_gpu_graph_rounds": 635,
+            "eager_tail_query_rows": 0,
+            "eager_tail_rounds": 0,
+            "graph_plan_query_rows": 635,
+            "graph_plan_rounds": 635,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 320,
+            "verification_query_rows": 635,
+            "verification_rounds": 635
+          }
+        },
+        {
+          "case_id": "r1-c256",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            2.9185024519683793,
+            2.896087376982905,
+            2.934599853004329,
+            2.8937903840560466,
+            2.84264886402525
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 635,
+            "actual_gpu_graph_rounds": 635,
+            "eager_tail_query_rows": 0,
+            "eager_tail_rounds": 0,
+            "graph_plan_query_rows": 635,
+            "graph_plan_rounds": 635,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 1280,
+            "verification_query_rows": 635,
+            "verification_rounds": 635
+          }
+        }
+      ],
+      "fixed_gamma7_full_shadow": [
+        {
+          "case_id": "r1-c64",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            5.529362536035478,
+            5.418119333102368,
+            5.452963951043785,
+            5.63530667393934,
+            5.665428470005281
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 3480,
+            "actual_gpu_graph_rounds": 435,
+            "eager_tail_query_rows": 95,
+            "eager_tail_rounds": 20,
+            "graph_plan_query_rows": 3480,
+            "graph_plan_rounds": 435,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 320,
+            "verification_query_rows": 3575,
+            "verification_rounds": 455
+          }
+        },
+        {
+          "case_id": "r1-c256",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            6.528350559994578,
+            6.475655850954354,
+            6.750505464035086,
+            6.805081131053157,
+            6.645158623927273
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 3965,
+            "actual_gpu_graph_rounds": 500,
+            "eager_tail_query_rows": 135,
+            "eager_tail_rounds": 30,
+            "graph_plan_query_rows": 3965,
+            "graph_plan_rounds": 500,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 1280,
+            "verification_query_rows": 4100,
+            "verification_rounds": 530
+          }
+        }
+      ]
+    },
+    "paired_comparisons": [
+      {
+        "case_id": "r1-c64",
+        "complete_primary_pair": true,
+        "native_rates": {
+          "target_only": 44.80493242218613,
+          "fixed_gamma7_full_shadow": 23.103708135361327
+        },
+        "speculative_over_target_only_rate_ratio": 0.5156509983691222,
+        "frozen_vllm_output_tokens_per_second": 131.26405631263103,
+        "native_over_frozen_vllm_rate_ratios": {
+          "target_only": 0.3413343582455994,
+          "fixed_gamma7_full_shadow": 0.1760094026070269
+        }
+      },
+      {
+        "case_id": "r1-c256",
+        "complete_primary_pair": true,
+        "native_rates": {
+          "target_only": 44.18171990260759,
+          "fixed_gamma7_full_shadow": 19.274349862097893
+        },
+        "speculative_over_target_only_rate_ratio": 0.43625168745321585,
+        "frozen_vllm_output_tokens_per_second": 127.33989818625602,
+        "native_over_frozen_vllm_rate_ratios": {
+          "target_only": 0.34695896990575875,
+          "fixed_gamma7_full_shadow": 0.1513614360984168
+        }
+      }
+    ]
+  },
+  "acceptance": [
+    {
+      "case_id": "r1-c64",
+      "arm": "target_only",
+      "primary_samples": 5,
+      "output_tokens": 640,
+      "seconds": 14.284141620155424,
+      "tokens_per_second": 44.80493242218613,
+      "vllm_tokens_per_second": 131.26405631263103,
+      "relative_to_vllm": 0.3413343582455994,
+      "verification_rounds": 635,
+      "accepted_draft_tokens": 0,
+      "proposed_tokens": 0,
+      "accepted_per_round": 0.0,
+      "accepted_over_proposed": null,
+      "graph_rounds": 635,
+      "eager_tail_rounds": 0
+    },
+    {
+      "case_id": "r1-c64",
+      "arm": "fixed_gamma7_full_shadow",
+      "primary_samples": 5,
+      "output_tokens": 640,
+      "seconds": 27.70118096412625,
+      "tokens_per_second": 23.103708135361327,
+      "vllm_tokens_per_second": 131.26405631263103,
+      "relative_to_vllm": 0.1760094026070269,
+      "verification_rounds": 455,
+      "accepted_draft_tokens": 180,
+      "proposed_tokens": 3120,
+      "accepted_per_round": 0.3956043956043956,
+      "accepted_over_proposed": 0.057692307692307696,
+      "graph_rounds": 435,
+      "eager_tail_rounds": 20
+    },
+    {
+      "case_id": "r1-c256",
+      "arm": "target_only",
+      "primary_samples": 5,
+      "output_tokens": 640,
+      "seconds": 14.48562893003691,
+      "tokens_per_second": 44.18171990260759,
+      "vllm_tokens_per_second": 127.33989818625602,
+      "relative_to_vllm": 0.34695896990575875,
+      "verification_rounds": 635,
+      "accepted_draft_tokens": 0,
+      "proposed_tokens": 0,
+      "accepted_per_round": 0.0,
+      "accepted_over_proposed": null,
+      "graph_rounds": 635,
+      "eager_tail_rounds": 0
+    },
+    {
+      "case_id": "r1-c256",
+      "arm": "fixed_gamma7_full_shadow",
+      "primary_samples": 5,
+      "output_tokens": 640,
+      "seconds": 33.20475162996445,
+      "tokens_per_second": 19.274349862097893,
+      "vllm_tokens_per_second": 127.33989818625602,
+      "relative_to_vllm": 0.1513614360984168,
+      "verification_rounds": 530,
+      "accepted_draft_tokens": 105,
+      "proposed_tokens": 3570,
+      "accepted_per_round": 0.19811320754716982,
+      "accepted_over_proposed": 0.029411764705882353,
+      "graph_rounds": 500,
+      "eager_tail_rounds": 30
+    }
+  ],
+  "frozen_vllm_reference": {
+    "source_commit": "700bfa60746f1315baaeec5ead28cc5ee553ae52",
+    "workload_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+    "files_sha256": {
+      "reports/vllm-offline-benchmark-20261009-700bfa6/source-identity.json": "47b7409e26878792bc7946f468dda89c5e076378b548042bb7e0dbbc69ca06d9",
+      "reports/vllm-offline-benchmark-20261009-700bfa6/scalar-samples.jsonl": "69c1ece50adea40555005b3640caa2781f98609014a3258ffe11ff579a6b11f4",
+      "reports/vllm-offline-benchmark-20261009-700bfa6/primary-metrics.json": "47a5602db4f0b644a8166fbac886f4bd9dca4df661644cf23fc2a860dde8669e"
+    },
+    "cells": [
+      {
+        "case_id": "r1-c64",
+        "batch_wall_seconds": [
+          0.9685598809737712,
+          0.9720953319920227,
+          0.9811986440327018,
+          0.984228782937862,
+          0.9695856730686501
+        ],
+        "pooled_output_tokens_per_second": 131.26405631263103,
+        "completed_samples": 5
+      },
+      {
+        "case_id": "r1-c256",
+        "batch_wall_seconds": [
+          1.000916232005693,
+          1.0182816300075501,
+          1.0057085859589279,
+          0.9998146409634501,
+          1.0011978030670434
+        ],
+        "pooled_output_tokens_per_second": 127.33989818625602,
+        "completed_samples": 5
+      }
+    ],
+    "comparison_scope": "Frozen strong execution-stack baseline; different FP64/native implementation, not target-law equivalence"
+  },
+  "setup": {
+    "seconds": 21.627453043009154,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "workspace_bytes": 41646512,
+    "graph_reserved_bytes": 1073852488,
+    "resident_and_scratch_bytes": 73400320,
+    "graph_count": 2,
+    "workspace_count": 10,
+    "captures": [
+      {
+        "query_tokens": 1,
+        "capture_seconds": 0.21514948399271816,
+        "graph_memory": {
+          "kind": "graph_private_pool_reserved_segments",
+          "pool_id": [
+            1,
+            0
+          ],
+          "private_pool_reserved_bytes": 2097152,
+          "segments": [
+            {
+              "total_size": 2097152,
+              "allocated_size": 0,
+              "active_size": 0,
+              "device": 0
+            }
+          ],
+          "global_reserved_before": 2128609280,
+          "global_reserved_after": 2185232384,
+          "global_reserved_delta": 56623104,
+          "reservation_bytes": 536870912,
+          "includes_inactive_blocks": true,
+          "transient_peak_measured": false
+        }
+      },
+      {
+        "query_tokens": 8,
+        "capture_seconds": 0.16422403894830495,
+        "graph_memory": {
+          "kind": "graph_private_pool_reserved_segments",
+          "pool_id": [
+            2,
+            0
+          ],
+          "private_pool_reserved_bytes": 2097152,
+          "segments": [
+            {
+              "total_size": 2097152,
+              "allocated_size": 0,
+              "active_size": 0,
+              "device": 0
+            }
+          ],
+          "global_reserved_before": 2248146944,
+          "global_reserved_after": 2267021312,
+          "global_reserved_delta": 18874368,
+          "reservation_bytes": 536870912,
+          "includes_inactive_blocks": true,
+          "transient_peak_measured": false
+        }
+      }
+    ]
+  },
+  "memory": {
+    "max_sample_peak_allocated_bytes": 2465330688,
+    "max_sample_peak_reserved_bytes": 2514485248,
+    "released_free_vram_bytes": 25250160640
+  },
+  "audit": {
+    "root_scalar": {
+      "status": "passed",
+      "sample_count": 36,
+      "rounds_checked": 4059
+    },
+    "independent_scalar": {
+      "passed": true,
+      "assertions": 50324
+    },
+    "raw": {
+      "passed": true,
+      "assertions": 404,
+      "artifact_count": 2,
+      "saved_tensor_count": 36,
+      "numerical_comparison_count": 126,
+      "limits": {
+        "atol": 0.02,
+        "rtol": 0.02,
+        "max_rms": 0.005
+      },
+      "captures": [
+        {
+          "query_tokens": 1,
+          "tensor_sha256": "547dd36295c83f6829851114171faa3b5fd14aa7693887842cf891d43b8f099d",
+          "comparisons": 63,
+          "max_abs": 0.0,
+          "max_rms": 0.0,
+          "all_passed": true,
+          "all_torch_equal": true,
+          "all_storage_bytes_equal": true,
+          "resident": {
+            "keys": {
+              "torch_equal": true,
+              "storage_bytes_equal": true
+            },
+            "values": {
+              "torch_equal": true,
+              "storage_bytes_equal": true
+            }
+          }
+        },
+        {
+          "query_tokens": 8,
+          "tensor_sha256": "a96d0c8b324e3030187d525cece63bfb1a81db218cefbd715879087e288c76f2",
+          "comparisons": 63,
+          "max_abs": 0.0,
+          "max_rms": 0.0,
+          "all_passed": true,
+          "all_torch_equal": true,
+          "all_storage_bytes_equal": true,
+          "resident": {
+            "keys": {
+              "torch_equal": true,
+              "storage_bytes_equal": true
+            },
+            "values": {
+              "torch_equal": true,
+              "storage_bytes_equal": true
+            }
+          }
+        }
+      ],
+      "exact_equality_note": "torch.equal and byte equality are descriptive diagnostics, not tightened numerical pass thresholds; resident preservation is an existing exact invariant."
+    },
+    "provenance": {
+      "status": "passed",
+      "commit": "192a3578eb71527e02fded28a3beaf487d53859a",
+      "exact_git_archive_match": true,
+      "source_files_verified": 352,
+      "all_transferred_scalars_match_complete_archive": true,
+      "archive_sha256": "68bb82399cab6b4686090b015ee3613f7bf7baae0676b4eb9dff8966bde872c4",
+      "archive_bytes": 102307761,
+      "actual_controller_and_ssh_exit": 0
+    },
+    "release": {
+      "passed": true,
+      "owned_processes_absent": true,
+      "preserved_asr_identity_unchanged": true,
+      "asr_ready": true,
+      "asr_busy": false,
+      "kfd_only_preserved_asr": true,
+      "worker_os_exit": 0,
+      "controller_os_exit": 0,
+      "ssh_os_exit": 0
+    }
+  },
+  "limitations": {
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "distribution_equivalence_claimed": false,
+    "prior_target_numerical_gate": "failed_unchanged",
+    "graph_only_causal_speedup_measured": false
+  }
+}

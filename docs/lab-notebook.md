@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（S30 full-target graph 交接）**。experiment_journal 已成功恢复并接回专职记录与本日志唯一编辑权，sol_data 已停止编辑；此前 thread limit 下的临时代记与各轮来源保留在历史条目中。root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S31 配对R1完整结果核对）**。experiment_journal 已成功恢复并接回专职记录与本日志唯一编辑权，sol_data 已停止编辑；此前 thread limit 下的临时代记与各轮来源保留在历史条目中。root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -17,7 +17,7 @@
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 - 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)。
-- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)。
+- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)、[S31 配对R1完整请求负收益](#paired-r1-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -1020,3 +1020,26 @@ S25报告与项目入口已由root提交/推送 **51d1c3d**。Root另在本地CP
 **资源口径。** 实测graph私有pool retained **2097152 bytes**，含allocated/active为0的inactive segment；reservation **536870912 bytes**不变。global reserved从1694498816到1692401664、delta **−2097152**，独立于private retained量，不能用净allocated/global delta替代保留显存。combined graph/workspace预算768MiB、workspace cap256MiB、allocator fraction cap6GiB、deadline300秒；这些不是transient/process-wide峰值测量。Supervisor **25.762924秒**含setup/证据I/O，不能当吞吐或speedup。
 
 **结论边界与下一决策。** 通过的是一个有限Q家族、同pinned native backend的完整target eager↔graph保真；hook证明raw-layer身份，不构成独立attention oracle。此前whole-Qwen layer26 RMS失败、cross-backend/sequential law与BF16 endpoint TV限制、S24无加速结果均不解除。没有模型质量、完整sampling distribution无损、paired E2E收益、t−2 capacity graph家族、ZOS或CPU/GPU overlap结论。下一步另审同backend paired请求计时与完整setup/物理工作收费；其CPU准备不冒称已有GPU速度结果。记录者仅维护日志，无GPU/进程/实现/stage/commit/push操作。
+
+
+<a id="paired-r1-result"></a>
+## 2026-10-09 — S31：36批R1同backend配对完整请求完成，speculative慢于target-only
+
+**问题与方法。** S30证明同backend graph保真，不回答加上draft/全shadow与验证后是否更快。依据[冻结配对协议](paired-r1-benchmark.md)，在R1/C64与R1/C256分别对同栈target-only和trained step1280 fixed-γ7/full-shadow，完整生成128输出；每case/arm两warmup、五primary、两diagnostic，共36批，交替臂次序。两臂共享resident target/selected-layer copies/draft weights和graph pools，target-only不执行draft/shadow；这是共同resident条件下的执行归因，不是另行优化的target-only部署。只有Q1/Q8 graph，Q2…7明确native eager尾轮，prefill eager，physical Q不padding。Batch timer含reset/session/admission、全部shadow/q/p/draw、metadata/event等待、尾轮、commit/draft projection/release与final sync；输入准备及startup另列。
+
+**准备与执行身份。** 初始3829d53+三overlay的349文件准备为11tests/2.779秒；root在6b349ba+三overlay的352文件副本另跑11tests/6.024秒/OS0，core非作者审查743项CPU checks通过（非743项unittest），direction源码/协议审查未发现具体blocker。三overlay随后归档为执行commit **192a3578eb71527e02fded28a3beaf487d53859a**。先前15:21保存状态不是launch readiness；本次fresh preflight核binding/source、ASR原身份ready/nonbusy、KFD仅ASR与free25250160640 bytes后，仅执行授权一次，不以旧PID/log推live状态。
+
+**完成、启动检查与证据。** 本轮直接读本地未发布 `output/paired-r1-gpu-20261009-192a357/scalars/` 的result/samples/runtime/capture-progress、实际exit和independent-release及 `root-scalar-audit.json`，核其四个input SHA一致；独立从samples重算 **36批、4608输出、4059轮**与四项primary pooled rates一致。Root额外核36 identities、全shadow/实际graph/完整输出和启动检查；这是scalar audit，未重验大setup tensors。worker/controller/SSH OS0、未timeout，独立release确认owned identities消失、原ASRready/not busy/KFD仅ASR，free恢复25250160640 bytes。随后完整archive已回收并fresh解包为 `complete/`：root-provenance-verification留证102307761 bytes、SHA **68bb8239…**，source.tar逐字节等192a357 Git archive、352source逐hash一致、全部scalars与complete一致。Core首次 `independent-scalar-audit.py` 曾对整数buckets调用len，修正仅审计脚本、原实验evidence未变，不算GPU失败；root的scalar审计一次OS0，无此错误。随后core与root分别实际运行[公开raw审计器](../reports/paired-r1-benchmark-20261009-192a357/verify_raw.py)，均OS0：2 artifacts、36 saved tensors、126 numerical comparisons、404 assertions，maxabs/RMS0、resident exact。Root结果保存在 `root-setup-raw-audit.json`；原scalar audit仍只支持scalar范围，本记录者仅核留证，未亲自加载tensor。
+
+Q1/Q8各一次same-native eager↔first replay启动核验通过：原.02/.02/RMS≤.005下selected raw/final/logits及28层scratch KV标量maxabs/RMS0、resident隔离通过、真实replay Python counters不增。每graph私有poolretained **2097152 bytes**，各reservation仍512MiB；workspace41646512 bytes、resident/scratch73400320 bytes，不能拿retained代替全部resident/process峰值。startup **21.627453秒**（validation1.320902秒）另收费，supervisor **195.083493秒**含setup与I/O，不作为primary吞吐。
+
+**实际性能负结果。** 每cell五primary各合计640输出；pooled rate按sum(tokens)/sum完整batch wall计算，不平均单批rate。
+
+| Prompt长度 | Target-only tok/s | Full-shadow spec tok/s | Spec/target | 冻结vLLM tok/s | Target/vLLM | Spec/vLLM |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 64 | 44.804932 | 23.103708 | 0.515651 | 131.264056 | 0.341334 | 0.176009 |
+| 256 | 44.181720 | 19.274350 | 0.436252 | 127.339898 | 0.346959 | 0.151361 |
+
+Speculative吞吐仅同栈target-only的51.57%/43.63%，两臂也都低于保留的vLLM强baseline；没有加速。Spec主轮455/530，实际graph轮435/500、eager尾轮20/30，graph rows3480/3965、尾rows95/135；target-only各635轮全部Q1 graph。Spec accepted draft180/105、proposed3120/3570，draft/round **0.395604/0.198113**，accepted/proposed **5.7692%/2.9412%**。这是synthetic prompt和empty-EOS固定预算下的本次轨迹工作量，不是自然development接受率，不能把quality32或TF overlap转作本次收益预测。Graph覆盖多数轮仍慢，不单凭覆盖率推加速，也不凭这两个cell定位某一个算子为唯一瓶颈。
+
+**边界与下一决策。** 本段无运行gate失败，失败的是性能收益假设；旧whole-Qwen layer26 RMS、cross-backend/sequential law与endpoint TV限制继续保留，同backend启动保真不解除它们。36批是两个R1 case，不是完整六case、多请求serving frontier或all-graph；TTFT/SLA、scheduler、t−2 capacity、ZOS/CPU-GPU overlap未由本次证明。下一步用已测负结果拆分shadow/FP64概率/metadata/commit及新栈target成本，再决定优化与finite physical-B family政策，保留强baseline和完整收费；不将新gate/局部kernel时间改写成E2E改善。[公开报告](../reports/paired-r1-benchmark-20261009-192a357/README.md)、[aggregate](../reports/paired-r1-benchmark-20261009-192a357/aggregate.json)及可复用审计器已完成，raw审计与scalar/归档身份分别留证；记录者未操作GPU/remote/进程/实现、未commit/push或读取final test。

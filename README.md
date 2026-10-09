@@ -45,7 +45,15 @@ A [pretrained full-target GPU probe](reports/full-target-graph-20261009-3829d53/
 also passed three actual graph replays against same-backend eager execution,
 including selected features, all-layer KV, partial commits and rollback. This
 finite-shape fidelity result does not resolve cross-backend numerical differences
-or demonstrate speedup; paired end-to-end performance remains unmeasured.
+or demonstrate speedup. The subsequent
+[paired R1 end-to-end experiment](reports/paired-r1-benchmark-20261009-192a357/README.md)
+completed all 36 batches with 128 output tokens per request. At prompt lengths
+64/256, this stack's target-only path measured 44.80/44.18 output tok/s; trained
+full-shadow speculative decoding measured 23.10/19.27, or 51.6%/43.6% of that
+control. The matched vLLM rates remain 131.26/127.34. Most verification rounds
+used actual graphs; eager tails were included in timing. This synthetic workload
+shows both a target-stack gap and additional speculation cost, not a speedup.
+It does not identify the individual operation responsible for either gap.
 The [experiment notebook](docs/lab-notebook.md) preserves the event-ownership,
 cancellation and memory-accounting failures found during review and their fixes.
 

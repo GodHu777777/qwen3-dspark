@@ -522,3 +522,17 @@ Eleven focused CPU tests and independent host/sampling composition checks passed
 these are not GPU throughput evidence. Read docs/paired-r1-benchmark.md for the
 fixed 1800-second supervision and memory bounds before execution. This two-case
 attribution experiment does not complete multi-request capacity or overlap.
+
+Paired R1 GPU result (immutable 192a357): all 36 batches completed, worker,
+controller and SSH exited 0, and independent release preserved the ASR service.
+Root verified all 4,059 rounds, original source archive/352 files, complete
+evidence archive, output budgets, graph coverage and pooled rates. At C64/C256,
+target-only achieved 44.8049/44.1817 tok/s versus speculative 23.1037/19.2743;
+the latter is 51.6%/43.6% of the same-stack control and 17.6%/15.1% of vLLM.
+Speculative primary graph coverage was 435/455 and 500/530 rounds; explicit eager
+tails remain charged. Accepted draft tokens/round were 0.3956/0.1981 on these
+synthetic inputs, not the natural quality32 population. See
+reports/paired-r1-benchmark-20261009-192a357 and notebook S31. Q1/Q8 raw startup
+artifacts independently matched native eager at the frozen limits. This resolves
+the missing same-stack attribution measurement, not per-operation bottleneck
+attribution, numerical-law equivalence, multi-request capacity or actual overlap.
