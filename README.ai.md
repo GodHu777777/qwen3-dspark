@@ -477,3 +477,9 @@ inspection confirms pool-scoped memory_snapshot exists, but actual GPU pool
 accounting, full-model capture/replay and speed remain unverified. See
 docs/persistent-qwen-graph.md. Exact ordered-Q buckets are a bounded first step;
 general finite physical-B families, calibrated capacity and overlap remain open.
+Immutable c2d11a0 then passed all 261 tests in the pinned AMD CPU environment
+(17.615 s, no skips, test/SSH exit 0, three GPU visibility variables empty).
+All 343 source files were checked before/after; root independently matched its
+Git archive and eight evidence hashes. See
+output/persistent-qwen-graph-pinned-cpu-20261009-c2d11a0. This includes both
+speculative and target-only emulator composition, not actual GPU graph execution.
