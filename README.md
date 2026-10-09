@@ -36,6 +36,15 @@ contexts replay through a captured gather+attention subgraph with bit-identical
 outputs. This establishes that limited execution boundary; QKV projections,
 RoPE, the full model and scheduling overlap are not captured by the probe.
 
+The next [full-target graph implementation](docs/persistent-qwen-graph.md) now
+includes the original HF model body, persistent KV transactions and explicit
+output ownership. Both [speculative](docs/persistent-sampling.md) and
+[target-only](docs/packed-target-only.md) sessions have CPU replay-emulator
+coverage. All 261 tests passed in the pinned AMD environment with GPUs hidden;
+real full-model GPU capture/replay and paired performance remain unverified.
+The [experiment notebook](docs/lab-notebook.md) preserves the event-ownership,
+cancellation and memory-accounting failures found during review and their fixes.
+
 ## Architecture
 
 ```mermaid

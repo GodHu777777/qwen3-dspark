@@ -483,3 +483,18 @@ All 343 source files were checked before/after; root independently matched its
 Git archive and eight evidence hashes. See
 output/persistent-qwen-graph-pinned-cpu-20261009-c2d11a0. This includes both
 speculative and target-only emulator composition, not actual GPU graph execution.
+
+Full-target GPU probe preparation: scripts/probe_full_target_graph.py runs the
+complete pretrained native eager phase before attempting one full-HF capture and
+three growing-context replays at ordered Q=(1,4). It compares selected raw layers,
+final norm, logits and all-layer KV at fixed limits, checks partial commits/abort
+and inactive isolation, and requires unchanged Python model/layer counters during
+real replay. Scoped private-pool bytes and raw failure evidence are retained.
+The identity-aware supervisor enforces one 300-second window and preserves ASR.
+Eight targeted CPU tests passed; this preparation has no GPU or speed result.
+Read docs/full-target-graph-probe.md before execution. The same-native eager
+reference is not a stock attention oracle and cannot overturn the earlier
+whole-Qwen cross-backend numerical failure. No additional full core suite was
+run for these three additive files; immutable c2d11a0's 261-test result remains
+the core baseline. Private preparation evidence:
+output/full-target-graph-preparation-20261009.
