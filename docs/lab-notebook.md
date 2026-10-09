@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 11:38（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 11:52（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -798,3 +798,25 @@ Root随后在该immutable source archive运行完整unittest suite，未发布 `
 **单engine54batch与API边界。** vLLM预定只load一次engine，依次 **12warmup+30primary+12diagnostic=54**，primary六case按repeat旋转，fresh request/prefixcacheoff；完整54ordered (phase,repeat,case) identities由worker/controller独立验证/重算，缺diagnostic或reorder不能completed。Primary只计完整LLM.generate batch entry→return，包括submission/prefill/decode/IPC；params准备及output验证/hash在外，stats关闭故per-request latency/TTFT为null，不能用batchwall/R代替。五primary以总output/总wall算pooled tok/s，排除warmup/diag，不能平均batchrates。Diagnostic add_request/step DELTA按各request自己的host提交→first nonempty chunk/final计时，包含queue/observer/IPC/采样，不等于pureprefill，不能替primary。实际installed API源码留证核签名、DELTA prompt-ID echo与statsNone；missing echo拒绝，但source/fake engine tests不证明真实新multi-request/diagnostic可执行。
 
 **Baseline准备身份与当前状态。** 直接读未发布 `output/vllm-benchmark-cpu-20261009/` handoff、installed-api-evidence、final tests与real-input preflights。Linux **15/15、1.307秒、OS0**（7measurement contract+8guard），worker/controller preflight均OS0；独立核六交付对700bfa6、四API source SHA、共享六case/full64域和54identity唯一性/phase计数，finalpreflight与native一致。Native manifest SHA **f1ea3ea2…**、baseline handoff SHA **fa477e60…**，详细完整身份保留在handoffs；十文件含README的700bfa6 root已核commit/push。Root刚给direction唯一正式vLLM窗口，但本条无启动状态，不写已运行/性能完成；native profile尚未执行。下一步须真实maxseq4/defaultgraph/diagnostic路径与完整54sample/释放验证后才报告baseline测量，再另核native窗口，不能由准备推出真实SPS/overlap/graph收益。原wholeQwen固定RMS失败及sampling fidelity边界保留。本轮记录者只日志，无GPU/源代码/实验/进程/提交或final-test/private样本动作。
+
+
+<a id="vllm-formal-benchmark"></a>
+## 2026-10-09 11:52（UTC+8）— S20：共享六shape正式vLLM baseline完成，单engine54批全部留证
+
+**问题、假设与方法。** S19冻结协议后，检验强target-only engine在共享synthetic **R1/2/4×C64/256、每request128输出**下的实际吞吐，而不是从S18单request推速度。唯一正式执行source **700bfa6**、共享manifest **3f2faab1…**、BF16/T1/nofilter/ignoreEOS、memory0.18/defaultgraph/maxseq4不变，单engine复用、prefixcacheoff、每批fresh requests，按固定旋转顺序保留 **12warmup+30primary+12diagnostic=54**。直接读[九份报告](../reports/vllm-offline-benchmark-20261009-700bfa6/README.md)与公开scalar-samples，未读raw generated tokens或final test。所有54ordered identities完成，共 **16128output tokens**，其中primary **30批/8960tokens**；本轮无失败、超时、自动retry或手动eager/backend切换，所有五repeats与outliers保留。
+
+**主结果与计时。** Pooled output tok/s按每cell总primary输出/总primary batchwall重算，排除warmup/diag，六结果如下（各五samples）：
+
+| 活跃R | Supplied C64：output tok/s | Supplied C256：output tok/s |
+| ---: | ---: | ---: |
+| 1 | 131.264 | 127.340 |
+| 2 | 252.165 | 246.567 |
+| 4 | 515.998 | 475.260 |
+
+计时是完整同步LLM.generate entry→return，含submission/prefill/decode/completion；params准备/output核验与hash在样本外。Primary **per-request latency/TTFT均null**，batchwall不是requestlatency，不能除R。每cell另两批diagnostic用各request自己的host submission→first nonempty chunk/final clocks，含queue/IPC/observer与第一token工作，**不等于pureprefill**、不替主结果；同批request相关、五repeat不支持高percentile serving tail。完整times/median/min/max和diagnostic统计见[primary](../reports/vllm-offline-benchmark-20261009-700bfa6/primary-metrics.json)与[diagnostic](../reports/vllm-offline-benchmark-20261009-700bfa6/diagnostic-metrics.json)。Engine init98.778713秒、imports/version20.506031秒在sample外；compiler/JIT/allocator自然warmcache与OMP2 warning保留，未按结果调参。
+
+**实际backend、退出与释放。** 两版本分别核distribution0.30.0+rocm723/module0.30.0；默认ROCM_ATTN记录内部 **Triton paged-attention fallback**。Engine完成 **FULL_AND_PIECEWISE、capture sizes[1,2,4,8]** capture日志，**replay未独立instrument**。Worker/controller实际 **OS0**，supervisor cleanup为空；vLLM自身正常EngineCore SIGTERM与guard清理分开，不推断每个descendant都单独OS0，也不添shell独立exit。七ownedPID独立absent，ASR同身份/readyidle、KFDonlyASR、VRAM恢复used8967499776/free25241243648bytes；**35health samples**均ready/notbusy。采样全局VRAMmax **15068602368bytes**含常驻ASR，不是exact allocator peak/连续max或0.18硬cap；这是saved release/采样记录，不是本轮liveGPU探测。
+
+**独立证据与CPU集成。** 记录者核九public handoff SHA对 **7bf281bae9dcf71293b2ea015c27517dcd650a22**（11:50:35）Git blobs，root已核commit/push；执行仍700bfa6。独立核archive SHA **71213ffb…**及 **288文件逐一对700bfa6 Git blobs**、八criticalsourceSHA、binding **3456files** count/hash及八份非样本stage/exit/health/release/integrity evidence SHA；完整bound前后检查依据verification，不重读大型weights。公开samples SHA **69c1ece5…**与raw scalar留证一致依据root独立检查，记录者另重构54顺序/phase、所有request128、16128/8960分母、六rates/medians、primary null和diagnostic clock bounds及35samplemax/七gone。独立stdlib verifier与root审计见[verification](../reports/vllm-offline-benchmark-20261009-700bfa6/verification.json)及[root review](../reports/vllm-offline-benchmark-20261009-700bfa6/root-verification.json)。另immutable700bfa6完整CPU suite **204/204、13.793秒、SSHOS0、120秒bound/三GPU隐藏**，证据 `output/integration-cpu-700bfa6/{verification.json,tests.log}`；记录者核log **ece14761…**/204entries/最终Ran/OK与source identity，不含native end-to-end WIP，不是新的GPU或CI验证。
+
+**结论与下一决策。** 当前成立的是这组六synthetic shape、固定批次/固定输出的vLLM吞吐基线；没有自然输入质量/性能分布、float64-law fidelity、arrival-load/HTTP frontier、verification SPS/B曲线或DSpark speedup结论。Native R2/committedC128/full64 allocation是独立成本实验，不能与suppliedC256端到端request混同；core当前独立profile窗口的结果尚等完整交付，本条不提前写完成。待native全轮分解与matched trajectory再选优化，不以单kernel或graph capture替代系统收益。S16原失败/wholeQwen固定RMS失败仍保留；本轮记录者只日志，无GPU/remoteCPU/源代码/实验/进程/提交动作。
