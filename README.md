@@ -15,7 +15,14 @@ A [packed multi-request decoder](docs/packed-sampling.md) and a
 models, with per-request KV reconstruction and confidence-source checks. A
 [bounded trained GPU gate](reports/packed-decoder-gate-20261009/README.md) passed
 structural and draft-attention checks; target probability differences remain.
-Measured hardware profiles and execution overlap are still open.
+A [full64 native local profile](reports/packed-profile-20261009-700bfa6/README.md)
+now records all allocation shapes at two requests and a fixed 128-token context;
+its complete-round median is 94.978 ms, excluding real planner/history cost.
+A [matched-workload vLLM baseline](reports/vllm-offline-benchmark-20261009-700bfa6/README.md)
+measures 127–516 output tok/s across 1/2/4 requests and two prompt lengths.
+The native end-to-end comparison, measured capacity prediction, graph replay
+and scheduling overlap remain unfinished; these two measurements use different
+units and must not be treated as a speedup ratio.
 
 ## Architecture
 
@@ -134,8 +141,10 @@ distribution equivalence to sequential decoding. A
 [packed target reference](docs/packed-target.md) verifies variable-length chunks
 in one model call, with independent request caches; its attention mask remains
 dense and still awaits real GPU validation.
-Real rollout calibration, efficient multi-request execution, hardware capacity
-profiles and asynchronous scheduling remain unfinished. The earlier
+[Real rollout STS fitting and evaluation](reports/sts-step1280-20261009/README.md)
+completed with mixed results; raw and fit-only constant controls remain.
+Efficient serving, integrated hardware capacity prediction and asynchronous
+execution remain unfinished. The earlier
 [experiment plan](docs/experiment-plan.md) preserves the initial stage gates.
 
 The [three-way data pipeline](docs/data-pipeline.md) adds pilot exclusions,
@@ -151,18 +160,21 @@ a frozen target. On the same 119 dev rows, teacher-forced overlap increased from
 The [resource and first-resume report](reports/expanded-training-20261009/README.md)
 records the two-cycle memory gate and earlier steps.
 
-[Fixed-panel stochastic rollouts](reports/expanded-quality512-20261009/README.md)
-compare step128 and step512 on the same 32 prompts, source and sampling protocol.
-Accepted draft tokens per round increased from 0.1778 to 0.4958, improving on
-31 of 32 prompts. This is acceptance evidence, not a speedup measurement;
-BF16 block/sequential probability differences remain, and STS is not fitted.
+[Fixed-panel stochastic rollouts](reports/expanded-quality1280-20261009/README.md)
+compare steps 128/512/1280 on the same 32 prompts, source and sampling protocol.
+Accepted draft tokens per round increased from 0.1778 to 0.4958 to 0.6930;
+28 of 32 prompt ratios improved from step512 to step1280. The final planned
+checkpoint was frozen for STS research. This is acceptance evidence, not a
+speedup measurement; BF16 block/sequential probability differences remain.
 
 A [six-call ROCm diagnostic](reports/native-varlen-diagnostic-20261009/README.md)
 identified a causal-window alignment mismatch in the tested public varlen path.
 An explicit private-ATen control produced the required alignment on that shape.
 The original public-wrapper gate remains failed. The explicit pinned backend
 [passed all original small-tensor cases](reports/pinned-varlen-tensor-gate-20261009/README.md);
-whole pretrained-model/KV validation is still pending.
+the subsequent [whole-Qwen gate](reports/whole-qwen-varlen-gate-20261009/README.md)
+passed structural checks but failed its fixed layer26 numerical threshold.
+The later bounded trained draft/integration result does not erase this failure.
 
 ## Experiment journal
 
@@ -184,7 +196,9 @@ whole pretrained-model/KV validation is still pending.
 | `tensor_sampling.py`, `cached_sampling.py` | Experimental random Markov proposals, residual sampling and cache commits |
 | `scheduler.py`, `calibration.py` | Global prefix planning and sequential confidence temperature fitting |
 | `packed_target.py` | One-forward variable-query target with per-request KV and dense marker mask |
-| `scripts/` | Prompt selection, target regeneration and data auditing |
+| `packed_draft.py`, `packed_sampling.py` | Packed draft backbone, real proposals and transactional verification/commit |
+| `async_capacity.py`, `async_round.py` | Two-step history capacity and synchronous reference driver |
+| `scripts/` | Data workflows, bounded hardware probes, local cost profiling and fixed-batch benchmarks |
 | `tests/` | Tensor-level correctness and regression checks |
 
 Development instructions: [README.ai.md](README.ai.md). Apache-2.0;

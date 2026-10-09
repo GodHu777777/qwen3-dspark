@@ -1,0 +1,22 @@
+{
+  "worker_os_exit": 0,
+  "controller_os_exit": 0,
+  "ssh_os_exit": 0,
+  "supervisor_status": "completed",
+  "timed_out": false,
+  "supervisor_elapsed_seconds": 107.00988561206032,
+  "all_owned_processes_gone": true,
+  "identity_aware_supervisor": true,
+  "asr_identity_unchanged": true,
+  "asr_ready": true,
+  "asr_busy": false,
+  "kfd_only_asr": true,
+  "vram": [
+    {
+      "total_bytes": 34208743424,
+      "used_bytes": 8967499776,
+      "free_bytes": 25241243648
+    }
+  ],
+  "scope": "Controller lifetime includes setup/restoration/evidence; not a serving throughput figure"
+}

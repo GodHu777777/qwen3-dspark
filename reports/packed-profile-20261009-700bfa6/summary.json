@@ -1,0 +1,67 @@
+{
+  "source_commit": "700bfa60746f1315baaeec5ead28cc5ee553ae52",
+  "protocol_sha256": "1014eb9e51bfe8dc71511f346712c002db8c79a7d41b086dc6f75799cd869909",
+  "status": "completed",
+  "cells": 64,
+  "samples": {
+    "warmups": 128,
+    "primary": 320,
+    "diagnostic": 64
+  },
+  "primary": {
+    "median_seconds": 0.09497797553194687,
+    "min_seconds": 0.07838796195574105,
+    "max_seconds": 0.15341760800220072,
+    "median_restore_seconds": 0.009573669522069395
+  },
+  "diagnostic_regions": {
+    "PackedDraft.append_committed": {
+      "count": 64,
+      "median_host_span_seconds": 0.004388421017210931,
+      "median_gpu_stream_interval_ms": 4.446739435195923
+    },
+    "PackedDraft.backbone": {
+      "count": 64,
+      "median_host_span_seconds": 0.01107425254303962,
+      "median_gpu_stream_interval_ms": 11.128857612609863
+    },
+    "VarlenPackedTarget.append": {
+      "count": 64,
+      "median_host_span_seconds": 0.04346131801139563,
+      "median_gpu_stream_interval_ms": 43.51192855834961
+    },
+    "VarlenPackedTarget.crop": {
+      "count": 128,
+      "median_host_span_seconds": 0.0016506845713593066,
+      "median_gpu_stream_interval_ms": 1.699468970298767
+    },
+    "VarlenPackedTarget.predict": {
+      "count": 64,
+      "median_host_span_seconds": 0.0001293634995818138,
+      "median_gpu_stream_interval_ms": 0.7796500027179718
+    },
+    "full_shadow_propose": {
+      "count": 64,
+      "median_host_span_seconds": 0.03312938706949353,
+      "median_gpu_stream_interval_ms": 33.18156623840332
+    },
+    "private_source_verify_commit": {
+      "count": 64,
+      "median_host_span_seconds": 0.061121000500861555,
+      "median_gpu_stream_interval_ms": 61.14453125
+    }
+  },
+  "diagnostic_remainder_median_seconds": 0.0010686584282666445,
+  "peak_allocated_bytes": 2268122112,
+  "peak_reserved_bytes": 2348810240,
+  "capacity_round_driver_profile_eligible": false,
+  "whole_system_pass_claimed": false,
+  "local_profile_only": true,
+  "prior_target_gate": "failed_unchanged",
+  "limitations": [
+    "five samples per exact cell",
+    "observed same-B spread includes noise/drift/commit work; no causal layout effect established",
+    "nested host/event intervals include dispatch gaps and are not additive pure kernel costs",
+    "exact measured domain only; no growing-context transfer validation"
+  ]
+}

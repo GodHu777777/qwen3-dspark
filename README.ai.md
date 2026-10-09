@@ -349,3 +349,13 @@ its internal Triton path; graph capture completed with sizes 1/2/4/8, but replay
 was not independently traced. This target-only measurement is not DSpark
 speedup or an arrival-load frontier. Immutable 700bfa6 also passed the complete
 204-test CPU suite with GPUs hidden (output/integration-cpu-700bfa6).
+
+The first native local cost profile completed all 64 allocations on 700bfa6:
+128 warmups, 320 primary samples and 64 diagnostic samples. Primary round
+median across the exact frozen R2/C128 domain was 94.978 ms. See
+reports/packed-profile-20261009-700bfa6 for every sample and same-B contrasts.
+Target append and proposal outside the backbone are coarse investigation targets;
+nested host spans/GPU event intervals do not isolate kernel cost. The measured
+local rate still excludes real planner/history and cannot become a full capacity
+profile by relabeling. Growing-context prediction, matched native trajectories,
+actual graph replay and scheduling overlap remain unverified.

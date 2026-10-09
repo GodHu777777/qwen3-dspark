@@ -1,0 +1,1603 @@
+{
+  "status": "all512_records_source_protocol_schedule_work_and_statistics_recomputed",
+  "archive_files": 288,
+  "cell_count": 64,
+  "sample_counts": {
+    "warmups": 128,
+    "primary": 320,
+    "diagnostic": 64
+  },
+  "source_commit": "700bfa60746f1315baaeec5ead28cc5ee553ae52",
+  "archive_sha256": "71213ffbd3e058d2073aead8ee90fe26efd699d28c4cfef8249d553d3b110f3f",
+  "protocol_sha256": "1014eb9e51bfe8dc71511f346712c002db8c79a7d41b086dc6f75799cd869909",
+  "workload_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+  "raw_result_sha256": "ca8c40af1fa7d4cd504d50beeca992ff7d505af5bb7bd2aeae5cde3092eca1e2",
+  "all_primary_decision_records_repeat_identically": true,
+  "primary": {
+    "median_seconds": 0.09497797553194687,
+    "min_seconds": 0.07838796195574105,
+    "max_seconds": 0.15341760800220072,
+    "median_restore_seconds": 0.009573669522069395
+  },
+  "same_b_cells": [
+    {
+      "logical_b": 2,
+      "cells": 1,
+      "low_ell": [
+        0,
+        0
+      ],
+      "high_ell": [
+        0,
+        0
+      ],
+      "min_cell_median_seconds": 0.08502389199566096,
+      "max_cell_median_seconds": 0.08502389199566096,
+      "median_ratio": 1.0,
+      "low_cell_range": [
+        0.07838796195574105,
+        0.10491528501734138
+      ],
+      "high_cell_range": [
+        0.07838796195574105,
+        0.10491528501734138
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.08955412404611707,
+          "high_seconds": 0.08955412404611707,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.08319788402877748,
+          "high_seconds": 0.08319788402877748,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.08502389199566096,
+          "high_seconds": 0.08502389199566096,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.07838796195574105,
+          "high_seconds": 0.07838796195574105,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.10491528501734138,
+          "high_seconds": 0.10491528501734138,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        }
+      ],
+      "high_slower_repeats": 0,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 3,
+      "cells": 2,
+      "low_ell": [
+        1,
+        0
+      ],
+      "high_ell": [
+        0,
+        1
+      ],
+      "min_cell_median_seconds": 0.08901022002100945,
+      "max_cell_median_seconds": 0.09394888102542609,
+      "median_ratio": 1.0554842017383055,
+      "low_cell_range": [
+        0.08653474901802838,
+        0.09975738602224737
+      ],
+      "high_cell_range": [
+        0.08515442407224327,
+        0.09911106596700847
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.0886426450451836,
+          "high_seconds": 0.09312334703281522,
+          "difference_seconds": 0.004480701987631619,
+          "ratio": 1.0505479274151588
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.08901022002100945,
+          "high_seconds": 0.08515442407224327,
+          "difference_seconds": -0.003855795948766172,
+          "ratio": 0.9566814243594042
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09975738602224737,
+          "high_seconds": 0.09911106596700847,
+          "difference_seconds": -0.0006463200552389026,
+          "ratio": 0.9935210806837425
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.08653474901802838,
+          "high_seconds": 0.09584745997563004,
+          "difference_seconds": 0.009312710957601666,
+          "ratio": 1.1076181656881154
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09045883000362664,
+          "high_seconds": 0.09394888102542609,
+          "difference_seconds": 0.003490051021799445,
+          "ratio": 1.0385816511407402
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 4,
+      "cells": 3,
+      "low_ell": [
+        0,
+        2
+      ],
+      "high_ell": [
+        1,
+        1
+      ],
+      "min_cell_median_seconds": 0.0921784290112555,
+      "max_cell_median_seconds": 0.09296601102687418,
+      "median_ratio": 1.0085441032578513,
+      "low_cell_range": [
+        0.08413497696164995,
+        0.09838304691947997
+      ],
+      "high_cell_range": [
+        0.08815407194197178,
+        0.12206567008979619
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.0921784290112555,
+          "high_seconds": 0.08848963398486376,
+          "difference_seconds": -0.0036887950263917446,
+          "ratio": 0.9599820145997354
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.09045172005426139,
+          "high_seconds": 0.08815407194197178,
+          "difference_seconds": -0.0022976481122896075,
+          "ratio": 0.9745980716462742
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.08413497696164995,
+          "high_seconds": 0.12206567008979619,
+          "difference_seconds": 0.03793069312814623,
+          "ratio": 1.4508314436864425
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.09838304691947997,
+          "high_seconds": 0.10269658698234707,
+          "difference_seconds": 0.004313540062867105,
+          "ratio": 1.0438443430848148
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.0959029570221901,
+          "high_seconds": 0.09296601102687418,
+          "difference_seconds": -0.0029369459953159094,
+          "ratio": 0.9693758556929964
+        }
+      ],
+      "high_slower_repeats": 2,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 5,
+      "cells": 4,
+      "low_ell": [
+        2,
+        1
+      ],
+      "high_ell": [
+        3,
+        0
+      ],
+      "min_cell_median_seconds": 0.09410393110010773,
+      "max_cell_median_seconds": 0.10192320100031793,
+      "median_ratio": 1.0830918518365833,
+      "low_cell_range": [
+        0.0891535789705813,
+        0.11165444797370583
+      ],
+      "high_cell_range": [
+        0.09061110008042306,
+        0.10831271298229694
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09410393110010773,
+          "high_seconds": 0.0959754060022533,
+          "difference_seconds": 0.0018714749021455646,
+          "ratio": 1.0198873190552973
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.10956985608208925,
+          "high_seconds": 0.10192320100031793,
+          "difference_seconds": -0.007646655081771314,
+          "ratio": 0.9302120550743219
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09183982596732676,
+          "high_seconds": 0.1034495719941333,
+          "difference_seconds": 0.011609746026806533,
+          "ratio": 1.126412979385837
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.11165444797370583,
+          "high_seconds": 0.10831271298229694,
+          "difference_seconds": -0.0033417349914088845,
+          "ratio": 0.9700707401088414
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.0891535789705813,
+          "high_seconds": 0.09061110008042306,
+          "difference_seconds": 0.001457521109841764,
+          "ratio": 1.016348430726743
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 6,
+      "cells": 5,
+      "low_ell": [
+        1,
+        3
+      ],
+      "high_ell": [
+        3,
+        1
+      ],
+      "min_cell_median_seconds": 0.09127407392952591,
+      "max_cell_median_seconds": 0.09423628298100084,
+      "median_ratio": 1.0324540028065592,
+      "low_cell_range": [
+        0.08693379408214241,
+        0.1119407790247351
+      ],
+      "high_cell_range": [
+        0.08799022994935513,
+        0.10196586500387639
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.08693379408214241,
+          "high_seconds": 0.1012283000163734,
+          "difference_seconds": 0.014294505934230983,
+          "ratio": 1.1644297949394031
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.09075871692039073,
+          "high_seconds": 0.08799022994935513,
+          "difference_seconds": -0.0027684869710355997,
+          "ratio": 0.9694961865374983
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09127407392952591,
+          "high_seconds": 0.09150316100567579,
+          "difference_seconds": 0.00022908707614988089,
+          "ratio": 1.0025098811336806
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.1119407790247351,
+          "high_seconds": 0.10196586500387639,
+          "difference_seconds": -0.009974914020858705,
+          "ratio": 0.9108911505908442
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09212146303616464,
+          "high_seconds": 0.09423628298100084,
+          "difference_seconds": 0.0021148199448361993,
+          "ratio": 1.0229568645040512
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 7,
+      "cells": 6,
+      "low_ell": [
+        1,
+        4
+      ],
+      "high_ell": [
+        0,
+        5
+      ],
+      "min_cell_median_seconds": 0.08883072796743363,
+      "max_cell_median_seconds": 0.09985430201049894,
+      "median_ratio": 1.124096405549065,
+      "low_cell_range": [
+        0.08706026698928326,
+        0.12227223895024508
+      ],
+      "high_cell_range": [
+        0.0890224720351398,
+        0.10647104296367615
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09847579896450043,
+          "high_seconds": 0.10647104296367615,
+          "difference_seconds": 0.007995243999175727,
+          "ratio": 1.0811899378654235
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.08858359197620302,
+          "high_seconds": 0.09985430201049894,
+          "difference_seconds": 0.011270710034295917,
+          "ratio": 1.1272324793210424
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.08706026698928326,
+          "high_seconds": 0.08987167698796839,
+          "difference_seconds": 0.0028114099986851215,
+          "ratio": 1.032292687535994
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.12227223895024508,
+          "high_seconds": 0.10293101298157126,
+          "difference_seconds": -0.019341225968673825,
+          "ratio": 0.8418183380403778
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.08883072796743363,
+          "high_seconds": 0.0890224720351398,
+          "difference_seconds": 0.0001917440677061677,
+          "ratio": 1.002158533112286
+        }
+      ],
+      "high_slower_repeats": 4,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 8,
+      "cells": 7,
+      "low_ell": [
+        6,
+        0
+      ],
+      "high_ell": [
+        5,
+        1
+      ],
+      "min_cell_median_seconds": 0.09132290107663721,
+      "max_cell_median_seconds": 0.09795123303774744,
+      "median_ratio": 1.0725812680386468,
+      "low_cell_range": [
+        0.08874786598607898,
+        0.09995050798170269
+      ],
+      "high_cell_range": [
+        0.0952681420603767,
+        0.11819309298880398
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.08874786598607898,
+          "high_seconds": 0.11819309298880398,
+          "difference_seconds": 0.029445227002725005,
+          "ratio": 1.3317851835146526
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.09132290107663721,
+          "high_seconds": 0.0952681420603767,
+          "difference_seconds": 0.003945240983739495,
+          "ratio": 1.0432010036609403
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09995050798170269,
+          "high_seconds": 0.09795123303774744,
+          "difference_seconds": -0.0019992749439552426,
+          "ratio": 0.9799973508456682
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.09029412595555186,
+          "high_seconds": 0.09909854806028306,
+          "difference_seconds": 0.008804422104731202,
+          "ratio": 1.0975082488651062
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09495196398347616,
+          "high_seconds": 0.09694252000190318,
+          "difference_seconds": 0.0019905560184270144,
+          "ratio": 1.0209638214410544
+        }
+      ],
+      "high_slower_repeats": 4,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 9,
+      "cells": 8,
+      "low_ell": [
+        0,
+        7
+      ],
+      "high_ell": [
+        3,
+        4
+      ],
+      "min_cell_median_seconds": 0.09121505508664995,
+      "max_cell_median_seconds": 0.10563838493544608,
+      "median_ratio": 1.1581244437674751,
+      "low_cell_range": [
+        0.08651293895673007,
+        0.09696824999991804
+      ],
+      "high_cell_range": [
+        0.09059675200842321,
+        0.11825800698716193
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09121505508664995,
+          "high_seconds": 0.10563838493544608,
+          "difference_seconds": 0.01442332984879613,
+          "ratio": 1.1581244437674751
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.08995107398368418,
+          "high_seconds": 0.09059675200842321,
+          "difference_seconds": 0.000645678024739027,
+          "ratio": 1.0071781024521858
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09696824999991804,
+          "high_seconds": 0.10252559999935329,
+          "difference_seconds": 0.005557349999435246,
+          "ratio": 1.0573110270572064
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.08651293895673007,
+          "high_seconds": 0.10760799807030708,
+          "difference_seconds": 0.021095059113577008,
+          "ratio": 1.2438370418109113
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09330422896891832,
+          "high_seconds": 0.11825800698716193,
+          "difference_seconds": 0.02495377801824361,
+          "ratio": 1.2674453054700903
+        }
+      ],
+      "high_slower_repeats": 5,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 10,
+      "cells": 7,
+      "low_ell": [
+        7,
+        1
+      ],
+      "high_ell": [
+        4,
+        4
+      ],
+      "min_cell_median_seconds": 0.09264521207660437,
+      "max_cell_median_seconds": 0.09858261607587337,
+      "median_ratio": 1.0640875428549899,
+      "low_cell_range": [
+        0.09062836598604918,
+        0.0982515070354566
+      ],
+      "high_cell_range": [
+        0.0883440530160442,
+        0.09986464190296829
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09264521207660437,
+          "high_seconds": 0.09986464190296829,
+          "difference_seconds": 0.007219429826363921,
+          "ratio": 1.077925557776202
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.09062836598604918,
+          "high_seconds": 0.0883440530160442,
+          "difference_seconds": -0.002284312970004976,
+          "ratio": 0.9747947240894025
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09497285401448607,
+          "high_seconds": 0.09858261607587337,
+          "difference_seconds": 0.0036097620613873005,
+          "ratio": 1.0380083561649807
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.0982515070354566,
+          "high_seconds": 0.08964493009261787,
+          "difference_seconds": -0.008606576942838728,
+          "ratio": 0.9124025961277844
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.0921355509199202,
+          "high_seconds": 0.09873764298390597,
+          "difference_seconds": 0.006602092063985765,
+          "ratio": 1.071656293342447
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 11,
+      "cells": 6,
+      "low_ell": [
+        3,
+        6
+      ],
+      "high_ell": [
+        6,
+        3
+      ],
+      "min_cell_median_seconds": 0.09308001201134175,
+      "max_cell_median_seconds": 0.10275535995606333,
+      "median_ratio": 1.1039465695765343,
+      "low_cell_range": [
+        0.08548355707898736,
+        0.11134607798885554
+      ],
+      "high_cell_range": [
+        0.09928503795526922,
+        0.11025765491649508
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09308001201134175,
+          "high_seconds": 0.11025765491649508,
+          "difference_seconds": 0.017177642905153334,
+          "ratio": 1.184547063692474
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.08548355707898736,
+          "high_seconds": 0.09928503795526922,
+          "difference_seconds": 0.013801480876281857,
+          "ratio": 1.161451878558694
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09592655999585986,
+          "high_seconds": 0.10275535995606333,
+          "difference_seconds": 0.006828799960203469,
+          "ratio": 1.0711877915824168
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.11134607798885554,
+          "high_seconds": 0.10078924102708697,
+          "difference_seconds": -0.010556836961768568,
+          "ratio": 0.9051889644211341
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09278764796908945,
+          "high_seconds": 0.10886067198589444,
+          "difference_seconds": 0.016073024016804993,
+          "ratio": 1.1732237465719515
+        }
+      ],
+      "high_slower_repeats": 4,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 12,
+      "cells": 5,
+      "low_ell": [
+        7,
+        3
+      ],
+      "high_ell": [
+        6,
+        4
+      ],
+      "min_cell_median_seconds": 0.09524045092985034,
+      "max_cell_median_seconds": 0.10608231497462839,
+      "median_ratio": 1.1138367567449219,
+      "low_cell_range": [
+        0.09144994604866952,
+        0.1265479070134461
+      ],
+      "high_cell_range": [
+        0.09613993496168405,
+        0.10901558096520603
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09524045092985034,
+          "high_seconds": 0.09613993496168405,
+          "difference_seconds": 0.0008994840318337083,
+          "ratio": 1.0094443487305222
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.1265479070134461,
+          "high_seconds": 0.10901558096520603,
+          "difference_seconds": -0.017532326048240066,
+          "ratio": 0.8614570050030365
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09780577500350773,
+          "high_seconds": 0.10643950989469886,
+          "difference_seconds": 0.008633734891191125,
+          "ratio": 1.0882742853464582
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.0927254450507462,
+          "high_seconds": 0.10608231497462839,
+          "difference_seconds": 0.013356869923882186,
+          "ratio": 1.1440475148603744
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09144994604866952,
+          "high_seconds": 0.09649034298490733,
+          "difference_seconds": 0.005040396936237812,
+          "ratio": 1.055116456094521
+        }
+      ],
+      "high_slower_repeats": 4,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 13,
+      "cells": 4,
+      "low_ell": [
+        5,
+        6
+      ],
+      "high_ell": [
+        4,
+        7
+      ],
+      "min_cell_median_seconds": 0.09293384908232838,
+      "max_cell_median_seconds": 0.10473424301017076,
+      "median_ratio": 1.126976274461511,
+      "low_cell_range": [
+        0.08976759994402528,
+        0.10814597993157804
+      ],
+      "high_cell_range": [
+        0.09159323398489505,
+        0.15341760800220072
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.09112453507259488,
+          "high_seconds": 0.11824594193603843,
+          "difference_seconds": 0.027121406863443553,
+          "ratio": 1.2976301260888423
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.09543010406196117,
+          "high_seconds": 0.15341760800220072,
+          "difference_seconds": 0.05798750394023955,
+          "ratio": 1.6076437253237117
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09293384908232838,
+          "high_seconds": 0.09159323398489505,
+          "difference_seconds": -0.0013406150974333286,
+          "ratio": 0.9855745230540737
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.08976759994402528,
+          "high_seconds": 0.09212112007662654,
+          "difference_seconds": 0.002353520132601261,
+          "ratio": 1.0262179242184128
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.10814597993157804,
+          "high_seconds": 0.10473424301017076,
+          "difference_seconds": -0.0034117369214072824,
+          "ratio": 0.9684524850247247
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 14,
+      "cells": 3,
+      "low_ell": [
+        6,
+        6
+      ],
+      "high_ell": [
+        7,
+        5
+      ],
+      "min_cell_median_seconds": 0.09298548405058682,
+      "max_cell_median_seconds": 0.09361231699585915,
+      "median_ratio": 1.0067411913985553,
+      "low_cell_range": [
+        0.08966575493104756,
+        0.10229358600918204
+      ],
+      "high_cell_range": [
+        0.09164992801379412,
+        0.1087950220098719
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.10203396901488304,
+          "high_seconds": 0.09374266001395881,
+          "difference_seconds": -0.00829130900092423,
+          "ratio": 0.9187397189291457
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.0928160990588367,
+          "high_seconds": 0.09164992801379412,
+          "difference_seconds": -0.0011661710450425744,
+          "ratio": 0.9874356813433482
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.08966575493104756,
+          "high_seconds": 0.09361231699585915,
+          "difference_seconds": 0.003946562064811587,
+          "ratio": 1.0440141508633531
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.10229358600918204,
+          "high_seconds": 0.1087950220098719,
+          "difference_seconds": 0.006501436000689864,
+          "ratio": 1.0635566339428777
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.09298548405058682,
+          "high_seconds": 0.0933048800798133,
+          "difference_seconds": 0.0003193960292264819,
+          "ratio": 1.003434902043987
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 15,
+      "cells": 2,
+      "low_ell": [
+        7,
+        6
+      ],
+      "high_ell": [
+        6,
+        7
+      ],
+      "min_cell_median_seconds": 0.09028240293264389,
+      "max_cell_median_seconds": 0.09067118901293725,
+      "median_ratio": 1.0043063328806547,
+      "low_cell_range": [
+        0.08511312503833324,
+        0.10655874095391482
+      ],
+      "high_cell_range": [
+        0.08802308805752546,
+        0.11993337702006102
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.08837934106122702,
+          "high_seconds": 0.08802308805752546,
+          "difference_seconds": -0.00035625300370156765,
+          "ratio": 0.9959690466185445
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.10507137805689126,
+          "high_seconds": 0.09067118901293725,
+          "difference_seconds": -0.014400189043954015,
+          "ratio": 0.8629485088112484
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09028240293264389,
+          "high_seconds": 0.09096986497752368,
+          "difference_seconds": 0.0006874620448797941,
+          "ratio": 1.0076145740758882
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.08511312503833324,
+          "high_seconds": 0.08854824397712946,
+          "difference_seconds": 0.003435118938796222,
+          "ratio": 1.0403594502874747
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.10655874095391482,
+          "high_seconds": 0.11993337702006102,
+          "difference_seconds": 0.013374636066146195,
+          "ratio": 1.125514208843088
+        }
+      ],
+      "high_slower_repeats": 3,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    },
+    {
+      "logical_b": 16,
+      "cells": 1,
+      "low_ell": [
+        7,
+        7
+      ],
+      "high_ell": [
+        7,
+        7
+      ],
+      "min_cell_median_seconds": 0.09331625397317111,
+      "max_cell_median_seconds": 0.09331625397317111,
+      "median_ratio": 1.0,
+      "low_cell_range": [
+        0.08438814606051892,
+        0.10756888100877404
+      ],
+      "high_cell_range": [
+        0.08438814606051892,
+        0.10756888100877404
+      ],
+      "paired_repeats": [
+        {
+          "repeat": 0,
+          "low_seconds": 0.10533732199110091,
+          "high_seconds": 0.10533732199110091,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 1,
+          "low_seconds": 0.09331625397317111,
+          "high_seconds": 0.09331625397317111,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 2,
+          "low_seconds": 0.09218711394350976,
+          "high_seconds": 0.09218711394350976,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 3,
+          "low_seconds": 0.08438814606051892,
+          "high_seconds": 0.08438814606051892,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        },
+        {
+          "repeat": 4,
+          "low_seconds": 0.10756888100877404,
+          "high_seconds": 0.10756888100877404,
+          "difference_seconds": 0.0,
+          "ratio": 1.0
+        }
+      ],
+      "high_slower_repeats": 0,
+      "selection": "post-hoc min/max cell medians; descriptive only, not causal or inferential proof"
+    }
+  ],
+  "balanced_concentrated_differences": [
+    {
+      "logical_b": 2,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        0,
+        0
+      ],
+      "concentrated_ell": [
+        0,
+        0
+      ],
+      "identical_layout": true,
+      "paired_difference_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "logical_b": 2,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        0,
+        0
+      ],
+      "concentrated_ell": [
+        0,
+        0
+      ],
+      "identical_layout": true,
+      "paired_difference_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "logical_b": 3,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        1,
+        0
+      ],
+      "concentrated_ell": [
+        1,
+        0
+      ],
+      "identical_layout": true,
+      "paired_difference_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "logical_b": 3,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        1,
+        0
+      ],
+      "concentrated_ell": [
+        0,
+        1
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.004480701987631619,
+        -0.003855795948766172,
+        -0.0006463200552389026,
+        0.009312710957601666,
+        0.003490051021799445
+      ]
+    },
+    {
+      "logical_b": 4,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        1,
+        1
+      ],
+      "concentrated_ell": [
+        2,
+        0
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.0008402901003137231,
+        0.0012656600447371602,
+        -0.010922726127319038,
+        -0.009524005930870771,
+        -9.203609079122543e-05
+      ]
+    },
+    {
+      "logical_b": 4,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        1,
+        1
+      ],
+      "concentrated_ell": [
+        0,
+        2
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.0036887950263917446,
+        0.0022976481122896075,
+        -0.03793069312814623,
+        -0.004313540062867105,
+        0.0029369459953159094
+      ]
+    },
+    {
+      "logical_b": 5,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        2,
+        1
+      ],
+      "concentrated_ell": [
+        3,
+        0
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.0018714749021455646,
+        -0.007646655081771314,
+        0.011609746026806533,
+        -0.0033417349914088845,
+        0.001457521109841764
+      ]
+    },
+    {
+      "logical_b": 5,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        2,
+        1
+      ],
+      "concentrated_ell": [
+        0,
+        3
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.0019932439317926764,
+        -0.011753364116884768,
+        -0.0016213079215958714,
+        -0.006205467041581869,
+        0.0026564860017970204
+      ]
+    },
+    {
+      "logical_b": 6,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        2,
+        2
+      ],
+      "concentrated_ell": [
+        4,
+        0
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.008246032055467367,
+        0.00015938386786729097,
+        0.0002724090591073036,
+        -0.004294449929147959,
+        -0.004820683039724827
+      ]
+    },
+    {
+      "logical_b": 6,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        2,
+        2
+      ],
+      "concentrated_ell": [
+        0,
+        4
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.002476696972735226,
+        -0.002876081154681742,
+        0.0006164070218801498,
+        -0.0011456109350547194,
+        0.003394457045942545
+      ]
+    },
+    {
+      "logical_b": 7,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        3,
+        2
+      ],
+      "concentrated_ell": [
+        5,
+        0
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.00472873798571527,
+        -0.011713231913745403,
+        0.0038574219215661287,
+        -0.012908055912703276,
+        -0.007152705918997526
+      ]
+    },
+    {
+      "logical_b": 7,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        3,
+        2
+      ],
+      "concentrated_ell": [
+        0,
+        5
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.022409637924283743,
+        -0.005433427984826267,
+        -0.006097418023273349,
+        0.0028577380580827594,
+        -0.009712819941341877
+      ]
+    },
+    {
+      "logical_b": 8,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        3,
+        3
+      ],
+      "concentrated_ell": [
+        6,
+        0
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.002524258103221655,
+        0.0002430130261927843,
+        -6.72010937705636e-05,
+        -0.0014461340615525842,
+        -0.0128659539623186
+      ]
+    },
+    {
+      "logical_b": 8,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        3,
+        3
+      ],
+      "concentrated_ell": [
+        0,
+        6
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.0003460819134488702,
+        0.002353471936658025,
+        0.03325539885554463,
+        -0.0022017910378053784,
+        -0.007998541928827763
+      ]
+    },
+    {
+      "logical_b": 9,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        4,
+        3
+      ],
+      "concentrated_ell": [
+        7,
+        0
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.004948647925630212,
+        0.0036498350091278553,
+        -0.016812285990454257,
+        -0.0006565679796040058,
+        -0.004406438092701137
+      ]
+    },
+    {
+      "logical_b": 9,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        4,
+        3
+      ],
+      "concentrated_ell": [
+        0,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.007711208891123533,
+        -0.0001039999770000577,
+        -0.015535695943981409,
+        -0.003951941034756601,
+        -0.0029747451189905405
+      ]
+    },
+    {
+      "logical_b": 10,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        4,
+        4
+      ],
+      "concentrated_ell": [
+        7,
+        1
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.007219429826363921,
+        0.002284312970004976,
+        -0.0036097620613873005,
+        0.008606576942838728,
+        -0.006602092063985765
+      ]
+    },
+    {
+      "logical_b": 10,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        4,
+        4
+      ],
+      "concentrated_ell": [
+        1,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.0028474428690969944,
+        0.015481882961466908,
+        0.012353375903330743,
+        0.0005187179194763303,
+        -0.011464631999842823
+      ]
+    },
+    {
+      "logical_b": 11,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        5,
+        4
+      ],
+      "concentrated_ell": [
+        7,
+        2
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.003936466062441468,
+        -0.00424046500120312,
+        -1.6228295862674713e-06,
+        0.011493504978716373,
+        -0.012068283860571682
+      ]
+    },
+    {
+      "logical_b": 11,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        5,
+        4
+      ],
+      "concentrated_ell": [
+        2,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.005320396041497588,
+        -0.007369802915491164,
+        -0.0048599959118291736,
+        0.008829134050756693,
+        -0.015190662001259625
+      ]
+    },
+    {
+      "logical_b": 12,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        5,
+        5
+      ],
+      "concentrated_ell": [
+        7,
+        3
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.0007814338896423578,
+        0.031471408903598785,
+        -0.009163664071820676,
+        -0.018131888937205076,
+        -0.012518972856923938
+      ]
+    },
+    {
+      "logical_b": 12,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        5,
+        5
+      ],
+      "concentrated_ell": [
+        3,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.011767135001718998,
+        0.0002823459217324853,
+        -0.0030346751445904374,
+        -0.01887014601379633,
+        -0.01206808490678668
+      ]
+    },
+    {
+      "logical_b": 13,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        6,
+        5
+      ],
+      "concentrated_ell": [
+        7,
+        4
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.002125240978784859,
+        -0.005612896988168359,
+        0.01493467902764678,
+        -0.0006203430239111185,
+        0.001002846984192729
+      ]
+    },
+    {
+      "logical_b": 13,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        6,
+        5
+      ],
+      "concentrated_ell": [
+        4,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        0.023778226925060153,
+        0.057675346033647656,
+        -0.0031175409676507115,
+        0.002105928142555058,
+        0.011157989967614412
+      ]
+    },
+    {
+      "logical_b": 14,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        6,
+        6
+      ],
+      "concentrated_ell": [
+        7,
+        5
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.00829130900092423,
+        -0.0011661710450425744,
+        0.003946562064811587,
+        0.006501436000689864,
+        0.0003193960292264819
+      ]
+    },
+    {
+      "logical_b": 14,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        6,
+        6
+      ],
+      "concentrated_ell": [
+        5,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.005430866032838821,
+        -0.0013384120538830757,
+        0.005289723980240524,
+        -0.014757027034647763,
+        0.0005674859276041389
+      ]
+    },
+    {
+      "logical_b": 15,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        7,
+        6
+      ],
+      "concentrated_ell": [
+        7,
+        6
+      ],
+      "identical_layout": true,
+      "paired_difference_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "logical_b": 15,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        7,
+        6
+      ],
+      "concentrated_ell": [
+        6,
+        7
+      ],
+      "identical_layout": false,
+      "paired_difference_seconds": [
+        -0.00035625300370156765,
+        -0.014400189043954015,
+        0.0006874620448797941,
+        0.003435118938796222,
+        0.013374636066146195
+      ]
+    },
+    {
+      "logical_b": 16,
+      "contrast": "left_concentrated",
+      "balanced_ell": [
+        7,
+        7
+      ],
+      "concentrated_ell": [
+        7,
+        7
+      ],
+      "identical_layout": true,
+      "paired_difference_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "logical_b": 16,
+      "contrast": "right_concentrated",
+      "balanced_ell": [
+        7,
+        7
+      ],
+      "concentrated_ell": [
+        7,
+        7
+      ],
+      "identical_layout": true,
+      "paired_difference_seconds": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "diagnostic_regions": {
+    "PackedDraft.append_committed": {
+      "count": 64,
+      "median_host_span_seconds": 0.004388421017210931,
+      "median_gpu_stream_interval_ms": 4.446739435195923
+    },
+    "PackedDraft.backbone": {
+      "count": 64,
+      "median_host_span_seconds": 0.01107425254303962,
+      "median_gpu_stream_interval_ms": 11.128857612609863
+    },
+    "VarlenPackedTarget.append": {
+      "count": 64,
+      "median_host_span_seconds": 0.04346131801139563,
+      "median_gpu_stream_interval_ms": 43.51192855834961
+    },
+    "VarlenPackedTarget.crop": {
+      "count": 128,
+      "median_host_span_seconds": 0.0016506845713593066,
+      "median_gpu_stream_interval_ms": 1.699468970298767
+    },
+    "VarlenPackedTarget.predict": {
+      "count": 64,
+      "median_host_span_seconds": 0.0001293634995818138,
+      "median_gpu_stream_interval_ms": 0.7796500027179718
+    },
+    "full_shadow_propose": {
+      "count": 64,
+      "median_host_span_seconds": 0.03312938706949353,
+      "median_gpu_stream_interval_ms": 33.18156623840332
+    },
+    "private_source_verify_commit": {
+      "count": 64,
+      "median_host_span_seconds": 0.061121000500861555,
+      "median_gpu_stream_interval_ms": 61.14453125
+    }
+  },
+  "diagnostic_remainder_median_seconds": 0.0010686584282666445,
+  "peak_allocated_bytes": 2268122112,
+  "peak_reserved_bytes": 2348810240,
+  "capacity_round_driver_profile_eligible": false,
+  "limitations": [
+    "five samples per exact cell",
+    "observed same-B spread includes noise/drift/commit work; no causal layout effect established",
+    "nested host/event intervals include dispatch gaps and are not additive pure kernel costs",
+    "exact measured domain only; no growing-context transfer validation"
+  ]
+}
