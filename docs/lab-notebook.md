@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（S39 R2三臂E2E CPU准备与独立复审通过，设备执行待完成）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32及后续轮次的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S40 R2三臂真实E2E完成，无speculative加速）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32及后续轮次的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,7 +16,7 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
-- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)、[S34 signature成本与缓存安全否决](#signature-cpu-safety)、[S35 finite actual-Q family的CPU基础与兼容失败修复](#query-family-cpu-foundation)、[S36 full-shadow capacity/family同步CPU桥接](#capacity-query-family-cpu)、[S39 R2三臂完整请求比较的CPU准备](#paired-r2-cpu-preparation)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)、[S34 signature成本与缓存安全否决](#signature-cpu-safety)、[S35 finite actual-Q family的CPU基础与兼容失败修复](#query-family-cpu-foundation)、[S36 full-shadow capacity/family同步CPU桥接](#capacity-query-family-cpu)、[S39 R2三臂完整请求比较的CPU准备](#paired-r2-cpu-preparation)、[S40 R2三臂完整请求负收益与独立审计](#paired-r2-native-result)。
 - 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)、[S31 配对R1完整请求负收益](#paired-r1-result)、[S37 native variable-Q full-target gate的CPU准备](#query-family-graph-cpu-preparation)、[S38 native variable-Q finite-family真实capture/replay结果](#query-family-graph-native-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
@@ -1151,3 +1151,25 @@ Speculative吞吐仅同栈target-only的51.57%/43.63%，两臂也都低于保留
 **独立复审与单请求反例。** 初次准备交接时Direction审查尚未完成；随后在相同freeze上完成独立local CPU/source复核，root转达实际OS0、无blocker。Review核380source/base archive与原R1 PROTOCOL AST一致，初始/增长context的两hotfamily保存raw经72项独立metadata/输出/resident检查；另换seed跑每请求17输出的三臂短轨迹（batch34），fixed臂含一R1 eager tail，按每round重算actual B、shadow和结束lease。CPU workspace unique backing430554 bytes与计费相同，不是GPU pool测量。重要反例在grown B16仅r1的layer0 scratch V加.006：pooled RMS **.0041960023≤.005**通过，r1 RMS **.0059340433>.005**失败，证明pooled不能替代逐request门槛；runner拒绝ready、保留先通过的B2及坏B16 raw，这是预期negative check而非真实设备失败。记录者核review handoff SHA **4370af20…05f0a2**及10份artifact SHA、读counterexample标量/source，不重跑测试或tensor；证据在 `output/paired-r2-independent-review-20261009/`。
 
 **截止状态与结论边界。** 独立CPU/source复审已通过，设备执行仍待完成；本轮准备尚无remote CPU/GPU执行或27batch吞吐结果，不将CPU fixture写成native performance、speedup、measured SPS或调度通过。没有Profile/current-confidence/t−2策略、校准、训练或overlap结果。既有vLLM r2-c256五次scalar参考重算246.566727 output tok/s作为独立stack基线，非native FP64 law等价证据；旧R1 paired负收益、cross-backend RMS/sequential law/endpoint TV与完整profiler timeline缺口继续保留。下一步由root提交不可变源码，再按协调窗口执行并另记实际结果。记录者仅核源码/标量/哈希并维护本日志，未重复remote检查、运行测试/GPU、改实现或stage/commit/push。
+
+
+<a id="paired-r2-native-result"></a>
+## 2026-10-09 — S40：R2三臂真实完整请求比较完成，γ7仍无加速
+
+**实际执行与E2E结果。** S39准备归档为immutable commit **17da0b4cd7829d94d80720bc215d22583285e827**；AMD三个GPU visibility变量为空时相关**34项CPU测试/26.201秒/OS0全部pass**（含本地跳过的两Linux用例），随后单次native完成原r2-c256三臂**27batch、6912输出**，每batch两请求各128、总256。真实BF16 target/step1280 draft/两hot R2 B2/B16 pools在三臂共同resident，原FP64 sampling，全部R1/其他family eager仍在完整timer内。五primary每臂1280输出除完整batch wall，记录者独立从[27份公开scalar](../reports/paired-r2-benchmark-20261009-17da0b4/scalar-samples.jsonl)重算如下；保留预声明primary位置不平衡，不作置信区间/显著性主张。
+
+| Native arm | 五primary wall总秒 | Output tok/s | 相对native target-only |
+| --- | ---: | ---: | ---: |
+| target_only | 15.867885 | 80.6660752 | 1.0000× |
+| fixed_gamma7_full_shadow | 36.585227 | 34.9867992 | 0.4337× |
+| full_shadow_zero_admission | 40.550960 | 31.5652205 | 0.3913× |
+
+强vLLM r2-c256独立stack基线仍为**246.5667274 output tok/s**，不混作同native law对照；γ7只有native target-only的**43.37%**，没有speculative speedup。完整timer包含reset/session、admission首token、shadow/q-p/FP64 draw、host、target prepare/graph/eager/head/wait、commit/projection/release与final sync；setup **25.8303秒**另报，不从primary相减。
+
+**接受/工作量与zero解释。** 以下均五primary合计：γ7 **220 accepted / 7080 selected =3.107345%**，不是220/全部shadow；530 global rounds对应1050 request-rounds，分别为**.415094 accepted/global round、.209524/request-round**。共7350 shadow positions、490真实graph rounds/40 eager rounds，后者含10 R1 tails。Zero臂8890 shadow positions、selected/accepted均0，accepted/selected为**null**，仍执行完整shadow和私有验证/RNG路径。γ7吞吐为zero的1.108397×，但两臂proposal RNG改变后续轨迹，差值不是isolated draft时间或matched-trajectory反事实，也不支持confidence head/scheduler收益。原输入是合成workload，不是natural held-out acceptance评估；旧R1负收益继续保留。
+
+**独立scalar/raw审计。** Root scalar审计实际OS0，核27 identities、**3240 rounds/380source**与逐轮actual B/Q、shadow、输出组成；记录者从公开scalar的coverage独立重数3240，并重算上表及接受/工作量。Raw setup另经独立CPU审计实际OS0：**2203 checks、756 pooled/每request reductions全部pass、failed0/unavailable空**，maxabs/RMS均**0**，tensor/storage bytes等；两hotgraphs在C256/256与真实grown C368/375的selected raw、final norm/logits、全部层scratch、metadata及保存resident检查通过，门槛仍.02/.02/.005。Raw verification tokens与bound原workload核对；**prefill/growth token arrays未独立保存**，该审计不独立重跑其prefix model execution。Zero误差不解除same-native control的独立attention oracle缺口，scalar审计也不审原始q/p law；旧cross-backend RMS/sequential law/endpoint TV与完整profiler timeline缺口保持。
+
+**身份、退出与释放。** Worker/controller/native SSH、CPU/test SSH、collection与两audit实际OS均0，无timeout/retry；独立release remaining空、原ASR listener身份ready/nonbusy、KFD仅原ASR、free25246035968 bytes，source前后380通过，不把释放观察当未来readiness。仍为两graph各512MiB独立reservation、其余family eager，未扩大预算。完整未发布 `output/paired-r2-native-20261009/` archive **533372941 bytes**、SHA **2c09ad74…63fe60**核实；记录者核source.tar逐字节等17da0b4 Git archive、部署380逐manifest、result handoff SHA **3b973dd3…7da8f**及11份artifact SHA、scalar/raw审计分别3/7输入SHA、756 reduction标量与实际exit/release，未加载tensor或重复任何测试/remote/GPU。[公开报告](../reports/paired-r2-benchmark-20261009-17da0b4/README.md)与[aggregate](../reports/paired-r2-benchmark-20261009-17da0b4/aggregate.json)保留结果/审计边界；本轮没有measured SPS/Profile、current-confidence/capacity调度或异步overlap收益。
+
+**已收到的后续计划，尚未实现/执行。** Root转达Direction对27batch/3240round无矛盾并接受：暂缓扩capacity/SPS/全B表，下一步仅同R2 target_only/γ7各1warmup+1plain+1coarse-synchronized，共6完整batch/300秒，不用Kineto/Chrome trace、不retry。拟观测fullshadow、target prepare/replay/head、FP64 law/sampling、commit/projection，先核输出/RNG/work不变，再用plain对照量化phase同步扰动并选择下一优化路径，不把阶段计时相减宣称speedup。该方案本轮未启动；Direction decision已收到，留证 `output/paired-r2-result-direction-20261009/decision.json`、SHA **e0eda622…d98471**，不将此计划写成实现、profile或优化成功。记录者仅维护本日志和核源码/标量/哈希，未stage/commit/push。

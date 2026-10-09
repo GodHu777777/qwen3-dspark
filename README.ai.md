@@ -646,3 +646,27 @@ draft latency. Fixed draft cost cannot be cancelled when maximizing E/(D+V+H).
 No new Profile/SPS, confidence admission, training or overlap is introduced.
 Related local CPU tests passed 32 with two Linux-only skips; device execution and
 performance remain pending. Deploy only reviewed immutable source with fresh guards.
+
+
+R2 actual result (immutable 17da0b4): one bounded native run completed 27 batches,
+following all 34 pinned AMD GPU-hidden CPU tests (26.201 s, exit 0). See
+reports/paired-r2-benchmark-20261009-17da0b4. Primary output tokens/s: target-only
+80.666075, gamma7 full shadow 34.986799, zero-admission full shadow 31.565220;
+gamma7/native target-only=0.433724. Separate strong vLLM R2/C256=246.566727.
+Gamma7 accepted 220/7080 selected proposals, 0.415094/global round or
+0.209524/request-round, on this synthetic workload; 7350 shadow positions,
+490 graph/40 eager primary rounds including 10 R1 tails. Zero selected no
+proposals but generated 8890 shadow positions; accepted/selected is null.
+The zero arm follows a different RNG trajectory; its gap is whole-path overhead.
+Independent scalar audit checked all 3240 rounds and 380 source hashes; CPU raw
+audit passed 2203 checks and 756 reductions with max absolute error/RMS zero
+at initial and grown contexts under unchanged thresholds. Prefill/growth token arrays
+were not separately saved; the audit does not independently replay prefix execution. Worker/controller/SSH
+exited 0 without timeout/retry; independent live release preserved ASR.
+No measured SPS/Profile, learned confidence admission, capacity policy or overlap
+was exercised, and no inference speedup has been demonstrated.
+Next decision: defer capacity/SPS expansion and prepare a bounded R2 coarse
+critical-path diagnostic (two arms, six complete batches, 300-second window).
+Preserve plain controls, output/RNG/work invariants and original primary rates;
+measure observer perturbation. No Kineto trace, retry or new speed claim. This
+is a proposed follow-up, not implemented or executed by the R2 result commit.

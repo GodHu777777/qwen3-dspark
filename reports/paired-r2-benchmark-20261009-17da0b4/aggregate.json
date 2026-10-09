@@ -1,0 +1,431 @@
+{
+  "status": "completed_and_independently_audited",
+  "source_commit": "17da0b4cd7829d94d80720bc215d22583285e827",
+  "protocol": {
+    "version": 1,
+    "method": "paired_r2_three_arm_finite_family_diagnostic",
+    "case_ids": [
+      "r2-c256"
+    ],
+    "arms": [
+      "target_only",
+      "fixed_gamma7_full_shadow",
+      "full_shadow_zero_admission"
+    ],
+    "output_tokens": 128,
+    "gamma": 7,
+    "allocation": "fixed gamma7 clipped by remaining budget, or zero; chosen before all-seven-position shadow draws",
+    "proposal_mode": "shadow; all seven positions even when allocation is zero",
+    "graph_query_lengths": [
+      2,
+      16
+    ],
+    "eager_query_lengths": null,
+    "prefill_query_lengths": [
+      256,
+      256
+    ],
+    "verification_key_capacity": 766,
+    "slots": 2,
+    "context_capacity": 384,
+    "max_query_tokens": 512,
+    "max_buckets": 25,
+    "max_graph_buckets": 2,
+    "graph_reservation_bytes": 536870912,
+    "graph_byte_budget": 1342177280,
+    "workspace_byte_budget": 67108864,
+    "temperature": 1.0,
+    "eos_ids": [],
+    "probability_policy": "float64_softmax_normalize_cdf_v1",
+    "timeout_seconds": 1800,
+    "cooperative_reserve_seconds": 10,
+    "minimum_free_bytes": 8589934592,
+    "process_allocation_cap_bytes": 6442450944,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "selected_layers": "same trained draft layer IDs in both arms",
+    "setup_validation_limits": {
+      "atol": 0.02,
+      "rtol": 0.02,
+      "max_rms": 0.005
+    },
+    "setup_validation": "each B2/B16 at C256/256 and after committed eager growth to C368/375; pooled and per-request fixed limits, raw outputs before assertions",
+    "measurement": {
+      "warmup_batches_per_case": 2,
+      "measured_batches_per_case": 5,
+      "diagnostic_batches_per_case": 2
+    },
+    "pair_order": "global replicate ordinal 0..8: rotate canonical three arms left by ordinal modulo3; warmup2,primary5,diagnostic2",
+    "setup_scope": "load/register/prime/two captures, native eager/graph validation and actual context growth outside samples; separately reported",
+    "resident_cost": "same target, both R2 graph pools and trained draft weights resident for all three arms",
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "distribution_equivalence_claimed": false,
+    "request_count": 2,
+    "graph_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        16
+      ]
+    ],
+    "verification_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        2,
+        13
+      ],
+      [
+        2,
+        14
+      ],
+      [
+        2,
+        15
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        1,
+        8
+      ]
+    ],
+    "maximum_key_length": 383,
+    "primary_arm_position_counts": {
+      "target_only": [
+        2,
+        2,
+        1
+      ],
+      "fixed_gamma7_full_shadow": [
+        1,
+        2,
+        2
+      ],
+      "full_shadow_zero_admission": [
+        2,
+        1,
+        2
+      ]
+    },
+    "setup_growth_query_lengths": [
+      112,
+      119
+    ],
+    "setup_growth_contexts": [
+      368,
+      375
+    ],
+    "zero_arm_scope": "aggregate full-shadow-path overhead diagnostic; proposal RNG changes trajectories; not isolated drafter latency",
+    "measured_sps": false,
+    "current_confidence_admission": false
+  },
+  "sample_count": 27,
+  "cells": [
+    {
+      "arm": "target_only",
+      "primary_samples": 5,
+      "output_tokens": 1280,
+      "batch_wall_seconds": [
+        3.125937255099416,
+        3.1484503999818116,
+        3.3188841940136626,
+        3.1315252690110356,
+        3.143087816075422
+      ],
+      "seconds": 15.867884934181347,
+      "tokens_per_second": 80.66607523997888,
+      "vllm_tokens_per_second": 246.56672736039107,
+      "relative_to_vllm": 0.3271571801416432,
+      "verification_rounds": 635,
+      "request_rounds": 1270,
+      "accepted_draft_tokens": 0,
+      "selected_proposals": 0,
+      "full_shadow_positions": 0,
+      "accepted_per_round": 0.0,
+      "accepted_per_request_round": 0.0,
+      "accepted_over_selected": null,
+      "accepted_over_shadow": null,
+      "graph_rounds": 635,
+      "eager_rounds": 0,
+      "r1_tail_rounds": 0,
+      "distinct_trajectories_across_nine_repeats": 1,
+      "relative_to_target_only": 1.0
+    },
+    {
+      "arm": "fixed_gamma7_full_shadow",
+      "primary_samples": 5,
+      "output_tokens": 1280,
+      "batch_wall_seconds": [
+        7.333910812973045,
+        7.241568633937277,
+        7.182330286013894,
+        7.391562029020861,
+        7.435855466988869
+      ],
+      "seconds": 36.585227228933945,
+      "tokens_per_second": 34.98679923430116,
+      "vllm_tokens_per_second": 246.56672736039107,
+      "relative_to_vllm": 0.14189586571087978,
+      "verification_rounds": 530,
+      "request_rounds": 1050,
+      "accepted_draft_tokens": 220,
+      "selected_proposals": 7080,
+      "full_shadow_positions": 7350,
+      "accepted_per_round": 0.41509433962264153,
+      "accepted_per_request_round": 0.20952380952380953,
+      "accepted_over_selected": 0.031073446327683617,
+      "accepted_over_shadow": 0.029931972789115645,
+      "graph_rounds": 490,
+      "eager_rounds": 40,
+      "r1_tail_rounds": 10,
+      "distinct_trajectories_across_nine_repeats": 1,
+      "relative_to_target_only": 0.43372383161343353
+    },
+    {
+      "arm": "full_shadow_zero_admission",
+      "primary_samples": 5,
+      "output_tokens": 1280,
+      "batch_wall_seconds": [
+        7.948272305075079,
+        7.8283221300225705,
+        8.257429266930558,
+        8.188017846085131,
+        8.3289187051123
+      ],
+      "seconds": 40.55096025322564,
+      "tokens_per_second": 31.565220453643438,
+      "vllm_tokens_per_second": 246.56672736039107,
+      "relative_to_vllm": 0.12801897803310072,
+      "verification_rounds": 635,
+      "request_rounds": 1270,
+      "accepted_draft_tokens": 0,
+      "selected_proposals": 0,
+      "full_shadow_positions": 8890,
+      "accepted_per_round": 0.0,
+      "accepted_per_request_round": 0.0,
+      "accepted_over_selected": null,
+      "accepted_over_shadow": 0.0,
+      "graph_rounds": 635,
+      "eager_rounds": 0,
+      "r1_tail_rounds": 0,
+      "distinct_trajectories_across_nine_repeats": 1,
+      "relative_to_target_only": 0.3913072547503763
+    }
+  ],
+  "same_backend_target_only": true,
+  "measured_sps": false,
+  "confidence_admission": false,
+  "capacity_scheduler_integrated": false,
+  "overlap_demonstrated": false,
+  "speedup_over_target_only": false,
+  "scalar_audit": {
+    "status": "passed",
+    "rounds_checked": 3240,
+    "source_files": 380
+  },
+  "raw_setup_audit": {
+    "status": "passed",
+    "checks_total": 2203,
+    "failed_checks": 0,
+    "reduction_count": 756,
+    "failed_reductions": 0,
+    "limitations": [
+      "Raw verification input tokens are checked against the bound original workload. Prefill/growth token arrays are not saved separately; their planned bytes can be reconstructed from frozen source/protocol, but this audit does not independently replay their model execution."
+    ]
+  },
+  "raw_setup_max_abs": 0.0,
+  "raw_setup_max_rms": 0.0,
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "device_arch": "gfx1201",
+    "setup_seconds": 25.830258272006176
+  },
+  "execution": {
+    "worker_os_exit": 0,
+    "controller_os_exit": 0,
+    "ssh_os_exit": 0,
+    "timed_out": false,
+    "independent_release_passed": true,
+    "remaining_owned_count": 0,
+    "asr_ready": true,
+    "source_integrity_passed": true
+  },
+  "setup": {
+    "workspace_bytes": 24876570,
+    "graph_reserved_bytes": 1073963152,
+    "resident_and_scratch_bytes": 146800640,
+    "buckets": 25,
+    "graph_count": 2,
+    "captures": [
+      {
+        "query_tokens": 2,
+        "status": "validated",
+        "private_pool_reserved_bytes": 2097152,
+        "reservation_bytes": 536870912,
+        "validations": [
+          {
+            "stage": "initial",
+            "context_lengths": [
+              256,
+              256
+            ],
+            "query_lengths": [
+              1,
+              1
+            ],
+            "status": "passed",
+            "comparison_count": 189
+          },
+          {
+            "stage": "grown",
+            "context_lengths": [
+              368,
+              375
+            ],
+            "query_lengths": [
+              1,
+              1
+            ],
+            "status": "passed",
+            "comparison_count": 189
+          }
+        ]
+      },
+      {
+        "query_tokens": 16,
+        "status": "validated",
+        "private_pool_reserved_bytes": 2097152,
+        "reservation_bytes": 536870912,
+        "validations": [
+          {
+            "stage": "initial",
+            "context_lengths": [
+              256,
+              256
+            ],
+            "query_lengths": [
+              8,
+              8
+            ],
+            "status": "passed",
+            "comparison_count": 189
+          },
+          {
+            "stage": "grown",
+            "context_lengths": [
+              368,
+              375
+            ],
+            "query_lengths": [
+              8,
+              8
+            ],
+            "status": "passed",
+            "comparison_count": 189
+          }
+        ]
+      }
+    ]
+  },
+  "provenance": {
+    "source_archive_sha256": "2dd1b5f1f8707cee1f76b296c24f507d8b4f330775a59907fbdf82ced6d0c03e",
+    "evidence_archive": {
+      "passed": true,
+      "sha256": "2c09ad741d78f0edb43346bf7f2b2912049d939415a77c57fe3c594a2263fe60",
+      "bytes": 533372941
+    },
+    "scalar_auditor_sha256": "65376dfa35751cab51381f83b8f9458cb6a837fcb508ebf8e9bb4bb1b5277426",
+    "scalar_audit_sha256": "ea178e3a3f1e57cfa956b19a8c5f81be4beec4ccedefb1ca1ede6b1a28822c4a",
+    "raw_auditor_sha256": "32fee44a825148176bd34dca48f928635d7b4cce3e36b57409bbf62eb9acf2b3",
+    "raw_audit_sha256": "0380ba9335b8e53823f0dfafceab70c53813877d5a0fb83ba2e8adddfedac661",
+    "public_scalar_samples_sha256": "19d2faae0b61827860a7cf380ce1e9a7538ddc09bdefbc5efbe5a10f0f714090"
+  },
+  "limitations": [
+    "Original synthetic r2-c256 only; no natural held-out quality claim.",
+    "Different shadow RNG gives different trajectories; zero-arm difference is whole-path overhead, not isolated draft time.",
+    "Five primary repeats have predeclared position imbalance; no confidence interval or statistical significance claim.",
+    "Strong vLLM baseline is a separate stack; same native backend control is separately reported.",
+    "Same-native setup fidelity does not establish cross-kernel target-law equivalence; earlier numerical failures remain.",
+    "No learned confidence admission, measured SPS profile or hardware-aware scheduling benefit was exercised."
+  ]
+}

@@ -227,10 +227,11 @@ The [bounded variable-Q native gate](reports/query-family-graph-20261009-a4942af
 passed six same-backend states, including five real graph replays with changing
 Q and request order. This establishes finite target graph fidelity, not speed.
 
-The [R2 three-arm benchmark](docs/paired-r2-benchmark.md) is prepared to compare
-target-only, full-shadow fixed-γ7 and full-shadow zero admission on the same
-workload. It includes eager tails and complete session costs; CPU preparation
-does not establish device performance.
+The [R2 three-arm result](reports/paired-r2-benchmark-20261009-17da0b4/README.md)
+completed 27 batches: target-only **80.67**, fixed-γ7 full shadow **34.99**, and
+zero-admission full shadow **31.57 output tokens/s**. Fixed-γ7 reaches only
+43.37% of native target-only throughput; no speedup or scheduler benefit is
+established. The separate matched vLLM baseline remains 246.57 tokens/s.
 
 [实验复盘日志](docs/lab-notebook.md)记录问题、假设、处理方法、验证结果、
 失败尝试和下一步决策，并关联提交与证据。历史结果与进行中的实验分开标注。
