@@ -45,6 +45,14 @@ a causal scheduler capacity estimate. Existing typed policy validation and its
 request identities, real confidence provenance and output-budget bounds remain
 in force; this strategy supplies no scheduler proof.
 
+The provider also accepts explicitly declared `QueryFamily` values with fixed
+R/physical-B/maxQ/Kcapacity/maxK and per-transaction actual Q. Their metadata and
+gather workspaces share one predeclared arena, while graph input/output buffers
+and private reservations remain separate. Selection still requires exact actual
+physical B with no proposal padding. See [query-families.md](query-families.md)
+for the CPU session composition evidence and the unconnected capacity-driver and
+native validation boundaries.
+
 Admission checks bucket availability before adding requests or consuming RNG.
 It calls target prefill, selects only each request's final hidden row, and makes
 the original single R-row LM-head projection. It then samples each first token

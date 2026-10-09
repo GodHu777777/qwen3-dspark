@@ -230,7 +230,9 @@ class FullTargetExecution:
         return result
 
     def validate_pointers(self):
-        if self.invalid or self.pointers()!=self.addresses or self._model_signature()!=self.model_signature:
+        if (self.invalid or self.pointers()!=self.addresses or self._model_signature()!=self.model_signature
+                or self.workspace is not self.target.pool._workspaces[self.bucket]
+                or self.workspace.signature()!=self.writer.workspace_signature):
             raise RuntimeError('Graph executor, model signature or captured buffer addresses changed')
 
     def prepare(self, chunks, layout):

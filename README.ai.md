@@ -570,3 +570,16 @@ Return next to finite physical-B families and multi-request current-confidence
 admission, retaining prior capacity/RNG ordering, actual work counts and explicit
 eager fallback costs. No new lease framework or GPU profiling retry is required
 by these CPU findings.
+
+Finite physical-B CPU foundation: `persistent_target_kv.QueryFamily` separates
+fixed R/B/maxQ/Kcapacity/maxK from transaction actual ordered Q. One explicit
+`register_families` call allocates shared metadata/gather backing with stable
+per-family views. Exact `Bucket` remains compatible; graph I/O and private-pool
+reservations remain separately charged per captured program. The real CPU
+`PackedSpeculativeSession` composition matches exact eager q/p, RNG, outputs and
+target/draft KV while varying actual Q and B, with graph-emulator and explicit
+eager families. See docs/query-families.md and output/query-family-cpu-20261009.
+No generalized native family capture, t-2 capacity/current-confidence integration,
+speed gain or overlap is established. Keep all three fresh model-signature
+checks and receipt/feature lease boundaries; never pad actual physical B to a
+reservation or infer native support from the emulator or launch-argument spy.

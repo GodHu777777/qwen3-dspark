@@ -13,7 +13,7 @@ from transformers import Cache
 from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
 
 from .packed_target import PackedFeatures
-from .persistent_target_kv import PersistentTargetKV, Bucket
+from .persistent_target_kv import PersistentTargetKV, Bucket, QueryFamily
 
 
 @dataclass(frozen=True)
@@ -24,6 +24,7 @@ class PersistentAttentionLayout:
     cu_key: torch.Tensor
     physical_key_capacity: int
     maximum_key_length: int = 0
+    maximum_query_length: int = 0
 
 
 def test_only_persistent_sdpa(query, key, value, layout, *, scale):
@@ -191,7 +192,10 @@ class PersistentQwenTarget:
 
     def register_bucket(self,bucket):
         self._idle()
-        if not isinstance(bucket,Bucket):raise ValueError('Explicit Bucket required')
+        if isinstance(bucket,QueryFamily):
+            self.pool.register_bucket(bucket)
+            return
+        if not isinstance(bucket,Bucket):raise ValueError('Explicit Bucket or QueryFamily required')
         if bucket not in self.pool._workspaces:
             size=self.pool.workspace_bytes(bucket)
             if len(self.pool._workspaces)>=self._max_buckets or self._workspace_bytes+size>self._workspace_budget:
@@ -199,6 +203,22 @@ class PersistentQwenTarget:
             if self._graph_backend is not None and self._workspace_bytes+size+self._graph_reserved_bytes>self._graph_budget:
                 raise ValueError('Combined graph/workspace byte budget exceeded')
             self.pool.register_bucket(bucket);self._workspace_bytes+=size
+
+    def register_families(self,families):
+        """Declare one finite family set, sharing fixed metadata and gather storage.
+
+        Graph input/output buffers and private reservations remain per program.
+        This does not capture any graph or imply native family validation.
+        """
+        self._idle()
+        shape=self.pool.family_arena_shape(families)
+        size=self.pool.workspace_bytes(shape)
+        if (len(self.pool._workspaces)+len(families)>self._max_buckets
+                or self._workspace_bytes+size>self._workspace_budget):
+            raise ValueError('Finite bucket/workspace budget exceeded')
+        if self._graph_backend is not None and self._workspace_bytes+size+self._graph_reserved_bytes>self._graph_budget:
+            raise ValueError('Combined graph/workspace byte budget exceeded')
+        self.pool.register_families(families);self._workspace_bytes+=size
 
     def _native_attention(self,q,k,v,layout,*,scale):
         # The ordinary pinned wrapper keeps its exact-K contract. Only this
@@ -209,16 +229,16 @@ class PersistentQwenTarget:
                 or len(q)!=sum(layout.query_lengths) or scale!=128**-.5):
             raise ValueError('Pinned native capacity attention shape/dtype/scale differs')
         return self._varlen_kernel._operator(q,k,v,layout.cu_query,layout.cu_key,
-            max(layout.query_lengths),layout.maximum_key_length,0.,True,False,
+            layout.maximum_query_length,layout.maximum_key_length,0.,True,False,
             scale=scale,window_size_left=None,window_size_right=None,seqused_k=None,
             alibi_slopes=None,block_table=None,num_splits=None)[0]
 
     def _layout_for(self,tx):
         ws=self.pool._workspaces[tx.bucket]
-        return PersistentAttentionLayout(tx.bucket.query_lengths,
-            tuple(c+q for c,q in zip(tx.context_lengths,tx.bucket.query_lengths)),
+        return PersistentAttentionLayout(tx.query_lengths,
+            tuple(c+q for c,q in zip(tx.context_lengths,tx.query_lengths)),
             ws.cu_query,ws.cu_key,tx.bucket.key_capacity,
-            max(c+q for c,q in zip(tx.bucket.context_ceilings,tx.bucket.query_lengths)))
+            tx.bucket.maximum_key_length,tx.bucket.maximum_query_length)
 
     def register_graph_bucket(self,bucket,*,reserve_bytes):
         """Explicit registration only; reservation covers retained graph allocations."""
@@ -241,7 +261,8 @@ class PersistentQwenTarget:
         """Setup-only full-model capture; no request commit and no lazy fallback."""
         self._idle();self._validate_chunks(chunks,bucket)
         if bucket not in self._graphs:raise ValueError('Explicit registered graph bucket required')
-        tx=self.pool.begin(tuple(self._handles[r] for r in chunks),bucket)
+        tx=self.pool.begin(tuple(self._handles[r] for r in chunks),bucket,
+            query_lengths=tuple(ids.shape[1] for ids in chunks.values()))
         try:
             ex=self._graphs[bucket];ex.prepare(chunks,self._layout_for(tx));ex.capture()
             self.pool.abort(tx)
@@ -254,12 +275,13 @@ class PersistentQwenTarget:
         from .persistent_qwen_graph import GraphTicket
         ex=self._graphs.get(bucket)
         if ex is None or ex.graph is None:raise ValueError('Explicitly captured bucket required; no capture-on-miss')
-        tx=self.pool.begin(tuple(self._handles[r] for r in chunks),bucket)
+        tx=self.pool.begin(tuple(self._handles[r] for r in chunks),bucket,
+            query_lengths=tuple(ids.shape[1] for ids in chunks.values()))
         try:
             ex.prepare(chunks,self._layout_for(tx))
             receipt=self.pool.prepare_external_write(tx,ex.writer)
             spans={};offset=0
-            for r,c,q in zip(chunks,tx.context_lengths,bucket.query_lengths):
+            for r,c,q in zip(chunks,tx.context_lengths,tx.query_lengths):
                 spans[r]=(offset,q,c);offset+=q
             ticket=GraphTicket(tx,receipt,ex,spans);self._graph_ticket=ticket
             return ticket
@@ -353,10 +375,11 @@ class PersistentQwenTarget:
         self._hooks=[];self.model.config._attn_implementation=self._old_backend;self._closed=True
 
     def _validate_chunks(self,chunks,bucket):
-        if not isinstance(chunks,Mapping) or not chunks or not isinstance(bucket,Bucket):
+        if not isinstance(chunks,Mapping) or not chunks or not isinstance(bucket,(Bucket,QueryFamily)):
             raise ValueError('Nonempty ordered token mapping and explicit bucket required')
-        if tuple(x.shape[1] if isinstance(x,torch.Tensor) and x.ndim==2 else -1 for x in chunks.values())!=bucket.query_lengths:
-            raise ValueError('Ordered query lengths must exactly match the chosen bucket')
+        queries=tuple(x.shape[1] if isinstance(x,torch.Tensor) and x.ndim==2 else -1 for x in chunks.values())
+        if not bucket.accepts(queries,tuple(self.lengths.get(r,-1) for r in chunks)):
+            raise ValueError('Ordered query lengths and contexts must match the chosen bucket or family')
         for request,ids in chunks.items():
             if request not in self._handles:raise ValueError('Request not resident')
             if ids.shape[0]!=1 or ids.dtype!=torch.long or ids.device!=self.device:
@@ -374,11 +397,12 @@ class PersistentQwenTarget:
         """Explicit same-backend eager control, including on registered graph buckets."""
         self._idle();self._validate_chunks(chunks,bucket)
         handles=tuple(self._handles[r] for r in chunks)
-        tx=self.pool.begin(handles,bucket);ws=self.pool._workspaces[bucket]
+        tx=self.pool.begin(handles,bucket,query_lengths=tuple(ids.shape[1] for ids in chunks.values()))
+        ws=self.pool._workspaces[bucket]
         self._active_tx=tx
         self._layout=self._layout_for(tx)
         self._captured={};spans={};offset=0
-        for request,c,q in zip(chunks,tx.context_lengths,bucket.query_lengths):
+        for request,c,q in zip(chunks,tx.context_lengths,tx.query_lengths):
             spans[request]=(offset,q,c);offset+=q
         try:
             output=self.model.model(input_ids=torch.cat(tuple(chunks.values()),dim=1),
@@ -389,9 +413,11 @@ class PersistentQwenTarget:
             context=torch.cat([self._captured[i] for i in self.layer_ids],dim=-1) if self.layer_ids else None
             work=self.pool.work(tx)
             work.update(model_forward_calls=1,layers=self.pool.layers,attention_heads=self.model.config.num_attention_heads,
-                queried_context_lengths=list(tx.context_lengths),query_lengths=list(bucket.query_lengths),
+                queried_context_lengths=list(tx.context_lengths),query_lengths=list(tx.query_lengths),
                 selected_layer_ids=list(self.layer_ids),attention_backend=self.attention_backend,
+                workspace_bytes=self._workspace_bytes,
                 committed_write_policy='scratch_only_until_explicit_commit',full_model_native_or_graph_verified=False)
+            if isinstance(bucket,QueryFamily):work['execution_kind']='explicit_eager'
             features=PackedFeatures(output.last_hidden_state.detach(),None if context is None else context.detach(),spans,work)
             self._pending=(features,tx)
             self._features[id(features)]=features

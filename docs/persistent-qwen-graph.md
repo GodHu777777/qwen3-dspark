@@ -184,8 +184,10 @@ raw selected versus final norm distinction, partial-commit cache semantics and
 original failure reports. A separate immutable bounded runner and authorization
 must establish those GPU facts; this document does not report an execution.
 
-The exact ordered Q shape still depends on current prefix allocations. It is not
-selected solely by t−2 capacity K, and a passing fixed-family graph would not
-complete the bounded R/physical-B/max-Q family, capacity scheduler or CPU/GPU
-overlap. The observed native end-to-end gap remains unchanged until a new measured
-implementation improves it.
+The original exact ordered-Q path remains available. A subsequent opt-in CPU
+foundation adds `QueryFamily`, actual transaction Q and a shared metadata/gather
+arena; see [query-families.md](query-families.md). It permits different Q splits
+at fixed physical B in the CPU replay emulator, but has no generalized native
+family evidence. Current allocations still determine actual B; family selection
+is not supplied solely by t−2 reserved capacity. Capacity-driver integration and
+CPU/GPU overlap remain open, and the measured native end-to-end gap is unchanged.

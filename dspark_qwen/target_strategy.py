@@ -5,7 +5,7 @@ permission to use future confidence. Query lengths are exact and ordered.
 """
 from dataclasses import dataclass
 
-from .persistent_target_kv import Bucket
+from .persistent_target_kv import Bucket, QueryFamily
 
 
 class AppendCropTargetStrategy:
@@ -42,7 +42,7 @@ class FiniteTargetBuckets:
     def __post_init__(self):
         for buckets in (self.prefill, self.verification):
             if (not isinstance(buckets, tuple) or not buckets or
-                    any(not isinstance(b, Bucket) for b in buckets) or
+                    any(not isinstance(b, (Bucket,QueryFamily)) for b in buckets) or
                     len(set(buckets)) != len(buckets)):
                 raise ValueError('Explicit nonempty tuples of distinct buckets required')
 
@@ -55,8 +55,7 @@ class FiniteTargetBuckets:
                 any(type(c) is not int or c < 0 for c in context_lengths)):
             raise ValueError('Matching nonnegative context lengths required')
         candidates = getattr(self, phase)
-        compatible = [b for b in candidates if b.query_lengths == query_lengths and
-                      all(c <= ceiling for c, ceiling in zip(context_lengths, b.context_ceilings))]
+        compatible = [b for b in candidates if b.accepts(query_lengths,context_lengths)]
         if not compatible:
             raise ValueError(f'No finite {phase} bucket for ordered Q={query_lengths}, C={context_lengths}')
         # Stable declaration order breaks equal-capacity ties.
@@ -73,7 +72,10 @@ class PersistentTargetStrategy:
             raise ValueError('Strategy requires an initially empty persistent target')
         self.target, self.buckets = target, buckets
         self._features = None
-        for bucket in dict.fromkeys(buckets.prefill + buckets.verification):
+        declared=tuple(dict.fromkeys(buckets.prefill + buckets.verification))
+        families=tuple(b for b in declared if isinstance(b,QueryFamily))
+        if families and not target.pool._families:target.register_families(families)
+        for bucket in declared:
             target.register_bucket(bucket)
 
     def preflight(self, phase, query_lengths, context_lengths):
@@ -87,9 +89,11 @@ class PersistentTargetStrategy:
         features = operation(chunks, bucket=bucket)
         self._features = features
         features.work.update(target_strategy='persistent', bucket_phase=phase,
-            bucket_source=bucket.source, bucket_context_ceilings=list(bucket.context_ceilings),
+            bucket_source=bucket.source,
+            bucket_context_ceilings=list(bucket.context_ceilings) if isinstance(bucket,Bucket) else None,
             declared_phase_bucket_count=len(getattr(self.buckets, phase)),
-            bucket_selection='smallest_compatible_key_capacity_exact_ordered_query')
+            bucket_selection=('smallest_compatible_key_capacity_actual_physical_query_family'
+                              if isinstance(bucket,QueryFamily) else 'smallest_compatible_key_capacity_exact_ordered_query'))
         return features
 
     def prefill(self, chunks):

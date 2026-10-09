@@ -46,13 +46,62 @@ class Bucket:
     def key_capacity(self):
         return sum(self.query_lengths) + sum(self.context_ceilings)
 
+    @property
+    def request_count(self):return len(self.query_lengths)
+
+    @property
+    def maximum_query_length(self):return max(self.query_lengths)
+
+    @property
+    def maximum_key_length(self):
+        return max(c+q for c,q in zip(self.context_ceilings,self.query_lengths))
+
+    def accepts(self, queries, contexts):
+        return (all(type(q) is int and q>=1 for q in queries)
+                and tuple(queries)==self.query_lengths and len(contexts)==self.request_count
+                and all(type(c) is int and 0<=c<=cap for c,cap in zip(contexts,self.context_ceilings)))
+
+
+@dataclass(frozen=True)
+class QueryFamily:
+    """Fixed physical B and native launch bounds; actual ordered Q is per transaction.
+
+    No query padding is permitted. K capacity is storage, with its unused tail
+    excluded by cumulative lengths. Families do not assert measured throughput.
+    """
+    request_count: int
+    query_tokens: int
+    maximum_query_length: int
+    key_capacity: int
+    maximum_key_length: int
+    source: str
+
+    def __post_init__(self):
+        values=(self.request_count,self.query_tokens,self.maximum_query_length,
+                self.key_capacity,self.maximum_key_length)
+        if (any(type(n) is not int or n<1 for n in values)
+                or not self.request_count<=self.query_tokens<=self.request_count*self.maximum_query_length
+                or self.key_capacity<self.query_tokens
+                or self.maximum_key_length<self.maximum_query_length
+                or not isinstance(self.source,str) or not self.source.strip()):
+            raise ValueError('Positive feasible finite family bounds and provenance required')
+
+    def accepts(self, queries, contexts):
+        return (len(queries)==len(contexts)==self.request_count
+                and all(type(q) is int and 1<=q<=self.maximum_query_length for q in queries)
+                and sum(queries)==self.query_tokens
+                and all(type(c) is int and c>=0 for c in contexts)
+                and all(c+q<=self.maximum_key_length for c,q in zip(contexts,queries))
+                and sum(contexts)+self.query_tokens<=self.key_capacity)
+
 
 @dataclass(frozen=True)
 class Transaction:
     sequence: int
     slots: tuple
     context_lengths: tuple
-    bucket: Bucket
+    bucket: Bucket | QueryFamily
+    query_lengths: tuple
 
 
 @dataclass(frozen=True)
@@ -62,9 +111,10 @@ class ExternalWriter:
     Completion attests that this trusted fixed program finished. It is not an
     independent proof that the device executed every intended layer correctly.
     """
-    bucket: Bucket
+    bucket: Bucket | QueryFamily
     layers: tuple
     scratch_pointers: tuple
+    workspace_signature: tuple
 
 
 @dataclass(frozen=True)
@@ -75,14 +125,21 @@ class ExternalWrite:
 
 
 class _Workspace:
-    def __init__(self, bucket, heads, dim, dtype, device):
+    def __init__(self, bucket, heads, dim, dtype, device, arena=None):
         self.bucket = bucket
         n = bucket.key_capacity
+        if arena is not None:
+            for name,value in vars(arena).items():
+                if isinstance(value,torch.Tensor):
+                    count=(bucket.request_count+1 if name in ('cu_query','cu_key')
+                           else bucket.query_tokens if name=='positions' else n)
+                    setattr(self,name,value[:count])
+            return
         self.committed_indices = torch.zeros(n, dtype=torch.long, device=device)
         self.scratch_indices = torch.zeros_like(self.committed_indices)
         self.from_scratch = torch.zeros((n, 1, 1), dtype=torch.bool, device=device)
         self.valid = torch.zeros((n, 1, 1), dtype=torch.bool, device=device)
-        self.cu_query = torch.zeros(len(bucket.query_lengths)+1, dtype=torch.int32, device=device)
+        self.cu_query = torch.zeros(bucket.request_count+1, dtype=torch.int32, device=device)
         self.cu_key = torch.zeros_like(self.cu_query)
         self.positions = torch.zeros(bucket.query_tokens, dtype=torch.long, device=device)
         # A deterministic layer can reuse these allocations. Its attention must
@@ -97,6 +154,10 @@ class _Workspace:
 
     def pointers(self):
         return {k: v.data_ptr() for k, v in vars(self).items() if isinstance(v, torch.Tensor)}
+
+    def signature(self):
+        return (id(self),tuple((k,v.data_ptr(),tuple(v.shape),tuple(v.stride()),v.storage_offset(),v.dtype,v.device)
+            for k,v in vars(self).items() if isinstance(v,torch.Tensor)))
 
 
 class PersistentTargetKV:
@@ -130,6 +191,8 @@ class PersistentTargetKV:
         self._incarnations = [0] * slots
         self._lengths = [0] * slots
         self._workspaces = {}
+        self._family_arena = None
+        self._families = ()
         self._sequence = 0
         self._pending = None
         self._staged = set()
@@ -205,6 +268,10 @@ class PersistentTargetKV:
 
     def register_bucket(self, bucket):
         self._idle()
+        if isinstance(bucket,QueryFamily):
+            if bucket not in self._workspaces:
+                raise ValueError('Family must belong to the explicitly registered shared arena')
+            return
         if (not isinstance(bucket, Bucket) or len(bucket.query_lengths) > self.slot_capacity
                 or bucket.query_tokens > self.max_query_tokens
                 or any(c+q > self.context_capacity for c,q in zip(bucket.context_ceilings,bucket.query_lengths))):
@@ -214,15 +281,38 @@ class PersistentTargetKV:
 
     def workspace_bytes(self, bucket):
         """Exact tensor allocation size before registering a workspace."""
-        n, r, q = bucket.key_capacity, len(bucket.query_lengths), bucket.query_tokens
+        n, r, q = bucket.key_capacity, bucket.request_count, bucket.query_tokens
         return 6*n*self.heads*self.dim*self.keys.element_size() + 18*n + 8*(r+1) + 8*q
+
+    def family_arena_shape(self, families):
+        """Validate the complete finite declaration before allocating any storage."""
+        from types import SimpleNamespace
+        if (not isinstance(families,tuple) or not families
+                or any(not isinstance(f,QueryFamily) for f in families)
+                or len(set(families))!=len(families)
+                or any(f.request_count>self.slot_capacity or f.query_tokens>self.max_query_tokens
+                       or f.maximum_key_length>self.context_capacity for f in families)):
+            raise ValueError('Distinct finite families within resident/query capacity required')
+        return SimpleNamespace(request_count=max(f.request_count for f in families),
+            query_tokens=max(f.query_tokens for f in families),key_capacity=max(f.key_capacity for f in families))
+
+    def register_families(self, families):
+        """One immutable declaration and one shared workspace; no resize or lazy family."""
+        self._idle()
+        if self._family_arena is not None:
+            raise ValueError('Shared family arena already registered; no dynamic extension')
+        shape=self.family_arena_shape(families)
+        arena=_Workspace(shape,self.heads,self.dim,self.dtype,self.device)
+        views={f:_Workspace(f,self.heads,self.dim,self.dtype,self.device,arena) for f in families}
+        self._family_arena=arena;self._families=families;self._workspaces.update(views)
 
     def register_external_writer(self, bucket, layers, completion_check):
         self._idle()
         if bucket not in self._workspaces or tuple(layers) != tuple(range(self.layers)) or not callable(completion_check):
             raise ValueError('Registered bucket, complete ordered layer signature and completion checker required')
         writer = ExternalWriter(bucket, tuple(layers),
-            (self.scratch_keys.data_ptr(), self.scratch_values.data_ptr()))
+            (self.scratch_keys.data_ptr(), self.scratch_values.data_ptr()),
+            self._workspaces[bucket].signature())
         self._writers[id(writer)] = (writer, completion_check)
         return writer
 
@@ -244,6 +334,9 @@ class PersistentTargetKV:
         if receipt.writer.scratch_pointers != (self.scratch_keys.data_ptr(), self.scratch_values.data_ptr()):
             self.failed = True
             raise RuntimeError('Registered scratch allocation changed')
+        if receipt.writer.workspace_signature != self._workspaces[receipt.transaction.bucket].signature():
+            self.failed=True
+            raise RuntimeError('Registered workspace view/layout changed')
         return self._external
 
     def submit_external_write(self, receipt, event):
@@ -273,7 +366,7 @@ class PersistentTargetKV:
         self.failed = True
 
     @torch.no_grad()
-    def begin(self, handles, bucket):
+    def begin(self, handles, bucket, *, query_lengths=None):
         """Prepare host metadata before any future captured layer execution.
 
         Exact Q and bounded actual C select a registered bucket. Physical Q is
@@ -284,17 +377,21 @@ class PersistentTargetKV:
         """
         self._idle()
         handles = tuple(handles)
-        if bucket not in self._workspaces or len(handles) != len(bucket.query_lengths):
+        if bucket not in self._workspaces or len(handles) != bucket.request_count:
             raise ValueError('Registered exact-query bucket required')
+        if query_lengths is None:
+            if isinstance(bucket,QueryFamily):raise ValueError('Family requires actual ordered query lengths')
+            query_lengths=bucket.query_lengths
+        query_lengths=tuple(query_lengths)
         indices = [self._slot(h) for h in handles]
         if len(set(indices)) != len(indices):
             raise ValueError('Active request slots must be unique')
         contexts = tuple(self._lengths[i] for i in indices)
-        if any(c > cap for c,cap in zip(contexts,bucket.context_ceilings)):
+        if not bucket.accepts(query_lengths,contexts):
             raise ValueError('Actual context exceeds declared bucket applicability')
         old, new, choose, positions, cq, ck = [], [], [], [], [0], [0]
         qo = 0
-        for i,c,q in zip(indices,contexts,bucket.query_lengths):
+        for i,c,q in zip(indices,contexts,query_lengths):
             old.extend(i*self.context_capacity+j for j in range(c))
             old.extend([0]*q)
             new.extend([0]*c)
@@ -313,7 +410,7 @@ class PersistentTargetKV:
                           (ws.positions,positions),(ws.cu_query,cq),(ws.cu_key,ck)):
             dst.copy_(torch.tensor(data,device=self.device,dtype=dst.dtype).reshape(dst.shape))
         self._sequence += 1
-        tx = Transaction(self._sequence,handles,contexts,bucket)
+        tx = Transaction(self._sequence,handles,contexts,bucket,query_lengths)
         self._pending, self._staged = tx, set()
         return tx
 
@@ -373,13 +470,13 @@ class PersistentTargetKV:
         self._transaction(tx)
         if set(committed_query_lengths) != set(tx.slots) or len(self._staged) != self.layers:
             raise ValueError('Complete layer scratch and one prefix count per active handle required')
-        for h,c,q in zip(tx.slots,tx.context_lengths,tx.bucket.query_lengths):
+        for h,c,q in zip(tx.slots,tx.context_lengths,tx.query_lengths):
             n = committed_query_lengths[h]
             if type(n) is not int or not 0 <= n <= q or c+n > self.context_capacity:
                 raise ValueError('Commit must be a valid verified prefix')
         qo = 0
         try:
-            for h,c,q in zip(tx.slots,tx.context_lengths,tx.bucket.query_lengths):
+            for h,c,q in zip(tx.slots,tx.context_lengths,tx.query_lengths):
                 n = committed_query_lengths[h]
                 self.keys[:,h.index,c:c+n].copy_(self.scratch_keys[:,qo:qo+n])
                 self.values[:,h.index,c:c+n].copy_(self.scratch_values[:,qo:qo+n])
@@ -421,8 +518,13 @@ class PersistentTargetKV:
                     inactive_resident_key_tokens=resident-sum(tx.context_lengths),
                     gather_rows_per_kv_per_layer=2*tx.bucket.key_capacity,
                     staging_output_rows_per_layer=tx.bucket.key_capacity,
-                    allowed_causal_pairs=sum(c*n+n*(n+1)//2 for c,n in zip(tx.context_lengths,tx.bucket.query_lengths)),
+                    allowed_causal_pairs=sum(c*n+n*(n+1)//2 for c,n in zip(tx.context_lengths,tx.query_lengths)),
+                    query_lengths=list(tx.query_lengths),queried_context_lengths=list(tx.context_lengths),
+                    maximum_query_length=tx.bucket.maximum_query_length,maximum_key_length=tx.bucket.maximum_key_length,
                     resident_allocated_kv_bytes=2*self.keys.numel()*self.keys.element_size(),
                     scratch_allocated_kv_bytes=2*self.scratch_keys.numel()*self.keys.element_size(),
                     bucket_workspace_bytes=sum(t.numel()*t.element_size() for t in vars(self._workspaces[tx.bucket]).values() if isinstance(t,torch.Tensor)),
+                    workspace_is_shared=isinstance(tx.bucket,QueryFamily),
+                    shared_arena_allocated_bytes=(self.workspace_bytes(self._family_arena.bucket)
+                        if isinstance(tx.bucket,QueryFamily) else 0),
                     bucket_source=tx.bucket.source,capture_or_replay_verified=False)
