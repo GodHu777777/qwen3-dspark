@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 03:00（UTC+8）**。当前由现存 Sol（sol_data）复用记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。专职 experiment_journal 的新建/恢复本轮两次受系统 agent thread limit 限制，恢复前由 Sol 暂代，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 10:40（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -12,6 +12,7 @@
 
 - 数据质量/长度：[P06 正式审计与拒绝](#data-final-audit)、[T04 模板与实际输入长度](#expanded-resource-gate)。
 - Hidden-state/训练对齐：[D03 同轨迹学习诊断](#aligned-learning)、[T05 首段训练与 TF 边界](#expanded-step32)。
+- Confidence/校准：[R12 冻结STS与raw/constant对照](#sts-fit-eval-result)。
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
@@ -671,3 +672,25 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 **CPU结果与边界。** 最终 **10/10通过、0.331秒**，GPU三设备隐藏/cuda_available=false，两条 `(null)` 提示保留。涵盖独立single-request cached/fullbackbone的实际KV/hidden、不同position/order、零context/cropzero/exitreadd、active/inactivepoison、fullblock双向可见、module callcounts、原子失败和AMP精度；native spy只核literal noncausal/no-window参数。AMP与原cachedSDPA的fixture-only0.02/0.02比较不是正式GPU阈值或分布等价证明。新noncausalGPU未验证，无quality/speedup结论；wholeQwen原layer26失败保持独立。Fit/eval尚等完整报告，本条不提前写结果。
 
 **另行只读baseline盘点。** 已完成的私有 `output/target-baseline-inventory-20261009/` inventory/notes确认现有vLLM0.30.0+rocm723 metadata、offlineLLM与bench latency/throughput/serve源码入口和gfx1201/R9700识别；入口存在不等于GPU实际load/kernel/graph成功，也不写“无支持”。隐藏GPU的CLIhelp在25秒退出124，停止该路径、未重试或修环境；精确自有help/timeout进程检查为空，本地父进程已返回。参数/ASR共存预算/关闭instrumentation的baseline提案有file:line，比例及KVbytes不冒称硬全系统cap，性能与采样law仍未测。该盘点未启动server/GPU、调用podman、安装或读凭据。S11本轮仅日志，无实现/进程/GPU/提交动作。
+
+
+<a id="sts-fit-eval-result"></a>
+## 2026-10-09 10:40（UTC+8）— R12：冻结STS fit44/eval43完成，改善不一致，保留raw与constant对照
+
+**问题与假设。** R11冻结研究checkpoint与校准流程，需检验逐位置STS在prompt-held-out eval上是否优于raw confidence，并对照只用fit prevalence的常数。假设是fit44上最小化cumprod ECE的温度可能改善eval校准；不能预先保证Brier、尾部稳定性或scheduler收益。直接读取[九份最终报告](../reports/sts-step1280-20261009/README.md)和未发布 `output/sts1280-20261009-034064b/` 的handoff/public-verification/最终verification，不读raw样本或final test。
+
+**方法与冻结顺序。** 执行source **034064b**、已选step1280、原panel/cases/seeds、nativeBF16/SDPA/temp1/nofilter/fullproposal7/预算128不变。先采fit44，在CPU以原61点grid/20bins、条件logit scaling后cumprod、从左到右冻结先前位置最小化prefix ECE；常数为fit有效标签的累计prefix prevalence，不是条件率乘积。Artifact在 **02:53:36（UTC+8）**冻结后才启动eval43，eval不搜索温度、不拟合常数、不选checkpoint。最终温度约 **0.9330/0.8123/0.8123/0.6598/0.6598/5.6569/1.5157**；完整网格/身份见[fit metrics](../reports/sts-step1280-20261009/fit-metrics.json)和[source identity](../reports/sts-step1280-20261009/source-identity.json)。
+
+**完成、分母与证据。** Fit **44prompts/3157blocks/21637effective labels**，eval **43/3280/22437**；proposed/verified分别21657/22465，acceptedEOS后tail排除20/28，拒绝后已验证tail继续记零、不补未proposal budget尾部。两组zero-block prompts均0，完成/coverage定义仍保留此类prompt。记录者核13handoff SHA对归档Git blobs、九public SHA、executed package SHA对034064b，重算位置count/event总和、各方法bin ECE、加权指标、fit-only constant prevalence及其Brier公式，均与报告一致。对raw logits的独立sigmoid/cumprod/ECE/Brier、223archive文件与prompt disjoint/frozen ordering全核事实依据[verification](../reports/sts-step1280-20261009/verification.json)及公开[核验脚本](../reports/sts-step1280-20261009/verify_sts.py)，本轮未重读完整raw。两组worker/launcher/controller OS均0、CPUfit/eval/verifier均0/no timeout；shell不添独立退出码。既有postrelease确认自有PID退出/KFDonlyASR/ready/notbusy，fit/eval peak2381026304/2474884608bytes；非本轮live探测或性能实验。公开归档 **02c584490553a66b5a1446d02c98bfcc9761a845**（10:34:18）已直接核Git、root已核push，execution仍034064b。
+
+**结果与判断修正。** Eval上STS对raw ECE仅 **3/4/6/7改善**，**1/2/5变差**；Brier仅 **7改善**，**1–6变差**。Fit-only constant ECE在1–5优于STS，但raw/STS Brier在全部7位置均优于constant，不能仅因constant低ECE断言head无用。按同22437有效标签的加权结果为：
+
+| 方法 | 按label count加权的位置ECE均值 | Label-weighted Brier |
+| --- | ---: | ---: |
+| raw/unscaled | 0.021306579 | **0.04629602443** |
+| frozen STS | 0.021254273 | **0.04674456667** |
+| fit-only constant | 0.011116911 | **0.06261451037** |
+
+这里ECE是位置ECE的count加权均值，未把不同位置合并为pooled-bin ECE；小幅均值下降不抵消各位置失败或Brier变差。最终采集/拟合没有执行失败、重试或实现修复；被证据修正的是“STS应普遍改善”的预期，保留不利结果，不据eval调整grid/温度/checkpoint/sampler/admission。尾部eval位置6/7仅 **19/9正例**（3159/3135labels），位置3–7只有42/43prompt有观测，round相关性与稀疏事件限制外推，不能用尾部低ECE泛称校准可靠。完整position/bin/coverage见[eval metrics](../reports/sts-step1280-20261009/eval-metrics.json)。
+
+**下一决策与记录责任。** 保留冻结STS作为论文方法分支，同时保留raw/fit-only constant对照；未来scheduler还须验证因果集成与实测成本，不因本轮低ECE/Brier宣布系统收益。Eval43仅相对STSfit prompt-held-out，全部119dev已用于TF监测；final test未使用，既有native数值差异/wholeQwen固定失败不解除，无答案质量/无损/性能结论。专职独立experiment_journal创建仍遭系统thread limit拒绝，继续由现存sol_data承担6.1 Sol专职记录；本轮同步修正README.ai.md的当前角色描述和顶部STS索引，旧历史条目保留。记录者只日志及入口角色说明，无GPU/实现/进程/提交动作。
