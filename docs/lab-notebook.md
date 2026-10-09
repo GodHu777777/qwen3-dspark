@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 12:30（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 12:39（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -17,7 +17,7 @@
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 - 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)。
-- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)。
+- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -897,3 +897,25 @@ Root随后在该immutable source archive运行完整unittest suite，未发布 `
 **下一决策。** 当前证据足以否定这六个固定batch上“已实现加速”的判断，并支持把低接受与完整实现成本同时作为改进问题。下一步应先核S23的native capacity-tail固定buffer可行性，再考虑target子图与端到端消融；persistent存储尚未接入本次decoder，不能认领收益。Graph capture/replay、CPU/GPU overlap、真实capacity planner、arrival负载frontier仍缺证据。旧whole-pretrained-Qwen layer26固定RMS gate仍失败，same-input endpoint TV及cross-backend law非等价限制不因本次完成而消失；该速度比较不是分布忠实性pass、quality改进或完整系统复现。记录者只编辑本日志，未操作GPU/进程、改实现、提交或读final test。
 
 S24公开报告与项目状态入口已由root提交并推送 **2934342114b99943d78351265d4b8566b8270479**。随后独立verifier补充核对两引擎的workload、八个model/tokenizer指纹及vLLM原始sample SHA，重跑通过；不改变任何测量值。
+
+
+<a id="native-capacity-graph-result"></a>
+## 2026-10-09 12:39（UTC+8）— S25：native capacity-tail与gather+attention真实capture/replay通过，仍非完整target graph
+
+**问题与因果进展。** S23只验证固定resident/scratch/storage语义，S24又显示完整native链路明显慢于vLLM；稳定地址并不自动意味着native算子能接受capacity tail，更不意味着能capture。当前按[固定probe协议](native-capacity-graph-probe.md)先测尾部不会被attention使用，再测固定地址的gather+attention能否在context增长时真实replay。[正式报告](../reports/native-capacity-graph-20261009-f5d03d4/README.md)记录三步现已分别有证据：CPU持久存储、同QKV native tail隔离、这个局部subgraph真实capture/replay；它们仍没有连接成完整target执行或吞吐优化。
+
+**准备、review与冻结。** 最初五CPU contract tests通过后，root review发现隔离检查只覆盖committed K，漏了V；即使输出数值正确，也可能已污染resident values。Direction加入K/V双before-clone与双torch.equal检查，以及eager和replay的V-only污染反例；本地最终 **6tests/1.738秒、OS0**，旧五测试与中间六测试日志保留，不将review前覆盖不足写成已经完整隔离。CPU用了本地 **Torch2.11.0/Transformers5.4.0** 的真实tiny Qwen和明确标注的CPU replay emulator，不是真实GPU graph。源码随后经root审查提交/推送 **f5d03d4ca82482a65963429e94e4068896f5a77a**（12:32:47）；core在其immutable archive上跑完整 **226tests/13.806秒、OS0、GPU隐藏** 后，才进入唯一原定 **300秒/290秒cooperative** 窗口，无retry、缩domain或阈值回调。
+
+**真实输入与同QKV参照。** 正式worker绑定实际pretrained Qwen3-0.6B与共享r2-c256 synthetic输入，BF16首层的normalized、已RoPE Q/K及projected V由模型实际forward提取，随后恢复原attention setting。QKV生成与RoPE在capture外；未来context改变通过外部刷新实际QKV体现，不能把更新positions tensor说成graph已执行RoPE。单bucket固定 **R2、ordered Q=(1,4)、physical Q5、ceilings(144,144)、Kcapacity293、maxQ4/maxK148**；context依次 **(128,128)→(129,131)→(130,135)**，cuK末为 **261/265/270**，尾容量 **32/28/23** 行。Reference独立拼接当前已提交KV与新实际scratch bytes，避免把另一条完整prefix浮点重算的KV当作同QKV oracle。人工commit为 **(1,3)/(1,4)/(0,0)**，只是事务fixture，不是实际采样/接受事件。
+
+**先eager tail，后capture。** 三state各五variant：exact actual maxK、exact fixed maxK148、capacity zero、capacity finite（K尾100/V尾−100）、capacity NaN。前三按执行前冻结的elementwise **atol0.02/rtol0.02、RMS≤0.005** 做pooled/逐request比较；后两必须输出finite且与zero-tail **bit-identical**，NaN gate没有被豁免。全部 **15 eager** 通过后才新建pool、两次side-stream warmup并一次真实capture。Body只有fixed-size index_select双source gathers、where选择、invalid-tail zeroing和private native attention；metadata/host copy、QKV/RoPE、模型其余计算、采样与commit均在外。随后三个增长context都更新真实QKV及cumulative metadata并 **真实replay**：与各state exact eager native数值比较通过，同时与对应zero-tail capacity eager bit-identical；Runtime逐次检查18个input buffer地址稳定，capture output地址逐次直接记录并保持稳定。18个主比较×pooled+两request的 **54行** 在本次实测均finite、maxabs/RMS0且bit-equal；这是比原阈值更好的观察值，不改协议或外推到其他shape。
+
+**事务隔离的证据层级。** Eager与replay在人工commit前均用runtime双K/V snapshot比较断言resident未变，随后commit又与独立old-prefix+选定scratch prefix比对，标量记录全部隔离通过。K/V before clones未dump为完整resident快照，所以不能声称离线复算了这些未保存的全resident bytes；这部分是source-bound runtime assertions、V-only CPU反例与保存scalar证据。当前production wrapper的exact-K guard没有修改，直接调用private native schema限于该probe；成功证明这个固定bucket下cuK末小于Kcapacity可用，不证明所有capacity形状都可放行。
+
+**身份、退出与核对。** 正式环境 **Torch2.12.0+rocm7.2/Transformers5.17.0、gfx1201、固定ROCm ATen/AOTriton schema**。记录者核本地 `output/native-capacity-graph-gpu-20261009-f5d03d4/`：archive **7d2714bc…** 的324文件逐SHA与f5d03d4 Git blobs一致；三准备文件与final handoff一致、本地six-test log **ea1c9f3b…**，full suite log **49a11c11…** 明记226/13.806/OK。Result **6ecbe61f…** 记录real_qkv/eager_tail/capture_replay三stage passed、完整固定18观察顺序；记录者独立重构比较分母、cuK、初始input pointer字典与每次实际output pointer一致，与root scalar+exact-Git核对一致；保存的input字典是初始快照，后续input地址稳定依据执行中的比较flag，不能把重复字典当作独立重测当前地址。Worker/controller/outer **OS0**、no timeout/cleanup/retry；保存独立release显示worker/controller/shell消失、ASR同start identity ready/notbusy、KFD only ASR、VRAM回used **8967499776** / free **25241243648bytes**，source/model/workload post-integrity仍通过。Supervisor **19.940秒**包含模型提取、warmup和disk evidence，不能作速度指标；四health samples的global peak **10742800384bytes**含ASR，allocator peak未记录，6GiB配置cap不冒充实测峰值。记录者没有操作远端/GPU/进程。
+
+**独立raw tensor复算与公开证据。** Core随后在CPU独立读取42个已保存tensor artifacts，从初始prefix与人工commit重构增长context的K/V，并逐项核actual QKV、cumulative lengths、positions与zero/finite/NaN尾；共108个exact input tensor对照、21组输出比较（含三个replay对capacity的额外组）/63个pooled或request比较，maxabs/RMS0，output storage bytes也相同。记录者核该audit的scalar结果、42文件字节SHA及[公开verification](../reports/native-capacity-graph-20261009-f5d03d4/verification.json)与原audit逐JSON一致，[公开result](../reports/native-capacity-graph-20261009-f5d03d4/result.json)与原result一致；没有自行加载private QKV tensor或冒称执行了core的离线tensor复算。Core audit **dd97233e…** 明列未保存full resident snapshots及input pointer初始快照的局限，前述runtime隔离不能越级为离线full-pool证明。公开只保存scalar/哈希/审计代码，42个raw tensor保留在未发布output证据中。
+
+**结论边界与下一决策。** 这解除S23在该固定first-layer shape上的native tail与局部capture能力未知，但 **不是whole-layer/whole-model graph、sampling-law pass或加速结果**。Ordered Q=(1,4)已知且不变；当前ell依赖当前confidence，所以不能从t−2 global K单独预选该graph，也未实现zero-overhead scheduling。未来还需确定full-target deterministic边界、有限bucket cache/总workspace预算、sampling/commit与resident所有权，再测double-bank+events及CPU/GPU overlap；这些不由pointer稳定自动成立。S24的无加速结果没有被本probe改写，旧whole-pretrained-Qwen固定layer26 RMS失败及cross-backend law/endpoint TV限制仍保留。下一步是有界集成和独立验证，不把这次disk-heavy能力probe转换成SPS或serving吞吐。
+
+S25报告与项目入口已由root提交/推送 **51d1c3d**。Root另在本地CPU重跑公开tensor verifier，实际OS0，输出与core原audit逐字节一致；运行证据保存在同一私有目录的 `root-rerun-public-tensor-verifier.json`。
