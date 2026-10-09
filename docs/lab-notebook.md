@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 10:52（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 10:58（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -724,3 +724,17 @@ attempted uniforms **3901=1299accepted+2602rejected rounds**，不能替代17955
 Root随后在该immutable source archive运行完整unittest suite，未发布 `output/integration-cpu-6b1c2bc/{verification.json,tests.log}` 记录 **176/176、10.878秒、SSH实际OS0、120秒bound**，三GPU环境变量为空。记录者独立核log SHA **e624d933…**、176test entries、最终Ran/OK及source identity；archive SHA依据root verification，未在本轮重复解包。日志有用例JSON/stdout穿插，不能仅按同一行“... ok”计数；所有原输出保留。GitHub Actions API本轮HTTP403 rate limit使CI状态未核，不写CI失败，也不把CPU suite替代CI状态。
 
 **边界与下一决策。** Driver全round计入calibration/host copies/hash/private验证/model work与显式device sync，各stage时间都属同步开销；fixture用synthetic SPS/test-only dense kernels，`hardware_overlap_proven=False`。Progress公式/预算oracle固定无EOS，真实随机EOS停机尚未建模，也不能用当前sampled EOS事后改变自身admission；root随后在说明文档补记该局限，原五文件handoff仍绑定6b1c2bc blobs。数值干预与provenance只验证这份参考集成，不是模型losslessness因果定理、实际异步buffer/overlap、graph或speedup。wholeQwen固定RMS失败与trained noncausal/integrated GPU未验证状态均保留。后续需分别解决native gate、测量真实capacity及同物理成本baseline，不能据本条自动开GPU。本轮记录者只追加日志，无实现/进程/GPU/提交或final-test/private样本动作。
+
+
+<a id="vllm-baseline-cpu-prep"></a>
+## 2026-10-09 10:58（UTC+8）— S14：强target-only vLLM smoke 的 CPU 准备，真实engine尚未启动留证
+
+**问题与方法。** S11只读盘点发现现有vLLM入口，尚不知default graph/init与Qwen3-0.6B能否实际运行；不能只与逐token Python reference比较就宣布系统加速。直接读[冻结smoke协议](vllm-offline-smoke.md)、五交付源码/tests及未发布 `output/vllm-offline-smoke-cpu-20261009/` 的handoff/tested-source/preparation、三tests log、两preflight及tokenizer logs。准备一个新公开synthetic prompt，真实non-thinking tokenizer得 **35tokens/seed20261009**，request SHA **8b676c69…**、八model/tokenizer files绑定；无dataset/final-test输入。原始tokens不写入本日志。
+
+**配置与执行边界。** 预定现有vLLM0.30.0+rocm723、BF16/T1/top_p1/top_k0/min_p0/no penalties、TP1、max_model_len4096/max_num_seqs1、128fixed output tokens/ignoreEOS、generation_config=vllm、memory ratio **0.18**。保留default graph配置/enforce_eager=False，无eager fallback、retry、改backend/安装环境；该开关不证明capture/replay，0.18是engine预算比例，不是全系统/全process硬显存cap。Worker **600秒deadline**包含import/init/compile/capture/generation；blocking health/KFD最多额外6秒、TERM grace10秒/KILL观察2秒及bounded post-release另记controller wall time，不偷算进worker限时。执行前后需fresh ASR/KFD/VRAM/source/model核验，启动free≥10GiB、运行free≥2GiB；单独核worker与controller实际OS exit、所有自有PIDs退出及ASR ready/notbusy，不以worker-written completed替代。
+
+**失败与review修正。** 初次tokenizer准备由direction报告 **exit1**，原log留有失败traceback：Transformers5默认 `apply_chat_template(tokenize=True)` 返回BatchEncoding，JSON序列化报TypeError；明确 `return_dict=False` 后第二轮 **exit0**，原 `tokenizer.log` / `tokenizer-v2.log` 及 `(null)` 提示保留。这与P01/README已记的同一返回类型陷阱一致，应复用显式接口约定，不能假定tokenize=True总返回list。Review还发现仅ppid/group认ownership会把recycled parent PID后的无关child误纳；改为live parent startticks核验，并用Linux subreaper接管orphan/跨group descendant，仅对仍匹配已观察身份的自有PID发TERM/KILL。Mock PID-reuse反例与真实子进程timeout/orphan tests均覆盖。另拒绝config-only模型指纹：完整weights/tokenizer/config及indexed shards必须存在且在frozen binding，不以config hash代替实际权重身份。
+
+**CPU证据与身份。** 最终 **7/7、1.348秒、tests OS0**，前5项/0.943秒与冻结7项/1.315秒也通过；覆盖exact graph-preserving config/非法tokens、缺weights/index shards拒绝、PID reuse、真实zero/nonzero worker OS exit、escaped-session timeout清理、成功parent后orphan adoption和ASR guard失败。真实35-token输入worker/controller stdlib preflight均 **OS0**、prepared-only，不import vLLM/Torch或执行GPU。记录者独立核五交付对 **e0f5ce8dd511ecce8b2f77e1f4c870a607bb1833**（10:55:53）Git blobs、四tested-source SHA、request原文件SHA与preparation35/8计数；handoff SHA **2824e84c…**、final test log SHA **4b41d0f9…**。远端大型模型文件实际哈希依据preparation/已有绑定，未在本轮重新读取weights。Root已核commit/push。
+
+**当前状态与下一决策。** Handoff当时no GPU authorized；root随后授权direction唯一一次按committed archive与installed-source身份冻结的真实smoke，但本条时尚未收到启动PID，不写已运行、完成或通过。仅CPU准备通过；真实init/kernel/graph、sampling fidelity、速度均未验证，fixedignoreEOS工作也不是EOS-stopping quality评估。此前隐藏GPU的vLLM help25秒timeout仍只表示该入口尝试未完成，不写engine unsupported。实际结果收到后另起条；无benchmark/speedup、无自动重试授权，wholeQwen原固定RMS失败不解除。记录者只日志，无GPU/进程/实现/提交动作。
