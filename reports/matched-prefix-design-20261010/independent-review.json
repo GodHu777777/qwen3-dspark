@@ -1,0 +1,33 @@
+{
+  "status": "approved_design_only",
+  "document": "docs/matched-prefix-diagnostic.md",
+  "document_sha256": "327b4c0a2e78562a8184466f1179b5df41d1bc01ed977a4bfc6961b41163355b",
+  "independent_proposal_sha256": "04f05b781faf677b47416b59018f4b32ca492514abbfacd12cb340d16d50e682",
+  "source_alignment_audit_sha256": "d9f173df8817804ac432392d1fdb178f7db068b09b29aea1400cb854317e247d",
+  "live_read_only_sha256": "af6e577d571d9984c18960a8851e576ff99316524012b1330ebcef4a3b702a3f",
+  "findings": {
+    "blocking_issues": [],
+    "source_alignment": "Ten inspected model/training/loss/data/cache/probability modules match historical collector bytes. k0 gold-versus-sampled Markov previous is the same anchor; no direct within-block exposure substitution at k0.",
+    "smallest_next_evidence": "Six existing original case0/1 round0 payloads across checkpoints128/512/1280, only first full-vocabulary row analysis, no new model execution.",
+    "identity": "Independently checked local all32 prompt bindings and initial output tokens match; full probe existence/bytes remain unverified.",
+    "reference": "Fixed p_ref=step128 sequential row0; native pairing and common-law overlap remain separate; full mass accounting and TV sensitivity controls retained.",
+    "outcome_scope": "Two-state descriptive law comparison can separate selected-token draw from distribution mismatch and indicate numerical sensitivity; cannot attribute objective/data/exposure/capacity causes or extrapolate32prompt population.",
+    "resource_scope": "Future only:6 exact files<=64MiB each/384MiB total; CPU<=2GiB RSS,300s wall/290s cooperative; one full payload resident; stop on missing/invalid evidence without replacement.",
+    "required_revisions_completed": [
+      "Explicit O=(massp+massq-L1)/2 and mass residual, no law modification.",
+      "FP64 probability and mean-logit scalar-reconciliation tolerance fixed1e-12; max/argmax/shape/gather exact.",
+      "Further work requires bounded design/review, no extra user-confirmation flow."
+    ]
+  },
+  "completed_this_turn": [
+    "One fresh read-only AMD proc/listener/KFD/health/sysfs check without PID files, no accelerator initialization or remote write.",
+    "Local stdlib source and initial-state identity review.",
+    "Independent proposal followed by review of core design document."
+  ],
+  "not_executed": [
+    "Probe transfer or tensor load",
+    "Model/forward/GPU/training/generation/final-test",
+    "New analyzer/runner/tests",
+    "Notebook edits or Git commit"
+  ]
+}

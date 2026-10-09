@@ -1,0 +1,26 @@
+{
+  "status": "completed",
+  "check": "Exact initial state across historical checkpoint collections: same prompt tokens, case/seed identity, and initial target output token",
+  "steps": [
+    128,
+    512,
+    1280
+  ],
+  "prompts": 32,
+  "identical_initial_states": 32,
+  "source_sha256": {
+    "128": {
+      "binding_sha256": "b4e849900044ceb680972233e319bf1c94f53e0f1b1d1baa81fb330a24318fd0",
+      "outputs_sha256": "c8fec197a2aaffa8fd6023d0182b0590df1ca03dcec4113607cca69783a8a176"
+    },
+    "512": {
+      "binding_sha256": "79299aba6990b915ca481a8317439fb223cb8ebc168ec0d50d9ba0a14b1b9970",
+      "outputs_sha256": "0e2130c34205c2f916678dd013d446c5c785c238ac1c45238ffbdfaa1f215898"
+    },
+    "1280": {
+      "binding_sha256": "46da68c61ab6dcee645ceae73a502d798ccb970246ecbc62399a58f5476b5d68",
+      "outputs_sha256": "368fd0b4633b8d8075f4d66ddd18a0457414ebff640cf6fd1ba0e0013f7fe5b6"
+    }
+  },
+  "scope": "CPU structural comparison of already recovered evidence; no model forward, new generation, training or final test. No token values or prompt identifiers exported."
+}

@@ -846,3 +846,25 @@ exposure-bias attribution, independent-round CI, new rollout or speed claim foll
 Root accepted only designing a bounded matched-prefix quality/objective diagnostic;
 no new execution/training/generation/GPU/final-test or policy search is authorized by
 these results. Keep original sampler and frozen step1280/STS state and prior limits.
+
+
+Matched-prefix probe design only (S48): docs/matched-prefix-diagnostic.md and
+reports/matched-prefix-design-20261010 record32/32 common initial states across
+historical128/512/1280 collections. Atk0 both Markov previous-token paths use the
+anchor; direct recorded/sampled substitution starts atk>=1, so first-position
+mismatch cannot be assigned to within-block exposure bias from this source fact.
+Root accepted only six existing probes: preselected ordinals0/1,round0,three steps,
+first row. Fix each state's p_ref to128 sequential row0; report full-law O_ref,
+O_seq/O_block and TV/reference sensitivity, preserving per-state disagreements.
+Valid unequal sequential vectors are a numerical control, not an automatic gap;
+missing/broken identity/payload/law/gather is a gap, with no replacement collection.
+Remote existence/bytes/hashes remain unverified; estimated197MB is schema-based,
+not a transferred payload. No probe transfer/load, implementation, tests or model
+execution ran. Two states cannot establish general acceptance/speed, dense/cache q
+equality or training causality; keep original sampler and prior numerical-law limits.
+
+Final source/design review approved this design only (document SHA327b4c0a…163355b),
+with no new analyzer/runner/tests or probe execution. See the public independent
+review; source byte alignment does not establish numerical equality. Overlap uses
+O=sum min and the finite-mass identity O=(sum p+sum q-L1)/2; normalized1-O rejection
+interpretation and saved-law mass errors are separate. Native paths remain controls.
