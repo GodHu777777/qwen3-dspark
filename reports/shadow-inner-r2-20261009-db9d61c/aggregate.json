@@ -1,0 +1,544 @@
+{
+  "status": "completed_and_independently_audited",
+  "source_commit": "db9d61c4decb56090993ba9c1dc8d4063ec72763",
+  "diagnostic_only": true,
+  "primary_throughput_claimed": false,
+  "protocol": {
+    "version": 1,
+    "method": "full_shadow_inner_service_reversed_pair_diagnostic",
+    "case_ids": [
+      "r2-c256"
+    ],
+    "arms": [
+      "target_only",
+      "fixed_gamma7_full_shadow"
+    ],
+    "output_tokens": 128,
+    "gamma": 7,
+    "allocation": "fixed gamma7 clipped by remaining budget, or zero; chosen before all-seven-position shadow draws",
+    "proposal_mode": "shadow; all seven positions even when allocation is zero",
+    "graph_query_lengths": [
+      2,
+      16
+    ],
+    "eager_query_lengths": null,
+    "prefill_query_lengths": [
+      256,
+      256
+    ],
+    "verification_key_capacity": 766,
+    "slots": 2,
+    "context_capacity": 384,
+    "max_query_tokens": 512,
+    "max_buckets": 25,
+    "max_graph_buckets": 2,
+    "graph_reservation_bytes": 536870912,
+    "graph_byte_budget": 1342177280,
+    "workspace_byte_budget": 67108864,
+    "temperature": 1.0,
+    "eos_ids": [],
+    "probability_policy": "float64_softmax_normalize_cdf_v1",
+    "timeout_seconds": 300,
+    "cooperative_reserve_seconds": 10,
+    "minimum_free_bytes": 8589934592,
+    "process_allocation_cap_bytes": 6442450944,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "selected_layers": "same trained draft layer IDs in both arms",
+    "setup_validation_limits": {
+      "atol": 0.02,
+      "rtol": 0.02,
+      "max_rms": 0.005
+    },
+    "setup_validation": "each B2/B16 at C256/256 and after committed eager growth to C368/375; pooled and per-request fixed limits, raw outputs before assertions",
+    "measurement": {
+      "target_warmup": 1,
+      "shadow_warmup": 1,
+      "shadow_plain": 2,
+      "shadow_inner_observed": 2
+    },
+    "pair_order": "plain0 observed0; observed1 plain1 after target/shadow warmups",
+    "setup_scope": "load/register/prime/two captures, native eager/graph validation and actual context growth outside samples; separately reported",
+    "resident_cost": "Same target, trained draft and both R2 graph pools remain resident across all six batches and both arms",
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "distribution_equivalence_claimed": false,
+    "request_count": 2,
+    "graph_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        16
+      ]
+    ],
+    "verification_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        2,
+        13
+      ],
+      [
+        2,
+        14
+      ],
+      [
+        2,
+        15
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        1,
+        8
+      ]
+    ],
+    "maximum_key_length": 383,
+    "setup_growth_query_lengths": [
+      112,
+      119
+    ],
+    "setup_growth_contexts": [
+      368,
+      375
+    ],
+    "measured_sps": false,
+    "current_confidence_admission": false,
+    "schedule": [
+      {
+        "phase": "warmup",
+        "repeat": 0,
+        "arm": "target_only"
+      },
+      {
+        "phase": "warmup",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow"
+      },
+      {
+        "phase": "plain",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow"
+      },
+      {
+        "phase": "inner_observed",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow"
+      },
+      {
+        "phase": "inner_observed",
+        "repeat": 1,
+        "arm": "fixed_gamma7_full_shadow"
+      },
+      {
+        "phase": "plain",
+        "repeat": 1,
+        "arm": "fixed_gamma7_full_shadow"
+      }
+    ],
+    "diagnostic_only": true,
+    "max_stage_records": 8192,
+    "max_signature_records": 8192,
+    "max_rounds_per_batch": 127,
+    "full_shadow_phase": "Inclusive owning propose envelope with inner fences; child ledger is a decomposition, never added to parent totals",
+    "target_phase": "Strategy prefill/verify, target.predict, and admission-only head; prefill owns its nested commit",
+    "probability_phase": "Outside full_shadow: logits_to_probabilities, sample_categorical, verify_proposal; nested probability calls suppressed",
+    "commit_phase": "Outside prefill: strategy commit, draft append_committed, feature release",
+    "remainder": "Unwrapped reset/session and loop work, private confidence D2H/capability validation, token materialization, record construction, final synchronization and instrumentation gaps",
+    "fences": "Only outer observed callable boundaries. Pre-drain is prior unassigned queued work; body plus post-drain is current synchronized service. Fence wall includes waiting and API overhead.",
+    "nested_signatures": "Host spans/counts only, attributed to current outer stage; no nested fence and never added to outer totals",
+    "invariant": "Private actual token arrays, final per-request RNG state bytes and digest, all round decisions/Q/work/execution, final lengths and prefill work equal within each arm",
+    "observer_context": "Observer enter/restore and common token/RNG collection excluded; wrappers and outer/inner fences included in observed complete-session wall",
+    "timing_scope": "Perturbed serialized full-shadow child service; no original critical-path/kernel-active/speedup claim",
+    "trace_export": false,
+    "kineto": false,
+    "retry": false,
+    "max_inner_records": 8192,
+    "record_bound": {
+      "r2_children_per_round": 46,
+      "r1_children_per_round": 38,
+      "maximum_rounds": 127,
+      "maximum_children": 5842,
+      "maximum_outer_stages": 1278,
+      "maximum_signatures": 381,
+      "maximum_stage_signature_records": 7501,
+      "maximum_observer_rows_with_summaries": 7755
+    },
+    "inner_partition": "Within full-shadow propose only: packed backbone; shared base head; Markov embedding/projection/confidence modules; FP64 law; categorical draw; proposal copy; explicit residual",
+    "parent_denominator": "Sum of owning propose synchronized-service envelopes (body through post-drain, including bookkeeping, excluding outer pre-drain)",
+    "decision_rule": "Both fractions >=0.50 with both observed/plain ratios in [0.95,1.05]: supported; both <0.50 with valid ratios: not_supported; mixed thresholds or any ratio outside: inconclusive"
+  },
+  "sample_count": 6,
+  "comparisons": [
+    {
+      "repeat": 0,
+      "arm": "fixed_gamma7_full_shadow",
+      "raw_semantics_equal": true,
+      "plain_wall_seconds": 7.230387642048299,
+      "coarse_wall_seconds": 7.982689293916337,
+      "coarse_over_plain_wall_ratio": 1.104047208685331,
+      "probability_fraction": 0.4164798049887625
+    },
+    {
+      "repeat": 1,
+      "arm": "fixed_gamma7_full_shadow",
+      "raw_semantics_equal": true,
+      "plain_wall_seconds": 7.21103016496636,
+      "coarse_wall_seconds": 8.184521693969145,
+      "coarse_over_plain_wall_ratio": 1.135000340690896,
+      "probability_fraction": 0.41174938718577975
+    }
+  ],
+  "phase_audits": [
+    {
+      "repeat": 0,
+      "arm": "fixed_gamma7_full_shadow",
+      "stage_records": 1064,
+      "categories": {
+        "target_service": {
+          "calls": 214,
+          "pre_boundary_drain_seconds": 0.004742075223475695,
+          "body_host_seconds": 2.543319513089955,
+          "post_boundary_drain_seconds": 0.08571080630645156,
+          "synchronized_service_seconds": 2.62917294097133,
+          "boundary_bookkeeping_seconds": 0.0001426215749233961
+        },
+        "fp64_probability_service": {
+          "calls": 424,
+          "pre_boundary_drain_seconds": 0.0032930461456999183,
+          "body_host_seconds": 0.7987326662987471,
+          "post_boundary_drain_seconds": 0.02573497104458511,
+          "synchronized_service_seconds": 0.824905828689225,
+          "boundary_bookkeeping_seconds": 0.0004381913458928466
+        },
+        "commit_projection_release": {
+          "calls": 320,
+          "pre_boundary_drain_seconds": 0.002793632331304252,
+          "body_host_seconds": 0.49882333644200116,
+          "post_boundary_drain_seconds": 0.011937198461964726,
+          "synchronized_service_seconds": 0.51095828297548,
+          "boundary_bookkeeping_seconds": 0.00019774807151407003
+        },
+        "full_shadow_propose": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.003981433110311627,
+          "body_host_seconds": 3.8944570048479363,
+          "post_boundary_drain_seconds": 0.0007566135609522462,
+          "synchronized_service_seconds": 3.8952541808830574,
+          "boundary_bookkeeping_seconds": 4.056247416883707e-05
+        }
+      },
+      "pre_boundary_drain_seconds": 0.014810186810791492,
+      "service_seconds": 7.860291233519092,
+      "remainder_seconds": 0.1075878735864535,
+      "service_bookkeeping_gap_seconds": 0.0008191234664991498,
+      "signature_calls": 294,
+      "nested_signature_host_seconds": 0.6224452214082703,
+      "inner_stage_records": 4860,
+      "inner_categories": {
+        "backbone": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.0036631831899285316,
+          "body_host_seconds": 1.1744639476528391,
+          "post_boundary_drain_seconds": 0.007432474754750729,
+          "synchronized_service_seconds": 1.182032939977944,
+          "boundary_bookkeeping_seconds": 0.00013651757035404444
+        },
+        "base_head": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.0008062458364292979,
+          "body_host_seconds": 0.012237339513376355,
+          "post_boundary_drain_seconds": 0.08092442702036351,
+          "synchronized_service_seconds": 0.09319983387831599,
+          "boundary_bookkeeping_seconds": 3.8067344576120377e-05
+        },
+        "markov_confidence": {
+          "calls": 2226,
+          "pre_boundary_drain_seconds": 0.07192567049060017,
+          "body_host_seconds": 0.2003030050545931,
+          "post_boundary_drain_seconds": 0.21422581479419023,
+          "synchronized_service_seconds": 0.4153247579233721,
+          "boundary_bookkeeping_seconds": 0.0007959380745887756
+        },
+        "fp64_law": {
+          "calls": 742,
+          "pre_boundary_drain_seconds": 0.01632833539042622,
+          "body_host_seconds": 0.6418635962763801,
+          "post_boundary_drain_seconds": 0.03408226720057428,
+          "synchronized_service_seconds": 0.6764113898389041,
+          "boundary_bookkeeping_seconds": 0.00046552636194974184
+        },
+        "categorical_draw": {
+          "calls": 1470,
+          "pre_boundary_drain_seconds": 0.027605780051089823,
+          "body_host_seconds": 0.8795493190409616,
+          "post_boundary_drain_seconds": 0.06539801193866879,
+          "synchronized_service_seconds": 0.9458833117969334,
+          "boundary_bookkeeping_seconds": 0.0009359808173030615
+        },
+        "proposal_copy": {
+          "calls": 210,
+          "pre_boundary_drain_seconds": 0.00519370031543076,
+          "body_host_seconds": 0.008851866004988551,
+          "post_boundary_drain_seconds": 0.0055933629628270864,
+          "synchronized_service_seconds": 0.014501772937364876,
+          "boundary_bookkeeping_seconds": 5.654396954923868e-05
+        }
+      },
+      "parent_propose_seconds": 3.8952541808830574,
+      "inner_probability_seconds": 1.6222947016358376,
+      "inner_probability_fraction": 0.4164798049887625,
+      "inner_pre_drains_seconds": 0.1255229152739048,
+      "inner_residual_seconds": 0.4423772592563182
+    },
+    {
+      "repeat": 1,
+      "arm": "fixed_gamma7_full_shadow",
+      "stage_records": 1064,
+      "categories": {
+        "target_service": {
+          "calls": 214,
+          "pre_boundary_drain_seconds": 0.00476713536772877,
+          "body_host_seconds": 2.5186147729400545,
+          "post_boundary_drain_seconds": 0.13181102008093148,
+          "synchronized_service_seconds": 2.650566473719664,
+          "boundary_bookkeeping_seconds": 0.00014068069867789745
+        },
+        "fp64_probability_service": {
+          "calls": 424,
+          "pre_boundary_drain_seconds": 0.0033160008024424314,
+          "body_host_seconds": 0.9053567423252389,
+          "post_boundary_drain_seconds": 0.0263545730849728,
+          "synchronized_service_seconds": 0.9321388301905245,
+          "boundary_bookkeeping_seconds": 0.00042751478031277657
+        },
+        "commit_projection_release": {
+          "calls": 320,
+          "pre_boundary_drain_seconds": 0.002683216705918312,
+          "body_host_seconds": 0.497447588481009,
+          "post_boundary_drain_seconds": 0.015170325525105,
+          "synchronized_service_seconds": 0.5128090913640335,
+          "boundary_bookkeeping_seconds": 0.00019117735791951418
+        },
+        "full_shadow_propose": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.0039518948178738356,
+          "body_host_seconds": 3.9647157954750583,
+          "post_boundary_drain_seconds": 0.000688452972099185,
+          "synchronized_service_seconds": 3.9654457450378686,
+          "boundary_bookkeeping_seconds": 4.1496590711176395e-05
+        }
+      },
+      "pre_boundary_drain_seconds": 0.014718247693963349,
+      "service_seconds": 8.06096014031209,
+      "remainder_seconds": 0.10884330596309155,
+      "service_bookkeeping_gap_seconds": 0.0008008694276213646,
+      "signature_calls": 294,
+      "nested_signature_host_seconds": 0.6083045026753098,
+      "inner_stage_records": 4860,
+      "inner_categories": {
+        "backbone": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.003707443014718592,
+          "body_host_seconds": 1.185382156050764,
+          "post_boundary_drain_seconds": 0.012291734339669347,
+          "synchronized_service_seconds": 1.197802850860171,
+          "boundary_bookkeeping_seconds": 0.00012896046973764896
+        },
+        "base_head": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.0008727362146601081,
+          "body_host_seconds": 0.018631708691827953,
+          "post_boundary_drain_seconds": 0.0871012827847153,
+          "synchronized_service_seconds": 0.10577452566940337,
+          "boundary_bookkeeping_seconds": 4.1534192860126495e-05
+        },
+        "markov_confidence": {
+          "calls": 2226,
+          "pre_boundary_drain_seconds": 0.07106691028457135,
+          "body_host_seconds": 0.20262008521240205,
+          "post_boundary_drain_seconds": 0.22972073697019368,
+          "synchronized_service_seconds": 0.4331320319324732,
+          "boundary_bookkeeping_seconds": 0.0007912097498774529
+        },
+        "fp64_law": {
+          "calls": 742,
+          "pre_boundary_drain_seconds": 0.016269021783955395,
+          "body_host_seconds": 0.570032125338912,
+          "post_boundary_drain_seconds": 0.04153483419213444,
+          "synchronized_service_seconds": 0.6120549035258591,
+          "boundary_bookkeeping_seconds": 0.00048794399481266737
+        },
+        "categorical_draw": {
+          "calls": 1470,
+          "pre_boundary_drain_seconds": 0.02568724937736988,
+          "body_host_seconds": 0.9048473404254764,
+          "post_boundary_drain_seconds": 0.11496433441061527,
+          "synchronized_service_seconds": 1.0207149519119412,
+          "boundary_bookkeeping_seconds": 0.0009032770758494735
+        },
+        "proposal_copy": {
+          "calls": 210,
+          "pre_boundary_drain_seconds": 0.0051925728330388665,
+          "body_host_seconds": 0.008930821320973337,
+          "post_boundary_drain_seconds": 0.005784023436717689,
+          "synchronized_service_seconds": 0.014768988243304193,
+          "boundary_bookkeeping_seconds": 5.4143485613167286e-05
+        }
+      },
+      "parent_propose_seconds": 3.9654457450378686,
+      "inner_probability_seconds": 1.6327698554378003,
+      "inner_probability_fraction": 0.41174938718577975,
+      "inner_pre_drains_seconds": 0.12279593350831419,
+      "inner_residual_seconds": 0.45840155938640237
+    }
+  ],
+  "rounds_checked": 657,
+  "source_files": 393,
+  "classification": "inconclusive",
+  "ratios_within_predeclared_bounds": false,
+  "raw_setup_audit": {
+    "status": "passed",
+    "checks_total": 2203,
+    "failed_checks": 0,
+    "reduction_count": 756,
+    "failed_reductions": 0,
+    "limitations": [
+      "Raw verification input tokens are checked against the bound original workload. Prefill/growth token arrays are not saved separately; their planned bytes can be reconstructed from frozen source/protocol, but this audit does not independently replay their model execution."
+    ]
+  },
+  "raw_setup_max_abs": 0.0,
+  "raw_setup_max_rms": 0.0,
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "device_arch": "gfx1201",
+    "setup_seconds": 24.32680724002421
+  },
+  "execution": {
+    "worker_os_exit": 0,
+    "controller_os_exit": 0,
+    "ssh_os_exit": 0,
+    "timed_out": false,
+    "independent_release_passed": true,
+    "remaining_owned_count": 0,
+    "asr_ready": true
+  },
+  "setup": {
+    "workspace_bytes": 24876570,
+    "graph_reserved_bytes": 1073963152,
+    "resident_and_scratch_bytes": 146800640,
+    "buckets": 25,
+    "graph_count": 2
+  },
+  "preserved_primary_baselines": {
+    "source_commit": "17da0b4cd7829d94d80720bc215d22583285e827",
+    "target_only_tokens_per_second": 80.66607523997888,
+    "fixed_gamma7_tokens_per_second": 34.98679923430116,
+    "zero_admission_tokens_per_second": 31.565220453643438,
+    "separate_vllm_tokens_per_second": 246.56672736039107
+  },
+  "provenance": {
+    "source_archive_sha256": "9e9efcb1cf9624f597de1101b81a8a6d2b155aba240db6d224fc03785fe18880",
+    "evidence_archive": {
+      "passed": true,
+      "sha256": "8f83eb7ae2dc6b0bb168d890bd6e699426926d3a5e08ffb5e47586680dafff9a",
+      "bytes": 535732256
+    },
+    "scalar_auditor_sha256": "9625872361bf5757a69ca622f75a87d1749a2d8a92a74457a28c49b82b32ce11",
+    "scalar_audit_sha256": "e8d8f7f171e55bcbf40f85d46a86f07d78a098179ca230f13e2ed4e488b7711b",
+    "raw_auditor_sha256": "32fee44a825148176bd34dca48f928635d7b4cce3e36b57409bbf62eb9acf2b3",
+    "raw_audit_sha256": "a9aa2a57b5d225fa28396f2c10542e276413b6580f8bd23e43ed251668dc58b3",
+    "public_files_sha256": {
+      "parent-partitions.jsonl": "215d4a58da82af38991838c4cdc7a01ee0a2a331522347bb620ca1983d004a26",
+      "inner-stages.jsonl": "461f5fa6c9d92d9d3946ece570944ea149a21021738c8d117f09f60f083235ea",
+      "outer-stages.jsonl": "10da8165fcccadce8602f3c3186db3d566664571cc91e92d769a2dafcb7d746c",
+      "scalar-samples.jsonl": "66edae376aff40b1224071c318b03e4aa9f7bb851b36193ea9587158fb073487"
+    }
+  },
+  "limitations": [
+    "Two reversed plain/observed pairs are diagnostic controls, not confidence intervals or isolated observer overhead.",
+    "Synchronized service includes validation, host work and waits; no kernel-active/utilization claim.",
+    "Parent and child ledgers must never be added. All three fresh signature checks remain intact.",
+    "Raw token/RNG/work equality does not establish cross-backend probability-law equivalence.",
+    "No confidence admission, measured SPS, scheduler, overlap or speedup benefit was tested.",
+    "Synthetic r2-c256 only; not natural held-out acceptance."
+  ]
+}

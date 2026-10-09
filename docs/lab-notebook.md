@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（S43 shadow内部诊断CPU准备与独立复审通过，native结果待完成）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32及后续轮次的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S44 shadow内部native诊断与审计完成，扰动超限、假设inconclusive）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32及后续轮次的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,7 +16,7 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
-- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)、[S34 signature成本与缓存安全否决](#signature-cpu-safety)、[S35 finite actual-Q family的CPU基础与兼容失败修复](#query-family-cpu-foundation)、[S36 full-shadow capacity/family同步CPU桥接](#capacity-query-family-cpu)、[S39 R2三臂完整请求比较的CPU准备](#paired-r2-cpu-preparation)、[S40 R2三臂完整请求负收益与独立审计](#paired-r2-native-result)、[S41 六batch粗区间诊断的CPU准备与清理失败修复](#paired-r2-coarse-cpu-preparation)、[S42 六batch native粗区间诊断与观察扰动](#paired-r2-coarse-native-result)、[S43 shadow内部诊断的CPU准备、测试预期失败与三态判据](#shadow-inner-r2-cpu-preparation)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)、[S34 signature成本与缓存安全否决](#signature-cpu-safety)、[S35 finite actual-Q family的CPU基础与兼容失败修复](#query-family-cpu-foundation)、[S36 full-shadow capacity/family同步CPU桥接](#capacity-query-family-cpu)、[S39 R2三臂完整请求比较的CPU准备](#paired-r2-cpu-preparation)、[S40 R2三臂完整请求负收益与独立审计](#paired-r2-native-result)、[S41 六batch粗区间诊断的CPU准备与清理失败修复](#paired-r2-coarse-cpu-preparation)、[S42 六batch native粗区间诊断与观察扰动](#paired-r2-coarse-native-result)、[S43 shadow内部诊断的CPU准备、测试预期失败与三态判据](#shadow-inner-r2-cpu-preparation)、[S44 shadow内部native诊断的扰动超限与inconclusive结果](#shadow-inner-r2-native-result)。
 - 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)、[S31 配对R1完整请求负收益](#paired-r1-result)、[S37 native variable-Q full-target gate的CPU准备](#query-family-graph-cpu-preparation)、[S38 native variable-Q finite-family真实capture/replay结果](#query-family-graph-native-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
@@ -1226,3 +1226,36 @@ Shadow虽最大，但包含内部backbone、heads、Markov、FP64 laws/draws、v
 **来源与独立复审。** Base为Git **e3863a2f423b3ae033e87517002b4571ee2ec67c**加三additive overlay，393files；首freeze SHA **b819381f…495fd5f**与v2 **8d2938ec…6933dde**、首失败log/OS保留，v2只改test。记录者核393 frozen/当前三overlay、base archive SHA与nonoverlay逐Git、8份CPU evidence SHA及三轮actual log/exit。Direction终审approved：225边界分类组合、合成clock **parent60=child pre11+service33+residual16**（body21/post11/gap1、四fences）通过，非实测时间；真实tiny-CPU post-draw drain故障保留failed body、restore aliases、unfenced cleanup；丢最后child则coverage拒绝、保留complete_batch=true原row与两partial文件，并正确记实验failed。Core/review handoff SHA **508101da…1ac02ff / f8f919b8…bfae5ec**及review10份evidence SHA已核，本地未发布 `output/shadow-inner-r2-preparation-20261009/`、`output/shadow-inner-direction-review-20261009/`。准备通过范围为source/CPU契约，无新native数据。
 
 **当时观察与解释边界。** Direction仅一次22:23:52.793822（UTC+8）真实stdlib只读SSH OS0，proc发现/实际listener FD ownership核ASR身份稳定、HTTP200 ready/nonbusy，fuser可见KFD仅原ASR、可见实验候选为空、free25250680832 bytes；live SHA **ba0b7e4d…35aecd8**与review绑定一致，仍只是当时可见范围，不作全进程可见或未来readiness，记录者不重复remote。S42 observed gamma wall7.478367−propose3.412737=non-propose4.065630秒，已大于observed target whole3.216314秒；这只是账本算术，移除propose会改变Q/decision/RNG/context，不能作为可实现反事实或加速预测。Direction建议本有界归因后选择一项具体语义保持改动并做实际E2E A/B，或停止更深profile，不自动扩capacity/SPS、训练/校准/final test。本轮完成的是准备/独立复审，root负责exact immutable source部署与唯一有界设备执行，实际结果另记；旧数值/law/TV、primary负收益、强vLLM与timeline边界保留。记录者只改本日志及README.ai准备入口，未测试/tensor加载/GPU/部署或commit/push。
+
+
+<a id="shadow-inner-r2-native-result"></a>
+## 2026-10-09 — S44：shadow内部native诊断完成，扰动超限使假设inconclusive
+
+**实际执行与正式结论。** S43实现按immutable **db9d61c4decb56090993ba9c1dc8d4063ec72763** exact Git archive部署；AMD隐藏GPU visibility的相关**47项CPU测试全部pass、42.099秒/OS0**，wrapper **44.1717秒**另报。随后唯一有界native完成固定6batch、1536输出、**657 rounds**，两observed batches共**9720 child records（各4860）**。四non-warmup batches的raw token arrays、final per-request RNG bytes及全round work/decisions/execution由root scalar审计核为完全相同；这是语义控制通过，不是计时扰动通过。
+
+| Pair顺序 | Plain 秒 | Observed 秒 | Observed/plain | FP64 law+draw / owning propose |
+| --- | ---: | ---: | ---: | ---: |
+| plain0 → observed0 | 7.230388 | 7.982689 | 1.104047（+10.40%） | 41.6480% |
+| observed1 → plain1 | 7.211030 | 8.184522 | 1.135000（+13.50%） | 41.1749% |
+
+两ratio均超过预注册1.05上限，故正式分类为 **inconclusive**，不能因两fraction<.50改写为not_supported，更不能声称已定位未观察路径的原始瓶颈。本次失败的是诊断的扰动接受条件，执行/语义/coverage与审计通过；两个反序pair仍不能分离observer成本与run variation，5%不是置信区间。这些内部值只能描述被fence扰动的serialized service，不能用于原始critical path、kernel-active/utilization或可实现speedup推断。
+
+**分解与账本。** 下表来自[公开inner records](../reports/shadow-inner-r2-20261009-db9d61c/inner-stages.jsonl)的service重算；parent排除outer pre-drain，逐parent以child services+child pre-drains+residual闭合，**212个parent分区**均通过，父子绝不相加。Body可能含wait，post-drain/bookkeeping是service子项；三个fresh signature checks保留，nested host spans不重复收费。
+
+| Propose内类别 | Pair0 秒 | Pair1 秒 |
+| --- | ---: | ---: |
+| packed backbone | 1.182033 | 1.197803 |
+| shared base head | 0.093200 | 0.105775 |
+| Markov/confidence | 0.415325 | 0.433132 |
+| batched FP64 law | 0.676411 | 0.612055 |
+| categorical draw | 0.945883 | 1.020715 |
+| actual proposal copy | 0.014502 | 0.014769 |
+| child pre-boundary drains | 0.125523 | 0.122796 |
+| parent residual | 0.442377 | 0.458402 |
+| owning propose总service | 3.895254 | 3.965446 |
+
+**独立审计与来源。** Root scalar审计实际OS0，核6batch/657round/9720child/393source、raw语义及两层互斥账本；记录者从公开6scalar重数round/output并重算两ratio/fraction和child分解。Raw setup独立CPU审计实际OS0：**2203 checks、756 reductions全pass、failed0/unavailable空、maxabs/RMS0**，原.02/.02/.005门槛不变；prefill/growth token arrays未单独保存，审计未独立重跑其prefix model execution，不证明cross-backend law等价。记录者核正式result handoff SHA **fb619a7a…73d673**、12份artifact、scalar/raw各3/7份输入及4份公开记录SHA；source.tar逐字节等db9d61c Git archive并核部署393files，CPU前/后及native后393source检查均pass。完整未发布 `output/shadow-inner-r2-native-20261009/` archive **535732256 bytes**、SHA **8f83eb7a…fff9a**已核；[报告](../reports/shadow-inner-r2-20261009-db9d61c/README.md)和[aggregate](../reports/shadow-inner-r2-20261009-db9d61c/aggregate.json)保留诊断/审计边界，未读取raw tensor或private样本内容。
+
+**退出、释放与后续界限。** Prepare/CPU、native worker/controller/SSH、collection、scalar/raw audit及independent release实际OS均0，无timeout/retry/trace。Controller elapsed **77.2058秒**含loading/setup/evidence，不是吞吐；independent release remaining空，原ASR身份ready/nonbusy、可见KFD仅原ASR、free25241772032 bytes，仅为当时释放观察。原300/290秒、prefree/allocator、两graph reservation与workspace界限保持。S40同backend target-only/γ7/zero与独立vLLM primary、旧RMS/sequential law/endpoint TV与timeline缺口均保留；无训练/校准/final-test、capacity/SPS/调度/overlap收益或优化成功，phase相减也不是可实现移除反事实。记录者仅改本日志与README.ai，未测试、tensor/model加载、remote/GPU复跑、改报告/实现或stage/commit/push。
+
+**后续决定，尚未实现/执行。** Direction独立复核通过657round及两observed各1064outer/4860child/294signature、46或38child覆盖与raw语义；audit/decision SHA **a3dc2e2d…752fe / c570a06f…f3979**已核，留在 `output/shadow-inner-result-direction-20261009/`。Root接受**停止profiler链**：次轮仅先准备categorical fallback的nonzero固定形状候选CPU等价gate，保留FP64 CDF/searchsorted、一次同序RNG、zero-tail/CDF越界，以及mutable RNG导致无正支撑或shape变更的原异常语义；小改无法保持契约则放弃候选。CPU gate与实现复审通过后，拟以原R2/权重/graph/内存/300秒界限，做target+γ7两臂共**20完整batch（4warmup+16measured）**无observer重复A/B。建议实用门槛为两臂各pooled B/A throughput≥1.02且各至少3/4pairs更快，否则保留原实现；这不是置信区间，须在后续准备freeze时正式预注册，不事后放宽。当前只有已接受方向，无候选实现、正式新protocol freeze或A/B结果，不从受扰比例预测瓶颈/收益。

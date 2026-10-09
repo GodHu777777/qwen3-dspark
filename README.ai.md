@@ -731,3 +731,27 @@ This is CPU preparation only; native results remain pending. Root deploys an
 exact source commit archive and coordinates the single bounded GPU run. Preserve
 original laws/checks, budgets and prior primary/vLLM results; no training, new
 Profile, optimization or stage-subtraction speedup is established.
+
+Full-shadow inner-service result (notebook S44, immutable db9d61c):
+the pinned AMD GPU-hidden suite passed all47 tests (42.099 s; wrapper44.1717 s,
+OS0), and the single native run completed6 batches/657 rounds/9720 child records.
+Four non-warmup batches preserve actual tokens, RNG bytes and full round work
+exactly. Reversed observed/plain ratios are1.104047 and1.135000, both above the
+predeclared1.05 ceiling; FP64 law+draw/propose fractions are.416480 and.411749.
+The formal classification is inconclusive, not not_supported or an identified
+unperturbed bottleneck. See reports/shadow-inner-r2-20261009-db9d61c.
+Parent service equals disjoint child services, child pre-drains and residual;
+never add parent and children, and retain all three fresh signature checks.
+Root scalar and raw setup audits passed (2203 checks/756 reductions, maxabs/RMS0);
+prefill/growth prefix execution was not independently replayed. Execution,
+collection and independent release passed without timeout/retry/trace.
+Independent Direction result review passed; root accepted stopping the profiler
+chain. Next prepare only a CPU-gated fixed-shape categorical fallback candidate,
+preserving zero tails/CDF overflow and mutable-RNG no-support/shape exceptions.
+After CPU equivalence and implementation review, propose20 observer-free complete
+target/gamma A/B batches under the original300 s and memory bounds. Proposed
+screening requires EACH arm pooled B/A throughput>=1.02 and at least3/4 pairs
+faster; otherwise retain the original. Freeze this rule before execution.
+This is a future direction, not an implementation, frozen protocol or A/B result.
+Preserve S40 native primary and separate vLLM results and prior numerical/law/TV
+limits; this perturbed diagnostic establishes no optimization or speedup.
