@@ -579,7 +579,21 @@ reservations remain separately charged per captured program. The real CPU
 `PackedSpeculativeSession` composition matches exact eager q/p, RNG, outputs and
 target/draft KV while varying actual Q and B, with graph-emulator and explicit
 eager families. See docs/query-families.md and output/query-family-cpu-20261009.
-No generalized native family capture, t-2 capacity/current-confidence integration,
-speed gain or overlap is established. Keep all three fresh model-signature
-checks and receipt/feature lease boundaries; never pad actual physical B to a
+The later CPU bridge below establishes synchronous t-2/current-confidence
+composition; generalized native family capture, speed gain and overlap remain open.
+Keep all three fresh model-signature checks and receipt/feature lease boundaries; never pad actual physical B to a
 reservation or infer native support from the emulator or launch-argument spy.
+
+Full-shadow capacity/family bridge: five real tiny-Qwen CPU tests now compose
+`CapacityRoundDriver` with persistent `QueryFamily` selection, using a full-shadow
+exact-eager control rather than fixed-budget draws. Synthetic B5 and rising-zero
+profiles exercise nonuniform Q, cold starts, historical t-2, removal/reincarnation,
+remaining1 and K8 reservation with actual B2. q/p, decisions, RNG, outputs and both
+KV caches match; committed caches also match a separate full-prefix HF reference
+within declared tolerances. Concrete driver profiles must map physical B to actual
+B, checked at construction and step entry; pure planner mappings stay general.
+Current-score-dependent missing family/provenance rejection happens after proposal
+RNG but before target/verification RNG/commit, and the driver cannot retry. See
+docs/query-families.md and output/capacity-query-family-cpu-20261009. This is CPU
+correctness evidence with synthetic SPS and untrained heads, not hardware-aware
+performance or confidence quality. No remote deployment or GPU run was performed.

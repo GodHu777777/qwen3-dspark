@@ -2,8 +2,9 @@
 
 `QueryFamily` permits different ordered per-request query lengths in one fixed
 physical-B program. This is an opt-in CPU-tested foundation over the existing
-target and sampling lifecycle. No native GPU family capture, performance curve,
-capacity-driver connection or CPU/GPU overlap is established by these tests.
+target and sampling lifecycle. The synchronous full-shadow capacity driver is now connected and CPU-tested
+below. Native GPU family capture, measured capacity costs and CPU/GPU overlap
+remain unverified.
 
 ```python
 from dspark_qwen.persistent_target_kv import QueryFamily
@@ -85,12 +86,11 @@ writer/view refusal and unfinished/completed cancellation; and a real
 `PackedSpeculativeSession` comparison of q/p, RNG traces, outputs and both target
 and draft KV, including zero allocations and eager/graph family selection.
 
-The session test uses `step(manual_allocations)` and its `fixed_budget` proposal
-mode. It is not a full-shadow capacity-driver composition test. It does **not** connect
-`CapacityRoundDriver`, historical t−2 capacity selection, calibrated confidence
-ranking or a measured physical profile to family choice. That causal integration
-and the distinction between reserved K and actual B need their own validation.
-The current slice neither constructs 74 private graph pools nor changes STS,
+The original six-test foundation uses `step(manual_allocations)` and its
+`fixed_budget` proposal mode. Its result alone does not establish full-shadow
+capacity integration. The later bridge below tests that separate causal path;
+a measured physical profile remains outstanding.
+The foundation neither constructs 74 private graph pools nor changes STS,
 training, final-test access, numerical-law claims or scheduling overlap. A later
 native gate must validate unequal Q distributions and maxima below launch bounds,
 stable metadata replay, exact outputs/KV, private-pool accounting and explicit
@@ -123,3 +123,61 @@ covered lease retention through abort, mixed exact/family reuse after release,
 cancel-checker failure poisoning and strict integer actual-Q overrides. Evidence:
 `output/query-family-independent-review-20261009/handoff.json`. No GPU or remote
 operation was performed for this implementation or review.
+
+
+## Full-shadow capacity bridge: CPU validation
+
+`CapacityRoundDriver` composes with `PersistentTargetStrategy` and the declared
+families through the existing interfaces: freeze historical t−2 capacity before
+current draws, generate all shadow positions, bind current confidence, recheck
+private confidence data, select actual Q, then verify/commit and record history.
+Only an early identity physical-B profile guard was added to production code.
+The guard runs at construction and step entry; the concrete engine never pads
+actual B to reserved K. General physical mappings remain valid in the pure planner.
+
+Five bridge tests use actual tiny-Qwen/draft/head execution with synthetic SPS
+curves. Their exact-bucket eager control also generates full shadow proposals,
+then verifies the same allocations. They compare q/p, decisions, RNG draws,
+outputs and all target/draft KV; a separate full-prefix HF cache checks committed
+content. Calling `step(fixed_budget)` would consume different RNG and is not the
+control used here. These are untrained CPU fixtures, not quality measurements.
+
+The positive fixture produces these successive actual shapes:
+
+| Round | Active R | Reserved K | Actual Q | Execution |
+| --- | --- | --- | --- | --- |
+| 0, 1 | 2 | 2 | (1, 1) | Explicit eager, full shadow still generated |
+| 2 | 2 | 5 | (3, 2) | CPU replay emulator |
+| 3, after removing one request | 1 | 4 | (4) | Explicit eager |
+| 4, new incarnation with one output left | 1 | 1 | (1) | Explicit eager, three shadow positions |
+
+The zero-score fixture fixes the real confidence head to finite −1000 logits
+before cache/source binding. With a synthetic rising SPS curve, rounds 2 and 3
+reserve K=8 but execute B=2, while still generating six shadow positions. This
+verifies reservation/actual-work separation without changing scores after draws.
+It does not establish trained head calibration or sensible measured hardware costs.
+
+Invalid physical profiles are rejected before draws, including public profile
+replacement. Missing B5 after two successful cold rounds, changed public
+confidence and foreign capabilities fail after full-shadow proposal draws but
+before target verification RNG/forward/commit. Partial rounds cannot be retried.
+Public token/probability observation tampering does not affect computation from
+privately retained proposals. Historical digests bind observed shadow duration;
+independently timed runs need not have equal history digests.
+
+Private frozen evidence: `output/capacity-query-family-cpu-20261009/`, base
+`8bee244fbacae3fd093d24c1b2512f5ab3d807c6` plus `async_round.py` and the new
+`tests/test_capacity_query_family.py`. All 372 frozen files matched before and
+after the complete CPU run: 307 tests, 301 passed and six Linux-only skips,
+7.058 seconds, process exit 0. The five focused bridge tests passed in 0.238
+seconds. These elapsed times describe testing, not inference throughput.
+Native variable-Q replay, measured capacity costs, multi-request end-to-end gains
+and actual CPU/GPU overlap remain next gates.
+The earlier same-stack slowdown and separate strong vLLM baseline are unchanged.
+
+Independent review found no blocker in this frozen synchronous CPU scope. Four
+additional cases checked changed t−2 profile identity, out-of-range context,
+incomplete shadow proposals and profile replacement/restoration. The first two
+reject before drawing; incomplete shadow rejects after its two proposal draws
+per request, without target work. Review evidence is retained under
+`output/capacity-query-family-independent-review-20261009/`.

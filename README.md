@@ -219,9 +219,10 @@ The later bounded trained draft/integration result does not erase this failure.
 
 The opt-in [finite query-family CPU foundation](docs/query-families.md) lets one
 fixed physical-B family accept different per-request Q splits with shared
-metadata/gather storage. Real tiny-model session tests preserve q/p, RNG and KV;
-native family replay, confidence-driven capacity integration and speed gains
-remain unverified.
+metadata/gather storage. The synchronous full-shadow capacity driver now selects
+these families using current confidence, with CPU tests preserving q/p, RNG and KV
+and distinguishing reserved K from actual B. Synthetic cost curves are fixtures;
+native family replay, measured capacity costs and speed gains remain unverified.
 
 [实验复盘日志](docs/lab-notebook.md)记录问题、假设、处理方法、验证结果、
 失败尝试和下一步决策，并关联提交与证据。历史结果与进行中的实验分开标注。

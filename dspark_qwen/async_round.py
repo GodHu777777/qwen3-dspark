@@ -6,7 +6,7 @@ wall time. This is not a pipelined or asynchronous execution implementation.
 """
 import time
 
-from .async_capacity import Request
+from .async_capacity import Profile, Request
 
 
 class CapacityRoundDriver:
@@ -15,6 +15,14 @@ class CapacityRoundDriver:
             raise ValueError('Planner gamma must match complete shadow block size')
         self.session, self.planner, self.profile = session, planner, profile
         self.failed = False
+        self._validate_profile()
+
+    def _validate_profile(self):
+        # This concrete session executes exact actual Q rows. The pure planner
+        # still supports other physical mappings; this driver has no pad adapter.
+        if (not isinstance(self.profile, Profile)
+                or self.profile.physical != tuple(range(1, len(self.profile.sps)+1))):
+            raise ValueError('Concrete capacity driver requires an identity physical-B profile; no query padding')
 
     def _synchronize(self):
         if self.session.target.device.type == 'cuda':
@@ -24,6 +32,7 @@ class CapacityRoundDriver:
     def step(self):
         if self.failed:
             raise RuntimeError('Driver failed; no retry/reuse of partial round')
+        self._validate_profile()  # Also reject a replaced public profile before any draw.
         if self.session._pending:
             raise ValueError('Driver requires no previously drawn outstanding proposals')
         roster = [Request(name, state['incarnation'], self.session.target.lengths[name],

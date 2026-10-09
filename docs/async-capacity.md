@@ -86,6 +86,19 @@ round failure. Planner epochs and model mutation epochs stay distinct. Full roun
 wall time includes calibration, host copies, hashing, private-source validation,
 model work and explicit device synchronization. Per-stage durations are reported;
 none of these synchronous costs may be hidden from a later end-to-end comparison.
+The concrete driver requires an identity physical mapping (`physical[B-1] == B`)
+because this session executes only actual query rows. It checks at construction
+and again at step entry, before freezing or drawing, so replacing its public
+profile cannot silently enable padding. The pure planner still accepts general
+physical mappings for separate reference experiments.
+
+A current-confidence-dependent missing target family can only be identified after
+full shadow proposals and allocation. That failure consumes proposal RNG, but
+preflight rejects it before target forward, verification RNG or commit; the driver
+cannot retry a partial round. A changed public confidence observation is similarly
+checked against private proposal data after drawing. These failures must not be
+reported as consuming no RNG.
+
 The executable order strengthens the call-order contract but is still a
 synchronous reference, not asynchronous buffer management or graph overlap.
 
