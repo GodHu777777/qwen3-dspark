@@ -1,0 +1,440 @@
+{
+  "status": "completed_and_independently_audited",
+  "source_commit": "ab4e3a5f818185adb5d413f5da43a3465c609349",
+  "diagnostic_only": true,
+  "primary_throughput_claimed": false,
+  "protocol": {
+    "version": 1,
+    "method": "six_batch_r2_coarse_synchronized_service_diagnostic",
+    "case_ids": [
+      "r2-c256"
+    ],
+    "arms": [
+      "target_only",
+      "fixed_gamma7_full_shadow"
+    ],
+    "output_tokens": 128,
+    "gamma": 7,
+    "allocation": "fixed gamma7 clipped by remaining budget, or zero; chosen before all-seven-position shadow draws",
+    "proposal_mode": "shadow; all seven positions even when allocation is zero",
+    "graph_query_lengths": [
+      2,
+      16
+    ],
+    "eager_query_lengths": null,
+    "prefill_query_lengths": [
+      256,
+      256
+    ],
+    "verification_key_capacity": 766,
+    "slots": 2,
+    "context_capacity": 384,
+    "max_query_tokens": 512,
+    "max_buckets": 25,
+    "max_graph_buckets": 2,
+    "graph_reservation_bytes": 536870912,
+    "graph_byte_budget": 1342177280,
+    "workspace_byte_budget": 67108864,
+    "temperature": 1.0,
+    "eos_ids": [],
+    "probability_policy": "float64_softmax_normalize_cdf_v1",
+    "timeout_seconds": 300,
+    "cooperative_reserve_seconds": 10,
+    "minimum_free_bytes": 8589934592,
+    "process_allocation_cap_bytes": 6442450944,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "selected_layers": "same trained draft layer IDs in both arms",
+    "setup_validation_limits": {
+      "atol": 0.02,
+      "rtol": 0.02,
+      "max_rms": 0.005
+    },
+    "setup_validation": "each B2/B16 at C256/256 and after committed eager growth to C368/375; pooled and per-request fixed limits, raw outputs before assertions",
+    "measurement": {
+      "warmup_per_arm": 1,
+      "plain_per_arm": 1,
+      "coarse_sync_per_arm": 1
+    },
+    "pair_order": "warmup target/spec; plain target; coarse target/spec; plain spec",
+    "setup_scope": "load/register/prime/two captures, native eager/graph validation and actual context growth outside samples; separately reported",
+    "resident_cost": "Same target, trained draft and both R2 graph pools remain resident across all six batches and both arms",
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "distribution_equivalence_claimed": false,
+    "request_count": 2,
+    "graph_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        16
+      ]
+    ],
+    "verification_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        2,
+        13
+      ],
+      [
+        2,
+        14
+      ],
+      [
+        2,
+        15
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        1,
+        8
+      ]
+    ],
+    "maximum_key_length": 383,
+    "setup_growth_query_lengths": [
+      112,
+      119
+    ],
+    "setup_growth_contexts": [
+      368,
+      375
+    ],
+    "measured_sps": false,
+    "current_confidence_admission": false,
+    "schedule": [
+      {
+        "phase": "warmup",
+        "arm": "target_only"
+      },
+      {
+        "phase": "warmup",
+        "arm": "fixed_gamma7_full_shadow"
+      },
+      {
+        "phase": "plain",
+        "arm": "target_only"
+      },
+      {
+        "phase": "coarse_sync",
+        "arm": "target_only"
+      },
+      {
+        "phase": "coarse_sync",
+        "arm": "fixed_gamma7_full_shadow"
+      },
+      {
+        "phase": "plain",
+        "arm": "fixed_gamma7_full_shadow"
+      }
+    ],
+    "diagnostic_only": true,
+    "max_stage_records": 8192,
+    "max_signature_records": 8192,
+    "max_rounds_per_batch": 254,
+    "full_shadow_phase": "Entire propose including its nested head, Markov, FP64 laws and draws; nested coarse stages suppressed",
+    "target_phase": "Strategy prefill/verify, target.predict, and admission-only head; prefill owns its nested commit",
+    "probability_phase": "Outside full_shadow: logits_to_probabilities, sample_categorical, verify_proposal; nested probability calls suppressed",
+    "commit_phase": "Outside prefill: strategy commit, draft append_committed, feature release",
+    "remainder": "Unwrapped reset/session and loop work, private confidence D2H/capability validation, token materialization, record construction, final synchronization and instrumentation gaps",
+    "fences": "Only outer observed callable boundaries. Pre-drain is prior unassigned queued work; body plus post-drain is current synchronized service. Fence wall includes waiting and API overhead.",
+    "nested_signatures": "Host spans/counts only, attributed to current outer stage; no nested fence and never added to outer totals",
+    "invariant": "Private actual token arrays, final per-request RNG state bytes and digest, all round decisions/Q/work/execution, final lengths and prefill work equal within each arm",
+    "observer_context": "Enter/restore and common post-timer semantic collection excluded; wrappers and fences included in coarse complete-batch wall",
+    "timing_scope": "Perturbed serialized service diagnostic, not original critical path, kernel-active time or primary speedup",
+    "trace_export": false,
+    "kineto": false,
+    "retry": false
+  },
+  "sample_count": 6,
+  "comparisons": [
+    {
+      "arm": "target_only",
+      "raw_semantics_equal": true,
+      "plain_wall_seconds": 3.165032338933088,
+      "coarse_wall_seconds": 3.2163142709759995,
+      "coarse_over_plain_wall_ratio": 1.0162026565770252
+    },
+    {
+      "arm": "fixed_gamma7_full_shadow",
+      "raw_semantics_equal": true,
+      "plain_wall_seconds": 7.35008119198028,
+      "coarse_wall_seconds": 7.478367215022445,
+      "coarse_over_plain_wall_ratio": 1.0174536878833582
+    }
+  ],
+  "phase_audits": [
+    {
+      "arm": "target_only",
+      "stage_records": 1023,
+      "categories": {
+        "target_service": {
+          "calls": 256,
+          "pre_boundary_drain_seconds": 0.00528749474324286,
+          "body_host_seconds": 2.6418993362458423,
+          "post_boundary_drain_seconds": 0.08791694382671267,
+          "synchronized_service_seconds": 2.729951028013602,
+          "boundary_bookkeeping_seconds": 0.0001347479410469532
+        },
+        "fp64_probability_service": {
+          "calls": 512,
+          "pre_boundary_drain_seconds": 0.006841702153906226,
+          "body_host_seconds": 0.3613868294050917,
+          "post_boundary_drain_seconds": 0.024647116078995168,
+          "synchronized_service_seconds": 0.3863779522944242,
+          "boundary_bookkeeping_seconds": 0.00034400681033730507
+        },
+        "commit_projection_release": {
+          "calls": 255,
+          "pre_boundary_drain_seconds": 0.004780945950187743,
+          "body_host_seconds": 0.02453817392233759,
+          "post_boundary_drain_seconds": 0.005068569560535252,
+          "synchronized_service_seconds": 0.029669789015315473,
+          "boundary_bookkeeping_seconds": 6.304553244262934e-05
+        }
+      },
+      "pre_boundary_drain_seconds": 0.01691014284733683,
+      "service_seconds": 3.1459987693233415,
+      "remainder_seconds": 0.05340535880532116,
+      "service_bookkeeping_gap_seconds": 0.0005418002838268876,
+      "signature_calls": 381,
+      "nested_signature_host_seconds": 0.7588275363668799
+    },
+    {
+      "arm": "fixed_gamma7_full_shadow",
+      "stage_records": 1064,
+      "categories": {
+        "target_service": {
+          "calls": 214,
+          "pre_boundary_drain_seconds": 0.0054697683081030846,
+          "body_host_seconds": 2.5044450018322095,
+          "post_boundary_drain_seconds": 0.08628570404835045,
+          "synchronized_service_seconds": 2.590843442478217,
+          "boundary_bookkeeping_seconds": 0.00011273659765720367
+        },
+        "fp64_probability_service": {
+          "calls": 424,
+          "pre_boundary_drain_seconds": 0.003249530913308263,
+          "body_host_seconds": 0.805169487837702,
+          "post_boundary_drain_seconds": 0.029121895786374807,
+          "synchronized_service_seconds": 0.8347228124039248,
+          "boundary_bookkeeping_seconds": 0.00043142877984791994
+        },
+        "commit_projection_release": {
+          "calls": 320,
+          "pre_boundary_drain_seconds": 0.002686096471734345,
+          "body_host_seconds": 0.5057447272120044,
+          "post_boundary_drain_seconds": 0.012490120832808316,
+          "synchronized_service_seconds": 0.5184115533484146,
+          "boundary_bookkeeping_seconds": 0.0001767053036019206
+        },
+        "full_shadow_propose": {
+          "calls": 106,
+          "pre_boundary_drain_seconds": 0.003928612917661667,
+          "body_host_seconds": 3.4037316465983167,
+          "post_boundary_drain_seconds": 0.008931321324780583,
+          "synchronized_service_seconds": 3.4127373894443735,
+          "boundary_bookkeeping_seconds": 7.442152127623558e-05
+        }
+      },
+      "pre_boundary_drain_seconds": 0.01533400861080736,
+      "service_seconds": 7.35671519767493,
+      "remainder_seconds": 0.10631800873670727,
+      "service_bookkeeping_gap_seconds": 0.0007952922023832798,
+      "signature_calls": 294,
+      "nested_signature_host_seconds": 0.607390831108205
+    }
+  ],
+  "rounds_checked": 699,
+  "source_files": 386,
+  "raw_setup_audit": {
+    "status": "passed",
+    "checks_total": 2203,
+    "failed_checks": 0,
+    "reduction_count": 756,
+    "failed_reductions": 0,
+    "limitations": [
+      "Raw verification input tokens are checked against the bound original workload. Prefill/growth token arrays are not saved separately; their planned bytes can be reconstructed from frozen source/protocol, but this audit does not independently replay their model execution."
+    ]
+  },
+  "raw_setup_max_abs": 0.0,
+  "raw_setup_max_rms": 0.0,
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "device_arch": "gfx1201",
+    "setup_seconds": 26.251805595005862
+  },
+  "execution": {
+    "worker_os_exit": 0,
+    "controller_os_exit": 0,
+    "ssh_os_exit": 0,
+    "timed_out": false,
+    "independent_release_passed": true,
+    "remaining_owned_count": 0,
+    "asr_ready": true
+  },
+  "setup": {
+    "workspace_bytes": 24876570,
+    "graph_reserved_bytes": 1073963152,
+    "resident_and_scratch_bytes": 146800640,
+    "buckets": 25,
+    "graph_count": 2,
+    "capture_validation_states": [
+      {
+        "query_tokens": 2,
+        "status": "validated",
+        "private_pool_reserved_bytes": 2097152,
+        "states": [
+          {
+            "stage": "initial",
+            "context_lengths": [
+              256,
+              256
+            ],
+            "status": "passed"
+          },
+          {
+            "stage": "grown",
+            "context_lengths": [
+              368,
+              375
+            ],
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "query_tokens": 16,
+        "status": "validated",
+        "private_pool_reserved_bytes": 2097152,
+        "states": [
+          {
+            "stage": "initial",
+            "context_lengths": [
+              256,
+              256
+            ],
+            "status": "passed"
+          },
+          {
+            "stage": "grown",
+            "context_lengths": [
+              368,
+              375
+            ],
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "preserved_primary_baselines": {
+    "source_commit": "17da0b4cd7829d94d80720bc215d22583285e827",
+    "target_only_tokens_per_second": 80.66607523997888,
+    "fixed_gamma7_tokens_per_second": 34.98679923430116,
+    "zero_admission_tokens_per_second": 31.565220453643438,
+    "separate_vllm_tokens_per_second": 246.56672736039107
+  },
+  "provenance": {
+    "source_archive_sha256": "d6dfb9759dd73b66ed65f861f52f809485e106b10cecb7f154600247efed716f",
+    "evidence_archive": {
+      "passed": true,
+      "sha256": "5d8e4bd61c6f2b8ae6bcf03292af3603d1df840b739611f70b3a0fe5b850ee5b",
+      "bytes": 533685988
+    },
+    "scalar_auditor_sha256": "08a4c0b3f6949d17cb1a145ac201d451e91cf8b954e3709653f39f6a05bb1d1c",
+    "scalar_audit_sha256": "b0989b14c1e03ecfccf67abbe700c3359de369ce131434dc90abeb972a748bc6",
+    "raw_auditor_sha256": "32fee44a825148176bd34dca48f928635d7b4cce3e36b57409bbf62eb9acf2b3",
+    "raw_audit_sha256": "14c9ee2fa98d70d6fb6c03a57606632bc2ca83ff066cca358c93bb05e5c0ad42",
+    "public_scalar_sha256": "4cc567fac1becaca822956d4d1ba34db8bb35117514e509053f667a7180fbf44",
+    "public_phase_records_sha256": "4eb9d0074459e9222d965c820e8992e595b94e11c68f10fe836e495536ed78ce"
+  },
+  "limitations": [
+    "One plain/coarse pair per arm; observed differences combine instrumentation and run variation, not isolated overhead or statistical significance.",
+    "Disjoint synchronized service costs describe deliberately perturbed execution, not an original critical path or kernel-active time.",
+    "Full shadow owns all its nested heads/probability work; prefill owns its nested commit. Category labels are call-site categories, not totals of all similar operations.",
+    "Signature spans are nested inside target service; never add them again or remove/cache the three fresh model checks.",
+    "Raw token/RNG/work equality does not establish cross-backend probability-law equivalence. Prior numerical failures and negative E2E results remain.",
+    "No confidence admission, measured SPS, scheduler, overlap or speedup benefit was tested.",
+    "Synthetic r2-c256 only; not natural held-out acceptance."
+  ]
+}

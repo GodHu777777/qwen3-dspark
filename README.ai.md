@@ -684,3 +684,29 @@ complete work/decisions between plain and observed calls. The diagnostic is
 bounded to 300 seconds with original GPU limits and no trace export. See
 docs/paired-r2-profile.md. Preparation/testing and native results must be recorded
 separately; no primary speedup can be obtained by subtracting diagnostic spans.
+
+
+R2 coarse diagnostic result (immutable ab4e3a5): pinned AMD GPU-hidden40 CPU
+tests passed (34.599 s, exit0), then the single300-second-bounded native run
+completed all6 batches. See reports/paired-r2-coarse-20261009-ab4e3a5. Plain/coarse
+wall seconds: target3.165032/3.216314, gamma7 7.350081/7.478367; one pair per arm
+is insufficient to isolate observer overhead from run variation. Actual output
+tokens, final RNG bytes and complete round work/decisions match exactly. Root's
+independent audit checked699 rounds,2087 disjoint stage records and386 source
+files. Setup raw audit passed2203 checks/756 reductions with maxabs/RMS0 under
+unchanged limits; prefill/growth prefix execution is not independently replayed.
+Gamma7 synchronized services: full shadow3.412737s, target2.590843s, outside-shadow
+FP64 law/sampling0.834723s, commit/projection/release0.518412s. Pre-drains0.015334s
+and unassigned remainder0.106318s complete the7.478367s observed batch. Signature
+host spans (target381/.758828s, gamma294/.607391s) remain nested inside target
+service; retain all three fresh checks and the previous unsafe-caching veto.
+Worker/controller/SSH and independent release passed, preserving ASR, without
+timeout/retry/trace export. Full shadow is the largest observed gamma category
+but its inner cause and kernel-active/CPU utilization are still unresolved.
+No optimization, new primary rate, SPS, learned admission or scheduler benefit
+was established; preserve the S40 same-backend control and separate vLLM rates.
+The accepted next investigation is a bounded full-shadow inner-stage diagnostic:
+separate backbone, base head, Markov/confidence, FP64 law/draw and issuance/copy
+remainder with complete semantic controls and reversed plain/observed pairs.
+The proposed hypothesis is FP64 law/draw accounting for at least50% of propose
+on both orders; this is not yet a result or a demonstrated optimization.

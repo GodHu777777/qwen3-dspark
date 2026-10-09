@@ -233,9 +233,10 @@ zero-admission full shadow **31.57 output tokens/s**. Fixed-γ7 reaches only
 43.37% of native target-only throughput; no speedup or scheduler benefit is
 established. The separate matched vLLM baseline remains 246.57 tokens/s.
 
-The separate [bounded R2 stage diagnostic](docs/paired-r2-profile.md) compares
-plain and synchronized observations with exact output/RNG/work checks. It is
-intended to choose the next optimization path; phase times are not speedup evidence.
+The [bounded R2 stage result](reports/paired-r2-coarse-20261009-ab4e3a5/README.md)
+passed exact plain/observed output, RNG and work checks. Full shadow accounts for
+45.63% of the observed γ7 batch wall, with target service at 34.64%. These
+perturbed service costs guide investigation; they are not a speedup result.
 
 [实验复盘日志](docs/lab-notebook.md)记录问题、假设、处理方法、验证结果、
 失败尝试和下一步决策，并关联提交与证据。历史结果与进行中的实验分开标注。
