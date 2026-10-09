@@ -1,0 +1,668 @@
+{
+  "status": "failed_profile_with_completed_primary_and_event_diagnostics",
+  "source": {
+    "commit": "f0b0268775a51e33fde3f374aef5e29c2fed4ec2",
+    "source_archive_sha256": "23d26684aa340960a82442354a5bb94220f13663fbeaa906e2d4e2b9dd4a7c5f",
+    "source_files": 360,
+    "protocol_sha256": "d4d011dbf71cfa2ba104b43373d05631fbe2a12bdf1f17bc3d2bbeda3f412472",
+    "profile_protocol_sha256": "8d66c2a1c615456136487f7a9ac0eea2cb4b6fa5810131a3870579b52466502b",
+    "workloads_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+    "checkpoint_step": 1280,
+    "checkpoint_weights_sha256": "d6f21ab3af5187ed181efdbde54118a9ada21b458d9957515a17d6b3693d0de4",
+    "checkpoint_metadata_sha256": "8bb0c5113d02decac5b8a64c585284dd1664f1a5f88f13014713ec1facc7ecc5"
+  },
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "native": {
+      "torch": "2.12.0+rocm7.2",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "hip": "7.2.53211",
+      "device_arch": "gfx1201",
+      "flash_preference": "_ROCmFABackend.AOTriton",
+      "flash_prefer_ck_env": null,
+      "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+    },
+    "setup_seconds": 22.100554563920014,
+    "model_loads": 1,
+    "draft_loads": 1
+  },
+  "protocol": {
+    "version": 1,
+    "method": "paired_r1_two_graphs_and_explicit_eager_tails",
+    "case_ids": [
+      "r1-c64",
+      "r1-c256"
+    ],
+    "arms": [
+      "target_only",
+      "fixed_gamma7_full_shadow"
+    ],
+    "output_tokens": 128,
+    "gamma": 7,
+    "allocation": "max(0,min(7,remaining_output_budget-1)) chosen before full shadow",
+    "proposal_mode": "shadow; all seven positions even when allocation is zero",
+    "graph_query_lengths": [
+      1,
+      8
+    ],
+    "eager_query_lengths": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "prefill_query_lengths": [
+      64,
+      256
+    ],
+    "verification_key_capacity": 383,
+    "slots": 1,
+    "context_capacity": 384,
+    "max_query_tokens": 256,
+    "max_buckets": 10,
+    "max_graph_buckets": 2,
+    "graph_reservation_bytes": 536870912,
+    "graph_byte_budget": 1342177280,
+    "workspace_byte_budget": 67108864,
+    "temperature": 1.0,
+    "eos_ids": [],
+    "probability_policy": "float64_softmax_normalize_cdf_v1",
+    "timeout_seconds": 1800,
+    "cooperative_reserve_seconds": 10,
+    "minimum_free_bytes": 8589934592,
+    "process_allocation_cap_bytes": 6442450944,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "selected_layers": "same trained draft layer IDs in both arms",
+    "setup_validation_limits": {
+      "atol": 0.02,
+      "rtol": 0.02,
+      "max_rms": 0.005
+    },
+    "setup_validation": "once per Q1/Q8: native eager versus first replay, raw selected/final norm/logits/all-layer scratch KV; resident unchanged",
+    "measurement": {
+      "warmup_batches_per_case": 2,
+      "measured_batches_per_case": 5,
+      "diagnostic_batches_per_case": 2
+    },
+    "pair_order": "original two-case schedule; within each pair canonical arms for even repeat, reversed for odd repeat",
+    "setup_scope": "load/register/prime/two captures outside batch timings; reported separately",
+    "resident_cost": "same target, both graph pools and trained draft weights remain resident in both arms",
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "distribution_equivalence_claimed": false
+  },
+  "profile_protocol": {
+    "version": 1,
+    "method": "diagnostic_only_complete_session_observer",
+    "baseline_execution_commit": "192a3578eb71527e02fded28a3beaf487d53859a",
+    "panel": "unchanged 36 full128 batches; warmup2 primary5 diagnostic2 for two cases and two arms",
+    "diagnostic0": "nested host spans and real GPU stream event intervals",
+    "diagnostic1": "complete CPU+ROCm GPU trace with verifiable CPU/runtime/GPU correlation",
+    "primary_observer": false,
+    "max_traces": 4,
+    "trace_bytes": 268435456,
+    "total_trace_bytes": 1073741824,
+    "rss_bytes": 8589934592,
+    "monitor_seconds": 0.25,
+    "max_spans": 100000,
+    "rss_abort": "independent stdlib process samples bound worker RSS; PID/startticks plus pidfd; write failure then SIGKILL only bound worker; monitor86; parent subreaper reaps",
+    "profiler_options": {
+      "record_shapes": false,
+      "profile_memory": false,
+      "with_stack": false
+    },
+    "trace_failure": "preserve partial artifacts and completed samples; no CPU-only fallback or retry"
+  },
+  "completeness": {
+    "expected_samples": 36,
+    "saved_samples": 32,
+    "counts": {
+      "warmup": 8,
+      "primary": 20,
+      "diagnostic": 4
+    },
+    "saved_outputs": 4096,
+    "completed_event_diagnostics": 4,
+    "validated_final_traces": 0,
+    "first_timeline": {
+      "case_id": "r1-c64",
+      "arm": "fixed_gamma7_full_shadow",
+      "repeat": 1,
+      "complete_batch_saved": true,
+      "output_tokens": 128,
+      "round_committed_tokens": 127,
+      "work_output_decisions_match_primary": true,
+      "appended_to_samples": false,
+      "export_finalized": false,
+      "correlation_validation_completed": false
+    },
+    "remaining_timeline_sessions_not_attempted": 3
+  },
+  "failure": {
+    "stage": "trace_export",
+    "reason": "trace_size_limit",
+    "limit_bytes": 268435456,
+    "observed_bytes": 282942823,
+    "retained_partial_bytes": 298398246,
+    "retained_partial_sha256": "c6f78317525859ad9c3f33e6e321bb953fb883a1b0ff2b86040b9508c15b9fcc",
+    "observed_overshoot_bytes": 14507367,
+    "retained_overshoot_bytes": 29962790,
+    "rss_at_abort_bytes": 4236587008,
+    "max_rss_bytes": 4249055232,
+    "rss_limit_bytes": 8589934592,
+    "worker_os_exit": -9,
+    "controller_os_exit": 1,
+    "ssh_os_exit": 1,
+    "timed_out": false,
+    "monitor_python_error": "RuntimeError('Diagnostic resource abort: trace_size_limit')",
+    "worker_python_error_file_present": false,
+    "failed_monitor_os_exit_independently_recorded": false,
+    "profiler_warning": "ROCTracer produced duplicate flow start: 4",
+    "warning_interpretation": "Raw warning retained; export resource failure preceded correlation validation, so this is not a verified correlation-gate result."
+  },
+  "completed_primary": {
+    "arms": {
+      "target_only": [
+        {
+          "case_id": "r1-c64",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 45.040682604338215,
+          "batch_latency_mean_seconds": 2.841875224770047,
+          "batch_latency_median_seconds": 2.803100107004866,
+          "batch_latency_min_seconds": 2.7618603450246155,
+          "batch_latency_max_seconds": 3.020794263924472,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        },
+        {
+          "case_id": "r1-c256",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 44.60403290703562,
+          "batch_latency_mean_seconds": 2.8696956678060817,
+          "batch_latency_median_seconds": 2.859302007011138,
+          "batch_latency_min_seconds": 2.837251501972787,
+          "batch_latency_max_seconds": 2.9059731719316915,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        }
+      ],
+      "fixed_gamma7_full_shadow": [
+        {
+          "case_id": "r1-c64",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 24.31667224445634,
+          "batch_latency_mean_seconds": 5.263878161995672,
+          "batch_latency_median_seconds": 5.259644462959841,
+          "batch_latency_min_seconds": 5.120871423045173,
+          "batch_latency_max_seconds": 5.397744073998183,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        },
+        {
+          "case_id": "r1-c256",
+          "completed_samples": 5,
+          "expected_samples": 5,
+          "complete": true,
+          "pooled_output_tokens_per_second": 20.737555910676466,
+          "batch_latency_mean_seconds": 6.172376366402022,
+          "batch_latency_median_seconds": 6.214693037094548,
+          "batch_latency_min_seconds": 6.059073812910356,
+          "batch_latency_max_seconds": 6.285324291908182,
+          "note": "Offline fixed-batch wall time; not per-request latency, spec SPS, or an arrival-load frontier"
+        }
+      ]
+    },
+    "primary_execution": {
+      "target_only": [
+        {
+          "case_id": "r1-c64",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            2.8516828599385917,
+            3.020794263924472,
+            2.803100107004866,
+            2.7618603450246155,
+            2.7719385479576886
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 635,
+            "actual_gpu_graph_rounds": 635,
+            "eager_tail_query_rows": 0,
+            "eager_tail_rounds": 0,
+            "graph_plan_query_rows": 635,
+            "graph_plan_rounds": 635,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 320,
+            "verification_query_rows": 635,
+            "verification_rounds": 635
+          }
+        },
+        {
+          "case_id": "r1-c256",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            2.8497094470076263,
+            2.9059731719316915,
+            2.859302007011138,
+            2.837251501972787,
+            2.8962422111071646
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 635,
+            "actual_gpu_graph_rounds": 635,
+            "eager_tail_query_rows": 0,
+            "eager_tail_rounds": 0,
+            "graph_plan_query_rows": 635,
+            "graph_plan_rounds": 635,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 1280,
+            "verification_query_rows": 635,
+            "verification_rounds": 635
+          }
+        }
+      ],
+      "fixed_gamma7_full_shadow": [
+        {
+          "case_id": "r1-c64",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            5.153218231978826,
+            5.120871423045173,
+            5.259644462959841,
+            5.397744073998183,
+            5.387912617996335
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 3480,
+            "actual_gpu_graph_rounds": 435,
+            "eager_tail_query_rows": 95,
+            "eager_tail_rounds": 20,
+            "graph_plan_query_rows": 3480,
+            "graph_plan_rounds": 435,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 320,
+            "verification_query_rows": 3575,
+            "verification_rounds": 455
+          }
+        },
+        {
+          "case_id": "r1-c256",
+          "primary_samples": 5,
+          "primary_batch_wall_seconds": [
+            6.059073812910356,
+            6.214693037094548,
+            6.225617169053294,
+            6.285324291908182,
+            6.077173521043733
+          ],
+          "coverage_samples": 5,
+          "totals": {
+            "actual_gpu_graph_query_rows": 3965,
+            "actual_gpu_graph_rounds": 500,
+            "eager_tail_query_rows": 135,
+            "eager_tail_rounds": 30,
+            "graph_plan_query_rows": 3965,
+            "graph_plan_rounds": 500,
+            "prefill_eager_calls": 5,
+            "prefill_eager_rows": 1280,
+            "verification_query_rows": 4100,
+            "verification_rounds": 530
+          }
+        }
+      ]
+    },
+    "paired_comparisons": [
+      {
+        "case_id": "r1-c64",
+        "complete_primary_pair": true,
+        "native_rates": {
+          "target_only": 45.040682604338215,
+          "fixed_gamma7_full_shadow": 24.31667224445634
+        },
+        "speculative_over_target_only_rate_ratio": 0.5398824093779212,
+        "frozen_vllm_output_tokens_per_second": 131.26405631263103,
+        "native_over_frozen_vllm_rate_ratios": {
+          "target_only": 0.343130357765762,
+          "fixed_gamma7_full_shadow": 0.1852500442812877
+        }
+      },
+      {
+        "case_id": "r1-c256",
+        "complete_primary_pair": true,
+        "native_rates": {
+          "target_only": 44.60403290703562,
+          "fixed_gamma7_full_shadow": 20.737555910676466
+        },
+        "speculative_over_target_only_rate_ratio": 0.4649255809199582,
+        "frozen_vllm_output_tokens_per_second": 127.33989818625602,
+        "native_over_frozen_vllm_rate_ratios": {
+          "target_only": 0.35027539319840445,
+          "fixed_gamma7_full_shadow": 0.16285199066473496
+        }
+      }
+    ]
+  },
+  "frozen_vllm_reference": {
+    "source_commit": "700bfa60746f1315baaeec5ead28cc5ee553ae52",
+    "workload_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+    "files_sha256": {
+      "reports/vllm-offline-benchmark-20261009-700bfa6/source-identity.json": "47b7409e26878792bc7946f468dda89c5e076378b548042bb7e0dbbc69ca06d9",
+      "reports/vllm-offline-benchmark-20261009-700bfa6/scalar-samples.jsonl": "69c1ece50adea40555005b3640caa2781f98609014a3258ffe11ff579a6b11f4",
+      "reports/vllm-offline-benchmark-20261009-700bfa6/primary-metrics.json": "47a5602db4f0b644a8166fbac886f4bd9dca4df661644cf23fc2a860dde8669e"
+    },
+    "cells": [
+      {
+        "case_id": "r1-c64",
+        "batch_wall_seconds": [
+          0.9685598809737712,
+          0.9720953319920227,
+          0.9811986440327018,
+          0.984228782937862,
+          0.9695856730686501
+        ],
+        "pooled_output_tokens_per_second": 131.26405631263103,
+        "completed_samples": 5
+      },
+      {
+        "case_id": "r1-c256",
+        "batch_wall_seconds": [
+          1.000916232005693,
+          1.0182816300075501,
+          1.0057085859589279,
+          0.9998146409634501,
+          1.0011978030670434
+        ],
+        "pooled_output_tokens_per_second": 127.33989818625602,
+        "completed_samples": 5
+      }
+    ],
+    "comparison_scope": "Frozen strong execution-stack baseline; different FP64/native implementation, not target-law equivalence"
+  },
+  "event_diagnostics": [
+    {
+      "case_id": "r1-c256",
+      "arm": "fixed_gamma7_full_shadow",
+      "status": "completed",
+      "complete_session": true,
+      "observer_restored": true,
+      "monitor_stop_acknowledged": true,
+      "monitor_os_exit": 0,
+      "max_rss_bytes": 2545930240,
+      "monitor_samples": 32,
+      "max_sampling_gap_seconds": 0.39004785497672856
+    },
+    {
+      "case_id": "r1-c256",
+      "arm": "target_only",
+      "status": "completed",
+      "complete_session": true,
+      "observer_restored": true,
+      "monitor_stop_acknowledged": true,
+      "monitor_os_exit": 0,
+      "max_rss_bytes": 2542616576,
+      "monitor_samples": 16,
+      "max_sampling_gap_seconds": 0.25352383498102427
+    },
+    {
+      "case_id": "r1-c64",
+      "arm": "fixed_gamma7_full_shadow",
+      "status": "completed",
+      "complete_session": true,
+      "observer_restored": true,
+      "monitor_stop_acknowledged": true,
+      "monitor_os_exit": 0,
+      "max_rss_bytes": 2542612480,
+      "monitor_samples": 29,
+      "max_sampling_gap_seconds": 0.2527088869828731
+    },
+    {
+      "case_id": "r1-c64",
+      "arm": "target_only",
+      "status": "completed",
+      "complete_session": true,
+      "observer_restored": true,
+      "monitor_stop_acknowledged": true,
+      "monitor_os_exit": 0,
+      "max_rss_bytes": 2537230336,
+      "monitor_samples": 16,
+      "max_sampling_gap_seconds": 0.25211151398252696
+    }
+  ],
+  "audit": {
+    "root_scalar_source": {
+      "status": "passed_scalar_and_source_audit_of_failed_run",
+      "source_commit": "f0b0268775a51e33fde3f374aef5e29c2fed4ec2",
+      "archive_sha256": "23d26684aa340960a82442354a5bb94220f13663fbeaa906e2d4e2b9dd4a7c5f",
+      "source_files": 360,
+      "samples": 32,
+      "counts": {
+        "warmup": 8,
+        "primary": 20,
+        "diagnostic": 4
+      },
+      "completed_output_tokens_in_samples": 4096,
+      "same_path_outputs_work_decisions_equal": true,
+      "primary_pooled_tps": {
+        "r1-c64": {
+          "target_only": 45.040682604338215,
+          "fixed_gamma7_full_shadow": 24.31667224445634
+        },
+        "r1-c256": {
+          "target_only": 44.60403290703562,
+          "fixed_gamma7_full_shadow": 20.737555910676466
+        }
+      },
+      "complete_profile": false,
+      "trace_or_tensor_audit_performed": false
+    },
+    "scalar_files_equal_to_full_archive": 55,
+    "first_timeline_same_path_invariant": "d150876d7242b2b05e303bf48bcacb831aa631082ae3c8c8ba94a0f847a47d49",
+    "archive_verification": {
+      "passed": true,
+      "sha256": "8f5dd4433bafabdf3555be3b80069827af36c899a3e987904041feaaf4d2383d",
+      "bytes": 123145901
+    },
+    "controller_post_input_integrity": {
+      "passed": true
+    },
+    "worker_post_input_integrity_present": false,
+    "post_source_integrity": {
+      "passed": true,
+      "files": 360,
+      "commit": "f0b0268775a51e33fde3f374aef5e29c2fed4ec2"
+    },
+    "failed_monitor_saved_sample_count": 117,
+    "failed_monitor_max_recorded_gap_seconds": 0.4933502629864961,
+    "raw_tensor_audit_repeated": false
+  },
+  "release": {
+    "passed": true,
+    "all_recorded_controller_worker_monitor_identities_absent": true,
+    "preserved_asr_identity_unchanged": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "kfd_only_preserved_asr": true,
+    "free_vram_bytes": 25252777984
+  },
+  "limitations": {
+    "complete_profile": false,
+    "gpu_kernel_attribution_established": false,
+    "diagnostic0_gpu_events_are_stream_intervals_not_kernel_active_time": true,
+    "distribution_equivalence_claimed": false,
+    "prior_target_numerical_gate": "failed_unchanged",
+    "retry_performed": false
+  },
+  "diagnostic0_independent_findings": {
+    "cells": {
+      "r1-c256-fixed_gamma7_full_shadow": {
+        "diag0_wall_seconds": 7.173313751933165,
+        "observer_wall_increase_fraction": 0.1621640234026438,
+        "rounds": 106,
+        "model_signature": {
+          "calls": 300,
+          "exclusive_host_seconds": 0.6678358123172075,
+          "inclusive_host_seconds": 0.6678358123172075,
+          "event_interval_union_seconds": 0.6674214019775391
+        },
+        "draft_propose": {
+          "calls": 106,
+          "exclusive_host_seconds": 0.4899558511096984,
+          "inclusive_host_seconds": 3.4445374904898927,
+          "event_interval_union_seconds": 3.444383392333984
+        },
+        "graph_vs_tail": {
+          "graph": {
+            "rounds": 100,
+            "q_counts": {
+              "1": 1,
+              "8": 99
+            },
+            "round_host_seconds": 6.4995948150753975,
+            "round_event_union_seconds": 6.496732749938965
+          },
+          "eager_tail": {
+            "rounds": 6,
+            "q_counts": {
+              "2": 1,
+              "3": 1,
+              "4": 1,
+              "5": 1,
+              "6": 1,
+              "7": 1
+            },
+            "round_host_seconds": 0.5700091129401699,
+            "round_event_union_seconds": 0.5698447265625
+          }
+        }
+      },
+      "r1-c256-target_only": {
+        "diag0_wall_seconds": 3.0598887449596077,
+        "observer_wall_increase_fraction": 0.06627639275036135,
+        "rounds": 127,
+        "model_signature": {
+          "calls": 381,
+          "exclusive_host_seconds": 0.8559567010961473,
+          "inclusive_host_seconds": 0.8559567010961473,
+          "event_interval_union_seconds": 0.8509743041992187
+        },
+        "draft_propose": null,
+        "graph_vs_tail": {
+          "graph": {
+            "rounds": 127,
+            "q_counts": {
+              "1": 127
+            },
+            "round_host_seconds": 2.9973588258726522,
+            "round_event_union_seconds": 2.9944561042785645
+          },
+          "eager_tail": {
+            "rounds": 0,
+            "q_counts": {},
+            "round_host_seconds": 0.0,
+            "round_event_union_seconds": 0.0
+          }
+        }
+      },
+      "r1-c64-fixed_gamma7_full_shadow": {
+        "diag0_wall_seconds": 6.282196642016061,
+        "observer_wall_increase_fraction": 0.1934540368681934,
+        "rounds": 91,
+        "model_signature": {
+          "calls": 261,
+          "exclusive_host_seconds": 0.5915536525426432,
+          "inclusive_host_seconds": 0.5915536525426432,
+          "event_interval_union_seconds": 0.5892282028198242
+        },
+        "draft_propose": {
+          "calls": 91,
+          "exclusive_host_seconds": 0.4385917370673269,
+          "inclusive_host_seconds": 3.0444198349723592,
+          "event_interval_union_seconds": 3.0442745132446287
+        },
+        "graph_vs_tail": {
+          "graph": {
+            "rounds": 87,
+            "q_counts": {
+              "8": 87
+            },
+            "round_host_seconds": 5.820345354964957,
+            "round_event_union_seconds": 5.817799797058106
+          },
+          "eager_tail": {
+            "rounds": 4,
+            "q_counts": {
+              "2": 1,
+              "4": 1,
+              "6": 1,
+              "7": 1
+            },
+            "round_host_seconds": 0.3908238550648093,
+            "round_event_union_seconds": 0.39070703125
+          }
+        }
+      },
+      "r1-c64-target_only": {
+        "diag0_wall_seconds": 3.188520202995278,
+        "observer_wall_increase_fraction": 0.12197755031742474,
+        "rounds": 127,
+        "model_signature": {
+          "calls": 381,
+          "exclusive_host_seconds": 1.052963151712902,
+          "inclusive_host_seconds": 1.052963151712902,
+          "event_interval_union_seconds": 1.0499827575683593
+        },
+        "draft_propose": null,
+        "graph_vs_tail": {
+          "graph": {
+            "rounds": 127,
+            "q_counts": {
+              "1": 127
+            },
+            "round_host_seconds": 3.1272349555511028,
+            "round_event_union_seconds": 3.124295570373535
+          },
+          "eager_tail": {
+            "rounds": 0,
+            "q_counts": {},
+            "round_host_seconds": 0.0,
+            "round_event_union_seconds": 0.0
+          }
+        }
+      }
+    },
+    "comparisons": {
+      "r1-c64": {
+        "primary_spec_over_target": 0.5398824093779212,
+        "diagnostic_wall_gap_seconds": 3.0936764390207827,
+        "diagnostic_spec_wall_minus_entire_tail_rounds_seconds": 5.891372786951251,
+        "diagnostic_target_wall_seconds": 3.188520202995278,
+        "draft_propose_share_of_spec_wall": 0.4846107195389151,
+        "spec_probability_sampling_exclusive_seconds": 1.5948938729707152,
+        "target_probability_sampling_exclusive_seconds": 0.2589284412097186
+      },
+      "r1-c256": {
+        "primary_spec_over_target": 0.4649255809199582,
+        "diagnostic_wall_gap_seconds": 4.113425006973557,
+        "diagnostic_spec_wall_minus_entire_tail_rounds_seconds": 6.603304638992995,
+        "diagnostic_target_wall_seconds": 3.0598887449596077,
+        "draft_propose_share_of_spec_wall": 0.48018776392732165,
+        "spec_probability_sampling_exclusive_seconds": 1.6933057534042746,
+        "target_probability_sampling_exclusive_seconds": 0.2696698240470141
+      }
+    },
+    "scope": "One instrumented full session per case/arm; observed host duration includes synchronization and observer costs; stream events are not kernel-active time. No completed primary attribution or common-timeline attribution.",
+    "next_hypothesis": "CPU-only decomposition of model-signature validation and an explicit immutable-model lease safety experiment; do not simply remove validation or assume cached signatures remain valid."
+  }
+}

@@ -26,7 +26,7 @@ throughput (8.2–14.2 times the batch time). This eager full-shadow baseline ha
 no capacity scheduler or graphs. It exposes an engine performance gap; it does
 not isolate the cost of speculation from the different execution backends.
 These are synthetic fixed-output workloads, and target numerical differences
-remain unresolved. Measured capacity prediction, graph-backed end-to-end performance
+remain unresolved. Measured capacity prediction, multi-request graph-backed end-to-end performance
 and scheduling overlap remain unfinished. Local verification rounds/s and output tok/s are
 different metrics.
 
@@ -54,6 +54,12 @@ control. The matched vLLM rates remain 131.26/127.34. Most verification rounds
 used actual graphs; eager tails were included in timing. This synthetic workload
 shows both a target-stack gap and additional speculation cost, not a speedup.
 It does not identify the individual operation responsible for either gap.
+A [follow-up diagnostic profile](reports/paired-profile-20261009-f0b0268/README.md)
+preserved all 20 primary samples and four complete event diagnostics, but failed
+while exporting its first full GPU trace: the file exceeded the predeclared
+256 MiB limit. The independent monitor terminated the worker and resources were
+released. Host spans and GPU stream intervals remain available; complete
+CPU/runtime/GPU attribution was not established. No speedup is claimed.
 The [experiment notebook](docs/lab-notebook.md) preserves the event-ownership,
 cancellation and memory-accounting failures found during review and their fixes.
 

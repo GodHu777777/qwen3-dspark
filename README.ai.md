@@ -538,3 +538,19 @@ reports/paired-r1-benchmark-20261009-192a357 and notebook S31. Q1/Q8 raw startup
 artifacts independently matched native eager at the frozen limits. This resolves
 the missing same-stack attribution measurement, not per-operation bottleneck
 attribution, numerical-law equivalence, multi-request capacity or actual overlap.
+
+Paired diagnostic profile (immutable f0b0268): the diagnostic-only observer and
+independent pidfd resource monitor passed 15 pinned Linux CPU tests, including
+native GIL-held sampling/termination. Independent review closed invalid trace-ID
+attribution and GIL-blocked thread-monitor defects; see notebook S32. The single
+GPU run then preserved 32 samples (8 warmup, 20 primary, 4 event diagnostics) but
+failed exporting its first full-session trace: observed 282942823 bytes exceeded
+the frozen 268435456-byte limit; final partial bytes were 298398246 after sampled
+overshoot. Worker -9, controller/SSH 1, no timeout or retry; independent release
+preserved ASR. Post-run source hashes and controller input-integrity checks passed;
+the killed worker did not write its post-input check. Primary rates were
+45.0407/44.6040 target-only and 24.3167/20.7376 speculative tok/s for C64/C256.
+See reports/paired-profile-20261009-f0b0268. Event intervals include dispatch gaps
+and host waits overlap earlier GPU work; neither proves kernel-active attribution.
+The full CPU/runtime/GPU timeline remains unavailable, and historical vLLM,
+quality/calibration and numerical limitations remain unchanged.

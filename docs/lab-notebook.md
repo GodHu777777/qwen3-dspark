@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（S32 配对profile的CPU修复闭环）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32 的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S33 配对profile的trace限额失败与部分留证）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32/S33 的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,7 +16,7 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
-- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)、[S33 trace限额失败与部分诊断](#paired-profile-trace-limit)。
 - 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)、[S31 配对R1完整请求负收益](#paired-r1-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
@@ -1056,4 +1056,16 @@ Speculative吞吐仅同栈target-only的51.57%/43.63%，两臂也都低于保留
 
 **独立复审与来源核验。** Direction复审冻结五文件，19项trace反例/对照与8项模拟Linux syscall的monitor边界通过，结论为两个原P1无剩余blocker；EOF、坏命令、身份改变与写失败的模拟检查不冒称真实内核实验，也未重复完整suite或运行GPU。记录者核其四个evidence SHA与handoff SHA **dd80144e…**、五文件当前/冻结SHA一致，独立从markers/samples重算上述39次与gap；Linux archive SHA **aeff6612…**一致。原Git base **0f4c1554…**的archive逐字节匹配，加五overlay后360文件逐manifest一致。Root首次source audit曾OS1，因为误把仅含五overlay的source目录当作完整解包树；纠正重建后OS0，错误属于审计脚本的路径假设，不属于源码、CPU测试或GPU实验。初始准备/失败审查留在 `output/paired-profile-implementation-20261009/`、`output/paired-profile-independent-review-20261009/`，修复/Linux与复审分别留在相应的 `-v2/`；均为本地未发布证据。
 
-**当前决定与边界。** 五文件修复已归档为commit **f0b0268775a51e33fde3f374aef5e29c2fed4ec2**，root报告已push；通过范围是CPU准备、资源监控契约及两个P1的独立复审，尚无GPU profile结果、真实ROCm correlation能力、算子瓶颈归因或收益结论。Root已授权core在该immutable source与fresh preflight后执行一次GPU profile，结果另记，不把启动当完成。旧whole-Qwen layer26 RMS、cross-backend/sequential law、endpoint TV与S31负收益继续保留；多请求、finite physical-B/capacity家族、t−2、ZOS及CPU/GPU overlap目标未被本轮缩小。本轮journal唤醒失败后由sol_data临时独占记录，root审核提交；记录者只核本地源码/标量/哈希并维护文档，未改实现、运行测试/GPU、stage/commit/push或读private/final-test样本。
+**当前决定与边界。** 五文件修复已归档为commit **f0b0268775a51e33fde3f374aef5e29c2fed4ec2**，root报告已push；本节记录截止于CPU准备交接：通过范围是CPU准备、资源监控契约及两个P1的独立复审，不提供真实ROCm correlation能力、算子瓶颈归因或收益结论。Root随后授权core在该immutable source与fresh preflight后执行一次GPU profile，执行结果另记，不把启动当完成。旧whole-Qwen layer26 RMS、cross-backend/sequential law、endpoint TV与S31负收益继续保留；多请求、finite physical-B/capacity家族、t−2、ZOS及CPU/GPU overlap目标未被本轮缩小。本轮journal唤醒失败后由sol_data临时独占记录，root审核提交；记录者只核本地源码/标量/哈希并维护文档，未改实现、运行测试/GPU、stage/commit/push或读private/final-test样本。
+
+
+<a id="paired-profile-trace-limit"></a>
+## 2026-10-09 — S33：唯一GPU profile在trace导出触及文件限额，未完成完整timeline
+
+**执行与失败。** 在S32修复commit **f0b0268775a51e33fde3f374aef5e29c2fed4ec2**、fresh source/binding及ASR/KFD/free guard核验后，core仅执行授权一次原36批profile。四项diagnostic0完整session与observer恢复均成功；首个diagnostic1（C64/spec）底层完整batch已结束，停在trace_export，独立monitor观察单个 `trace.json.partial.tmp` 为 **282942823 bytes > 268435456-byte cap** 后abort。回收时文件为 **298398246 bytes**，这是采样检查间的overshoot；RSS最大 **4249055232 bytes < 8GiB**，不是本次触发项。worker OS **−9**、controller/SSH **1**、timed_out=false、result failed，不能写成完整profile成功或timeout/OOM。未产生通过导出/解析/关联验证的最终trace；原ROCTracer duplicate flow start:4警告保留，但abort早于关联检查，警告不等于关联gate失败，也不据残缺文件推测ROCm correlation能力或具体GPU瓶颈。
+
+**已留存范围。** `samples.jsonl`只有 **32/36批 = 8 warmup + 20 primary + 4 diagnostic0**，完整保存输出4096 tokens；已结束但导出失败的diagnostic1未计入这32批。每cell五次primary均保留，pooled rate重算为C64 target/spec **45.040683/24.316672 tok/s**，C256 **44.604033/20.737556 tok/s**，仍无加速，不能把新诊断当E2E改善。Root的scalar审计核同路径outputs/work/decisions一致；记录者独立重算样本/输出数和四项rate。Diagnostic0可保留host inclusive/exclusive spans与GPU stream event区间作为有限成本证据，event含dispatch gaps且不是kernel-active时间；CPU/GPU重叠不相加。Diagnostic1虽留spans/completed batch，完整CPU+ROCm timeline及可验证kernel关联仍缺失。
+
+**来源、回收与释放。** 本地未发布证据在 `output/paired-profile-gpu-20261009-f0b0268/`，完整归档 **123145901 bytes**、SHA **8f5dd443…2383d**。Root核55个early scalar文件逐字节与complete一致，记录者读取审计留证；未重跑setup raw tensors或验证残缺timeline。记录者核source.tar逐字节匹配f0b0268 Git archive，pre/post-source均360文件通过、controller post-input passed（worker被SIGKILL后未写该留证）；直接读取independent-release确认controller/worker/monitor共七个owned identities消失，原ASR身份ready/nonbusy、KFD仅ASR，free **25252777984 bytes**。这些是失败后的释放观察，不作为未来运行许可或launch readiness；原失败result、partial文件与已完成samples保留，未重复launch。[公开失败报告](../reports/paired-profile-20261009-f0b0268/README.md)与[聚合证据](../reports/paired-profile-20261009-f0b0268/aggregate.json)保留失败口径，S31仍是已完成的配对E2E结果。
+
+**有限分解与下一决策。** Direction对四个diagnostic0的spans/completed-batch独立推导，记录者核三份review证据及八份输入SHA一致。每cell仅一次diagnostic0，较primary mean有6.6%–19.3%观察扰动，以下不从primary计时抵扣：spec整段tail rounds占wall **6.22%/7.95%**，即假设全部消失，剩余5.891/6.603秒仍高于diag target的3.189/3.060秒，不能把补Q2–Q7 graph当作主差距解释。Draft-propose父区间约48% wall，与其子阶段不相加；host exclusive包含同步等待/observer成本，不称纯CPU计算。共同host候选_model_signature在target每轮prepare/submit/finish共381次，exclusive1.053/0.856秒，需先做CPU配置序列化、tensor枚举、元数据/_version扫描的成本拆分；建议仅在封闭同步round研究显式immutable-model lease，验证parameter/buffer替换、in-place版本、config/layer/training变更及各提交边界的fail-closed，公共异步入口保留原检查，不能简单缓存signature。该建议尚未执行，也不保证低接受率spec胜出；不扩大trace限额或重复GPU launch。完整timeline、kernel-active归因及跨栈差距仍未证明，旧RMS/law/TV限制与多请求、capacity/t−2、ZOS/overlap目标不变。记录者仅核本地标量/哈希并写日志，无remote/GPU/实现修改或commit/push。
