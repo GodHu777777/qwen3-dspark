@@ -443,3 +443,13 @@ Immutable 933ed88 subsequently passed all 239 tests on pinned AMD Torch 2.12.0
 / Transformers 5.17.0 with GPUs hidden (16.039 s, test/SSH exit 0, no skips).
 The exact Git archive and eight evidence hashes were independently verified;
 see output/persistent-sampling-pinned-cpu-20261009-933ed88. This is CPU evidence.
+
+Same-backend target-only control: `packed_target_sampling.PackedTargetOnlySession`
+uses the explicit target strategy with one anchor query and original FP64
+categorical draw per active request, without draft/shadow work. Admission projects
+only R final hidden rows. Eight real tiny-Qwen CPU tests compare actual probability
+rows, RNG traces, outputs and all-layer KV against the independent cached target
+reference, including EOS, budgets, inactive requests and cleanup failures.
+See docs/packed-target-only.md and output/packed-target-only-cpu-20261009.
+This is preparation for paired E2E attribution, not a performance result or a
+replacement for the strong vLLM baseline. Graph composition is separately tested.
