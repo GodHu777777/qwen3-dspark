@@ -670,3 +670,17 @@ critical-path diagnostic (two arms, six complete batches, 300-second window).
 Preserve plain controls, output/RNG/work invariants and original primary rates;
 measure observer perturbation. No Kineto trace, retry or new speed claim. This
 is a proposed follow-up, not implemented or executed by the R2 result commit.
+
+
+R2 coarse diagnostic development: `scripts/profile_paired_r2.py` is an additive
+observer of the original complete-session runner. Its fixed six-batch plan uses
+target-only and full-shadow gamma7, each with warmup, plain and coarse-sync calls.
+Outer actual-call intervals are nonoverlapping: shadow includes its internal
+heads/probability work, and prefill includes its internal commit. Record pre-fence
+drain separately from body plus post-fence service, retain unassigned remainder,
+and keep signature spans nested rather than adding them to parent totals.
+Timer-external semantic evidence must compare actual outputs, final RNG state and
+complete work/decisions between plain and observed calls. The diagnostic is
+bounded to 300 seconds with original GPU limits and no trace export. See
+docs/paired-r2-profile.md. Preparation/testing and native results must be recorded
+separately; no primary speedup can be obtained by subtracting diagnostic spans.
