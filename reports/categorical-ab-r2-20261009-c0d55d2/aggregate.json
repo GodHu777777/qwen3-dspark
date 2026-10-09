@@ -1,0 +1,517 @@
+{
+  "status": "completed_and_independently_audited",
+  "source_commit": "c0d55d23c13c6514a825aacf90dc074f8bd3a05c",
+  "protocol": {
+    "version": 1,
+    "method": "observer_free_original_r2_categorical_ab",
+    "case_ids": [
+      "r2-c256"
+    ],
+    "arms": [
+      "target_only",
+      "fixed_gamma7_full_shadow"
+    ],
+    "output_tokens": 128,
+    "gamma": 7,
+    "allocation": "fixed gamma7 clipped by remaining budget, or zero; chosen before all-seven-position shadow draws",
+    "proposal_mode": "shadow; all seven positions even when allocation is zero",
+    "graph_query_lengths": [
+      2,
+      16
+    ],
+    "eager_query_lengths": null,
+    "prefill_query_lengths": [
+      256,
+      256
+    ],
+    "verification_key_capacity": 766,
+    "slots": 2,
+    "context_capacity": 384,
+    "max_query_tokens": 512,
+    "max_buckets": 25,
+    "max_graph_buckets": 2,
+    "graph_reservation_bytes": 536870912,
+    "graph_byte_budget": 1342177280,
+    "workspace_byte_budget": 67108864,
+    "temperature": 1.0,
+    "eos_ids": [],
+    "probability_policy": "float64_softmax_normalize_cdf_v1",
+    "timeout_seconds": 300,
+    "cooperative_reserve_seconds": 10,
+    "minimum_free_bytes": 8589934592,
+    "process_allocation_cap_bytes": 6442450944,
+    "model_loads": 1,
+    "draft_loads": 1,
+    "selected_layers": "same trained draft layer IDs in both arms",
+    "setup_validation_limits": {
+      "atol": 0.02,
+      "rtol": 0.02,
+      "max_rms": 0.005
+    },
+    "setup_validation": "each B2/B16 at C256/256 and after committed eager growth to C368/375; pooled and per-request fixed limits, raw outputs before assertions",
+    "measurement": {
+      "warmup_per_arm_variant": 1,
+      "primary_per_arm_variant": 4
+    },
+    "pair_order": "AB/BA/BA/AB per arm; arm order target,gamma / gamma,target / target,gamma / gamma,target",
+    "setup_scope": "load/register/prime/two captures, native eager/graph validation and actual context growth outside samples; separately reported",
+    "resident_cost": "Same target, trained draft and both R2 graph pools remain resident across all20 batches and both arms/variants",
+    "capacity_scheduler_integrated": false,
+    "overlap": false,
+    "all_graph": false,
+    "full_six_case_panel": false,
+    "distribution_equivalence_claimed": false,
+    "request_count": 2,
+    "graph_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        16
+      ]
+    ],
+    "verification_shapes": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        2,
+        10
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        2,
+        13
+      ],
+      [
+        2,
+        14
+      ],
+      [
+        2,
+        15
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        1,
+        8
+      ]
+    ],
+    "maximum_key_length": 383,
+    "setup_growth_query_lengths": [
+      112,
+      119
+    ],
+    "setup_growth_contexts": [
+      368,
+      375
+    ],
+    "measured_sps": false,
+    "current_confidence_admission": false,
+    "variants": [
+      "A",
+      "B"
+    ],
+    "schedule": [
+      {
+        "phase": "warmup",
+        "repeat": 0,
+        "arm": "target_only",
+        "variant": "A"
+      },
+      {
+        "phase": "warmup",
+        "repeat": 0,
+        "arm": "target_only",
+        "variant": "B"
+      },
+      {
+        "phase": "warmup",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "A"
+      },
+      {
+        "phase": "warmup",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 0,
+        "arm": "target_only",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 0,
+        "arm": "target_only",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 0,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 1,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 1,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 1,
+        "arm": "target_only",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 1,
+        "arm": "target_only",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 2,
+        "arm": "target_only",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 2,
+        "arm": "target_only",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 2,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 2,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 3,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 3,
+        "arm": "fixed_gamma7_full_shadow",
+        "variant": "B"
+      },
+      {
+        "phase": "primary",
+        "repeat": 3,
+        "arm": "target_only",
+        "variant": "A"
+      },
+      {
+        "phase": "primary",
+        "repeat": 3,
+        "arm": "target_only",
+        "variant": "B"
+      }
+    ],
+    "variant_binding": "Direct function aliases in tensor_sampling, packed_sampling, packed_target_sampling bound before batch and restored after; no wrapper in timed sampler path",
+    "categorical_gate": "Bounded exact original/candidate cases on actual execution device before all warmups, independent generators, source identity and raw reconstructible results saved",
+    "screening_rule": "Each arm pooled B/A throughput >=1.02 AND at least3/4 paired complete batches faster for B; both arms must pass",
+    "screening_not_statistical_confidence": true,
+    "invariant": "All same-arm raw tokens/final RNG bytes/round decisions/work/execution equal across warmup and primary A/B rows",
+    "observer": false,
+    "stage_fences": false,
+    "signature_wrappers": false,
+    "trace_export": false,
+    "kineto": false,
+    "retry": false,
+    "timing_scope": "Original complete-session timer including unchanged validation and any candidate scalar synchronization; no stage subtraction",
+    "production_default_changed": false
+  },
+  "sample_count": 20,
+  "output_tokens": 5120,
+  "rounds_checked": 2330,
+  "source_files": 404,
+  "comparisons": {
+    "target_only": {
+      "pairs": [
+        {
+          "repeat": 0,
+          "order": "AB",
+          "a_seconds": 3.146729054977186,
+          "b_seconds": 3.2772919629933313,
+          "b_over_a_wall_ratio": 1.0414916269354788,
+          "b_over_a_throughput_ratio": 0.960161343728163,
+          "b_faster": false
+        },
+        {
+          "repeat": 1,
+          "order": "BA",
+          "a_seconds": 3.161459765979089,
+          "b_seconds": 3.119763939990662,
+          "b_over_a_wall_ratio": 0.9868112109358084,
+          "b_over_a_throughput_ratio": 1.0133650579949172,
+          "b_faster": true
+        },
+        {
+          "repeat": 2,
+          "order": "BA",
+          "a_seconds": 3.115389615064487,
+          "b_seconds": 3.191723204916343,
+          "b_over_a_wall_ratio": 1.0245021006306063,
+          "b_over_a_throughput_ratio": 0.9760838942003879,
+          "b_faster": false
+        },
+        {
+          "repeat": 3,
+          "order": "AB",
+          "a_seconds": 3.1776699599577114,
+          "b_seconds": 3.130097543937154,
+          "b_over_a_wall_ratio": 0.9850291513530277,
+          "b_over_a_throughput_ratio": 1.0151983813132925,
+          "b_faster": true
+        }
+      ],
+      "pooled_output_tokens_per_second": {
+        "A": 81.2617899292261,
+        "B": 80.5102547992761
+      },
+      "pooled_b_over_a_throughput_ratio": 0.9907516788566368,
+      "b_faster_pairs": 2,
+      "screening_passed": false,
+      "all_ten_batches_raw_semantics_equal": true
+    },
+    "fixed_gamma7_full_shadow": {
+      "pairs": [
+        {
+          "repeat": 0,
+          "order": "AB",
+          "a_seconds": 7.181306185084395,
+          "b_seconds": 7.401212564087473,
+          "b_over_a_wall_ratio": 1.0306220586249093,
+          "b_over_a_throughput_ratio": 0.9702877903993572,
+          "b_faster": false
+        },
+        {
+          "repeat": 1,
+          "order": "BA",
+          "a_seconds": 7.240453823003918,
+          "b_seconds": 7.21855966001749,
+          "b_over_a_wall_ratio": 0.9969761338830908,
+          "b_over_a_throughput_ratio": 1.0030330376165895,
+          "b_faster": true
+        },
+        {
+          "repeat": 2,
+          "order": "BA",
+          "a_seconds": 7.35237907001283,
+          "b_seconds": 7.402412645984441,
+          "b_over_a_wall_ratio": 1.0068050865570406,
+          "b_over_a_throughput_ratio": 0.9932409096379202,
+          "b_faster": false
+        },
+        {
+          "repeat": 3,
+          "order": "AB",
+          "a_seconds": 7.341048762085848,
+          "b_seconds": 7.66256235295441,
+          "b_over_a_wall_ratio": 1.0437966837284989,
+          "b_over_a_throughput_ratio": 0.9580409821076891,
+          "b_faster": false
+        }
+      ],
+      "pooled_output_tokens_per_second": {
+        "A": 35.17064721068354,
+        "B": 34.49583020889208
+      },
+      "pooled_b_over_a_throughput_ratio": 0.9808130627295799,
+      "b_faster_pairs": 1,
+      "screening_passed": false,
+      "all_ten_batches_raw_semantics_equal": true
+    }
+  },
+  "screening_passed": false,
+  "decision": "retain_original_no_demonstrated_useful_e2e_gain",
+  "production_default_changed": false,
+  "large_vocabulary_gate_tensor_audit": {
+    "status": "passed",
+    "scope": "CPU audit of retained actual native large-vocabulary categorical gate tensors; no model/GPU execution",
+    "cases": [
+      {
+        "case": "native_vocab_dense",
+        "size": 151936,
+        "original_candidate_tensor_equal": true,
+        "original_candidate_bytes_equal": true,
+        "matches_reconstructed_law": true,
+        "file_sha256": "b143decc4fc4edae1b279477428f059e75ccb4694fad23d5b2f4dd81e54e6751"
+      },
+      {
+        "case": "native_vocab_strided_zero_tail",
+        "size": 151936,
+        "original_candidate_tensor_equal": true,
+        "original_candidate_bytes_equal": true,
+        "matches_reconstructed_law": true,
+        "file_sha256": "904fe2f0b8c702e28d9512464280a90022785c44a5ccd796f9112a4928e64900"
+      }
+    ],
+    "gate_sha256": "5e46df96bbeeedd1da9dce914625c2d8df4328710469224f23c0510d9735c73a",
+    "auditor_sha256": "5db624b542f6f3b87686424283763aa394ab0da9dfe56f9abbe74fd2344c2e44"
+  },
+  "native_categorical_gate": {
+    "status": "completed",
+    "scope": "native_device",
+    "cases": 15,
+    "all_actual_outcomes_exactly_equal": true,
+    "sha256": "5e46df96bbeeedd1da9dce914625c2d8df4328710469224f23c0510d9735c73a"
+  },
+  "raw_setup_audit": {
+    "status": "passed",
+    "checks_total": 2203,
+    "failed_checks": 0,
+    "reduction_count": 756,
+    "failed_reductions": 0,
+    "limitations": [
+      "Raw verification input tokens are checked against the bound original workload. Prefill/growth token arrays are not saved separately; their planned bytes can be reconstructed from frozen source/protocol, but this audit does not independently replay their model execution."
+    ]
+  },
+  "raw_setup_max_abs": 0.0,
+  "raw_setup_max_rms": 0.0,
+  "runtime": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "device_arch": "gfx1201",
+    "setup_seconds": 24.575608295970596
+  },
+  "execution": {
+    "worker_os_exit": 0,
+    "controller_os_exit": 0,
+    "ssh_os_exit": 0,
+    "timed_out": false,
+    "independent_release_passed": true,
+    "remaining_owned_count": 0,
+    "asr_ready": true
+  },
+  "setup": {
+    "workspace_bytes": 24876570,
+    "graph_reserved_bytes": 1073963152,
+    "resident_and_scratch_bytes": 146800640,
+    "buckets": 25,
+    "graph_count": 2
+  },
+  "historical_primary_baselines": {
+    "source_commit": "17da0b4cd7829d94d80720bc215d22583285e827",
+    "target_only_tokens_per_second": 80.66607523997888,
+    "fixed_gamma7_tokens_per_second": 34.98679923430116,
+    "zero_admission_tokens_per_second": 31.565220453643438,
+    "separate_vllm_tokens_per_second": 246.56672736039107
+  },
+  "provenance": {
+    "source_archive_sha256": "d36b68a4a583bdfc95daca4790232c21d5bde68f05e32305b7e9b4773c54ec4b",
+    "evidence_archive": {
+      "passed": true,
+      "sha256": "717acceac3828ed472561ca7c533aa28ad538e6662fd7257b563c15735c9ac37",
+      "bytes": 536079208
+    },
+    "scalar_auditor_sha256": "2f7a17c7ed18e0acdffe22eef4615115e07bf8658f0c3c331f7254edbaf1ad01",
+    "scalar_audit_sha256": "db2a4702d2d727ab0ea7bcb402bea387d55c6fed8faec1fb48d47b795b075033",
+    "raw_auditor_sha256": "32fee44a825148176bd34dca48f928635d7b4cce3e36b57409bbf62eb9acf2b3",
+    "raw_audit_sha256": "98614faea9809cd543d9bc31da3ff0cdaf7fa903874370745871b26dc0d055d8",
+    "public_scalar_sha256": "1968e85e216c9304411858f5b712f564c868658aee0e57d3d77d04d9fdbbdad5"
+  },
+  "limitations": [
+    "Four paired observations per arm; practical screening rule is not a statistical confidence interval.",
+    "Exact token/RNG/work equality in this finite native domain does not establish cross-backend probability-law equivalence.",
+    "No confidence admission, measured SPS, scheduler, overlap or natural held-out quality was tested.",
+    "The candidate still performs scalar validation/synchronization. It does not eliminate all synchronization.",
+    "Synthetic original r2-c256 only. Shared-sampler improvement would not establish speculative decoding superiority over target-only or the separate vLLM stack."
+  ]
+}

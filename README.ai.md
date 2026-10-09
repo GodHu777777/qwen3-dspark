@@ -796,3 +796,30 @@ Independent runner review approved one bounded native attempt subject to root li
 launch guards; large-only gate failure and pooled-ratio/favorable-pair counterexamples
 passed on CPU. Root committed/pushed the five tested overlays as c0d55d2 and began
 exact-archive preparation/GPU-hidden CPU deployment; actual device results are pending.
+
+
+Categorical native A/B result (S46, immutable c0d55d2):
+all20 observer-free batches completed (2330 rounds,5120 outputs). AMD GPU-hidden77
+CPU tests passed (33.472 s log;41.4752 s wrapper). Actual-device15 categorical cases,
+independent retained2 large-tensor gate audit, scalar audit and startup raw audit
+(2203 checks/756 reductions, maxabs/RMS0) passed. All10 same-arm batches including
+warmups preserve actual tokens/RNG/work exactly; prior cross-backend law limits remain.
+Target A/B pooled rates were81.261790/80.510255 tok/s (B/A.990752,2/4 B wins);
+gamma35.170647/34.495830 (B/A.980813,1/4 wins). BOTH arms miss the frozen>=1.02
+and>=3/4 practical screen. Retain the original default and close this candidate
+branch; no tuning/retry, theoretical-structure speed claim or statistical significance.
+See reports/categorical-ab-r2-20261009-c0d55d2. Native/controller/collection/audits
+and independent release exited0;142.1928 s controller elapsed is whole-run time,
+not throughput. Independent Direction result review passed and confirmed closing
+the candidate branch while retaining A; root accepted the next read-only CPU task.
+Historical primary/vLLM and numerical-law/TV bounds remain. No production integration
+or useful E2E gain shown.
+
+Next only verify/recover existing quality32 step128/512/1280 round artifacts and
+reanalyze first selected p/q and min(1,p/q), with fixed output-progress bins
+0-31/32-63/64-95/96-127 and all32 prompts/EOS/budget/missing coverage. Missing raw
+or provenance means a recorded gap, not replacement generation/training/GPU/final-test.
+Existing natural1280 first-prefix843/2270=.371366 and26/32 below.5 describe broad
+early rejection only; do not equate TF.373430 or transfer synthetic3.1% acceptance.
+This accepted direction has not been executed; selected-token risk is not full-law
+overlap, and different checkpoint trajectories are not matched-prefix causal controls.
