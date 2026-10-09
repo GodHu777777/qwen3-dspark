@@ -132,3 +132,13 @@ CPU replay emulator, not ROCm or pretrained weights; no duplicate full core suit
 is required by this additive preparation. Native generalized-Q correctness,
 capture support, source/runtime fidelity and resource release remain facts for
 the separately coordinated execution, not conclusions from this document.
+
+
+## Completed native execution
+
+Execution commit `a4942af` subsequently passed the complete fixed domain, with
+worker/controller/SSH exit0 and independently verified release. The
+[result report](../reports/query-family-graph-20261009-a4942af/README.md) records
+all twelve observations, two captures and the independent raw CPU audit. The
+preparation history above remains CPU evidence; the subsequent run supplies
+native evidence only for the declared finite same-backend target domain.

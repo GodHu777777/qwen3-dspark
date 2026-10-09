@@ -3,8 +3,9 @@
 `QueryFamily` permits different ordered per-request query lengths in one fixed
 physical-B program. This is an opt-in CPU-tested foundation over the existing
 target and sampling lifecycle. The synchronous full-shadow capacity driver is now connected and CPU-tested
-below. Native GPU family capture, measured capacity costs and CPU/GPU overlap
-remain unverified.
+below. A later [bounded native gate](../reports/query-family-graph-20261009-a4942af/README.md)
+passed the declared R2 cases. Measured capacity costs and CPU/GPU overlap remain
+unverified; native support outside that finite domain is not established.
 
 ```python
 from dspark_qwen.persistent_target_kv import QueryFamily
@@ -181,3 +182,18 @@ incomplete shadow proposals and profile replacement/restoration. The first two
 reject before drawing; incomplete shadow rejects after its two proposal draws
 per request, without target work. Review evidence is retained under
 `output/capacity-query-family-independent-review-20261009/`.
+
+
+## Subsequent native gate
+
+Immutable `a4942af` passed the six-state same-backend device protocol: S3 and L5
+full-target graphs share metadata/gather storage, E2 runs eagerly in the middle,
+L5 resumes with changed Q and then reversed request order, and S3 ends with abort.
+Five useful real graph replays left model/decoder Python counters unchanged.
+An independent audit of 65 raw tensor artifacts passed all 5,584 checks and 3,612
+numerical reductions. See the [native report](../reports/query-family-graph-20261009-a4942af/README.md)
+for frozen bounds, memory accounting, original thresholds and provenance.
+
+This updates the earlier preparation-only status for those finite target shapes.
+It does not extend the CPU full-shadow driver test into a native trained-draft
+rollout or demonstrate measured capacity costs, end-to-end gains or overlap.

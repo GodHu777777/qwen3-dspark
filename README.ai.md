@@ -612,3 +612,21 @@ and 300-second worker limit are explicit. Raw tensors are saved before assertion
 Read docs/query-family-graph-probe.md; CPU preparation is not native support,
 measured SPS, sampled acceptance or speed evidence. A device run requires reviewed
 immutable source, fresh live resource checks and coordinated execution.
+
+
+Variable-Q native result (immutable a4942af): after 18 targeted pinned AMD CPU
+tests passed with GPUs hidden (3.628 s, exit 0), the single device run completed
+all six native eager states, two captures, five actual graph replays and one
+explicit eager state. Every replay left original model/28 decoder Python counters
+unchanged. Worker/controller/SSH exited 0; independent identity/KFD/ASR release
+and all 375 source hashes passed. See reports/query-family-graph-20261009-a4942af.
+The independent CPU raw audit passed 5,584 checks and 3,612 numerical reductions
+over 65 tensor artifacts (no missing/failed checks); max absolute error and RMS
+were 0. Byte equality is descriptive under the original limits. Distinct private
+pools retained 2 MiB each; workspace 6,967,476 bytes includes shared arena
+3,605,722, with graph reservations plus separate I/O 1,073,840,192 bytes. This
+proves only the declared same-native R2 finite family domain; it does not execute
+trained draft/confidence/capacity scheduling, measure SPS/speed or demonstrate
+overlap. Prior numerical-law limits, same-stack slowdown and separate vLLM
+baseline remain unchanged. Next cost measurements must charge actual shapes and
+the full end-to-end round, including eager and host work.
