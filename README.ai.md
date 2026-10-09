@@ -394,3 +394,12 @@ private; public batch scalars and aggregate work preserve all repeats. This is
 eager full-shadow fixed-prefix execution, without real capacity scheduling,
 graph replay or overlap. It compares execution stacks and does not isolate
 speculation overhead; the previous target RMS failure remains unchanged.
+
+Native capacity-tail/capture preparation: scripts/probe_native_capacity_graph.py
+binds real target QKV and a fixed R2/Q(1,4) bucket at three growing contexts.
+It tests exact/fixed-max/capacity attention and finite/NaN unused-tail isolation
+before attempting gather+attention capture/replay. Six local CPU contract tests
+pass, including V-only resident contamination and partial-failure evidence;
+the CPU replay emulator is not a GPU graph. Read docs/native-capacity-graph-probe.md
+before the bounded 300-second formal execution. No actual native capture or
+whole-model graph result has yet been established for this probe.
