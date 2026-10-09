@@ -359,3 +359,15 @@ nested host spans/GPU event intervals do not isolate kernel cost. The measured
 local rate still excludes real planner/history and cannot become a full capacity
 profile by relabeling. Growing-context prediction, matched native trajectories,
 actual graph replay and scheduling overlap remain unverified.
+
+Native matched-workload preparation: scripts/benchmark_packed_decoder.py uses
+one target/draft load and a single native target adapter, resetting request
+caches inside each timed batch. It follows the shared six-case/54-batch protocol
+with eager full-shadow fixed maximum prefixes, preserving the original FP64
+sampling law. Eight CPU tests cover the actual production factory, unequal
+completion with retained inactive KV, and a round deadline preserving earlier
+samples. Memory records explicitly include inherited pre-reset target KV. The
+1800-second worker budget is fixed before the first run; this is not evidence
+that the native end-to-end comparison has completed. Read
+docs/native-offline-benchmark.md. No capacity planner, graphs or overlap are
+integrated in this baseline.
