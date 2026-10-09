@@ -597,3 +597,18 @@ RNG but before target/verification RNG/commit, and the driver cannot retry. See
 docs/query-families.md and output/capacity-query-family-cpu-20261009. This is CPU
 correctness evidence with synthetic SPS and untrained heads, not hardware-aware
 performance or confidence quality. No remote deployment or GPU run was performed.
+
+
+Variable-Q native gate preparation: `scripts/probe_query_family_graph.py` is an
+additive bounded protocol; the old fixed-Q probe remains unchanged. Six states
+use R2 plus one inactive resident, shared B3/B5/E2 families, changed per-request Q
+and one reversed roster. All six same-family native eager states must pass before
+two captures; the mixed phase contains five graph replays and one explicit eager
+state. Metadata, raw selected layers/final norm/logits, all-layer scratch and
+committed KV, exact own commit/abort/isolation, lease use and Python counters are
+checked. Original numerical thresholds stay fixed. Two independent 512 MiB graph
+reservations, 1280 MiB combined budget, 64 MiB workspace cap, 6 GiB allocator cap
+and 300-second worker limit are explicit. Raw tensors are saved before assertions.
+Read docs/query-family-graph-probe.md; CPU preparation is not native support,
+measured SPS, sampled acceptance or speed evidence. A device run requires reviewed
+immutable source, fresh live resource checks and coordinated execution.
