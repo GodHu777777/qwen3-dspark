@@ -195,3 +195,11 @@ All eight CPU tests passed in 3.664 seconds, with SSH exit 0 and CUDA unavailabl
 to the process. Evidence is in `output/persistent-target-kv-cpu-2010503-amd`.
 This adds pinned-runtime CPU coverage; native attention and graph execution were
 not invoked.
+
+Subsequent [native capability evidence](../reports/native-capacity-graph-20261009-f5d03d4/README.md)
+established capacity-tail attention and real gather+attention capture/replay for
+Q=(1,4), K capacity 293 and three growing contexts. Unused finite/NaN tails did
+not affect outputs; replay matched eager outputs bit-for-bit. This answers the
+bounded operator question above through a separate experimental adapter. The
+existing exact-K wrapper and full decoder are unchanged; full-model capture,
+graph selection from global K and scheduling overlap still require integration.

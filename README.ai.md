@@ -401,5 +401,13 @@ It tests exact/fixed-max/capacity attention and finite/NaN unused-tail isolation
 before attempting gather+attention capture/replay. Six local CPU contract tests
 pass, including V-only resident contamination and partial-failure evidence;
 the CPU replay emulator is not a GPU graph. Read docs/native-capacity-graph-probe.md
-before the bounded 300-second formal execution. No actual native capture or
-whole-model graph result has yet been established for this probe.
+before execution. Immutable f5d03d4 subsequently passed 226 CPU tests and its
+one bounded GPU run completed all 15 eager variants and three real graph replays.
+Independent CPU inspection of 42 saved tensor artifacts reconstructed 108 input
+comparisons and 63 pooled/request output comparisons; all output comparisons
+were bit-identical. Worker/controller/outer OS0 and independent release passed.
+See reports/native-capacity-graph-20261009-f5d03d4. Actual graph scope is only
+gather+attention at fixed Q=(1,4), with growing C and fixed K capacity. Resident
+isolation and current input-pointer stability are executed assertions, not an
+offline reconstruction of unsaved snapshots. Full-model graphs, selection from
+t-2 capacity K, sampling integration, overlap and speed gains remain unverified.

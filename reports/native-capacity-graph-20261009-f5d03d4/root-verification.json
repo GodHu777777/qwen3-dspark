@@ -1,0 +1,21 @@
+{
+  "source_commit": "f5d03d4ca82482a65963429e94e4068896f5a77a",
+  "archive_sha256": "7d2714bcb9f40a7270243e11f313d0e1641e01a123e173ebeb004d5ef8257b9c",
+  "exact_git_archive": true,
+  "ordered_observations": 18,
+  "stages": {
+    "real_qkv": "passed",
+    "eager_tail": "passed",
+    "capture_replay": "passed"
+  },
+  "replay_actual_key_rows": [
+    261,
+    265,
+    270
+  ],
+  "fixed_key_capacity": 293,
+  "stable_replay_pointers": true,
+  "all_comparison_rows_bit_equal": true,
+  "actual_os_exit_release_and_input_integrity_passed": true,
+  "scope": "Root independently checked scalar evidence, captured input/output addresses and exact Git archive; raw tensor recomputation recorded separately. Gather+attention only; no full-model graph, overlap or speed claim."
+}

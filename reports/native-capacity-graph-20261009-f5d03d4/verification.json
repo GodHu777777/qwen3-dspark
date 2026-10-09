@@ -1,0 +1,744 @@
+{
+  "passed": true,
+  "audit_runtime_torch": "2.11.0",
+  "audit_device": "cpu",
+  "source_commit": "f5d03d4ca82482a65963429e94e4068896f5a77a",
+  "result_sha256": "6ecbe61ff566e4ad507893b6b9502d8b6f78a66675a60871c8e6caf7e335b854",
+  "observations": 18,
+  "tensor_artifacts": 42,
+  "exact_input_tensor_comparisons": 108,
+  "comparison_groups": 21,
+  "pooled_and_per_request_comparisons": 63,
+  "max_abs": 0.0,
+  "max_rms": 0.0,
+  "all_compared_output_storage_bytes_equal": true,
+  "all_compared_outputs_bit_equal": true,
+  "recorded_input_addresses": 18,
+  "stable_recorded_output_address": true,
+  "logical_active_k": [
+    261,
+    265,
+    270
+  ],
+  "capacity_k": 293,
+  "tail_rows": [
+    32,
+    28,
+    23
+  ],
+  "health_samples": 4,
+  "supervisor_elapsed_seconds": 19.94041604991071,
+  "maximum_sampled_global_vram_used_bytes": 10742800384,
+  "comparisons": [
+    {
+      "observation": "eager-0-exact_actual_max",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-0-exact_fixed_max",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-0-capacity_zero",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-0-capacity_finite",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-0-capacity_nan",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-1-exact_actual_max",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-1-exact_fixed_max",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-1-capacity_zero",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-1-capacity_finite",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-1-capacity_nan",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-2-exact_actual_max",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-2-exact_fixed_max",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-2-capacity_zero",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-2-capacity_finite",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "eager-2-capacity_nan",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "replay-0-exact",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "replay-0-capacity",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "replay-1-exact",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "replay-1-capacity",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "replay-2-exact",
+      "passed": true,
+      "bitwise_required": false,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "observation": "replay-2-capacity",
+      "passed": true,
+      "bitwise_required": true,
+      "rows": [
+        {
+          "request": "pooled",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "0",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        },
+        {
+          "request": "1",
+          "finite": true,
+          "max_abs": 0.0,
+          "rms": 0.0,
+          "bit_equal": true,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "artifact_sha256": {
+    "eager-0-capacity_finite-inputs.pt": "24379fa8ea24b8bb4e96a6fc332ea31a4539526bf9790ac3cecf0a511b0d843f",
+    "eager-0-capacity_finite-output.pt": "9c3735132acd0201924c283b15726c142ce3c3b1f183a47d8edecf2f9af530bc",
+    "eager-0-capacity_nan-inputs.pt": "5f8f65d8b74ecc1a5e537693c8ed3b025c024961b3984b741603b40faa61d041",
+    "eager-0-capacity_nan-output.pt": "69a7842c77290b89df73d8463722f7d64280686e3013fdd96328371ad9124f8f",
+    "eager-0-capacity_zero-inputs.pt": "a14204ec9d4a6d69736facf96494e653ccb35760d93445c629a44e24f8e16a83",
+    "eager-0-capacity_zero-output.pt": "85cbfdb1a82ccc44ddaf9538e768410d9318bad4aa4ddd9bddf530489842de8d",
+    "eager-0-exact_actual_max-inputs.pt": "2aa2b58561f8cf918b5d7e4e877343d4979f751ef0a500e5ad840a8515cd11db",
+    "eager-0-exact_actual_max-output.pt": "897329ef329046f308248f163004b8d73dc518c83ea4a35fa8c98d6f11982be0",
+    "eager-0-exact_fixed_max-inputs.pt": "3a459235fdcbe75344994b81fddc12f50f13b8a7deb080e8ab41a5b29cabbf5a",
+    "eager-0-exact_fixed_max-output.pt": "f6022c43810868244b4e0c4ee44489632e4ee3bbc718d083014908df2e89aa6e",
+    "eager-1-capacity_finite-inputs.pt": "5a8fb1b82cd50e6f08c97f2bf693df7e5760cf80d443be8f92a472317855a2e9",
+    "eager-1-capacity_finite-output.pt": "653ba07a0459c5e8dc4cb248a70b56cab63d84f35c9fc6341d1fd63d14f0577b",
+    "eager-1-capacity_nan-inputs.pt": "295ced1a93ff0271f3ce3b55d7f142de7236f53e86f83b90b6d1ffacf968371b",
+    "eager-1-capacity_nan-output.pt": "40c3f5f1d18e621e7e8c2bbd75430856b7d12a2e8a07d43a3b0e99bf05785b8c",
+    "eager-1-capacity_zero-inputs.pt": "95c90ab7f501f74b04eeb3b13ba241e45b3f2dcd83d4c8d411b0af44597678ae",
+    "eager-1-capacity_zero-output.pt": "0fb28e760743a160ffb91187d1122d133f3745b90f7eed37372c8cbad79f78ea",
+    "eager-1-exact_actual_max-inputs.pt": "fc420fb88e2688303064db94bbcec026aad32ffb9daa6d75f0e36df34c135cad",
+    "eager-1-exact_actual_max-output.pt": "ee88dd9f558eeb948f59a83fcc75a704ee1b8e2ffa05d3e6e2cd0be003aef5ef",
+    "eager-1-exact_fixed_max-inputs.pt": "25db9564c39e23197791a54ad85ad401cdf4e5885d7347013e517cba62f3873d",
+    "eager-1-exact_fixed_max-output.pt": "e9acdc65a5ae4432a85b3730478be894c2927e7dc18fdf14bbcb1297c725c666",
+    "eager-2-capacity_finite-inputs.pt": "954a3022a5f6f7aa4d07128531d1a5afac1cd26a26ef581b4a72561ef4fa1d3c",
+    "eager-2-capacity_finite-output.pt": "2f4ad91945f906b3d0f274db4dc9a92e003553c838dea0dadfc85a6534c208b9",
+    "eager-2-capacity_nan-inputs.pt": "04240f0f0e363676195f8f342f7282f1366348b984afc666b7cc8f1e0be55d07",
+    "eager-2-capacity_nan-output.pt": "f34a2e0c33be2afc23f4f39587fb743e55abad793feaea42c9adff101b00a2f7",
+    "eager-2-capacity_zero-inputs.pt": "ffbf04108ab9d5406eb1a3b77f18fb54241b6bcf807206546819e78ea4c0bb66",
+    "eager-2-capacity_zero-output.pt": "2a55f95e882043ffb69d69a30533ebcde24331b960d1b49d8721b14147149fc9",
+    "eager-2-exact_actual_max-inputs.pt": "0eebeca81c624f3077b86eedf1d77dab11101fb6e573127ac9cf2beb4d349419",
+    "eager-2-exact_actual_max-output.pt": "e8e0522971d888fbce10016029b9bfd82ef8a536326fd4d4498c4e77f322571f",
+    "eager-2-exact_fixed_max-inputs.pt": "3d45527143dd1a46402e1ed59951eaf07a7db913429c0f489f60be98389d0e72",
+    "eager-2-exact_fixed_max-output.pt": "085d7d25887a566be7c4284414e10f60d44a84658108df0c4e66a9c09fff28e3",
+    "real-qkv-0-request-0.pt": "0f8fe49c819186888048612309ffbae13ec641e85710ab12677386d334fa1df2",
+    "real-qkv-0-request-1.pt": "d979a7decd53b99cfd075f787c4793d49a1a951ff56074b3fb94be3455c1b1b2",
+    "real-qkv-1-request-0.pt": "461dd5f5eaf687d0c5b48f898c82132942155518dd38de5c45c2f62b6bec90c2",
+    "real-qkv-1-request-1.pt": "019f54bc56a10accd9429dd5b6a610838461d27b7720a70a8d9335069c21de5d",
+    "real-qkv-2-request-0.pt": "e864f7392694d2ea7c38313e173de1d72d0d39afe3c6397e6105484295819fee",
+    "real-qkv-2-request-1.pt": "17a19791f777b647f850b1f2298dd5b486dfd3827bbf46587d0b25d9ebf2809c",
+    "replay-0-inputs.pt": "04bcbeadff3b48d18ad2f9191a0600dee28eef4279b844b4e3279f6151debe88",
+    "replay-0-output.pt": "99e80ada85345f6aa87b668044829b9f1b9a84dcafafd88005357b95ae6db31b",
+    "replay-1-inputs.pt": "8f59f82494eb5685371b3e3f0b45b58079fd46271e48bc855836966da13c7bc5",
+    "replay-1-output.pt": "522b6ada3d22543821d95df5518ccd6b13a5c8c8731c92ca3e9b8e60aa619c88",
+    "replay-2-inputs.pt": "d85475bcced24bec46eadd733f36061dcf1a4a8e8c806763b53893d598e025f3",
+    "replay-2-output.pt": "c0951b0745b9862a67aefccd26f8fee87f68afad93adcd3b91a3efd325aaf46e"
+  },
+  "checks": [
+    "324 source archive files and exact shared token recipe verified",
+    "42 original CPU-loaded tensor artifacts checked for real QKV shape/dtype/finite data",
+    "Cross-context committed-prefix K and V reconstructed from initial bytes and artificial selected new rows; all saved eager and replay active QKV match exactly",
+    "Actual cumulative lengths, positions, physical/logical K and all zero/finite/NaN tails inspected",
+    "All 21 comparison groups and 63 pooled/request records independently recomputed from raw output bytes",
+    "18 ordered observations complete and runtime K/V isolation/pointer flags true; actual saved output pointer constant",
+    "OS exits0, no timeout/cleanup, independent process release, preserved ASR and source/input/VRAM identity"
+  ],
+  "limits": [
+    "Pre-commit full resident K/V snapshots were not saved: their whole-pool isolation is checked by executed dual-K/V assertions, not independently recomputed offline",
+    "Saved input pointer dictionary is the initial snapshot; current input stability is an executed runtime comparison flag, while every output pointer is directly recorded",
+    "Graph covers gather+native attention only; QKV projections/RoPE/full model/commit/sampling/scheduler overlap excluded",
+    "No throughput or speedup measurement; earlier whole-Qwen numerical failure remains unchanged"
+  ]
+}

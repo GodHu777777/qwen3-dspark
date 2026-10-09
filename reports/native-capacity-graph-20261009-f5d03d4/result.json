@@ -1,0 +1,1425 @@
+{
+  "status": "completed",
+  "stages": {
+    "real_qkv": "passed",
+    "eager_tail": "passed",
+    "capture_replay": "passed"
+  },
+  "observations": [
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "exact_actual_max",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 261,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 32,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 651,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 261,
+        "logical_k_rows": 261,
+        "padding_k_rows": 0,
+        "max_q": 4,
+        "max_k": 132
+      },
+      "inputs": "eager-0-exact_actual_max-inputs.pt",
+      "output": "eager-0-exact_actual_max-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "exact_fixed_max",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 261,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 32,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 651,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 261,
+        "logical_k_rows": 261,
+        "padding_k_rows": 0,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-0-exact_fixed_max-inputs.pt",
+      "output": "eager-0-exact_fixed_max-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "capacity_zero",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 261,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 32,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 651,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 261,
+        "padding_k_rows": 32,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-0-capacity_zero-inputs.pt",
+      "output": "eager-0-capacity_zero-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "capacity_finite",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 261,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 32,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 651,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 261,
+        "padding_k_rows": 32,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-0-capacity_finite-inputs.pt",
+      "output": "eager-0-capacity_finite-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "capacity_nan",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 261,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 32,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 651,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 261,
+        "padding_k_rows": 32,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-0-capacity_nan-inputs.pt",
+      "output": "eager-0-capacity_nan-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "exact_actual_max",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 265,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 28,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 664,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 265,
+        "logical_k_rows": 265,
+        "padding_k_rows": 0,
+        "max_q": 4,
+        "max_k": 135
+      },
+      "inputs": "eager-1-exact_actual_max-inputs.pt",
+      "output": "eager-1-exact_actual_max-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "exact_fixed_max",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 265,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 28,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 664,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 265,
+        "logical_k_rows": 265,
+        "padding_k_rows": 0,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-1-exact_fixed_max-inputs.pt",
+      "output": "eager-1-exact_fixed_max-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "capacity_zero",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 265,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 28,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 664,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 265,
+        "padding_k_rows": 28,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-1-capacity_zero-inputs.pt",
+      "output": "eager-1-capacity_zero-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "capacity_finite",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 265,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 28,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 664,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 265,
+        "padding_k_rows": 28,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-1-capacity_finite-inputs.pt",
+      "output": "eager-1-capacity_finite-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "capacity_nan",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 265,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 28,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 664,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 265,
+        "padding_k_rows": 28,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-1-capacity_nan-inputs.pt",
+      "output": "eager-1-capacity_nan-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "exact_actual_max",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 270,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 23,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 681,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 270,
+        "logical_k_rows": 270,
+        "padding_k_rows": 0,
+        "max_q": 4,
+        "max_k": 139
+      },
+      "inputs": "eager-2-exact_actual_max-inputs.pt",
+      "output": "eager-2-exact_actual_max-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "exact_fixed_max",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 270,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 23,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 681,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 270,
+        "logical_k_rows": 270,
+        "padding_k_rows": 0,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-2-exact_fixed_max-inputs.pt",
+      "output": "eager-2-exact_fixed_max-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "capacity_zero",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 270,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 23,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 681,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 270,
+        "padding_k_rows": 23,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-2-capacity_zero-inputs.pt",
+      "output": "eager-2-capacity_zero-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "capacity_finite",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 270,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 23,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 681,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 270,
+        "padding_k_rows": 23,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-2-capacity_finite-inputs.pt",
+      "output": "eager-2-capacity_finite-output.pt"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "capacity_nan",
+      "comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "committed_unchanged_before_fixture_commit": true,
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 270,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 23,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 681,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      },
+      "operator_work": {
+        "physical_q_rows": 5,
+        "physical_k_rows": 293,
+        "logical_k_rows": 270,
+        "padding_k_rows": 23,
+        "max_q": 4,
+        "max_k": 148
+      },
+      "inputs": "eager-2-capacity_nan-inputs.pt",
+      "output": "eager-2-capacity_nan-output.pt"
+    },
+    {
+      "stage": "capture_replay",
+      "case": 0,
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "eager_capacity_comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "stable_input_pointers": true,
+      "stable_output_pointer": true,
+      "input_pointers": {
+        "query": 130755832726016,
+        "committed_keys": 130754655965184,
+        "committed_values": 130754592456704,
+        "scratch_keys": 130755832265728,
+        "scratch_values": 130755832603136,
+        "committed_indices": 130754696978432,
+        "scratch_indices": 130754696980992,
+        "from_scratch": 130754696983552,
+        "valid": 130754696984064,
+        "cu_query": 130755832275968,
+        "cu_key": 130755832276480,
+        "positions": 130755832276992,
+        "old_k": 130754593062912,
+        "old_v": 130754587656192,
+        "new_k": 130754588256256,
+        "new_v": 130754588856320,
+        "keys": 130754583461888,
+        "values": 130754584061952
+      },
+      "output_pointer": 130754497478656,
+      "committed_unchanged_before_fixture_commit": true,
+      "positions": [
+        128,
+        128,
+        129,
+        130,
+        131
+      ],
+      "cu_key": [
+        0,
+        129,
+        261
+      ],
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 261,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 32,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 651,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      }
+    },
+    {
+      "stage": "capture_replay",
+      "case": 1,
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "eager_capacity_comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "stable_input_pointers": true,
+      "stable_output_pointer": true,
+      "input_pointers": {
+        "query": 130755832726016,
+        "committed_keys": 130754655965184,
+        "committed_values": 130754592456704,
+        "scratch_keys": 130755832265728,
+        "scratch_values": 130755832603136,
+        "committed_indices": 130754696978432,
+        "scratch_indices": 130754696980992,
+        "from_scratch": 130754696983552,
+        "valid": 130754696984064,
+        "cu_query": 130755832275968,
+        "cu_key": 130755832276480,
+        "positions": 130755832276992,
+        "old_k": 130754593062912,
+        "old_v": 130754587656192,
+        "new_k": 130754588256256,
+        "new_v": 130754588856320,
+        "keys": 130754583461888,
+        "values": 130754584061952
+      },
+      "output_pointer": 130754497478656,
+      "committed_unchanged_before_fixture_commit": true,
+      "positions": [
+        129,
+        131,
+        132,
+        133,
+        134
+      ],
+      "cu_key": [
+        0,
+        130,
+        265
+      ],
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 265,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 28,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 664,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      }
+    },
+    {
+      "stage": "capture_replay",
+      "case": 2,
+      "comparison": {
+        "passed": true,
+        "bitwise_required": false,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "eager_capacity_comparison": {
+        "passed": true,
+        "bitwise_required": true,
+        "rows": [
+          {
+            "request": "pooled",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "0",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          },
+          {
+            "request": "1",
+            "finite": true,
+            "max_abs": 0.0,
+            "rms": 0.0,
+            "bit_equal": true,
+            "passed": true
+          }
+        ]
+      },
+      "stable_input_pointers": true,
+      "stable_output_pointer": true,
+      "input_pointers": {
+        "query": 130755832726016,
+        "committed_keys": 130754655965184,
+        "committed_values": 130754592456704,
+        "scratch_keys": 130755832265728,
+        "scratch_values": 130755832603136,
+        "committed_indices": 130754696978432,
+        "scratch_indices": 130754696980992,
+        "from_scratch": 130754696983552,
+        "valid": 130754696984064,
+        "cu_query": 130755832275968,
+        "cu_key": 130755832276480,
+        "positions": 130755832276992,
+        "old_k": 130754593062912,
+        "old_v": 130754587656192,
+        "new_k": 130754588256256,
+        "new_v": 130754588856320,
+        "keys": 130754583461888,
+        "values": 130754584061952
+      },
+      "output_pointer": 130754497478656,
+      "committed_unchanged_before_fixture_commit": true,
+      "positions": [
+        130,
+        135,
+        136,
+        137,
+        138
+      ],
+      "cu_key": [
+        0,
+        131,
+        270
+      ],
+      "work": {
+        "active_requests": 2,
+        "resident_requests": 2,
+        "logical_query_tokens": 5,
+        "physical_query_tokens": 5,
+        "logical_active_key_tokens": 270,
+        "physical_key_capacity": 293,
+        "padded_key_capacity": 23,
+        "inactive_resident_key_tokens": 0,
+        "gather_rows_per_kv_per_layer": 586,
+        "staging_output_rows_per_layer": 293,
+        "allowed_causal_pairs": 681,
+        "resident_allocated_kv_bytes": 1212416,
+        "scratch_allocated_kv_bytes": 20480,
+        "bucket_workspace_bytes": 3605722,
+        "bucket_source": "Preregistered native capacity-tail capability experiment; no performance applicability",
+        "capture_or_replay_verified": false
+      }
+    }
+  ],
+  "expected_observations": [
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "exact_actual_max"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "exact_fixed_max"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "capacity_zero"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "capacity_finite"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 0,
+      "variant": "capacity_nan"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "exact_actual_max"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "exact_fixed_max"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "capacity_zero"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "capacity_finite"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 1,
+      "variant": "capacity_nan"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "exact_actual_max"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "exact_fixed_max"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "capacity_zero"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "capacity_finite"
+    },
+    {
+      "stage": "eager_tail",
+      "case": 2,
+      "variant": "capacity_nan"
+    },
+    {
+      "stage": "capture_replay",
+      "case": 0,
+      "variant": "replay"
+    },
+    {
+      "stage": "capture_replay",
+      "case": 1,
+      "variant": "replay"
+    },
+    {
+      "stage": "capture_replay",
+      "case": 2,
+      "variant": "replay"
+    }
+  ],
+  "whole_model_graph": false,
+  "overlap": false,
+  "t_minus_two_capacity_graph": false,
+  "runtime_scope": "real_pretrained_gpu",
+  "current_attempt": {
+    "stage": "capture_replay",
+    "case": 2,
+    "variant": "replay"
+  }
+}

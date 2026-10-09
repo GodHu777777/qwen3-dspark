@@ -1,0 +1,45 @@
+{
+  "runtime": {
+    "runtime": {
+      "torch": "2.12.0+rocm7.2",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "hip": "7.2.53211",
+      "device_arch": "gfx1201",
+      "flash_preference": "_ROCmFABackend.AOTriton",
+      "flash_prefer_ck_env": null,
+      "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+    },
+    "transformers": "5.17.0",
+    "scope": "Real pretrained Qwen first-layer QKV; gather+native attention graph only"
+  },
+  "cpu_suite": {
+    "tests": 226,
+    "seconds": 13.806,
+    "os_exit": 0
+  },
+  "worker_os_exit": 0,
+  "controller_os_exit": 0,
+  "outer_execution_os_exit": 0,
+  "timed_out": false,
+  "cleanup_actions": [],
+  "supervisor_elapsed_seconds": 19.94041604991071,
+  "owned_process_count": 1,
+  "all_owned_controller_shell_absent": true,
+  "post_input_integrity_passed": true,
+  "preserved_asr_same_start_identity": true,
+  "asr_ready": true,
+  "asr_busy": false,
+  "only_preserved_asr_owns_kfd": true,
+  "pre_post_vram_identical": true,
+  "restored_vram": [
+    {
+      "total_bytes": 34208743424,
+      "used_bytes": 8967499776,
+      "free_bytes": 25241243648
+    }
+  ],
+  "health_samples": 4,
+  "maximum_sampled_global_vram_used_bytes": 10742800384,
+  "process_allocator_cap_bytes": 6442450944,
+  "allocator_peak_status": "Not recorded by this capability probe; configured cap is not a measured peak"
+}

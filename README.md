@@ -26,9 +26,15 @@ throughput (8.2–14.2 times the batch time). This eager full-shadow baseline ha
 no capacity scheduler or graphs. It exposes an engine performance gap; it does
 not isolate the cost of speculation from the different execution backends.
 These are synthetic fixed-output workloads, and target numerical differences
-remain unresolved. Measured capacity prediction, graph replay and scheduling
+remain unresolved. Measured capacity prediction, full-model graph replay and scheduling
 overlap remain unfinished. Local verification rounds/s and output tok/s are
 different metrics.
+
+A [native graph capability probe](reports/native-capacity-graph-20261009-f5d03d4/README.md)
+now passes on real Qwen Q/K/V: fixed-capacity KV tail isolation and three growing
+contexts replay through a captured gather+attention subgraph with bit-identical
+outputs. This establishes that limited execution boundary; QKV projections,
+RoPE, the full model and scheduling overlap are not captured by the probe.
 
 ## Architecture
 

@@ -1,7 +1,9 @@
 # Native capacity-tail and capture capability probe
 
-`scripts/probe_native_capacity_graph.py` is a bounded executable probe prepared
-on CPU. No native execution or graph-capture result exists for this tool yet.
+`scripts/probe_native_capacity_graph.py` is a bounded executable probe. The
+[first real execution](../reports/native-capacity-graph-20261009-f5d03d4/README.md)
+on immutable `f5d03d4` passed all 18 observations, including three actual GPU
+graph replays, with bit-identical output comparisons and verified release.
 It answers whether the pinned private ROCm attention operator can consume real
 pretrained Qwen QKV through a fixed-capacity K/V buffer and replay a fixed-address
 **gather + attention** subgraph as the committed context grows. It does not capture
@@ -146,3 +148,7 @@ Local preparation uses the existing Torch 2.11.0 / Transformers 5.4.0 CPU runtim
 not the pinned native environment. The formal worker requires Torch/ROCm runtime
 identity from `PinnedRocmVarlenKernel`, real GPU BF16 Hq16/Hkv8/D128 tensors and
 Transformers 5.17.0. No GPU capability is inferred from local tests.
+
+The immutable formal source also passed all 226 CPU tests in the pinned AMD
+environment with GPUs hidden (13.806 seconds, OS0). GPU capability evidence
+comes from the separate real execution linked above, not that CPU suite.
