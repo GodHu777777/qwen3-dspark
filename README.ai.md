@@ -411,3 +411,13 @@ gather+attention at fixed Q=(1,4), with growing C and fixed K capacity. Resident
 isolation and current input-pointer stability are executed assertions, not an
 offline reconstruction of unsaved snapshots. Full-model graphs, selection from
 t-2 capacity K, sampling integration, overlap and speed gains remain unverified.
+
+Persistent full-target candidate: persistent_qwen_target.py reuses the complete
+HF Qwen3 forward with a custom scratch-only Cache.update and request-local CPU
+attention callback. Its prefill/verify/commit/abort interface separates speculative
+KV from committed state; selected raw block outputs remain distinct from final
+normalized features. Four local tiny-Qwen tests cover all-layer KV, features,
+logits, partial commits, failed-forward recovery and inactive-request isolation.
+This is currently explicit CPU-only, not a PackedSpeculativeSession drop-in,
+full-model native path or captured graph. Read docs/persistent-qwen-target.md
+for the required sampling interface migration and external replay bookkeeping.
