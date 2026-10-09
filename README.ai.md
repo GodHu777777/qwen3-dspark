@@ -755,3 +755,44 @@ faster; otherwise retain the original. Freeze this rule before execution.
 This is a future direction, not an implementation, frozen protocol or A/B result.
 Preserve S40 native primary and separate vLLM results and prior numerical/law/TV
 limits; this perturbed diagnostic establishes no optimization or speedup.
+
+
+Categorical fallback CPU gate (notebook S45):
+`dspark_qwen/experimental_categorical.py` is opt-in; production sampling remains
+unchanged as the exact oracle. Only callback-after nonempty1D fallback uses a
+fixed-shape integer maximum; metadata/no-support cases retain original nonzero
+behavior and errors. FP64 CDF/right-searchsorted, one draw and validation order
+remain intact. The scalar positivity guard can synchronize; no speed is inferred.
+First6-test run had one incorrect remaining1 coverage assertion; adding an explicit
+budget2 real shadow session changed only tests. Revised7 passed, then frozen402-file
+base ba87fc4 plus3 additive files passed71 tests in4.787 s/OS0; candidate-bound
+existing Fraction oracle passed5 in.118 s. Independent review passed1874 oracle
+pairs,8 mutable-RNG cases and151936 strided-vocab fallback. Real tiny-Qwen CPU
+sessions preserve per-round laws/confidence, populated KV, tokens/RNG/work exactly.
+Core may now prepare a separately reviewed/frozen20-batch observer-free R2 A/B
+runner; no native or performance evidence exists yet. Keep production defaults,
+original budgets and both-arm screening; retain S44 inconclusive and prior primary,
+vLLM and numerical-law limits. See docs/categorical-fixed-shape.md.
+
+
+Observer-free categorical A/B runner preparation (same S45):
+`scripts/benchmark_categorical_ab_r2.py` now freezes20 original-R2 complete batches
+(4 warmups+16 primary), with direct timer-external sampler alias binding/restoration,
+no observer/stage fence/signature wrapper and unchanged fresh checks/session sync.
+First6 runner tests exposed two injected-extra-field rejection failures; union-key
+semantic comparison fixes added/removed fields (existing nested RNG was compared).
+The13-case revision passed6; final15-case native-gate design adds151936 dense and
+strided zero-tail cases with private actual A/B tensors saved/hashed. Frozen77 CPU
+tests passed in8.749 s/OS0, with404 source files unchanged before/after.
+Protocol SHA30dea383c399f51bc46d233510d81d3e64700ad73297465d4f68e557f85e3608
+predeclares EACH arm pooled1024 outputs/summed4 walls B/A>=1.02 and at least3/4
+strictly faster pairs. Complete semantic/native gates precede any performance
+result; valid misses retain A, partials do not pool. Original300/290 s and memory
+limits, production default and prior benchmark/numerical limits remain intact.
+CPU preparation is not native execution or a measured gain; use an exact committed
+source archive, excluding recorder working-tree docs, for any reviewed deployment.
+
+Independent runner review approved one bounded native attempt subject to root live
+launch guards; large-only gate failure and pooled-ratio/favorable-pair counterexamples
+passed on CPU. Root committed/pushed the five tested overlays as c0d55d2 and began
+exact-archive preparation/GPU-hidden CPU deployment; actual device results are pending.
