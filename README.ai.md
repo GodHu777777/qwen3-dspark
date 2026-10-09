@@ -439,3 +439,7 @@ local CPU tests (235 passed, four Linux-only skips); source and log hashes were
 independently verified. See docs/persistent-sampling.md and private evidence
 output/persistent-sampling-cpu-20261009. This does not establish GPU graph leases,
 full-model replay, overlap or speedup; the native graph implementation is separate.
+Immutable 933ed88 subsequently passed all 239 tests on pinned AMD Torch 2.12.0
+/ Transformers 5.17.0 with GPUs hidden (16.039 s, test/SSH exit 0, no skips).
+The exact Git archive and eight evidence hashes were independently verified;
+see output/persistent-sampling-pinned-cpu-20261009-933ed88. This is CPU evidence.

@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 12:51（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 13:13（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -17,7 +17,7 @@
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 - 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)。
-- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)。
+- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -937,3 +937,26 @@ S25报告与项目入口已由root提交/推送 **51d1c3d**。Root另在本地CP
 **尚未接入与下一决策。** 当前不是旧append/crop drop-in：session的admission需明确改走prefill，verification改走verify，并在所有决策确定后一次target commit，而不能沿用逐request crop。Direction已开始该接入，但本条没有完成或集成测试证据；实际q、FP64 law、RNG、EOS/output budget及committed context排除最新anchor的约束继续原样保留。当前 `predict(last_only=True)`仍先投影全部Q行；未来admission必须维持先选R末行再LM head的优化，不能新增full-prompt vocab projection费用。Full-model graph也未实现：Python Cache.update的staged-set/hook bookkeeping只在capture时执行，replay不会重新发布新事务；还需外部staging/feature所有权、persistent outputs及stream/events证明完成后才能commit。Exact ordered-Q不能仅由t−2 K确定，bucket预算和双bank/overlap仍未解决。旧target RMS失败、cross-backend law限制和S24无加速结果均保留；四CPU测试与230suite不解除这些边界。
 
 **工作协调续记（不作实验结果）。** Root核现有 `dspark-astra` 30分钟ACTIVE heartbeat，并把prompt里已不存在的experiment_journal改为现存sol_data，要求继续保留vLLM强baseline及同backend control的区分；周期与通知规则未变。此处只记录root的协调状态，不新增实验、GPU授权或性能结论；记录者没有修改automation、远端环境或实现。
+
+
+<a id="persistent-session-cpu"></a>
+## 2026-10-09 13:10（UTC+8）— S27：persistent target接入随机session，完成CPU缓存/采样/feature生命周期验证
+
+**遇到的问题。** S26已有完整CPU target，但旧session在验证时先append、再逐request crop；新的target要求先把所有层KV放在scratch，等所有请求的接受/回退决策确定后一次commit。若直接伪装成旧接口，会混淆哪些token已经提交，也可能在draft投影仍读取selected features时过早释放输出。本轮要解决的是把这两种生命周期明确接起来，同时保留原实际q/p、RNG和输出预算规则，不借接口重构改变采样行为。
+
+**为何这样接入。** [Session设计](persistent-sampling.md)新增显式可选target strategy：默认仍走原append/crop；选择persistent时，admission走prefill，verification走verify，按原request顺序计算完所有决策后，只调用一次target commit，再把同一选定raw feature前缀投影进draft KV，最后release features。Admission仍先选每request的final-normalized末行，再做单次 **R行LM head**，测试直接观测该输入shape，避免把全部prompt行投影到vocabulary。通常提交验证输入中的旧anchor+accepted前缀；遇EOS或budget提前停止时，按实际新输出数提交相应输入前缀，让target/draft都保持 **prompt+output[:-1]**，最新输出仍是下一次的excluded anchor。Finished/inactive request的KV继续保留；remove/readmit更新incarnation并拒绝旧proposal。
+
+**实际失败与修正。** Direction交接及handoff记录，早期working-tree八测试首次暴露：output-budget case会需要 **ordered Q=(3,)**，fixture没有声明该verification bucket。修复是补上明确bucket，不改budget或接受算法、也不隐式补任意shape；随后八测试通过，再加入admission failure测试成为最终九项。此段只依据提供的交接/manifest描述，不补造未提供的初次失败时间、时长或exit。这个问题也说明有限bucket不是装饰：调用方必须声明admission、active subset、改变allocation与收尾budget所需形状。选择只在已声明的exact ordered Q与context ceilings中进行，以最小兼容Kcapacity优先、声明顺序打破平手，不枚举全部shape或暗加maxQ padding。
+
+**拒绝和故障如何处理。** Admission在加slot和消费RNG前检查bucket；固定budget step在draft forward/draw前检查已知shape。Full-shadow的proposal与真实draw已经发生，随后bucket拒绝只能保证不再做target forward/verification draw，不能倒称shadow RNG没消费。正常bucket拒绝保留可供合法allocation继续使用的request/cache/proposal；ell0仍付fullshadow，只验证anchor一行，私有实际q不受观测副本修改影响。真正执行错误则永久invalidate session，按pending scratch abort→feature release→target reset尝试清理，并总是清空draft cache；清理失败保存cleanup_error，所有public操作仍拒绝复用。没有承诺撤回已消费RNG、回滚device部分写入或target/draft联合原子提交；测试分别覆盖commit前故障、commit后draft故障、poisoned commit/abort清理，以及admission的slot/commit/draft失败。
+
+**九项CPU测试能证明什么。** Tests执行完整tiny Qwen target与真实draft投影，并用独立逐request HF cache重构检查两套KV。Same-seed原默认、显式append/crop与persistent路径在fixture上的输出/RNG trace相同，实际q/p按声明数值容差对照；原默认与显式旧strategy的target p另作bit-exact检查，不把persistent的容差比较说成全backend bit-exact。合法受控uniform根据模型实际p/q覆盖每个reject index、partial/full接受及EOS/residual/bonus/budget；概率、proposal或decision未被替换。测试还在一次commit入口核所有请求的决策draw已完成，检查zero ell、inactive resident、移除重入、有限bucket拒绝不做后续forward/draw，及admission **R末行**投影。Feature lease测试使用真实model features加 **fake CPU lease**，观测verification正常顺序为verify→head→commit→draft→release，admission则为verify→commit→head→draft→release，verification failure为verify→abort→release→reset；这证明调用顺序，**没有执行GPU stream/event，也不是实际graph输出异步生命周期证明**。
+
+**冻结证据与提交身份。** 测试没有直接使用并发修改的checkout，而是 **f46e63f immutable archive+恰四owned overlays**：packed sampling、target strategy、新tests和design doc；core正在开发的full-model graph文件未混入。记录者直接核 `output/persistent-sampling-cpu-20261009/{handoff.json,source-manifest.json,cpu-tests.log}` 及其source副本：实际337文件无extra/missing，每个SHA吻合，非overlay内容逐项等于base Git blobs；四overlay与当前文件、随后 **933ed8846f97ef97e6615f44e00e62fb6895e0ec** Git blobs一致。Manifest **37bfc630…**、log **400b8863…** 与handoff吻合，`source_changed_after_run=[]`。完整本地 **239tests/4.155秒、235通过/4跳过、实际OS0**，九个新session tests全通过；四skip明确为Mac无法执行的Linux `/proc` lifecycle tests，不能写成239全部通过。Runtime为现存 **Python3.14.3/Torch2.11.0/Transformers5.4.0、CPU、CUDA/HIP/ROCR隐藏**，没有安装包或远端/GPU运行；suite时间不作模型性能数字。Root已审查并提交（13:08:02），随后确认push实际OS0。测试身份仍是上述base+overlay，不把随后整个commit冒称本次Mac实际执行snapshot。
+
+**仍未解决与下一决策。** Direction正在安排immutable933ed88固定AMD依赖的隐藏GPU CPU suite，本条尚无其完成结果，届时另续记；S26旧版本兼容结果不能自动代替这四overlay的验证。Core full-model graph仍在实现，没有新的whole-target native/capture/replay成功证据。后续需将真实device完成事件、输出lease直到最后draft consumer的寿命、bucket总预算与sampling/commit所有权一起验证；bucket选择、commit/release和draft投影都在session call内，未来round计时必须收费，注册/分配只可单列setup。Exact ordered Q仍不能仅从t−2 K预选，真实capacity scheduler、ZOS与CPU/GPU overlap未完成。S24 native仅有vLLM **7.06%–12.26%吞吐**的强baseline比较继续保留，同backend native target-only控制尚未测；旧target固定RMS失败及cross-backend law限制未解除。本轮没有速度、质量或完整系统pass结论。
+
+用户再次强调便于复盘的问题、方法与过程，要求新建 **6.1 Sol**记录子代理；我们因既有系统agent数量限制无法新建，继续复用现存 **sol_data**专职记录。这是受限后的执行安排，不是把复用既有代理表述为用户的原要求；本轮沿用此日志及索引，不另建重复记录。记录者只做本地source/scalar/hash核验和本日志编辑，未stage/commit、改实现、操作远端/GPU/进程或读取private样本/final test；root负责审核提交。
+
+
+**13:13后续：immutable933ed88固定AMD环境CPU suite完成。** S27初次本地测试留下两个范围缺口：新session路径尚未在固定5.17依赖上运行，且Mac跳过了四项Linux进程生命周期测试。Direction在root授权的CPU窗口中仅使用immutable **933ed88** archive，跑 **Python3.12.14/Torch2.12.0+rocm7.2/Transformers5.17.0** 完整suite：**239tests/16.039秒、全部OK、无skip，test process与实际SSH均OS0**，九项新session实模型测试也在此版本通过。CUDA/HIP/ROCR visibility均空，`cuda_available=False/device_count0`，没有GPU执行或环境变更。记录者核 `output/persistent-sampling-pinned-cpu-20261009-933ed88/summary.json` 与原log/versions/两个OS code，八项summary/remote/local evidence SHA全部一致；archive **b1b7d1e4…** 的337文件逐SHA与933ed88 Git blobs一致，保存的前后source verification均passed/337files/differences为空。Full log **7569ea75…**、runtime身份 **4a89f67d…**；runtime import前置两行 `(null): No such file or directory` 原样保留，不赋予未验证原因。这个续记消除了上述固定CPU版本与Linux skip缺口，未扩大到full-target native/graph、真实GPU lease/stream、overlap或性能证明；S27原Mac239/235pass4skip历史仍保留。本轮只续记session CPU结果，不将新的graph实现交接混入本节。
