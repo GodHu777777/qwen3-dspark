@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 10:58（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 11:06（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -738,3 +738,23 @@ Root随后在该immutable source archive运行完整unittest suite，未发布 `
 **CPU证据与身份。** 最终 **7/7、1.348秒、tests OS0**，前5项/0.943秒与冻结7项/1.315秒也通过；覆盖exact graph-preserving config/非法tokens、缺weights/index shards拒绝、PID reuse、真实zero/nonzero worker OS exit、escaped-session timeout清理、成功parent后orphan adoption和ASR guard失败。真实35-token输入worker/controller stdlib preflight均 **OS0**、prepared-only，不import vLLM/Torch或执行GPU。记录者独立核五交付对 **e0f5ce8dd511ecce8b2f77e1f4c870a607bb1833**（10:55:53）Git blobs、四tested-source SHA、request原文件SHA与preparation35/8计数；handoff SHA **2824e84c…**、final test log SHA **4b41d0f9…**。远端大型模型文件实际哈希依据preparation/已有绑定，未在本轮重新读取weights。Root已核commit/push。
 
 **当前状态与下一决策。** Handoff当时no GPU authorized；root随后授权direction唯一一次按committed archive与installed-source身份冻结的真实smoke，但本条时尚未收到启动PID，不写已运行、完成或通过。仅CPU准备通过；真实init/kernel/graph、sampling fidelity、速度均未验证，fixedignoreEOS工作也不是EOS-stopping quality评估。此前隐藏GPU的vLLM help25秒timeout仍只表示该入口尝试未完成，不写engine unsupported。实际结果收到后另起条；无benchmark/speedup、无自动重试授权，wholeQwen原固定RMS失败不解除。记录者只日志，无GPU/进程/实现/提交动作。
+
+
+<a id="trained-packed-gate-cpu"></a>
+## 2026-10-09 11:06（UTC+8）— S15：trained packed decoder gate CPU准备，纠正AMP下的FP32 oracle
+
+**问题与方法。** S12/S13的tiny CPU集成不能验证实际trained draft的native noncausal attention。新[冻结协议](packed-decoder-gate.md)绑定真实Qwen3-0.6B与已选step1280（weights d6f21ab3…/metadata8bb0c511…），固定synthetic三轮pre-draw allocation、remove/readd、active/inactive poison与完整KV；target causal/draft noncausal两侧显式pinned backend，无tiny正式入口/fallback。正常draft15层同actualQKV对FP32 MATH，原elementwise0.02/0.02、RMS≤0.005不变；结构、draft层数值与endpoint completed三状态独立，system_pass_claimed=false。300秒/8GiB free/6GiB processallocation边界保持。
+
+**失败假设与修复。** 首轮 **4/4、6.236秒**通过，但root review发现 `.float()` 输入加MATH SDPA仍被外层BF16 autocast影响，不能声称FP32 oracle。Core显式包 `torch.autocast(...,enabled=False)`、assert oracle.dtype==FP32并测试persisted tensor dtype，另加helper/protocol threshold drift拒绝。原first log保留为开发历史，不作为最终oracle证明。修复后 **5/5、5.948秒**，GPU三设备隐藏；finite故意bias用例仍完成矩阵并保留failed状态、未松原阈值。真实target/1280 stdlib dry-run **exit0**，只核身份不import backend/GPU。
+
+**证据与状态。** 直接读未发布 `output/packed-decoder-gate-cpu-20261009/` manifest、两test logs及real-binding-dryrun。独立核manifest SHA **93198e55…**、三文件对 **8378ea7af51fdb84e369a4b306259e88d8dd22b7**（11:02:57）Git blobs、四evidence SHA，按实际helper序列化重算protocol **a311e144…**、核dry-run checkpoint digests与冻结协议一致；CPU执行为6b1c2bc archive加明确overlay，不称当前整树tested。Root已授权core唯一一次真实GPU，但本条未收到启动PID，不写实际运行或通过；原wholeQwen固定RMS失败不解除，无quality/async/性能或系统通过结论。记录者仅日志，未读private trace/final test。
+
+
+<a id="vllm-first-version-failure"></a>
+## 2026-10-09 11:06（UTC+8）— S16：vLLM第一真实attempt在版本guard失败，engine尚未初始化
+
+**问题、结果与原因。** S14之后唯一授权的 **e0f5ce8** attempt实际执行，import后 **13.2115秒**抛runner版本guard异常，engine_initialization_started=false、generated_tokens=0；worker/controller实际OS均 **1**、无timeout/retry/fallback，controller15.9002秒不是benchmark。Runner把distribution metadata **0.30.0+rocm723**与module.__version__ **0.30.0**当作同一字段；已在launch前绑定的 `_version.py` 经后续stdlib AST核定module值，未二次import vLLM。Fatal是版本契约错误，optional torch-c-dlpack warning不是本次fatal原因；不能据此断言BF16/GPU/attention/graph失败。
+
+**证据与释放。** 直接读[六份公开失败报告](../reports/vllm-offline-smoke-20261009-e0f5ce8/README.md)并核对 **631892ce5db5a847df2d1005dcd956001aa73abe**（11:04:39）Git blobs；归档commit已核，root当时push进行中。执行source仍e0f5ce8，完整身份见[source identity](../reports/vllm-offline-smoke-20261009-e0f5ce8/source-identity.json)。257source/3147installed/3425binding files及八model/tokenizer文件前后不变；四自有shell/controller/worker/descendant PID均不存在、无cleanup signals、KFDonlyASR ready/notbusy、VRAM前后used8967499776/free25241243648bytes。完整raw日志/远端proc与版本再次核验依据root直接独立检查及[verification](../reports/vllm-offline-smoke-20261009-e0f5ce8/verification.json)，记录者未读private样本或重做远端进程动作。`verification.passed`只指失败边界/释放通过，不是engine通过；不添独立shell退出码。
+
+**修正与下一决策。** 原失败保留，direction仅CPU修双字段guard，分别钉distribution/module并报告actual/expected，不改installed packages。尚无第二次执行授权，不能沿用首次窗口重跑；真实init、graph capture/replay、完整request、fidelity与强性能baseline仍未验证。原35-token公开synthetic/128fixedignoreEOS/defaultgraph/.18配置身份保留，graph开关与显存比例仍不是replay或全系统硬cap证据；wholeQwen固定RMS失败独立保留。本轮只追加日志，无GPU/实现/进程/提交动作。
