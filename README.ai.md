@@ -710,3 +710,24 @@ separate backbone, base head, Markov/confidence, FP64 law/draw and issuance/copy
 remainder with complete semantic controls and reversed plain/observed pairs.
 The proposed hypothesis is FP64 law/draw accounting for at least50% of propose
 on both orders; this is not yet a result or a demonstrated optimization.
+
+
+Full-shadow inner-service preparation (notebook S43):
+`scripts/profile_shadow_inner_r2.py` adds a fixed six-batch diagnostic; see
+`docs/shadow-inner-r2-profile.md`. Within each owning propose, disjoint child
+services, prior drains and residual close the parent service; never add parent
+and child ledgers or nested signatures. Runtime guards prove at most127 rounds
+and127×46=5842 R2 child records under the original8192 cap. Reversed plain/inner
+pairs use raw token/RNG/work identity and the predeclared three-state rule:
+both fractions at least0.50 supported, both below not supported, mixed sides or
+any wall ratio outside[0.95,1.05] inconclusive. Semantic/coverage failure aborts.
+The5% band is diagnostic, not a confidence interval or a speedup estimate.
+Local first six tests passed. The initial47-test run failed only because a new
+test incorrectly required completed committed KV to be cleared. Correcting that
+test to persisted final lengths left runtime/doc bytes unchanged; frozen v2
+passed45 with two existing Linux-only skips (11.549 s, OS0). Independent source,
+classification, failure-cleanup and alias review approved the393-file snapshot.
+This is CPU preparation only; native results remain pending. Root deploys an
+exact source commit archive and coordinates the single bounded GPU run. Preserve
+original laws/checks, budgets and prior primary/vLLM results; no training, new
+Profile, optimization or stage-subtraction speedup is established.
