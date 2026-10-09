@@ -1,0 +1,129 @@
+{
+  "groups": {
+    "fit": {
+      "status": "completed",
+      "binding_sha256": "3ffea2ccafb8e740daf5943bf6db01192840d5bf4bdc97624172fdd282e710a3",
+      "blocks": 3157,
+      "proposed_positions": 21657,
+      "verified_positions": 21657,
+      "attempted_positions": 5119,
+      "effective_positions": 21637,
+      "accepted_draft_tokens": 2000,
+      "per_position": [
+        {
+          "position": 0,
+          "count": 3157,
+          "accepted_prefix_events": 1120
+        },
+        {
+          "position": 1,
+          "count": 3137,
+          "accepted_prefix_events": 465
+        },
+        {
+          "position": 2,
+          "count": 3115,
+          "accepted_prefix_events": 213
+        },
+        {
+          "position": 3,
+          "count": 3093,
+          "accepted_prefix_events": 94
+        },
+        {
+          "position": 4,
+          "count": 3068,
+          "accepted_prefix_events": 57
+        },
+        {
+          "position": 5,
+          "count": 3044,
+          "accepted_prefix_events": 33
+        },
+        {
+          "position": 6,
+          "count": 3023,
+          "accepted_prefix_events": 18
+        }
+      ],
+      "execution_checks_passed": true,
+      "error_type": null,
+      "completed_prompts": 44,
+      "output_tokens": 5181,
+      "eos_prompts": 8,
+      "numerical_fidelity": {
+        "rows": 0,
+        "max_total_variation": null,
+        "nonzero_tv_rows": 0,
+        "argmax_changed_rows": 0,
+        "scope": "Native block versus fresh sequential same-prefix differences; no losslessness verdict"
+      },
+      "scope": "Native-protocol quality only. Not a speed benchmark or untouched model-selection holdout.",
+      "zero_block_prompts": 0,
+      "peak_allocated_bytes": 2381026304
+    },
+    "eval": {
+      "status": "completed",
+      "binding_sha256": "09556d644aa13713fde808042bf201a8ffc6b16d03458c7c25fcabd40172b11a",
+      "blocks": 3280,
+      "proposed_positions": 22465,
+      "verified_positions": 22465,
+      "attempted_positions": 5076,
+      "effective_positions": 22437,
+      "accepted_draft_tokens": 1826,
+      "per_position": [
+        {
+          "position": 0,
+          "count": 3280,
+          "accepted_prefix_events": 1081
+        },
+        {
+          "position": 1,
+          "count": 3251,
+          "accepted_prefix_events": 432
+        },
+        {
+          "position": 2,
+          "count": 3224,
+          "accepted_prefix_events": 170
+        },
+        {
+          "position": 3,
+          "count": 3204,
+          "accepted_prefix_events": 79
+        },
+        {
+          "position": 4,
+          "count": 3184,
+          "accepted_prefix_events": 36
+        },
+        {
+          "position": 5,
+          "count": 3159,
+          "accepted_prefix_events": 19
+        },
+        {
+          "position": 6,
+          "count": 3135,
+          "accepted_prefix_events": 9
+        }
+      ],
+      "execution_checks_passed": true,
+      "error_type": null,
+      "completed_prompts": 43,
+      "output_tokens": 5128,
+      "eos_prompts": 6,
+      "numerical_fidelity": {
+        "rows": 0,
+        "max_total_variation": null,
+        "nonzero_tv_rows": 0,
+        "argmax_changed_rows": 0,
+        "scope": "Native block versus fresh sequential same-prefix differences; no losslessness verdict"
+      },
+      "scope": "Native-protocol quality only. Not a speed benchmark or untouched model-selection holdout.",
+      "zero_block_prompts": 0,
+      "peak_allocated_bytes": 2474884608
+    }
+  },
+  "scope": "Distinct frozen fit44/eval43 groups; full proposal labels retained, no quality or final-test rows."
+}

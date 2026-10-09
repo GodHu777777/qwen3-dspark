@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "source_commit": "034064bf8fea7f67c9039c2dd103b65ca12e803a",
+  "archive_sha256": "3d4ebda50a24c58175e6ff96428663155533f1ea3b419ee5f17eae02b59e0dda",
+  "source_file_count": 223,
+  "checkpoint_sha256": "d6f21ab3af5187ed181efdbde54118a9ada21b458d9957515a17d6b3693d0de4",
+  "selection_sha256": "3810939bb414f3ffcc2eff3e856d8d72d02f910d9ae503ef1845b94564042863",
+  "fit_artifact_file_sha256": "77dc61e54e82c4dbfda302743efe5d126584efd2c501e02fa3738737d99111e3",
+  "fit_artifact_sha256": "d2b5c5494396dda522db98a754464cb7c406980868bac82dc5f5c88f2e20147f",
+  "eval_report_file_sha256": "a3149fb6c34bd414f5a8724906cb6097eb4ad8c1865f7b695fbadfd52d027854",
+  "eval_report_sha256": "3c0aa8d168174ceafa477f1ff1a296034dece01441b0e341b5dbe8a78d067e3e",
+  "all_input_hashes_unchanged": true,
+  "all_os_exits_zero": true,
+  "all_owned_pids_gone": true,
+  "prompt_disjoint": true,
+  "fit_frozen_before_eval_launch": true,
+  "default_61_temperature_grid": true,
+  "num_bins": 20,
+  "independent_ece_brier_prevalence_recheck": true,
+  "position_evidence": [
+    {
+      "position": 0,
+      "fit_count": 3157,
+      "fit_prefix_events": 1120,
+      "eval_count": 3280,
+      "eval_prefix_events": 1081
+    },
+    {
+      "position": 1,
+      "fit_count": 3137,
+      "fit_prefix_events": 465,
+      "eval_count": 3251,
+      "eval_prefix_events": 432
+    },
+    {
+      "position": 2,
+      "fit_count": 3115,
+      "fit_prefix_events": 213,
+      "eval_count": 3224,
+      "eval_prefix_events": 170
+    },
+    {
+      "position": 3,
+      "fit_count": 3093,
+      "fit_prefix_events": 94,
+      "eval_count": 3204,
+      "eval_prefix_events": 79
+    },
+    {
+      "position": 4,
+      "fit_count": 3068,
+      "fit_prefix_events": 57,
+      "eval_count": 3184,
+      "eval_prefix_events": 36
+    },
+    {
+      "position": 5,
+      "fit_count": 3044,
+      "fit_prefix_events": 33,
+      "eval_count": 3159,
+      "eval_prefix_events": 19
+    },
+    {
+      "position": 6,
+      "fit_count": 3023,
+      "fit_prefix_events": 18,
+      "eval_count": 3135,
+      "eval_prefix_events": 9
+    }
+  ],
+  "verification_script_sha256": "63846cd43301168ac852201fd9a4dc4ac243c52d7ed59459c69babecb7d9c76f"
+}

@@ -92,7 +92,13 @@ the original 44/43 cases, seeds, sampling protocol and uncensored labels. They d
 not replace unreachable quality-only TV probes. See
 [confidence-calibration.md](confidence-calibration.md) for stdlib dry-run and
 CPU `calibrate_rollout fit/eval` commands, completion/identity checks and artifacts.
-No real fit44/eval43 collection or STS fit has been executed by this implementation.
+The frozen034064b real fit44/eval43 collections and default61-grid/20-bin CPU
+fit/eval completed, with all process exits0; see
+[STS report](../reports/sts-step1280-20261009/README.md). Fit used3157blocks and eval
+3280blocks. STS is not uniformly better: eval ECE worsens versus unscaled at
+positions1/2/5, and Brier at1–6; the fit-only constant has lower ECE at1–5 while
+both heads have lower Brier at all7 positions. Keep the frozen STS experimental
+branch and both baselines; do not tune on these eval results.
 
 The CPU workflow compares unscaled head, frozen STS and per-position prefix
 prevalence estimated only on fit44, applying those constants unchanged to eval43

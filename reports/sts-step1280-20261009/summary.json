@@ -1,0 +1,144 @@
+{
+  "status": "completed",
+  "source_commit": "034064bf8fea7f67c9039c2dd103b65ca12e803a",
+  "selected_checkpoint_step": 1280,
+  "checkpoint_sha256": "d6f21ab3af5187ed181efdbde54118a9ada21b458d9957515a17d6b3693d0de4",
+  "fit_prompts": 44,
+  "eval_prompts": 43,
+  "fit_blocks": 3157,
+  "eval_blocks": 3280,
+  "temperatures": [
+    0.9330329915368074,
+    0.8122523963562356,
+    0.8122523963562356,
+    0.6597539553864471,
+    0.6597539553864471,
+    5.656854249492381,
+    1.515716566510398
+  ],
+  "num_bins": 20,
+  "default_temperature_grid_count": 61,
+  "weighted_eval_metrics": {
+    "unscaled": {
+      "effective_labels": 22437,
+      "label_weighted_brier": 0.04629602442846652,
+      "count_weighted_mean_position_ece": 0.021306578725001853
+    },
+    "sts": {
+      "effective_labels": 22437,
+      "label_weighted_brier": 0.04674456667463109,
+      "count_weighted_mean_position_ece": 0.02125427253931247
+    },
+    "fit_prevalence_constant": {
+      "effective_labels": 22437,
+      "label_weighted_brier": 0.06261451037146835,
+      "count_weighted_mean_position_ece": 0.011116911373889433
+    }
+  },
+  "eval_sts_ece_better_than_unscaled_positions": [
+    3,
+    4,
+    6,
+    7
+  ],
+  "eval_sts_brier_better_than_unscaled_positions": [
+    7
+  ],
+  "eval_sts_ece_better_than_fit_constant_positions": [
+    6,
+    7
+  ],
+  "eval_sts_brier_better_than_fit_constant_positions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "event_counts": [
+    {
+      "position": 0,
+      "fit_count": 3157,
+      "fit_prefix_events": 1120,
+      "eval_count": 3280,
+      "eval_prefix_events": 1081
+    },
+    {
+      "position": 1,
+      "fit_count": 3137,
+      "fit_prefix_events": 465,
+      "eval_count": 3251,
+      "eval_prefix_events": 432
+    },
+    {
+      "position": 2,
+      "fit_count": 3115,
+      "fit_prefix_events": 213,
+      "eval_count": 3224,
+      "eval_prefix_events": 170
+    },
+    {
+      "position": 3,
+      "fit_count": 3093,
+      "fit_prefix_events": 94,
+      "eval_count": 3204,
+      "eval_prefix_events": 79
+    },
+    {
+      "position": 4,
+      "fit_count": 3068,
+      "fit_prefix_events": 57,
+      "eval_count": 3184,
+      "eval_prefix_events": 36
+    },
+    {
+      "position": 5,
+      "fit_count": 3044,
+      "fit_prefix_events": 33,
+      "eval_count": 3159,
+      "eval_prefix_events": 19
+    },
+    {
+      "position": 6,
+      "fit_count": 3023,
+      "fit_prefix_events": 18,
+      "eval_count": 3135,
+      "eval_prefix_events": 9
+    }
+  ],
+  "all_os_exits_zero": true,
+  "independent_verification_passed": true,
+  "fit_artifact_file_sha256": "77dc61e54e82c4dbfda302743efe5d126584efd2c501e02fa3738737d99111e3",
+  "eval_report_file_sha256": "a3149fb6c34bd414f5a8724906cb6097eb4ad8c1865f7b695fbadfd52d027854",
+  "scope": [
+    "Eval prompts are held out from STS fit only; all development rows participated in teacher-forced monitoring.",
+    "Per-position labels use actual realized prefix events, preserving rejected verified tails and excluding accepted-EOS tails.",
+    "Constant baseline uses fit44 prevalence only; no eval prevalence, grid or checkpoint selection.",
+    "Weighted mean of position ECE is not pooled-bin ECE; Brier weights each effective position label equally.",
+    "Rounds from the same prompt are correlated; no independent-round confidence intervals are claimed.",
+    "Frozen calibration is native-protocol evidence, not distribution losslessness, causal scheduler integration or serving speedup."
+  ],
+  "eval_sts_ece_worse_than_unscaled_positions": [
+    1,
+    2,
+    5
+  ],
+  "eval_sts_brier_worse_than_unscaled_positions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "eval_sts_ece_worse_than_fit_prevalence_constant_positions": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "eval_sts_brier_worse_than_fit_prevalence_constant_positions": []
+}

@@ -171,3 +171,25 @@ STS 对应位置保留 T=1 并标记 `fitted_on_fit=false`。所有方法仍用�
 要求、原始标签/计数篡改、checkpoint/runtime/source/fit 文件/artifact 变更、分组混入、
 零 block 提示、缺失 fit 尾部常数和无替代 TV probe。CPU 检查通过不代表已有真实校准
 结果，也不提供原生 BF16 losslessness 或服务性能证据。
+
+
+## 首次真实 fit44 → 冻结 artifact → eval43 结果
+
+[完整报告](../reports/sts-step1280-20261009/README.md) 使用不可变 `034064b`、已选择
+step1280、原 panel/cases/seeds，两个 GPU 采集各自限时 1200 秒；44/43 条提示全部
+完成，worker/launcher/controller 实际 OS 退出及 CPU fit/eval 均为 0，没有重试。
+fit 产生 3,157 blocks，eval 产生 3,280 blocks。fit artifact 文件 SHA256 为
+`77dc61e54e82c4dbfda302743efe5d126584efd2c501e02fa3738737d99111e3`，在 eval 启动前
+冻结；使用原 61 点网格/20 bins，eval 没有换 checkpoint、调温度或重估常数。
+
+结果混合：STS 相较原 head 的 ECE 在位置 1/2/5 更差，Brier 在 1–6 更差。
+fit-only constant 的 ECE 在位置 1–5 优于 STS，而两个 head 的 Brier 都在全部
+7 个位置优于 constant。近恒定预测容易获得低 ECE，不能仅由此判定 head 无用；
+Brier 对照也只支持此 panel 的概率预测表现，不能代替 scheduler/serving 收益。
+逐位置均保留完整结果；eval 第 6/7 位置仅 19/9 个正例，不能把多轮当独立重复。
+标签数加权 mean-position ECE 不是将所有位置合在同一批 bins 的 pooled ECE。
+
+保留原冻结 STS 为论文方法实验分支，unscaled 和 fit-only constant 为基线；不根据
+这次 eval 再调网格或改选 checkpoint。原始 prompts/token traces/artifacts 留在私有
+证据中，公开报告含独立验证脚本及 SHA256、每位置 ECE/Brier/coverage/event count。
+这些结果仍不证明 native block/sequential 分布一致、异步因果调度或服务加速。

@@ -60,8 +60,9 @@ evidence, same-checkpoint/data/protocol/source/runtime checks, disjoint prompt
 identities, frozen artifact integrity, and fit-only prefix-prevalence constants.
 It compares unscaled/STS/constants with 20-bin ECE/Brier and coverage. Explicit
 fit/eval collector groups require configs/sts-step1280-selection.json; quality
-remains the default. No real fit44/eval43 or STS fit has run; see
-docs/confidence-calibration.md for interfaces and evidence boundaries.
+remains the default. The frozen034064b fit44/eval43 collections and default-grid
+CPU STS fit/eval completed; results are mixed rather than universal improvement.
+See reports/sts-step1280-20261009 and docs/confidence-calibration.md.
 packed_target.py executes variable-length request chunks in one Qwen forward,
 with per-request positions, marker-based causal isolation and independent KV
 crop/removal. Five CPU tests check actual KV contents and lifecycle against
@@ -221,7 +222,12 @@ improved versus512. Root froze step1280 for STS research in
 configs/sts-step1280-selection.json; see reports/expanded-quality1280-20261009.
 All16 numerical probe rows still have nonzero TV (max0.0927705), so this is not
 a sequential-target-law or serving-speed guarantee. CPU fit/eval workflow now
-exists; real fit44/eval43 collection, frozen STS and eval metrics remain unexecuted. See docs/rollout-collection.md; keep final test locked and coordinate
+completed on034064b: fit44 yielded3157blocks, eval43 yielded3280blocks. All group
+OS exits and CPU fit/eval exits were0. STS ECE worsens versus unscaled at positions
+1/2/5, Brier worsens at1–6; the fit-only constant has lower ECE at1–5 but higher
+Brier at all7 positions. Eval tail events at6/7 number19/9. No eval-driven tuning;
+retain frozen STS as the paper-method branch and both baselines. See
+reports/sts-step1280-20261009 for per-position counts/coverage and independent checks. See docs/rollout-collection.md; keep final test locked and coordinate
 GPU windows separately. This does not modify completed old-pilot gate evidence.
 
 Experimental native varlen: varlen_target.py adds active-request KV gathering and
@@ -260,7 +266,7 @@ Whole-pretrained-Qwen gate: scripts/probe_qwen_varlen.py and
 docs/whole-qwen-varlen-gate.md define the fixed synthetic-input, three-result-state
 protocol. Eight CPU tests and real-target fingerprint dry-run passed. Root reports
 the first formal 7d1fcdb run exited and released the GPU with a layer26 RMS threshold
-failure; its independent report is being finalized. This is not a full native
+failure; see reports/whole-qwen-varlen-gate-20261009 for its independent report. This is not a full native
 correctness pass and does not affect the separate SDPA collector. Preserve the
 300-second bound and original per-layer thresholds; endpoint numerical differences
 remain separate from structural acceptance.

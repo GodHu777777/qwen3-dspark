@@ -72,7 +72,8 @@ prefix survival；不能直接将位置 confidence 相加当成期望连续接�
 target 的采样温度。需要绝对概率校准，是因为 `tau` 使用数值大小，不只需要排序。
 
 本项目已实现独立 CPU STS 算法及绑定 fit44/eval43 的采集/拟合/评估 CLI，
-但尚未采集这两组或拟合真实 STS。原定 1280 步训练已完成；同一 frozen
+两组真实采集和默认61-grid/20-bin STS拟合/评估现已完成（3157/3280blocks）；
+结果混合，不是普遍校准改善。原定 1280 步训练已完成；同一 frozen
 quality32 面板的 step128/512/1280 实际接受数/轮依次为 0.1778、0.4958、
 0.6930，step1280 相对512的 28/32 个 prompt 改善。root 已选择 step1280
 作为后续 STS 研究 checkpoint，独立选择文件位于
@@ -146,7 +147,7 @@ draft 与 target 在不同 CUDA stream 并发运行。本文所核对原文也�
 | 训练配方与数据 | target 重生成与三 split 审计完成：932 train/119 dev/119 test；冻结源码严格恢复至 step1280，原计划完成；quality128/512/1280完成并选择1280作STS研究 | 后续校准与系统检查；报告 anchor/批量及 warmup 差距，不延长计划或宣称论文规模 |
 | KV 增量与 rollback | target/draft cache CPU及逐层 KV 内容审查通过 | 真实 dtype/backend correctness gate；BF16 cached-block 3 prompt 中2失败仍是未解决事实 |
 | Stochastic distribution recovery | CPU 概率参考与真实 Markov/tensor/cache 路径已实现；Fraction 完整 law 与 tiny Qwen KV 检查通过，旧 pilot 真机9次运行/6次复现检查通过，expanded128/512/1280 quality32完成；均有same-prefix TV差异 | 检查实际 Qwen3-0.6B 的概率/缓存/数值差异，再接入调度因果性；区别概率无损理论与不同 kernel 的数值误差 |
-| Confidence STS | CPU算法与独立fit/eval CLI已实现，绑定冻结1280选择、checkpoint/data/source/runtime及fit身份，含fit-only常数和EOS/截断分母；尚无真实fit/eval采集或STS拟合 | 独立 dev 子集上拟合/评估并冻结逐位置温度，报告 cumprod ECE、Brier、prefix coverage；test 不参与 |
+| Confidence STS | CPU算法与独立fit/eval CLI已实现，绑定冻结1280选择、checkpoint/data/source/runtime及fit身份，真实fit44/eval43/default61-grid STS已完成，含fit-only常数和EOS/截断分母；STS ECE在1/2/5劣于unscaled、Brier在1–6更差，constant ECE在1–5更好 | 保留冻结方法和baseline，不用eval再调参；尾部正例稀疏，仍需因果scheduler/engine检验；test不参与 |
 | R 请求全局 Algorithm1 | 已有独立CPU `scheduler.py` literal planner，输出ell/B/tau/score；7项测试用小R/gamma穷举oracle，保留cliff反例 | 尚未接入解码/engine，没有实际多请求SPS；fixture仅证明算法，不证明性能或因果score来源 |
 | 硬件容量 SPS(B) | 已测单请求 eager target 若干块长；不含 draft、并发或服务管线 | 测真实 batched engine 的 SPS/shape 台阶、上下文/并发敏感性；定义计时边界，验证模型预测误差 |
 | 两步历史异步容量 K | 尚未实现 | 两步历史状态、因果隔离、当前top-K、启动/新旧请求映射、离散容量 cliffs、调度延迟隐藏 |
@@ -246,8 +247,9 @@ kernel、dtype 的浮点执行逐 bit 相同**。本项目此前要求 greedy �
 
 1. **先保持正确性边界。** 继续保留 BF16 失败；FP32 gate 只说明该精度配置，
    不混比 BF16。补随机 rejection sampler 后，在小词表已知分布上检验输出分布。
-2. **校准真实 prefix 信号。** 在独立 dev rollout 上按论文 STS 顺序拟合，冻结
-   温度；用恒定 confidence、未校准 head 作对照，报告位置分母/EOS截断。
+2. **保留真实 prefix 校准对照。** 固定fit44/default61grid STS与eval43已完成，
+   温度冻结；结果混合，保留fit-only常数与原head，不据eval再调参。下一步检验
+   因果调度中的信号用途，不能把较低ECE直接当作scheduler收益。
 3. **实现多请求数学 oracle。** 对小 R/gamma 枚举验证固定 B 的最优 allocation；
    测 ties、c=0/1、ell=0、不同请求质量、预算守恒。同步早停只在单峰曲线上与
    全局最优相等；用 Appendix A 反例验证“当前完整块回溯最优”确会破坏因果性。
