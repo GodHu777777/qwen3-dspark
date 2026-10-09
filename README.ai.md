@@ -117,11 +117,11 @@ Experiment logging: maintain docs/lab-notebook.md with problems, hypotheses,
 methods, failed attempts, observed results, limits and next decisions. Link source
 commits/configurations and aggregate evidence; do not reconstruct undocumented
 history as fact. User requested a dedicated 6.1 Sol recording role. The existing
-sol_data agent currently fulfills that dedicated role and maintains the notebook
-at each experiment milestone; attempts to create or restore a separate
-experiment_journal agent were rejected by the system agent thread limit. Reuse
-sol_data for follow-ups while that limit persists; do not describe a separate
-experiment_journal as the current owner. Root reviews and commits the evidence.
+experiment_journal agent now owns the notebook at each experiment milestone.
+Earlier agent-limit failures required sol_data to cover this role; on 2026-10-09
+experiment_journal was successfully restored and sol_data handed over sole editing
+ownership without pending notebook edits. Coordinate handoffs before changing the
+writer. Root reviews and commits the evidence.
 Astra owns correctness/training/result review and periodic direction review.
 
 Checkpoint integrity update (96b8fd3): new checkpoints hash both trainable weights
@@ -498,3 +498,15 @@ whole-Qwen cross-backend numerical failure. No additional full core suite was
 run for these three additive files; immutable c2d11a0's 261-test result remains
 the core baseline. Private preparation evidence:
 output/full-target-graph-preparation-20261009.
+
+Full-target GPU probe result (execution source 3829d53): three native eager states
+and three real full-target graph replays passed for ordered Q=(1,4), including
+partial commit, abort and inactive isolation. Replay left model/decoder Python
+counters unchanged. The private graph pool retained 2 MiB with no active tensor
+bytes, confirming why allocated/global deltas cannot substitute for pool accounting.
+Worker/controller/SSH exited 0 and release was independently checked. Complete
+archive recovery and root's CPU re-audit verified 30 tensor artifacts and 1,239
+numerical comparisons (all torch.equal and storage-byte equal; frozen limits
+unchanged). See reports/full-target-graph-20261009-3829d53 and notebook S30.
+This supersedes the preparation-only status for this finite same-backend family;
+cross-backend RMS/TV failures, E2E performance, capacity and overlap remain open.

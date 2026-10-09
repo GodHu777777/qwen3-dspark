@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 13:35（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S30 full-target graph 交接）**。experiment_journal 已成功恢复并接回专职记录与本日志唯一编辑权，sol_data 已停止编辑；此前 thread limit 下的临时代记与各轮来源保留在历史条目中。root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -17,7 +17,7 @@
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
 - 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)。
-- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)。
+- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -1004,3 +1004,19 @@ S25报告与项目入口已由root提交/推送 **51d1c3d**。Root另在本地CP
 
 
 **13:35统一续记：修复与第九composition已提交，固定AMD依赖完整CPU suite通过。** Root审核后将S28七文件修复及S29第九组成测试一并提交/推送 **c2d11a03e6a28dfccc5c2dc47da935d1410ef067**（13:31:44，push实际OS0）；原S29八测试仍对应21ce2bb。Direction随后仅用immutable c2d11a0在 **Python3.12.14/Torch2.12.0+rocm7.2/Transformers5.17.0** 跑完整 **261tests/17.615秒、全部OK、无skip，test与真实SSH均OS0**，三GPU visibility空、cuda_available=false/device_count0，没有环境更改或GPU执行。记录者直接核 `output/persistent-qwen-graph-pinned-cpu-20261009-c2d11a0/summary.json`：八remote/local evidence SHA一致，archive **10cd9f7c…** 的343文件逐Git blob一致、无missing/difference，保存的source before/after均343files passed；full log **51026d10…**明确261/17.615/OK。这个统一结果消除新修复/组成在固定5.17 CPU版本及Mac四Linux skip上的未测状态，不能追溯改写原260/256pass4skip或原247历史；仍只验证tiny Qwen、CPU emulator、host ownership/schema，**没有actual full-target GPU graph、真实private-pool测量或paired E2E速度结果**，旧RMS/分布/无加速与overlap限制继续保留。记录者停止编辑，交root审核日志。
+
+
+<a id="full-target-graph-result"></a>
+## 2026-10-09 — S30：完整 pretrained target 的同backend真实graph保真通过
+
+**问题与方法。** S28/29的CPU emulator不能证明完整pretrained Qwen在真实设备capture/replay保持RoPE、特征与全部layer KV一致。新协议冻结执行源码 **3829d5355018211f9b8464f00a44bdf55c3779e6**，原HF embedding、全部28 decoder blocks及final norm连同scratch/gather进入graph；prefill、LM head、采样、metadata与commit在capture外。固定Q=(1,4)、K ceilings=(144,144)，contexts依次(128,128)/(129,131)/(130,135)，人工commit(1,3)/(1,4)/(0,0)，最后abort。这些commit是fixture，不是采样接受决定。selected raw blocks[1,7,14,21,26]逐层对实际eager hooks核身份，另核final norm；layer26不是最后block。先三次native eager全部通过，再warmup2+capture1与三次有用真实replay；保留原pooled/per-request atol/rtol0.02及RMS≤0.005，own commit/inactive/lease要求exact。
+
+**准备失败与修复。** CPU准备留证中，首次7项通过；随后helper默认参数 `require_gpu=require_gpu` 在module import时NameError，产生loader error，未进入GPU。修复后最终8项/2.086秒、OS0；该准备使用acabd0f+三overlay，随后归档为3829d53，不能把准备snapshot认作后来完整执行tree。实际GPU仅一次，无retry/fallback/阈值或domain缩减。成功执行及独立释放后，网络传输两次exit255、首次打包mtime警告exit1；另post-release标量读取曾误把list当dict，修正后核验完成。保留原失败，成功resume得到独立verified archive与fresh `complete/`，未混入partial目录、未重跑GPU；post-release只读import生成的一项pyc另记，346执行源码未变。
+
+**直接证据与结果。** 本轮读[公开报告](../reports/full-target-graph-20261009-3829d53/README.md)、[aggregate](../reports/full-target-graph-20261009-3829d53/aggregate.json)、[可复用CPU审计器](../reports/full-target-graph-20261009-3829d53/verify_raw.py)及本地未发布 `output/full-target-graph-gpu-20261009-3829d53/final-handoff.json`；独立核handoff的15项critical及3项public SHA全部一致。正确完整证据使用 `complete/`。source.tar SHA **10d52f29…**；root另核逐字节等于3829d53 Git archive，verified evidence archive SHA **94ae5bc7…**、197727457 bytes。三stages、六observations与60项structural checks通过，worker/controller/外层SSH均OS0，独立identity/ASR/KFD检查确认释放；记录者没有再次live查进程或运行tensor审计。
+
+完整features/logits、28层speculative/committed KV、inactive isolation、rollback、固定地址与commit后consumer lease均有检查。Warmup/capture将Python model/decoder计数增加三次；三次replay改变tokens/positions但计数均不增加，证明所观察边界的真实Python-free replay。原raw CPU audit与root独立重跑均OS0：30 artifacts、3430 checks、1239 pooled/request comparisons，max abs/RMS均0、全部torch.equal及uint8 storage-byte equal。root结果保存在 `root-raw-audit.json`，记录者仅核报告与标量，不冒称亲自加载30个tensor。byte equality是额外描述性观察，不提高原gate阈值；worker原bit_equal仍按torch.equal解释。
+
+**资源口径。** 实测graph私有pool retained **2097152 bytes**，含allocated/active为0的inactive segment；reservation **536870912 bytes**不变。global reserved从1694498816到1692401664、delta **−2097152**，独立于private retained量，不能用净allocated/global delta替代保留显存。combined graph/workspace预算768MiB、workspace cap256MiB、allocator fraction cap6GiB、deadline300秒；这些不是transient/process-wide峰值测量。Supervisor **25.762924秒**含setup/证据I/O，不能当吞吐或speedup。
+
+**结论边界与下一决策。** 通过的是一个有限Q家族、同pinned native backend的完整target eager↔graph保真；hook证明raw-layer身份，不构成独立attention oracle。此前whole-Qwen layer26 RMS失败、cross-backend/sequential law与BF16 endpoint TV限制、S24无加速结果均不解除。没有模型质量、完整sampling distribution无损、paired E2E收益、t−2 capacity graph家族、ZOS或CPU/GPU overlap结论。下一步另审同backend paired请求计时与完整setup/物理工作收费；其CPU准备不冒称已有GPU速度结果。记录者仅维护日志，无GPU/进程/实现/stage/commit/push操作。
