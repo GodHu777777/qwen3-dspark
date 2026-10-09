@@ -31,6 +31,19 @@ class FakeGuard:
 
 
 class SmokeInputTests(unittest.TestCase):
+    def test_distribution_and_module_versions_are_separately_pinned(self):
+        evidence = worker.version_identity('0.30.0+rocm723', '0.30.0')
+        self.assertTrue(evidence['verified'])
+        self.assertNotEqual(evidence['distribution_metadata']['actual'], evidence['module']['actual'])
+        for distribution, module in [('0.30.0', '0.30.0'), ('0.30.0+rocm723', '0.30.0+rocm723'),
+                                     ('0.31.0+rocm723', '0.30.0'), ('0.30.0+rocm723', '0.31.0')]:
+            evidence = worker.version_identity(distribution, module)
+            self.assertFalse(evidence['verified'])
+            self.assertEqual(evidence['distribution_metadata']['actual'], distribution)
+            self.assertEqual(evidence['module']['actual'], module)
+            self.assertEqual(evidence['distribution_metadata']['expected'], '0.30.0+rocm723')
+            self.assertEqual(evidence['module']['expected'], '0.30.0')
+
     def test_worker_preflight_exact_settings_and_invalid_tokens(self):
         with tempfile.TemporaryDirectory() as tmp:
             model = Path(tmp) / 'model'; model.mkdir()

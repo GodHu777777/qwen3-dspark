@@ -7,12 +7,22 @@ The outer controller owns deadline, process group/tree cleanup and ASR checks.
 """
 import argparse
 import hashlib
+import importlib.metadata
 import json
 from pathlib import Path
 import time
 import traceback
 
-EXPECTED_VLLM_VERSION = '0.30.0+rocm723'
+EXPECTED_DISTRIBUTION_VERSION = '0.30.0+rocm723'
+EXPECTED_MODULE_VERSION = '0.30.0'
+
+
+def version_identity(distribution_version, module_version):
+    return dict(distribution_metadata=dict(actual=distribution_version,
+        expected=EXPECTED_DISTRIBUTION_VERSION, matches=distribution_version == EXPECTED_DISTRIBUTION_VERSION),
+        module=dict(actual=module_version, expected=EXPECTED_MODULE_VERSION,
+            matches=module_version == EXPECTED_MODULE_VERSION),
+        verified=(distribution_version == EXPECTED_DISTRIBUTION_VERSION and module_version == EXPECTED_MODULE_VERSION))
 
 
 def digest_bytes(value):
@@ -61,7 +71,7 @@ def main():
         raise ValueError('Output must be a new directory; no overwrite/retry')
     output.mkdir(parents=True)
     specification = dict(schema='vllm-offline-smoke-v1', engine=engine, sampling=sampling,
-        identity=identity, performance_claim=False, execute=args.execute, expected_vllm_version=EXPECTED_VLLM_VERSION,
+        identity=identity, performance_claim=False, execute=args.execute, expected_vllm_versions=dict(distribution_metadata=EXPECTED_DISTRIBUTION_VERSION, module=EXPECTED_MODULE_VERSION),
         runner_sha256=digest_bytes(Path(__file__).read_bytes()))
     (output / 'specification.json').write_text(json.dumps(specification, indent=2) + '\n')
     if not args.execute:
@@ -75,13 +85,16 @@ def main():
             stream.write(json.dumps(record, sort_keys=True, allow_nan=False) + '\n')
         print(json.dumps(record, sort_keys=True), flush=True)
 
+    versions = None
     try:
         stage('import_started')
         import vllm
         from vllm import LLM, SamplingParams
-        if vllm.__version__ != EXPECTED_VLLM_VERSION:
-            raise RuntimeError('Installed vLLM version differs from frozen inventory')
-        stage('import_completed', vllm_version=vllm.__version__)
+        versions = version_identity(importlib.metadata.version('vllm'), vllm.__version__)
+        stage('version_identity_checked', **versions)
+        if not versions['verified']:
+            raise RuntimeError('vLLM distribution or module version differs from its separately frozen identity: ' + json.dumps(versions, sort_keys=True))
+        stage('import_completed', versions=versions)
         stage('engine_initialization_started')
         llm = LLM(**engine)
         actual = llm.llm_engine.vllm_config
@@ -108,7 +121,7 @@ def main():
             graph_replay_independently_verified=False, performance_claim=False), indent=2) + '\n')
         stage('worker_completed')
     except BaseException as error:
-        stage('worker_failed', error_type=type(error).__name__, error=str(error))
+        stage('worker_failed', error_type=type(error).__name__, error=str(error), versions=versions)
         (output / 'failure.txt').write_text(traceback.format_exc())
         raise
 

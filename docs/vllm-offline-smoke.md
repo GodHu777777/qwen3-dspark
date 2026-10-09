@@ -1,6 +1,8 @@
 # Strong target-only engine: bounded offline smoke protocol
 
-This is the next execution proposal, not a completed GPU result. Source inventory
+The first authorized execution stopped at a runner version-contract check before
+engine initialization; see [the retained failure report](../reports/vllm-offline-smoke-20261009-e0f5ce8/README.md).
+The corrected protocol below still has no completed engine/request result. Source inventory
 found vLLM 0.30.0+rocm723 with offline `LLM.generate`, Qwen3 registration and graph
 configuration support. Hidden-GPU `vllm --help` timed out after 25 seconds; no
 process remained. That observation does not establish a kernel/engine failure.
@@ -101,3 +103,13 @@ and eight model/tokenizer file hashes. The first preparation failed because the
 installed Transformers returned a BatchEncoding by default; explicitly setting
 `return_dict=False` fixed the serialization contract. No GPU launch occurred.
 Seven Linux CPU lifecycle/input tests and both real-input stdlib preflights passed.
+
+The corrected runner separately pins distribution metadata `0.30.0+rocm723`
+and module `__version__` `0.30.0`. The latter is the literal value in the installed
+`_version.py` already bound before the failed run (SHA256
+`2ade9f96dd56ff65e00062b12ea8523a94eae3dec037a2e3972d40de9f45da7b`).
+Both actual and expected fields, their comparison results and any failure are
+recorded in worker stages. Neither guard is removed or normalized away; a true
+mismatch in either field still stops before constructing the engine. The frozen
+source/model/installed-file binding remains mandatory. A new execution needs its
+own immutable committed source and a separately authorized window.
