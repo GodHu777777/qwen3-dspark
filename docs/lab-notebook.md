@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09（S31 配对R1完整结果核对）**。experiment_journal 已成功恢复并接回专职记录与本日志唯一编辑权，sol_data 已停止编辑；此前 thread limit 下的临时代记与各轮来源保留在历史条目中。root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09（S32 配对profile的CPU修复闭环）**。experiment_journal 此前已恢复并接回唯一编辑权；本轮再次唤醒因 agent thread limit 失败，root 将 S32 的唯一临时编辑权交给 sol_data。历史交接与各轮来源保留，root 负责最终审核与提交。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,7 +16,7 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
-- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)、[S29 同backend target-only控制的CPU验证](#packed-target-only-cpu)、[S32 配对profile的两项P1修复与Linux CPU验证](#paired-profile-cpu-repair)。
 - 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)、[S25 native capacity tail与gather+attention真实capture/replay](#native-capacity-graph-result)、[S26 全部HF Qwen层的persistent事务CPU集成](#persistent-full-qwen-cpu)、[S27 随机session接入、bucket失败与feature生命周期](#persistent-session-cpu)、[S28 full-target graph的CPU准备与三项阻塞审查](#persistent-full-qwen-graph-cpu)、[S30 完整target真实graph保真](#full-target-graph-result)、[S31 配对R1完整请求负收益](#paired-r1-result)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
@@ -1043,3 +1043,17 @@ Q1/Q8各一次same-native eager↔first replay启动核验通过：原.02/.02/RM
 Speculative吞吐仅同栈target-only的51.57%/43.63%，两臂也都低于保留的vLLM强baseline；没有加速。Spec主轮455/530，实际graph轮435/500、eager尾轮20/30，graph rows3480/3965、尾rows95/135；target-only各635轮全部Q1 graph。Spec accepted draft180/105、proposed3120/3570，draft/round **0.395604/0.198113**，accepted/proposed **5.7692%/2.9412%**。这是synthetic prompt和empty-EOS固定预算下的本次轨迹工作量，不是自然development接受率，不能把quality32或TF overlap转作本次收益预测。Graph覆盖多数轮仍慢，不单凭覆盖率推加速，也不凭这两个cell定位某一个算子为唯一瓶颈。
 
 **边界与下一决策。** 本段无运行gate失败，失败的是性能收益假设；旧whole-Qwen layer26 RMS、cross-backend/sequential law与endpoint TV限制继续保留，同backend启动保真不解除它们。36批是两个R1 case，不是完整六case、多请求serving frontier或all-graph；TTFT/SLA、scheduler、t−2 capacity、ZOS/CPU-GPU overlap未由本次证明。下一步用已测负结果拆分shadow/FP64概率/metadata/commit及新栈target成本，再决定优化与finite physical-B family政策，保留强baseline和完整收费；不将新gate/局部kernel时间改写成E2E改善。[公开报告](../reports/paired-r1-benchmark-20261009-192a357/README.md)、[aggregate](../reports/paired-r1-benchmark-20261009-192a357/aggregate.json)及可复用审计器已完成，raw审计与scalar/归档身份分别留证；记录者未操作GPU/remote/进程/实现、未commit/push或读取final test。
+
+
+<a id="paired-profile-cpu-repair"></a>
+## 2026-10-09 — S32：配对profile的两项P1修复，Linux CPU验证与独立复审完成
+
+**问题与方法。** S31的speculative吞吐仅同栈target-only的51.57%/43.63%，多数轮走graph仍不能解释完整请求慢在哪里。[配对profile协议](paired-r1-profile.md)沿用36批、两case/两arm、每批128输出和原算法/RNG；warmup与primary直接调用原batch，只有diagnostic增加完整session的host spans/GPU events及最多四条CPU+ROCm trace，拟拆分target/head、FP64概率、host等待与spec增量。计时区分inclusive/exclusive与区间union，不叠加嵌套阶段或重叠的CPU/GPU时间；缺失关联保持unknown，不以CPU-only trace替代。预算保留1800/1790秒、free guard8GiB、allocator6GiB、每graph reservation512MiB、combined1280MiB与workspace64MiB；新增每trace256MiB/合计1GiB、RSS8GiB采样abort与100000 spans上限，不用RLIMIT_AS。
+
+**初始准备与实际失败。** 首轮6项CPU测试为5 pass/1 error：fixture对per-layer KV tuple调用clone，触发AttributeError，是测试夹具错误，非模型或GPU失败；修正后依次9、10、12项通过，原12项日志为3.314秒/OS0。静态修正还覆盖O(N²)汇总、monitor错误留证/rename竞争、round/stage关联、startup失败保留与精确trace数。随后独立审查实际跑出两项P1并要求GPU前修复：无效null/负数/bool ID、缺pid/tid的None相等和先滤掉无CPU父链的重复runtime，会制造假关联；零ID的合法语义未获证明，也不能当有效链。另一个stdlib反例用PyDLL.sleep持GIL约1.003686秒，原线程monitor虽设0.025秒周期，实测最大检查间隔1.008387秒，未在持GIL期间持续采样；这是CPU契约反例，不是AMD profiler故障。
+
+**修复与真实Linux检查。** 新关联规则只接受正JSON整数ID及有效pid/tid，先对全部runtime检查唯一性，再要求唯一包含的CPU父链，每条未解活动仍unknown。Diagnostic改由独立stdlib进程采样，以PID/start ticks与预绑定pidfd锁定worker，ready/stop握手、停前限额检查和正常OS0必需；留证写失败也执行绑定worker的abort，原supervisor回收后代，primary不新增monitor。Mac为15项/3.246秒/OS0，其中13 pass、两项真实Linux /proc+pidfd测试skip；冻结副本在隐藏GPU的Linux环境实际15项/12.622秒全过、worker/controller/SSH OS0。两秒持GIL实测区间2.000383秒，总41次采样，严格start<t<end为**39次**，最大gap0.0520248秒、正常monitor OS0。另一用例把partial trace写成11 bytes超过10-byte测试限额：通过的真实测试断言绑定worker被SIGKILL、monitor退出86并被reap，gil-end未写，failed结果保留sample_count28和partial；结束留证确认五个owned进程身份均消失、原ASR身份ready/nonbusy、KFD仅ASR、free25247080448 bytes。这些是当时CPU检查的释放证据，不是未来launch readiness。
+
+**独立复审与来源核验。** Direction复审冻结五文件，19项trace反例/对照与8项模拟Linux syscall的monitor边界通过，结论为两个原P1无剩余blocker；EOF、坏命令、身份改变与写失败的模拟检查不冒称真实内核实验，也未重复完整suite或运行GPU。记录者核其四个evidence SHA与handoff SHA **dd80144e…**、五文件当前/冻结SHA一致，独立从markers/samples重算上述39次与gap；Linux archive SHA **aeff6612…**一致。原Git base **0f4c1554…**的archive逐字节匹配，加五overlay后360文件逐manifest一致。Root首次source audit曾OS1，因为误把仅含五overlay的source目录当作完整解包树；纠正重建后OS0，错误属于审计脚本的路径假设，不属于源码、CPU测试或GPU实验。初始准备/失败审查留在 `output/paired-profile-implementation-20261009/`、`output/paired-profile-independent-review-20261009/`，修复/Linux与复审分别留在相应的 `-v2/`；均为本地未发布证据。
+
+**当前决定与边界。** 五文件修复已归档为commit **f0b0268775a51e33fde3f374aef5e29c2fed4ec2**，root报告已push；通过范围是CPU准备、资源监控契约及两个P1的独立复审，尚无GPU profile结果、真实ROCm correlation能力、算子瓶颈归因或收益结论。Root已授权core在该immutable source与fresh preflight后执行一次GPU profile，结果另记，不把启动当完成。旧whole-Qwen layer26 RMS、cross-backend/sequential law、endpoint TV与S31负收益继续保留；多请求、finite physical-B/capacity家族、t−2、ZOS及CPU/GPU overlap目标未被本轮缩小。本轮journal唤醒失败后由sol_data临时独占记录，root审核提交；记录者只核本地源码/标量/哈希并维护文档，未改实现、运行测试/GPU、stage/commit/push或读private/final-test样本。

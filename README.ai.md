@@ -116,12 +116,14 @@ Use git -C dspark-qwen when working from the parent workspace.
 Experiment logging: maintain docs/lab-notebook.md with problems, hypotheses,
 methods, failed attempts, observed results, limits and next decisions. Link source
 commits/configurations and aggregate evidence; do not reconstruct undocumented
-history as fact. User requested a dedicated 6.1 Sol recording role. The existing
-experiment_journal agent now owns the notebook at each experiment milestone.
+history as fact. User requested a dedicated 6.1 Sol recording role. The dedicated
+experiment_journal agent owns the notebook at experiment milestones when available.
 Earlier agent-limit failures required sol_data to cover this role; on 2026-10-09
-experiment_journal was successfully restored and sol_data handed over sole editing
-ownership without pending notebook edits. Coordinate handoffs before changing the
-writer. Root reviews and commits the evidence.
+experiment_journal was restored and sol_data handed over sole editing ownership
+without pending notebook edits. For S32, waking experiment_journal failed again
+with the agent thread limit, so root assigned sol_data sole temporary notebook
+editing ownership. Coordinate handoffs before changing the writer. Root reviews
+and commits the evidence.
 Astra owns correctness/training/result review and periodic direction review.
 
 Checkpoint integrity update (96b8fd3): new checkpoints hash both trainable weights
