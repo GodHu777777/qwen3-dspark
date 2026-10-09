@@ -1,0 +1,31 @@
+{
+  "status": "reject_round_signature_cache_preserve_three_validation_boundaries",
+  "base_commit": "d9e282d0e7ce5982a5d14bf08804f5a8c9948c6f",
+  "tested_cases": 8,
+  "final_run_os_exit": 0,
+  "scope": "Read-only production review and tiny real-HF CPUReplayEmulator counterexamples. Test-local signature monkeypatch only. No production changes, GPU, remote calls, full suite or performance claim.",
+  "findings": [
+    {
+      "claim": "No enforceable immutable model lease exists in current API.",
+      "evidence": "PersistentQwenTarget retains public model; caller and draft share tensor/module references. requires_grad_(False) forbids autograd, not mutation. Stream check enforces stream identity only, not writer/thread ownership."
+    },
+    {
+      "claim": "Synchronous verify does not remove the finish validation obligation.",
+      "evidence": "CPU thread waits for backend.wait, mutates public parameter in place while main thread releases GIL, then main resumes. Original rejects changed signature at finish; cached signature returns features. GPU waits also permit host concurrency, but test makes no GPU behavior claim."
+    },
+    {
+      "claim": "Removing any public boundary changes current refusal semantics.",
+      "evidence": "Mutations before prepare, after prepare before submit, and after submit before finish are all rejected by original code. Cached signature admits all three. Returned features are enough to prove refusal regression; no downstream output/KV claim needed."
+    }
+  ],
+  "existing_guard_limit": "The claim is preservation of the existing three-check refusal semantics only. Existing signatures are not a detector for arbitrary model writes: e.g. .data changes can bypass the tracked version. No new comprehensive immutability guarantee is asserted or required.",
+  "evidence_collector_notes": "Two initial collector-only mistakes are recorded: accessing healthy-only lengths after expected invalidation, then treating internal lengths tensor as mapping. Final collector removed unused field and passed all eight cases.",
+  "evidence_hashes": {
+    "evidence.json": "7c73c1587878ec4b0a67838660f43d1f8268fe4cdde5b74ce1b3446951ff68c3",
+    "run.log": "54a056e1062ee3dbd0e554e36e5a8b3e436a5cf2e7aad6c5022f2e1a99a99da6",
+    "first-attempt-note.txt": "c772c99d3d8cf760c25fd2ff47f0f71b703785108ee96422c8e8ab6228f4245e",
+    "second-attempt-collector-error.log": "8f7f20ee0a38b9926f3f07964f453582263013050a02d1c88cb6e6fb2b36153a",
+    "review.json": "3ee15f100b5b1acd584711b0d889596f3fdd6d71f9cd9d4bc5bb4afaf571b16d",
+    "counterexample.py": "49119a26205a347634674d0a27ee52d820f6b1fb763206404f98296f0b2750ea"
+  }
+}

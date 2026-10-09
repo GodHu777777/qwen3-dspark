@@ -554,3 +554,19 @@ See reports/paired-profile-20261009-f0b0268. Event intervals include dispatch ga
 and host waits overlap earlier GPU work; neither proves kernel-active attribution.
 The full CPU/runtime/GPU timeline remains unavailable, and historical vLLM,
 quality/calibration and numerical limitations remain unchanged.
+
+Model-signature CPU investigation: scripts/benchmark_model_signature_cpu.py
+measures the original signature and isolated components on a same-size BF16 meta
+Qwen model, loading config only. One focused equivalence test and a single pinned
+AMD CPU window passed; no weights, forward or GPU initialization were used.
+See reports/model-signature-cpu-20261009. AMD original/candidate medians were
+1601.134/1560.543 microseconds with broadly overlapping repeat ranges. Keep the
+production implementation unchanged: component timings are not additive and do
+not establish end-to-end gains. Independent CPU counterexamples also reject
+cross-boundary signature caching: public model aliases can mutate before prepare,
+submit, finish or during a synchronous wait. Preserve all three current checks;
+this does not imply detection of writes that already bypass version tracking.
+Return next to finite physical-B families and multi-request current-confidence
+admission, retaining prior capacity/RNG ordering, actual work counts and explicit
+eager fallback costs. No new lease framework or GPU profiling retry is required
+by these CPU findings.

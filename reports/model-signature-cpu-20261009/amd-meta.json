@@ -1,0 +1,311 @@
+{
+  "status": "completed_cpu_meta_measurement",
+  "iterations": 50,
+  "repeats": 7,
+  "warmup": 10,
+  "elapsed_seconds": 2.6420210589421913,
+  "orders": [
+    [
+      "named_buffers_tuple",
+      "config_to_dict_repr",
+      "named_parameters_tuple",
+      "full_original",
+      "full_local_string_candidate",
+      "named_tensor_enumeration",
+      "config_repr_prebuilt",
+      "metadata_without_version_prescanned",
+      "version_only_prescanned",
+      "metadata_and_version_prescanned",
+      "config_to_dict",
+      "full_recomposed"
+    ],
+    [
+      "metadata_and_version_prescanned",
+      "named_tensor_enumeration",
+      "config_repr_prebuilt",
+      "full_original",
+      "full_recomposed",
+      "full_local_string_candidate",
+      "config_to_dict",
+      "metadata_without_version_prescanned",
+      "version_only_prescanned",
+      "config_to_dict_repr",
+      "named_parameters_tuple",
+      "named_buffers_tuple"
+    ],
+    [
+      "config_repr_prebuilt",
+      "full_original",
+      "config_to_dict_repr",
+      "version_only_prescanned",
+      "named_buffers_tuple",
+      "config_to_dict",
+      "metadata_without_version_prescanned",
+      "named_parameters_tuple",
+      "named_tensor_enumeration",
+      "metadata_and_version_prescanned",
+      "full_recomposed",
+      "full_local_string_candidate"
+    ],
+    [
+      "metadata_without_version_prescanned",
+      "config_repr_prebuilt",
+      "named_parameters_tuple",
+      "config_to_dict_repr",
+      "full_local_string_candidate",
+      "config_to_dict",
+      "full_recomposed",
+      "named_tensor_enumeration",
+      "named_buffers_tuple",
+      "full_original",
+      "metadata_and_version_prescanned",
+      "version_only_prescanned"
+    ],
+    [
+      "version_only_prescanned",
+      "named_buffers_tuple",
+      "named_tensor_enumeration",
+      "named_parameters_tuple",
+      "config_to_dict_repr",
+      "config_to_dict",
+      "config_repr_prebuilt",
+      "full_local_string_candidate",
+      "full_recomposed",
+      "metadata_and_version_prescanned",
+      "metadata_without_version_prescanned",
+      "full_original"
+    ],
+    [
+      "metadata_and_version_prescanned",
+      "full_original",
+      "full_local_string_candidate",
+      "config_repr_prebuilt",
+      "named_parameters_tuple",
+      "named_tensor_enumeration",
+      "config_to_dict",
+      "full_recomposed",
+      "version_only_prescanned",
+      "named_buffers_tuple",
+      "metadata_without_version_prescanned",
+      "config_to_dict_repr"
+    ],
+    [
+      "metadata_and_version_prescanned",
+      "config_repr_prebuilt",
+      "full_local_string_candidate",
+      "full_recomposed",
+      "named_tensor_enumeration",
+      "config_to_dict",
+      "config_to_dict_repr",
+      "named_parameters_tuple",
+      "full_original",
+      "metadata_without_version_prescanned",
+      "version_only_prescanned",
+      "named_buffers_tuple"
+    ]
+  ],
+  "components": {
+    "config_to_dict": {
+      "samples_ns_per_call": [
+        87649.62,
+        88775.64,
+        91093.56,
+        82153.76,
+        87163.72,
+        88137.78,
+        84420.1
+      ],
+      "median_ns_per_call": 87649.62,
+      "min_ns_per_call": 82153.76,
+      "max_ns_per_call": 91093.56
+    },
+    "config_repr_prebuilt": {
+      "samples_ns_per_call": [
+        8907.64,
+        9408.32,
+        8971.44,
+        8776.36,
+        9010.46,
+        8765.44,
+        8932.5
+      ],
+      "median_ns_per_call": 8932.5,
+      "min_ns_per_call": 8765.44,
+      "max_ns_per_call": 9408.32
+    },
+    "config_to_dict_repr": {
+      "samples_ns_per_call": [
+        96230.32,
+        101702.2,
+        102086.2,
+        100716.56,
+        101781.26,
+        98899.82,
+        94085.9
+      ],
+      "median_ns_per_call": 100716.56,
+      "min_ns_per_call": 94085.9,
+      "max_ns_per_call": 102086.2
+    },
+    "named_parameters_tuple": {
+      "samples_ns_per_call": [
+        535370.36,
+        565376.28,
+        588115.5,
+        574785.64,
+        549874.3,
+        550345.44,
+        528315.46
+      ],
+      "median_ns_per_call": 550345.44,
+      "min_ns_per_call": 528315.46,
+      "max_ns_per_call": 588115.5
+    },
+    "named_buffers_tuple": {
+      "samples_ns_per_call": [
+        274112.72,
+        286599.28,
+        304231.06,
+        277925.24,
+        289106.86,
+        299856.18,
+        280422.56
+      ],
+      "median_ns_per_call": 286599.28,
+      "min_ns_per_call": 274112.72,
+      "max_ns_per_call": 304231.06
+    },
+    "named_tensor_enumeration": {
+      "samples_ns_per_call": [
+        814814.54,
+        871114.34,
+        920365.7,
+        867149.82,
+        893716.62,
+        817660.1,
+        772146.9
+      ],
+      "median_ns_per_call": 867149.82,
+      "min_ns_per_call": 772146.9,
+      "max_ns_per_call": 920365.7
+    },
+    "metadata_and_version_prescanned": {
+      "samples_ns_per_call": [
+        312888.58,
+        263190.32,
+        281925.0,
+        274326.28,
+        265720.12,
+        261173.44,
+        274085.54
+      ],
+      "median_ns_per_call": 274085.54,
+      "min_ns_per_call": 261173.44,
+      "max_ns_per_call": 312888.58
+    },
+    "metadata_without_version_prescanned": {
+      "samples_ns_per_call": [
+        264769.9,
+        275901.0,
+        262152.74,
+        245538.06,
+        247609.16,
+        249252.26,
+        242498.92
+      ],
+      "median_ns_per_call": 249252.26,
+      "min_ns_per_call": 242498.92,
+      "max_ns_per_call": 275901.0
+    },
+    "version_only_prescanned": {
+      "samples_ns_per_call": [
+        24009.88,
+        25317.34,
+        28768.98,
+        27255.52,
+        27912.12,
+        26054.36,
+        23106.94
+      ],
+      "median_ns_per_call": 26054.36,
+      "min_ns_per_call": 23106.94,
+      "max_ns_per_call": 28768.98
+    },
+    "full_original": {
+      "samples_ns_per_call": [
+        1601133.78,
+        1658588.04,
+        1804965.66,
+        1658440.76,
+        1583419.12,
+        1524858.72,
+        1522484.64
+      ],
+      "median_ns_per_call": 1601133.78,
+      "min_ns_per_call": 1522484.64,
+      "max_ns_per_call": 1804965.66
+    },
+    "full_recomposed": {
+      "samples_ns_per_call": [
+        1641122.48,
+        1588138.38,
+        2208870.3,
+        1584651.96,
+        1498936.52,
+        1714440.64,
+        1469746.98
+      ],
+      "median_ns_per_call": 1588138.38,
+      "min_ns_per_call": 1469746.98,
+      "max_ns_per_call": 2208870.3
+    },
+    "full_local_string_candidate": {
+      "samples_ns_per_call": [
+        1529669.74,
+        1771143.3,
+        1679720.36,
+        1718592.6,
+        1560543.06,
+        1359685.2,
+        1534844.16
+      ],
+      "median_ns_per_call": 1560543.06,
+      "min_ns_per_call": 1359685.2,
+      "max_ns_per_call": 1771143.3
+    }
+  },
+  "local_string_candidate_over_original_median": 0.9746487642025765,
+  "output_equivalent_before_after": true,
+  "production_signature_changed": false,
+  "scope": "Isolated CPU/meta object timings; component microbenchmarks have separate call/allocation overhead and are not an additive stage partition or a GPU speedup measurement.",
+  "architecture": {
+    "vocab_size": 151936,
+    "hidden_size": 1024,
+    "intermediate_size": 3072,
+    "num_hidden_layers": 28,
+    "num_attention_heads": 16,
+    "num_key_value_heads": 8,
+    "head_dim": 128
+  },
+  "config_source": {
+    "kind": "provided_config_json",
+    "sha256": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd"
+  },
+  "config_serialized_repr_bytes": 1490,
+  "parameter_tensor_count": 310,
+  "buffer_tensor_count": 2,
+  "unique_parameter_elements": 596049920,
+  "runtime": {
+    "python": "3.12.14",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "threads": 2,
+    "device": "meta"
+  },
+  "gpu_initialized": false,
+  "source_sha256": {
+    "scripts/benchmark_model_signature_cpu.py": "d06a83c40a69f4b5355ecc809fd64788f4b9773c74a2ec4dacf1c913d797e22c",
+    "dspark_qwen/persistent_qwen_graph.py": "0bc68d8ec485ad057cc2fc22de1c7e25e698798b5631e4ef4b183caa3d43ff8d"
+  }
+}

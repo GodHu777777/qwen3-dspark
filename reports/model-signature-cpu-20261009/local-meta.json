@@ -1,0 +1,311 @@
+{
+  "status": "completed_cpu_meta_measurement",
+  "iterations": 50,
+  "repeats": 7,
+  "warmup": 10,
+  "elapsed_seconds": 0.7552962090121582,
+  "orders": [
+    [
+      "named_buffers_tuple",
+      "config_to_dict_repr",
+      "named_parameters_tuple",
+      "full_original",
+      "full_local_string_candidate",
+      "named_tensor_enumeration",
+      "config_repr_prebuilt",
+      "metadata_without_version_prescanned",
+      "version_only_prescanned",
+      "metadata_and_version_prescanned",
+      "config_to_dict",
+      "full_recomposed"
+    ],
+    [
+      "metadata_and_version_prescanned",
+      "named_tensor_enumeration",
+      "config_repr_prebuilt",
+      "full_original",
+      "full_recomposed",
+      "full_local_string_candidate",
+      "config_to_dict",
+      "metadata_without_version_prescanned",
+      "version_only_prescanned",
+      "config_to_dict_repr",
+      "named_parameters_tuple",
+      "named_buffers_tuple"
+    ],
+    [
+      "config_repr_prebuilt",
+      "full_original",
+      "config_to_dict_repr",
+      "version_only_prescanned",
+      "named_buffers_tuple",
+      "config_to_dict",
+      "metadata_without_version_prescanned",
+      "named_parameters_tuple",
+      "named_tensor_enumeration",
+      "metadata_and_version_prescanned",
+      "full_recomposed",
+      "full_local_string_candidate"
+    ],
+    [
+      "metadata_without_version_prescanned",
+      "config_repr_prebuilt",
+      "named_parameters_tuple",
+      "config_to_dict_repr",
+      "full_local_string_candidate",
+      "config_to_dict",
+      "full_recomposed",
+      "named_tensor_enumeration",
+      "named_buffers_tuple",
+      "full_original",
+      "metadata_and_version_prescanned",
+      "version_only_prescanned"
+    ],
+    [
+      "version_only_prescanned",
+      "named_buffers_tuple",
+      "named_tensor_enumeration",
+      "named_parameters_tuple",
+      "config_to_dict_repr",
+      "config_to_dict",
+      "config_repr_prebuilt",
+      "full_local_string_candidate",
+      "full_recomposed",
+      "metadata_and_version_prescanned",
+      "metadata_without_version_prescanned",
+      "full_original"
+    ],
+    [
+      "metadata_and_version_prescanned",
+      "full_original",
+      "full_local_string_candidate",
+      "config_repr_prebuilt",
+      "named_parameters_tuple",
+      "named_tensor_enumeration",
+      "config_to_dict",
+      "full_recomposed",
+      "version_only_prescanned",
+      "named_buffers_tuple",
+      "metadata_without_version_prescanned",
+      "config_to_dict_repr"
+    ],
+    [
+      "metadata_and_version_prescanned",
+      "config_repr_prebuilt",
+      "full_local_string_candidate",
+      "full_recomposed",
+      "named_tensor_enumeration",
+      "config_to_dict",
+      "config_to_dict_repr",
+      "named_parameters_tuple",
+      "full_original",
+      "metadata_without_version_prescanned",
+      "version_only_prescanned",
+      "named_buffers_tuple"
+    ]
+  ],
+  "components": {
+    "config_to_dict": {
+      "samples_ns_per_call": [
+        11092.5,
+        11201.68,
+        11552.5,
+        10932.5,
+        11191.66,
+        11257.5,
+        11005.84
+      ],
+      "median_ns_per_call": 11191.66,
+      "min_ns_per_call": 10932.5,
+      "max_ns_per_call": 11552.5
+    },
+    "config_repr_prebuilt": {
+      "samples_ns_per_call": [
+        3728.34,
+        3876.66,
+        3884.16,
+        3660.0,
+        3590.0,
+        3590.0,
+        3690.84
+      ],
+      "median_ns_per_call": 3690.84,
+      "min_ns_per_call": 3590.0,
+      "max_ns_per_call": 3884.16
+    },
+    "config_to_dict_repr": {
+      "samples_ns_per_call": [
+        15676.66,
+        15131.66,
+        15138.32,
+        15148.34,
+        15749.18,
+        15251.66,
+        15075.0
+      ],
+      "median_ns_per_call": 15148.34,
+      "min_ns_per_call": 15075.0,
+      "max_ns_per_call": 15749.18
+    },
+    "named_parameters_tuple": {
+      "samples_ns_per_call": [
+        185775.82,
+        185954.18,
+        185042.5,
+        184307.5,
+        184705.84,
+        184395.0,
+        184436.66
+      ],
+      "median_ns_per_call": 184705.84,
+      "min_ns_per_call": 184307.5,
+      "max_ns_per_call": 185954.18
+    },
+    "named_buffers_tuple": {
+      "samples_ns_per_call": [
+        125958.32,
+        127120.84,
+        124029.16,
+        123515.0,
+        124720.0,
+        124295.84,
+        123802.5
+      ],
+      "median_ns_per_call": 124295.84,
+      "min_ns_per_call": 123515.0,
+      "max_ns_per_call": 127120.84
+    },
+    "named_tensor_enumeration": {
+      "samples_ns_per_call": [
+        314365.82,
+        311877.5,
+        315035.0,
+        310929.18,
+        312445.0,
+        309928.32,
+        311485.0
+      ],
+      "median_ns_per_call": 311877.5,
+      "min_ns_per_call": 309928.32,
+      "max_ns_per_call": 315035.0
+    },
+    "metadata_and_version_prescanned": {
+      "samples_ns_per_call": [
+        88548.32,
+        88997.5,
+        88698.34,
+        87505.84,
+        88345.82,
+        88139.16,
+        86849.18
+      ],
+      "median_ns_per_call": 88345.82,
+      "min_ns_per_call": 86849.18,
+      "max_ns_per_call": 88997.5
+    },
+    "metadata_without_version_prescanned": {
+      "samples_ns_per_call": [
+        83718.34,
+        83530.84,
+        82215.84,
+        80393.32,
+        82258.34,
+        81646.66,
+        82611.66
+      ],
+      "median_ns_per_call": 82258.34,
+      "min_ns_per_call": 80393.32,
+      "max_ns_per_call": 83718.34
+    },
+    "version_only_prescanned": {
+      "samples_ns_per_call": [
+        8944.18,
+        8585.82,
+        8862.5,
+        8784.16,
+        8701.68,
+        9026.66,
+        8925.82
+      ],
+      "median_ns_per_call": 8862.5,
+      "min_ns_per_call": 8585.82,
+      "max_ns_per_call": 9026.66
+    },
+    "full_original": {
+      "samples_ns_per_call": [
+        423708.34,
+        419940.0,
+        422633.34,
+        419020.82,
+        423403.34,
+        417682.5,
+        426264.16
+      ],
+      "median_ns_per_call": 422633.34,
+      "min_ns_per_call": 417682.5,
+      "max_ns_per_call": 426264.16
+    },
+    "full_recomposed": {
+      "samples_ns_per_call": [
+        424485.84,
+        422674.16,
+        422712.5,
+        419890.0,
+        426171.66,
+        420019.16,
+        428155.84
+      ],
+      "median_ns_per_call": 422712.5,
+      "min_ns_per_call": 419890.0,
+      "max_ns_per_call": 428155.84
+    },
+    "full_local_string_candidate": {
+      "samples_ns_per_call": [
+        419700.82,
+        418321.66,
+        416221.66,
+        416595.0,
+        422172.5,
+        414853.34,
+        419085.84
+      ],
+      "median_ns_per_call": 418321.66,
+      "min_ns_per_call": 414853.34,
+      "max_ns_per_call": 422172.5
+    }
+  },
+  "local_string_candidate_over_original_median": 0.9897980599448211,
+  "output_equivalent_before_after": true,
+  "production_signature_changed": false,
+  "scope": "Isolated CPU/meta object timings; component microbenchmarks have separate call/allocation overhead and are not an additive stage partition or a GPU speedup measurement.",
+  "architecture": {
+    "vocab_size": 151936,
+    "hidden_size": 1024,
+    "intermediate_size": 3072,
+    "num_hidden_layers": 28,
+    "num_attention_heads": 16,
+    "num_key_value_heads": 8,
+    "head_dim": 128
+  },
+  "config_source": {
+    "kind": "architecture_matched_synthetic_config",
+    "note": "Serialization contents are not claimed identical to a pretrained runtime config."
+  },
+  "config_serialized_repr_bytes": 1463,
+  "parameter_tensor_count": 310,
+  "buffer_tensor_count": 2,
+  "unique_parameter_elements": 596049920,
+  "runtime": {
+    "python": "3.14.3",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "torch": "2.11.0",
+    "transformers": "5.4.0",
+    "threads": 2,
+    "device": "meta"
+  },
+  "gpu_initialized": false,
+  "source_sha256": {
+    "scripts/benchmark_model_signature_cpu.py": "d06a83c40a69f4b5355ecc809fd64788f4b9773c74a2ec4dacf1c913d797e22c",
+    "dspark_qwen/persistent_qwen_graph.py": "0bc68d8ec485ad057cc2fc22de1c7e25e698798b5631e4ef4b183caa3d43ff8d"
+  }
+}
