@@ -371,3 +371,12 @@ samples. Memory records explicitly include inherited pre-reset target KV. The
 that the native end-to-end comparison has completed. Read
 docs/native-offline-benchmark.md. No capacity planner, graphs or overlap are
 integrated in this baseline.
+
+Persistent target KV candidate: persistent_target_kv.py separates fixed-address
+resident KV from speculative scratch and registered attention staging buffers.
+Eight local CPU tests include real tiny-Qwen KV prefix commits, stale-handle
+rejection, metadata-failure recovery and allocated-device alias normalization.
+These ran on Torch 2.11 / Transformers 5.4, not the pinned AMD runtime. This
+storage prototype is not connected to the decoder and proves no native graph,
+overlap or performance improvement. Capacity-tail native support and graph-safe
+attention still require a separate probe; see docs/persistent-target-kv.md.
