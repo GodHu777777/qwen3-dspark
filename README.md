@@ -26,8 +26,8 @@ throughput (8.2–14.2 times the batch time). This eager full-shadow baseline ha
 no capacity scheduler or graphs. It exposes an engine performance gap; it does
 not isolate the cost of speculation from the different execution backends.
 These are synthetic fixed-output workloads, and target numerical differences
-remain unresolved. Measured capacity prediction, full-model graph replay and scheduling
-overlap remain unfinished. Local verification rounds/s and output tok/s are
+remain unresolved. Measured capacity prediction, graph-backed end-to-end performance
+and scheduling overlap remain unfinished. Local verification rounds/s and output tok/s are
 different metrics.
 
 A [native graph capability probe](reports/native-capacity-graph-20261009-f5d03d4/README.md)
@@ -36,12 +36,16 @@ contexts replay through a captured gather+attention subgraph with bit-identical
 outputs. This establishes that limited execution boundary; QKV projections,
 RoPE, the full model and scheduling overlap are not captured by the probe.
 
-The next [full-target graph implementation](docs/persistent-qwen-graph.md) now
+The [full-target graph implementation](docs/persistent-qwen-graph.md) now
 includes the original HF model body, persistent KV transactions and explicit
 output ownership. Both [speculative](docs/persistent-sampling.md) and
 [target-only](docs/packed-target-only.md) sessions have CPU replay-emulator
-coverage. All 261 tests passed in the pinned AMD environment with GPUs hidden;
-real full-model GPU capture/replay and paired performance remain unverified.
+coverage. All 261 tests passed in the pinned AMD environment with GPUs hidden.
+A [pretrained full-target GPU probe](reports/full-target-graph-20261009-3829d53/README.md)
+also passed three actual graph replays against same-backend eager execution,
+including selected features, all-layer KV, partial commits and rollback. This
+finite-shape fidelity result does not resolve cross-backend numerical differences
+or demonstrate speedup; paired end-to-end performance remains unmeasured.
 The [experiment notebook](docs/lab-notebook.md) preserves the event-ownership,
 cancellation and memory-accounting failures found during review and their fixes.
 
