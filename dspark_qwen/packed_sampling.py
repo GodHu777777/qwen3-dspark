@@ -11,6 +11,7 @@ import torch
 
 from .tensor_sampling import (PROBABILITY_POLICY, TensorProposal, logits_to_probabilities,
     sample_categorical, validate_stops, validate_temperature, verify_proposal)
+from .target_strategy import AppendCropTargetStrategy
 
 
 @dataclass(frozen=True)
@@ -101,7 +102,7 @@ class PackedSpeculativeSession:
     External allocation policies must satisfy nonanticipation themselves; this
     class verifies capability identity and legal prefixes, not planner causality.
     """
-    def __init__(self, target, packed_draft, *, temperature=1., eos_ids=(), amp=False):
+    def __init__(self, target, packed_draft, *, temperature=1., eos_ids=(), amp=False, target_strategy=None):
         if target.lengths or packed_draft.lengths:
             raise ValueError('Session requires initially empty request pools')
         if target.device != packed_draft.device or tuple(target.layer_ids) != tuple(packed_draft.draft.spec.layer_ids):
@@ -113,6 +114,9 @@ class PackedSpeculativeSession:
                     getattr(packed_draft.kernel,'backend_name',None) != DRAFT_BACKEND):
                 raise ValueError('GPU session requires explicit pinned target and noncausal draft backends')
         self.target = target; self.draft = packed_draft
+        self.target_strategy = AppendCropTargetStrategy(target) if target_strategy is None else target_strategy
+        if self.target_strategy.target is not target:
+            raise ValueError('Target strategy must own the session target')
         self.temperature = validate_temperature(temperature)
         self.eos_ids = validate_stops(eos_ids,target.model.config.vocab_size)
         self.amp = amp; self.requests = {}; self.epoch = 0; self._incarnation = 0; self._nonce = 0
@@ -127,11 +131,18 @@ class PackedSpeculativeSession:
     def _invalidate(self):
         # Failure may occur after partial HF layer extension or random draws.
         # Do not promise rollback/replay. No public method may reuse these caches.
-        self.failed = True; self._pending.clear(); self.target.reset()
-        self.draft.layers=[]; self.draft._lengths={}; self.draft._markers={}
-        self.draft.key_requests=self.draft.key_requests[:0]
-        self.draft.key_positions=self.draft.key_positions[:0]
-        self.draft.last_projection_work=None
+        self.failed = True; self._pending.clear()
+        try:
+            self.target_strategy.invalidate()
+        except Exception as error:
+            # Preserve the original execution exception and poison the owner even
+            # when device failure makes target cleanup impossible.
+            self.cleanup_error = repr(error)
+        finally:
+            self.draft.layers=[]; self.draft._lengths={}; self.draft._markers={}
+            self.draft.key_requests=self.draft.key_requests[:0]
+            self.draft.key_positions=self.draft.key_positions[:0]
+            self.draft.last_projection_work=None
 
     def _advance(self):
         self.epoch += 1; self._pending.clear()
@@ -152,9 +163,10 @@ class PackedSpeculativeSession:
             if (not isinstance(t,torch.Tensor) or t.ndim!=2 or t.shape[0]!=1 or t.shape[1]<1 or t.dtype!=torch.long or t.device!=self.target.device or
                 not bool(((t>=0)&(t<self.target.model.config.vocab_size)).all()) or type(spec.max_new_tokens) is not int or spec.max_new_tokens<1 or not callable(getattr(spec.rng,'uniform',None))):
                 raise ValueError('Valid prompt, positive budget and per-request RNG required')
+        self.target_strategy.preflight('prefill',tuple(x.input_ids.shape[1] for x in requests.values()),(0,)*len(requests))
         try:
             for r in requests:self.target.add_request(r);self.draft.add_request(r)
-            features=self.target.append({r:x.input_ids for r,x in requests.items()})
+            features=self.target_strategy.prefill({r:x.input_ids for r,x in requests.items()})
             # PackedTarget.predict(last_only=True) projects every prompt row.
             # Select final hidden rows first, then do one R-row LM-head projection.
             final_hidden=torch.cat([features.for_request(r).last[:,-1:] for r in requests],dim=1)
@@ -166,6 +178,7 @@ class PackedSpeculativeSession:
                     finished=token in self.eos_ids or spec.max_new_tokens==1,incarnation=self._incarnation)
                 self._incarnation+=1
             with self._autocast():self.draft.append_committed({r:features.for_request(r).context for r in requests})
+            self.target_strategy.release_features(features)
             self.requests.update(additions);self._advance();self._check_lengths()
             self.last_prefill_work=dict(target=features.work,draft_context_projection=self.draft.last_projection_work,
                 prefill_lm_head_calls=1,prefill_lm_head_rows=len(requests),projection_scope='Only one final hidden row per request, batched once; not whole-prompt projection')
@@ -230,9 +243,11 @@ class PackedSpeculativeSession:
             policy_record=allocation_policy.validate_allocation(context,proposals,dict(allocations))
             if not isinstance(policy_record,dict):raise ValueError('Typed allocation validator must return a proof record')
         proposal_work={id(self._pending[r][2]):copy.deepcopy(self._pending[r][2]) for r in proposals}
+        self.target_strategy.preflight('verification',tuple(1+p.tokens.numel() for p in selected.values()),
+                                       tuple(before[r] for r in selected))
         try:
             chunks={r:torch.cat((torch.tensor([self.requests[r]['output'][-1]],device=self.target.device),p.tokens))[None] for r,p in selected.items()}
-            verified=self.target.append(chunks);logits=self.target.predict(verified)
+            verified=self.target_strategy.verify(chunks);logits=self.target.predict(verified)
             decisions={};probabilities={};contexts={};record={}
             for r,p in selected.items():
                 state=self.requests[r];remaining=state['budget']-len(state['output'])
@@ -242,8 +257,9 @@ class PackedSpeculativeSession:
                 record[r]=dict(accepted=decisions[r].accepted_draft_tokens,proposed=p.tokens.numel(),committed=committed,
                     rejected_index=decisions[r].rejected_index,extra_token_kind=decisions[r].extra_token_kind,stop_reason=decisions[r].stop_reason,
                     cache_before=before[r],cache_after=before[r]+committed)
-            for r in selected:self.target.crop(r,record[r]['cache_after'])
+            self.target_strategy.commit(verified,{r:record[r]['committed'] for r in selected})
             with self._autocast():self.draft.append_committed(contexts)
+            self.target_strategy.release_features(verified)
             for r,decision in decisions.items():
                 state=self.requests[r];state['output'].extend(decision.tokens.tolist())
                 state['finished']=decision.stop_reason in ('eos','budget')
@@ -258,6 +274,14 @@ class PackedSpeculativeSession:
 
     def step(self, allocations):
         """Fixed-budget baseline convenience; explicitly allows zero-draft skip."""
+        self._healthy()
+        # Fixed-budget Q is known before proposal draws. Shadow-mode allocation
+        # is only known later, and is checked before verification draws/forward.
+        if allocations and all(r in self.requests and not self.requests[r]['finished'] and
+                type(n) is int and 0<=n<=self.draft.draft.spec.block_size for r,n in allocations.items()):
+            before=self.target.lengths
+            self.target_strategy.preflight('verification',tuple(1+min(n,self.requests[r]['budget']-len(self.requests[r]['output']))
+                for r,n in allocations.items()),tuple(before[r] for r in allocations))
         issued=self.propose(allocations,allocations,mode='fixed_budget')
         actual={r:h.proposal_limit for r,h in issued.proposals.items()}
         result=self.verify_commit(issued.proposals,actual,allocation_policy='fixed_before_proposal')

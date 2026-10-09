@@ -426,3 +426,16 @@ Torch 2.12.0+rocm7.2 / Transformers 5.17.0 with GPUs hidden (13.647 s, actual
 SSH/test exit 0); all 334 archive files were verified. Evidence is under
 output/persistent-qwen-pinned-cpu-20261009-f46e63f. No tested HF API incompatibility
 was observed, and this CPU result makes no native or full-model graph claim.
+
+Persistent session integration: `target_strategy.py` adds an explicit optional
+strategy to `PackedSpeculativeSession`; default append/crop remains unchanged.
+Finite declared ordered-Q buckets select the smallest compatible K capacity;
+missing shapes fail explicitly. Persistent verification computes all sampling
+decisions before one target commit, then projects committed draft features before
+releasing the feature lease. Admission retains the single R-row LM-head call.
+Nine real tiny-Qwen tests exercise actual q/p/RNG, EOS/budgets, lifecycle and
+failure cleanup. Frozen f46e63f plus the four integration overlays passed 239
+local CPU tests (235 passed, four Linux-only skips); source and log hashes were
+independently verified. See docs/persistent-sampling.md and private evidence
+output/persistent-sampling-cpu-20261009. This does not establish GPU graph leases,
+full-model replay, overlap or speedup; the native graph implementation is separate.
