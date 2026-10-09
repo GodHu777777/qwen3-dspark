@@ -1,0 +1,114 @@
+{
+  "scope": "Separate add_request/step observer pass after all primary batches; request-specific submission to first nonempty host output / completion; includes queue, IPC and observer costs",
+  "pure_prefill_status": "unsupported; TTFT is not pure prefill",
+  "cells": [
+    {
+      "case_id": "r1-c64",
+      "diagnostic_batches": 2,
+      "request_observations": 2,
+      "ttft_seconds": {
+        "mean": 0.04525114700663835,
+        "median": 0.04525114700663835,
+        "min": 0.04337833798490465,
+        "max": 0.04712395602837205
+      },
+      "completion_latency_seconds": {
+        "mean": 0.9860843964852393,
+        "median": 0.9860843964852393,
+        "min": 0.9738903139950708,
+        "max": 0.9982784789754078
+      },
+      "pure_prefill_seconds": null
+    },
+    {
+      "case_id": "r1-c256",
+      "diagnostic_batches": 2,
+      "request_observations": 2,
+      "ttft_seconds": {
+        "mean": 0.056563312478829175,
+        "median": 0.056563312478829175,
+        "min": 0.0545093099353835,
+        "max": 0.05861731502227485
+      },
+      "completion_latency_seconds": {
+        "mean": 1.0144661695230752,
+        "median": 1.0144661695230752,
+        "min": 1.0117516199825332,
+        "max": 1.0171807190636173
+      },
+      "pure_prefill_seconds": null
+    },
+    {
+      "case_id": "r2-c64",
+      "diagnostic_batches": 2,
+      "request_observations": 4,
+      "ttft_seconds": {
+        "mean": 0.043858341086888686,
+        "median": 0.043774271092843264,
+        "min": 0.04332281707320362,
+        "max": 0.04456200508866459
+      },
+      "completion_latency_seconds": {
+        "mean": 0.9793141775007825,
+        "median": 0.9790807979879901,
+        "min": 0.9753435900202021,
+        "max": 0.9837515240069479
+      },
+      "pure_prefill_seconds": null
+    },
+    {
+      "case_id": "r2-c256",
+      "diagnostic_batches": 2,
+      "request_observations": 4,
+      "ttft_seconds": {
+        "mean": 0.08130639302544296,
+        "median": 0.08085339702665806,
+        "min": 0.0787031470099464,
+        "max": 0.08481563103850931
+      },
+      "completion_latency_seconds": {
+        "mean": 1.0453241797513328,
+        "median": 1.0454365990008228,
+        "min": 1.0419196779839694,
+        "max": 1.0485038430197164
+      },
+      "pure_prefill_seconds": null
+    },
+    {
+      "case_id": "r4-c64",
+      "diagnostic_batches": 2,
+      "request_observations": 8,
+      "ttft_seconds": {
+        "mean": 0.09187171663506888,
+        "median": 0.09184833796462044,
+        "min": 0.0844352759886533,
+        "max": 0.0984007710358128
+      },
+      "completion_latency_seconds": {
+        "mean": 1.0416600757162087,
+        "median": 1.040384997439105,
+        "min": 1.0233178170165047,
+        "max": 1.0575354839675128
+      },
+      "pure_prefill_seconds": null
+    },
+    {
+      "case_id": "r4-c256",
+      "diagnostic_batches": 2,
+      "request_observations": 8,
+      "ttft_seconds": {
+        "mean": 0.08051831873308402,
+        "median": 0.08018186845583841,
+        "min": 0.06961423298344016,
+        "max": 0.09143723302986473
+      },
+      "completion_latency_seconds": {
+        "mean": 1.0626992143807001,
+        "median": 1.0622753435163759,
+        "min": 1.0501108369790018,
+        "max": 1.074012091034092
+      },
+      "pure_prefill_seconds": null
+    }
+  ]
+}

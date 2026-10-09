@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "source_commit": "700bfa60746f1315baaeec5ead28cc5ee553ae52",
+  "workload_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+  "sample_count": 54,
+  "phase_counts": {
+    "warmup": 12,
+    "primary": 30,
+    "diagnostic": 12
+  },
+  "total_output_tokens": 16128,
+  "primary_output_tokens": 8960,
+  "health_samples": 35,
+  "maximum_sampled_global_vram_used_bytes": 15068602368,
+  "checks": [
+    "Archive members match preparation hashes; root separately matched git archive bytes",
+    "54 exact ordered phase/repeat/case identities match independent enumeration and specification",
+    "Materialized tokens and seeds match fixed recipe",
+    "Every request has 128 output tokens and expected identity; all batch times positive finite",
+    "Primary request latency and TTFT remain null",
+    "Diagnostic request-specific clocks obey first-output/completion/batch bounds",
+    "All six pooled rates and mean/median/min/max independently match worker; rates also match root",
+    "Worker/controller actual OS exits zero; timeout false and supervisor cleanup empty",
+    "Seven observed owned PIDs absent in saved independent release",
+    "Preserved ASR identity/health and sampled global VRAM restored",
+    "Saved post-run all-bound-file integrity passed"
+  ]
+}

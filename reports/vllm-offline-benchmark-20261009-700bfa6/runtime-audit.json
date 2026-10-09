@@ -1,0 +1,77 @@
+{
+  "versions": {
+    "vllm": "0.30.0+rocm723",
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "vllm_module": "0.30.0"
+  },
+  "hardware": {
+    "architecture": "gfx1201",
+    "device_name_from_preserved_service": "AMD Radeon Graphics",
+    "total_vram_bytes": 34208743424
+  },
+  "engine": {
+    "dtype": "bfloat16",
+    "tensor_parallel_size": 1,
+    "generation_config": "vllm",
+    "max_model_len": 4096,
+    "max_num_seqs": 4,
+    "max_num_batched_tokens": 4096,
+    "gpu_memory_utilization": 0.18,
+    "enable_prefix_caching": false,
+    "enforce_eager": false,
+    "disable_log_stats": true,
+    "seed": 20261009
+  },
+  "attention_backend": "Default ROCM_ATTN, internal Triton paged attention fallback logged; no manual backend change",
+  "graph": {
+    "configured_mode": "FULL_AND_PIECEWISE",
+    "configured_capture_sizes": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "capture_completion_logged": true,
+    "initial_capture_logged_seconds": 8,
+    "later_capture_logged_seconds": 2,
+    "graph_pool_logged_GiB": 0.17,
+    "replay_independently_instrumented": false
+  },
+  "timing": {
+    "imports_and_version_check_seconds": 20.506031300057657,
+    "engine_initialization_seconds": 98.77871316298842,
+    "worker_completed_stage_seconds": 174.42628050898202,
+    "controller_lifecycle_seconds": 179.4312819329789,
+    "setup_outside_sample_times": true
+  },
+  "execution": {
+    "worker_os_exit": 0,
+    "controller_os_exit": 0,
+    "wait_evidence": "Supervisor waited worker; outer shell waited controller and wrote OS exit; local SSH execution also exited 0",
+    "timeout": false,
+    "retries": 0,
+    "supervisor_cleanup_actions": [],
+    "normal_engine_shutdown": "Engine process manager logged SIGTERM to EngineCore during normal teardown; distinct from supervisor cleanup",
+    "owned_pids_independently_absent": 7,
+    "all_bound_files_unchanged_post_run": true
+  },
+  "resources": {
+    "health_sample_count": 35,
+    "maximum_sampled_global_vram_used_bytes": 15068602368,
+    "note": "Global sampled device usage includes preserved ASR; not allocator peak or continuous maximum",
+    "before_and_independent_release_vram": {
+      "total_bytes": 34208743424,
+      "used_bytes": 8967499776,
+      "free_bytes": 25241243648
+    },
+    "preserved_asr_ready_idle_all_health_samples": true,
+    "preserved_asr_identity_unchanged": true,
+    "only_preserved_asr_owned_kfd_after_release": true
+  },
+  "limitations": [
+    "OMP_NUM_THREADS=2 serving warning retained; no posthoc tuning",
+    "Graph capture is logged but graph replay was not separately instrumented",
+    "Compiler/JIT cache effects occur naturally; no environment or package patch"
+  ]
+}

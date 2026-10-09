@@ -1,0 +1,151 @@
+{
+  "throughput_formula": "sum(output tokens) / sum(batch wall seconds); primary only",
+  "time_scope": "Synchronous LLM.generate entry to return; includes submission/prefill/decode/completion",
+  "per_request_latency_status": "unsupported with stats disabled; null, never batch time / R",
+  "cells": [
+    {
+      "case_id": "r1-c64",
+      "request_count": 1,
+      "prompt_length": 64,
+      "repeats": 5,
+      "batch_wall_seconds": [
+        0.9685598809737712,
+        0.9720953319920227,
+        0.9811986440327018,
+        0.984228782937862,
+        0.9695856730686501
+      ],
+      "total_output_tokens": 640,
+      "total_batch_wall_seconds": 4.875668313005008,
+      "pooled_output_tokens_per_second": 131.26405631263103,
+      "batch_wall_summary_seconds": {
+        "mean": 0.9751336626010015,
+        "median": 0.9720953319920227,
+        "min": 0.9685598809737712,
+        "max": 0.984228782937862
+      },
+      "per_request_completion_latency_seconds": null,
+      "ttft_seconds": null
+    },
+    {
+      "case_id": "r1-c256",
+      "request_count": 1,
+      "prompt_length": 256,
+      "repeats": 5,
+      "batch_wall_seconds": [
+        1.000916232005693,
+        1.0182816300075501,
+        1.0057085859589279,
+        0.9998146409634501,
+        1.0011978030670434
+      ],
+      "total_output_tokens": 640,
+      "total_batch_wall_seconds": 5.0259188920026645,
+      "pooled_output_tokens_per_second": 127.33989818625602,
+      "batch_wall_summary_seconds": {
+        "mean": 1.0051837784005329,
+        "median": 1.0011978030670434,
+        "min": 0.9998146409634501,
+        "max": 1.0182816300075501
+      },
+      "per_request_completion_latency_seconds": null,
+      "ttft_seconds": null
+    },
+    {
+      "case_id": "r2-c64",
+      "request_count": 2,
+      "prompt_length": 64,
+      "repeats": 5,
+      "batch_wall_seconds": [
+        1.0165846339659765,
+        1.0363112859195098,
+        1.0100948170293123,
+        1.0061784359859303,
+        1.0068642509868369
+      ],
+      "total_output_tokens": 1280,
+      "total_batch_wall_seconds": 5.076033423887566,
+      "pooled_output_tokens_per_second": 252.1654002466537,
+      "batch_wall_summary_seconds": {
+        "mean": 1.0152066847775132,
+        "median": 1.0100948170293123,
+        "min": 1.0061784359859303,
+        "max": 1.0363112859195098
+      },
+      "per_request_completion_latency_seconds": null,
+      "ttft_seconds": null
+    },
+    {
+      "case_id": "r2-c256",
+      "request_count": 2,
+      "prompt_length": 256,
+      "repeats": 5,
+      "batch_wall_seconds": [
+        1.0117457669693977,
+        1.0546991219744086,
+        1.048368557007052,
+        1.0606905439635739,
+        1.0157884999644011
+      ],
+      "total_output_tokens": 1280,
+      "total_batch_wall_seconds": 5.191292489878833,
+      "pooled_output_tokens_per_second": 246.56672736039107,
+      "batch_wall_summary_seconds": {
+        "mean": 1.0382584979757667,
+        "median": 1.048368557007052,
+        "min": 1.0117457669693977,
+        "max": 1.0606905439635739
+      },
+      "per_request_completion_latency_seconds": null,
+      "ttft_seconds": null
+    },
+    {
+      "case_id": "r4-c64",
+      "request_count": 4,
+      "prompt_length": 64,
+      "repeats": 5,
+      "batch_wall_seconds": [
+        0.9848709909711033,
+        0.98612506093923,
+        0.982234796974808,
+        1.021410496905446,
+        0.9866183730773628
+      ],
+      "total_output_tokens": 2560,
+      "total_batch_wall_seconds": 4.96125971886795,
+      "pooled_output_tokens_per_second": 515.9979813723874,
+      "batch_wall_summary_seconds": {
+        "mean": 0.99225194377359,
+        "median": 0.98612506093923,
+        "min": 0.982234796974808,
+        "max": 1.021410496905446
+      },
+      "per_request_completion_latency_seconds": null,
+      "ttft_seconds": null
+    },
+    {
+      "case_id": "r4-c256",
+      "request_count": 4,
+      "prompt_length": 256,
+      "repeats": 5,
+      "batch_wall_seconds": [
+        1.0688802039949223,
+        1.0621810569427907,
+        1.119473073980771,
+        1.1074827499687672,
+        1.0285098649328575
+      ],
+      "total_output_tokens": 2560,
+      "total_batch_wall_seconds": 5.386526949820109,
+      "pooled_output_tokens_per_second": 475.25985182075345,
+      "batch_wall_summary_seconds": {
+        "mean": 1.0773053899640217,
+        "median": 1.0688802039949223,
+        "min": 1.0285098649328575,
+        "max": 1.119473073980771
+      },
+      "per_request_completion_latency_seconds": null,
+      "ttft_seconds": null
+    }
+  ]
+}

@@ -339,3 +339,13 @@ profiles. Both default to CPU binding/preflight; preparation is not a GPU
 benchmark result. Read docs/vllm-offline-benchmark.md and
 docs/packed-performance-plan.md before execution. Do not mix output tokens/s,
 local rounds/s and end-to-end serving capacity.
+
+The first formal vLLM fixed-batch baseline completed all 54 warmup/primary/diagnostic
+batches on 700bfa6 with one engine and worker/controller OS0. Pooled output
+throughput is 127–131 tok/s at R1, 247–252 at R2 and 475–516 at R4 over the two
+synthetic prompt lengths. All five primary repeats per cell remain public in
+reports/vllm-offline-benchmark-20261009-700bfa6. Actual default ROCM_ATTN used
+its internal Triton path; graph capture completed with sizes 1/2/4/8, but replay
+was not independently traced. This target-only measurement is not DSpark
+speedup or an arrival-load frontier. Immutable 700bfa6 also passed the complete
+204-test CPU suite with GPUs hidden (output/integration-cpu-700bfa6).

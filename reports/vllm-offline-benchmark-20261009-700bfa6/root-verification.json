@@ -1,0 +1,21 @@
+{
+  "source_commit": "700bfa60746f1315baaeec5ead28cc5ee553ae52",
+  "source_archive_git_exact_match": true,
+  "archive_sha256": "71213ffbd3e058d2073aead8ee90fe26efd699d28c4cfef8249d553d3b110f3f",
+  "samples": 54,
+  "total_output_tokens": 16128,
+  "primary_output_tokens": 8960,
+  "rates": {
+    "r1-c64": 131.26405631263103,
+    "r1-c256": 127.33989818625602,
+    "r2-c64": 252.1654002466537,
+    "r2-c256": 246.56672736039107,
+    "r4-c64": 515.9979813723874,
+    "r4-c256": 475.25985182075345
+  },
+  "sample_sha256": "69c1ece50adea40555005b3640caa2781f98609014a3258ffe11ff579a6b11f4",
+  "ordered_domain_and_request_counts": true,
+  "diagnostic_bounds_and_primary_null_latency": true,
+  "actual_os_exit_and_saved_release_passed": true,
+  "scope": "Independent root scalar and Git archive verification; no graph replay or sampling-fidelity assertion."
+}
