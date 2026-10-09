@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 12:20（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 12:30（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,7 +16,7 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
-- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)、[S24 完整native E2E与vLLM比较](#native-e2e-result)。
 - 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
@@ -865,3 +865,35 @@ Root随后在该immutable source archive运行完整unittest suite，未发布 `
 **CPU证据与身份。** 八测试核增长C时resident/scratch/staging pointers稳定、ordered allocations、active subset/inactive residents、scratch/partial或zero commit/abort隔离、capability拒绝、非法决策及注入metadata准备失败/retry；独立variable-prefix CPU SDPA对照验证staging语义。实际随机初始化tiny Qwen的所有layer KV导入并部分提交，再与独立完整prefix forward比较，不是预训练target或native dispatch验证。使用现存本地 **Torch2.11.0/Transformers5.4.0、CPU、HIP/CUDA/ROCR隐藏**，与native固定 **Torch2.12.0+rocm7.2/Transformers5.17.0** 不同；没有安装包或远端运行。Root审查后提交/推送 **2010503571d551ec887eb411e53ad54e53f45eb2**（12:17:56）。记录者独立核最终handoff/current文件/该commit三者SHA一致：module **b7eea1b3…**、tests **77f5768b…**、doc **00ec7cb1…**；final log **64292238…**、alias失败 **ac775b9f…**，均在未发布 `output/persistent-target-kv-cpu-20261009/`。旧七测试与最初handoff属于修复前阶段，未用于证明最终版本。
 
 **缺失机制与下一决策。** 当前private ROCm wrapper要求K tensor长度等于actual cuK末值，并把GPU layout值读回Python，不能直接消费capacity tail；CPU切片attention也证明不了native支持。下一项单独授权的bounded capability check应在同一小bucket的两个增长context复用指针，先比较exact-length eager与capacity-tail native，poison未用尾部确认不读，再考虑fixed maxK下capture/replay及变化positions/cuK后的输出/commit核对。Exact-Q bucket也不能从t−2全局K预选：当前各request ell仍依赖当前confidence；未来R/physical B/maxQ家族需要动态cumulative值的native支持，多余physical queries须隔离并明确收费。单事务不支持CPU/GPU overlap；未来双bank还需producer/consumer所有权、stream events以及shared resident commit/scratch hazard顺序。当前 **没有native/capture/replay/graph/overlap、decoder integration或speed证据**，也不解除旧whole-Qwen RMS失败或cross-backend law限制；记录者只核日志与公开/scalar/source证据，不执行下一GPU实验。
+
+
+**12:30后续：固定AMD环境的CPU对照完成。** S23首次本地验证使用较旧依赖，不能据此假定固定native环境也能通过。Root随后将immutable **2010503** Git archive的最小package/init、module、test流式送入AMD临时目录，在 **Torch2.12.0+rocm7.2/Transformers5.17.0** 上仅跑同一CPU suite；CUDA/HIP/ROCR全隐藏，日志明记 `torch.cuda.is_available=False`。实际 **8tests/3.664秒、SSH OS0**，记录者直接核本地 `output/persistent-target-kv-cpu-2010503-amd/{tests.log,ssh.os-exit,verification.json}`，log SHA **7ebb9f47…** 与verification一致，三执行源码SHA与2010503 Git blobs一致。本次操作由root执行，记录者没有远端动作；原 `(null): No such file or directory` stderr原样保存，未猜测原因。这个对照消除了该CPU suite在固定依赖版本上的未测状态，仍只有CPU存储/attention/tiny-model语义证据，没有GPU device alias、native capacity-tail、capture/replay或overlap证据。
+
+
+<a id="native-e2e-result"></a>
+## 2026-10-09 12:30（UTC+8）— S24：matched native E2E完整完成并释放，六case均显著慢于vLLM
+
+**问题与方法。** S21固定cache的一轮成本不能回答完整生成是否获益：实际还要admission、不断增长的KV、草稿采样、概率检查、接受/回退与提交。S24执行S22冻结的 **0c36b03** 单model/adapter eager full-shadow协议，保持共享R1/2/4×suppliedC64/256×output128、相同输入/输出预算和FP64实际q/p法则；draw前固定最大合法prefix，不使用capacity scheduler/history、persistent KV、graph或overlap。它测的是当前完整实现能否胜过S20的vLLM engine；执行路径与sampler不同，工作负载匹配并不构成输出law等价。结果已完整留证，不再沿用S22启动阶段的pending判断。
+
+**完成与结果。** 54/54批按原顺序完成（12warmup、30primary、12diagnostic），全部 **16128输出token**，primary **8960**；每cell五primary完整保留。[正式报告](../reports/native-offline-benchmark-20261009-0c36b03/README.md)与[primary证据](../reports/native-offline-benchmark-20261009-0c36b03/primary-metrics.json)按sum(outputs)/sum(batch wall)计算，不平均每batch tok/s，也不使用supervisor总时间。下表时间倍率为同等输出数的pooled总batch wall之比。
+
+| R / supplied C | Native tok/s | vLLM tok/s | Native / vLLM吞吐 | Native / vLLM耗时 |
+| --- | ---: | ---: | ---: | ---: |
+| 1 / 64 | 16.0924 | 131.2641 | 12.26% | 8.157× |
+| 1 / 256 | 13.9283 | 127.3399 | 10.94% | 9.143× |
+| 2 / 64 | 23.6857 | 252.1654 | 9.39% | 10.646× |
+| 2 / 256 | 24.0317 | 246.5667 | 9.75% | 10.260× |
+| 4 / 64 | 36.4076 | 515.9980 | 7.06% | 14.173× |
+| 4 / 256 | 33.8484 | 475.2599 | 7.12% | 14.041× |
+
+当前native只达到vLLM吞吐的 **7.06%–12.26%**，没有加速；R增加时native吞吐上升，但相对engine差距扩大，不能把多请求打包可执行等同于engine效率已达标。Native各cell primary batch median为 **7.960/9.122/10.745/10.693/13.962/15.092秒**，不是S21的94.978ms local round外推结果。比较值与限制见[matched comparison](../reports/native-offline-benchmark-20261009-0c36b03/matched-comparison.json)。
+
+**接受与成本能支持什么。** 这次确实接受了草稿，问题不是完全零接受：每cell每primary batch的accepted为 **36/21/54/44/126/85**，五repeat计数一致。但accepted/selected只有 **2.94%–5.77%**，每活跃request-round平均只提交 **1.198–1.396token**；128输出含admission首token，剩余生成仍需 **91/106/108/106/112/119轮**。与此同时，每活跃请求每轮付七位置fullshadow；selected target query（旧anchor+选中草稿）为 **715/820/1551/1626/2969/3291行**，约是admission后最终提交行的 **5.63–6.48倍**。因此少量接受减少部分顺序步骤，却仍伴随大量未提交query、草稿/概率/验证/crop及动态cache工作；全样本还记录 **99个含零prefix的round、621个存在inactive resident的round**，没有因结束或ell0隐去费用。[Work统计](../reports/native-offline-benchmark-20261009-0c36b03/work-metrics.json)是该固定synthetic轨迹的描述，不能外推为真实prompt接受率、校准收益或纯算法成本。比127个target-only顺序步骤少 **6.3%–28.3%** 的batch append调用只是反事实调用数对照，不证明相同每call成本或吞吐获益。
+
+**为何完整链路与engine不同，尚不能归因什么。** Native执行真实draft+target与FP64采样/校验、动态metadata和cache提交；vLLM是自己的target-only执行/采样路径，已有graph capture配置与专门engine。完整结果显示减少调用数没有转化为吞吐收益，但没有独立消融去分出接受率、host同步、数据移动、模型kernel或engine优化各占多少。同backend native target-only控制尚未运行，因而还不能将native执行本身与新增draft/verification成本分开归因。S21的append/fullshadow nested host spans只指出调查区域，不能直接扣减本次wall time；vLLM replay仍未独立追踪，更不能把全部差距归因于graph。Primary TTFT/request latency仍null；另12diagnostic以共同batch提交为start，TTFT medians约 **54–61ms**，含整个batched admission/projection/observer，不是pureprefill，也不同于vLLM各request add_request边界，不能直接比作相同服务延迟。
+
+**身份、结束与证据边界。** 执行源码仍0c36b03、archive **ad8ee63b…**（307文件已在S22逐Git核），固定 **Torch2.12.0+rocm7.2/Transformers5.17.0、gfx1201、pinned native ROCm ATen**，单target与trained step1280 draft；raw samples字节SHA **4fac289b…**。记录者重核公开scalar **fb0ea6d8…** 与source identity一致，从54行重构phase/输出/round分母及每cell五wall times、native pooled吞吐，再从S20五wall times独立重算vLLM吞吐与全部比值；另核每cell九次输出hash向量一致，仅是same-path重复证据；每轮allocation、active/retained roster、commit/KV计费的原始核对依据core independent audit及root `root-scalar-verification.json`，不冒称本轮重跑GPU或重新逐轮审计。公开报告去掉raw round列表，保留scalar聚合与原始SHA，记录者未发布或读取生成token/private样本。Worker/controller/outer **OS0**、no timeout/cleanup/retry/fallback；core与root分别检查owned worker/controller/shell消失，保留ASR同start身份、ready/notbusy，KFD仅ASR，VRAM回到used **8967499776** / free **25241243648bytes**。这些是保存的结束检查，不宣称此刻实时状态。[Runtime audit](../reports/native-offline-benchmark-20261009-0c36b03/runtime-audit.json)记录124health samples、global sampled peak **12178845696bytes**（含ASR），whole-operation allocated/reserved peak **2459580928/2728394752bytes**；后者从reset前至结束包含继承targetKV/预备输入，不能作独立cell稳态峰值。Supervisor **639.694秒**含setup/evidence，不能作生成吞吐分母。
+
+**下一决策。** 当前证据足以否定这六个固定batch上“已实现加速”的判断，并支持把低接受与完整实现成本同时作为改进问题。下一步应先核S23的native capacity-tail固定buffer可行性，再考虑target子图与端到端消融；persistent存储尚未接入本次decoder，不能认领收益。Graph capture/replay、CPU/GPU overlap、真实capacity planner、arrival负载frontier仍缺证据。旧whole-pretrained-Qwen layer26固定RMS gate仍失败，same-input endpoint TV及cross-backend law非等价限制不因本次完成而消失；该速度比较不是分布忠实性pass、quality改进或完整系统复现。记录者只编辑本日志，未操作GPU/进程、改实现、提交或读final test。
+
+S24公开报告与项目状态入口已由root提交并推送 **2934342114b99943d78351265d4b8566b8270479**。随后独立verifier补充核对两引擎的workload、八个model/tokenizer指纹及vLLM原始sample SHA，重跑通过；不改变任何测量值。

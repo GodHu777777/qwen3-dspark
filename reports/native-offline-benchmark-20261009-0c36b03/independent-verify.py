@@ -79,6 +79,10 @@ for s in samples:
  assert queries==s['target_verification_query_rows']
 result=read('run/worker/result.json'); assert result['status']=='completed' and result['sample_count']==54
 assert result['prior_target_numerical_gate']=='failed_unchanged' and not result['whole_system_pass_claimed']
+vsource=json.loads((v/'source-identity.json').read_text())
+assert vsource['workload_sha256']==binding['workloads_sha256']
+assert vsource['model_tokenizer_sha256']==binding['target_fingerprint']
+assert sha(v/'scalar-samples.jsonl')==vsource['evidence_sha256']['execution/worker/samples.jsonl']
 vrows=lines(v/'scalar-samples.jsonl'); vmetrics=json.loads((v/'primary-metrics.json').read_text())
 assert [(s['phase'],s['repeat'],s['case_id']) for s in vrows]==schedule
 primary=[]; diagnostic=[];comparison=[]

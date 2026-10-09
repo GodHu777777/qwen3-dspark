@@ -3,7 +3,7 @@
 The native eager full-shadow implementation is substantially slower than the
 matched target-only vLLM baseline: **7.06%–12.26% of vLLM output throughput**, or
 **8.16–14.17 times its batch time**. There is no measured speedup. One target and
-one trained step1280 draft completed all 54 preregistered batches, with actual
+one trained step 1280 draft completed all 54 preregistered batches, with actual
 worker/controller/outer-shell exit 0 and independently verified GPU release.
 
 ## Matched primary results
@@ -109,7 +109,7 @@ Execution used immutable Git source
 `0c36b03416311c0ca529d10ff0a10663ebd407fd`, archive SHA-256
 `ad8ee63bb232b847657d85a12fb1d6703c32f415d69060fe6738fe4c153eaafd`.
 All 307 archived files were verified before and after execution, along with
-actual target/tokenizer, step1280 checkpoint and exact shared workload bindings.
+actual target/tokenizer, step 1280 checkpoint and exact shared workload bindings.
 The complete immutable CPU suite passed 212 tests in 13.648 seconds with GPUs
 hidden before this one GPU execution. No retry, panel reduction or backend
 fallback occurred; the original 1800-second limit remained fixed.
