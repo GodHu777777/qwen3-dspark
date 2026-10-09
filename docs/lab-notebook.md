@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 12:03（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 12:20（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -16,6 +16,8 @@
 - 数值差异：[C02 dynamic BF16 调查](#dynamic-numerics)、[C06 canonical 真实 drafter control](#canonical-drafter-gate)、[R08 quality128 TV](#expanded-quality128)、[S05 varlen 诊断准备](#native-varlen-diagnostic-cpu)。
 - KV 正确性：[C03 缓存内容/回退](#kv-correctness)、[R04 随机路径提交](#stochastic-cache)、[S03 多请求隔离](#packed-isolation)。
 - 资源与调度：[M01 两周期/Pareto 设计](#memory-gate)、[T04 实测显存](#expanded-resource-gate)、[S01 异步机制范围](#scheduler-scope)。
+- 正式benchmark与计时边界：[S20 vLLM完整六case](#vllm-formal-benchmark)、[S21 native full64局部成本](#native-full64-profile)、[S22 matched native E2E准备/执行状态](#native-e2e-cpu-prep)。
+- 持久KV与设备身份：[S23 committed/scratch事务、CPU device alias复现修复及native/graph缺口](#persistent-target-kv-cpu)。
 
 ## 2026-10-08 — P01：pilot 数据重生成，已完成
 
@@ -832,3 +834,34 @@ Root随后在该immutable source archive运行完整unittest suite，未发布 `
 **诊断区域与下一调查。** 独立diagnostic hostmedian：fullshadow **33.129ms**（含backbone **11.074**），private verify/commit **61.121ms**（含target append **43.461**、draft committed projection **4.388**、crop每requestcall **1.651**）；diagnostic roundmedian95.092ms、两topspan外remainder1.069ms。它们nested，不可相加为独立组件；GPUeventinterval含enqueue/dispatch gaps/同步影响，不是isolatedkernel时间，crosspass subtraction也不证明精确host/device拆分。当前证据把target append和proposal中backbone外工作列为下一调查区域，尚未区分其中attention/MLP/metadata/host同步/copy谁主导。Persistent KV/layout buffers、deterministic target subgraph是待比较候选，不宣布graph或优化收益。
 
 **身份、退出与边界。** 记录者核六public SHA对 **53d1202626b89237d685c525deb8c37ae7a8e16f**（12:01:34）Git blobs，root已核commit/push；source仍700bfa6。独立核source archive **71213ffb…**与S20逐Git核的288文件archive同SHA、41executedsourceSHA、公开完整samples SHA **ca8c40af…**；从scalar重构512顺序/phase/64全域、各cell median/1T、全primary/restore统计、B9pair/commit及所有diagnostic region counts/host-event medians。原512work逐项独立核与rawscalar逐字节一致依据core本地stdlib audit和root `output/packed-profile-gpu-20261009-700bfa6/root-scalar-verification.json`，不冒称本轮重新执行GPU。Worker/controller/SSH **OS0**、no timeout/retry/fallback、三ownedPID保存独核gone；ASR同身份ready/notbusy/KFDonlyASR，VRAM恢复used8967499776/free25241243648bytes。Peakallocated/reserved **2268122112/2348810240bytes**；supervisor107.010秒含setup/restore/evidence，不是serving吞吐。Root另同步更新README的过期STS未拟合/wholegate pending状态，历史失败留存。只能查exact frozen R/C/input/cell，无growing context/churn/其他R外推；不与S20 end-to-end tok/s直接求speedup。WholeQwen target固定RMS失败未解除，下一matched E2E尚未执行/最终CPU修复交付另记；本条不提前写解决factory或memory review问题。记录者仅日志，无远端/GPU/实现/进程/实验/提交或final-test动作。
+
+
+<a id="native-e2e-cpu-prep"></a>
+## 2026-10-09 12:11（UTC+8）— S22：native六case端到端CPU准备，修复重复adapter与测试/内存口径缺口
+
+**问题与方法。** S20已有强vLLM吞吐、S21只有local成本，仍缺matched native完整trajectory。[Native协议](native-offline-benchmark.md)复用共享manifest **3f2faab1…** 的 **R1/2/4×suppliedC64/256×output128** 与单model/adapter的54batch（12warmup/30primary/12diagnostic），eager fullshadow、draw前固定 **ell=max(0,min(7,remaining−1))**，不接capacity scheduler/history/graph。Admission首token计入128；remaining1虽ell0仍付完整shadow与anchor验证。Finished request inactive但KV resident到batchend，后续copy/gather如实收费。FP64实际q/p/check/RNG/reject/commit语义不改，仅在完成verify/scalar记录后释放观测q/p引用，不跨round保留fullvocab tensors。固定 **1800秒worker/1790秒cooperative、8GiB free/6GiB processallocator cap**与identity-aware supervisor，不能按进度缩panel或自动retry。
+
+**失败、修复与S21待办闭合。** 首轮 **6tests/5.324秒、2errors**：在已经注册native的model config上重新构造VarlenPackedTarget，触发explicit-mask SDPA guard。改为production `make_session_factory`只构造/注册一个target adapter，每batch在timer内reset target cache、创建新的draft/session cache；同target/draft model复用。后续6/6与7/7中间日志保留；root/direction review又指出tests曾手写duplicate factory，不能验证生产路径，以及memory peak未说明继承上一batch targetKV。最终tests直接调用生产helper、只注入backend constructors；明记 **pre_reset allocated/reserved baseline + whole_operation_peak**，从reset前到结束的peak包含上一batch残留targetKV、model与预备输入，不当作currentcell独立steady-state峰值。S21留下的两个review缺口在CPU准备中修正，不倒改其当时状态。
+
+**计时、诊断与CPU证据。** Primary从fresh native cache/request构建前到admission/fullshadow所有round/私有验证/target/commitcrop/finalsync，token tensor/RNG准备成本单列在外，serialization/hash/重复finaloutput验证在后；request latency/TTFT仍null。Native diagnostic以共同batch提交为start、观测admission返回/各request结束round，含setup/sampling/projection/observer，区别于vLLM各request add_request时间边界，不把两者当相同服务timestamp或pureprefill。Worker/controller仍要求54完整有序identity，缺diag不能completed；deadline只保留此前完整samples和全panel，未完成batch不伪造计时。最终 **8/8、5.474秒、OS0、三GPU隐藏**，真实target/selected1280/workload/source stdlib finalbind **OS0**。实际tiny BF16连续batch验证单adapter/新cache、首tokenbudget、ell0fullshadow与diagnostic；新增unequal A/B→A fixture核finished B的 **15KV rows**仍resident/收费，下一实际batch rounddeadline核此前sample保留。
+
+**身份与当前边界。** 直接读未发布 `output/native-end-to-end-cpu-20261009/` manifest、各失败/修复logs及finaldryrun；独立核manifest SHA **ace4ec8f…**、三交付当前SHA、八evidence SHA，按真实compact序列化重算protocol **b6a7b1dd…**、核54identity/phase分母及script/selectedweights/sharedmanifest绑定一致。CPU执行为immutable700bfa6 archive加明确overlay，source.tar仍 **71213ffb…**；三新文件当时交root review、未添不存在的commit/push，不把含其他WIP的current tree当tested snapshot。**初次交付时没有native E2E GPU授权或执行**、无速度/whole-system pass/graph/overlap/fidelity结论；原target固定RMS失败仍限制速度比较的law解释。下一步root审查冻结source与独立窗口后才能测matched trajectory，本条不自行开GPU或将local94.978ms外推成已测E2E时间。记录者只日志，未提交、未改实现/实验/进程或读取private trace/final test。
+
+
+**12:20后续核对：提交、完整suite与执行状态。** 上述初次交付只证明新增路径的CPU准备；要启动完整trajectory，还需冻结整套源码并核完整suite。Root随后确认代码已提交/推送 **0c36b03416311c0ca529d10ff0a10663ebd407fd**（Git时间12:09:58；这是代码提交时间，不把它当作记录者知悉/窗口授权时间）。记录者直接核 `output/native-e2e-gpu-20261009-0c36b03/expected-source.json` 与 `source.tar`：archive **ad8ee63b…** 的307文件逐项SHA与该commit Git blobs一致，原三交付文件亦与初次manifest一致，protocol/workload绑定未变。完整CPU日志 **06f99105…** 明记 **212tests/13.648秒、OK**；OS0及三GPU隐藏执行条件由core/root确认，本轮没有重新跑suite。原开头两行 `(null): No such file or directory` 原样保留，不把它们删掉或误作测试失败。随后root授权首个all54/1800秒独立窗口并进行preflight；最新root交接已报告controller/worker启动，因此当前是 **native E2E执行中，尚无完成、54batch完整性、速度或释放证据**。PID/startticks属于其执行留证，不据此判断成功。本条等待真实结束后另补结果，旧target RMS失败与law边界继续保留。
+
+
+<a id="persistent-target-kv-cpu"></a>
+## 2026-10-09 12:20（UTC+8）— S23：persistent target KV独立存储候选，CPU事务/真实tiny Qwen验证与设备别名修复
+
+**问题与假设。** S21把target append列为较大成本区域，但其43.461ms host median含模型计算、动态layout、cache拼接与gather，不能直接当作可消除的开销；crop每call1.651ms同样不是独立kernel成本。当前先把已提交KV与验证中的KV分开，让缓存地址与所有权可被验证，再判断能否形成稳定的target子图。[候选设计](persistent-target-kv.md)引用S21同一raw scalar结果 **ca8c40af…**；这一步没有提前承诺graph或速度收益，也未修改现有decoder/oracle/sampling/benchmark。
+
+**存储与提交方法。** Resident KV固定为 `[L,slot,Ccapacity,Hkv,D]`，verification scratch另有 `[L,max_query_tokens,Hkv,D]` 分配；`load_prefix`导入模型实际含位置/RoPE的KV。Store签发的Slot绑定request/slot/incarnation及对象身份，拒绝旧、复制、伪造或跨store handle；`begin`冻结活跃顺序/context和metadata，单事务pending时禁止churn。每layer新KV先copy到scratch，再gather committed+scratch供attention；只有全部layer完成stage且整组决策通过检查，才把验证前缀copy回resident。提交数包含旧anchor，通常为accepted+1，拒绝尾部不进入resident；abort不改已提交内容。Metadata准备失败不发布事务，retry重写metadata且旧capability仍失效；resident bootstrap/commit发生copy或device错误则poison pool，不声称多layer原子回滚。Inactive request的KV继续resident并计入费用，审计接口返回detached副本；单owner约束也不等于防止任意Python直接改公开tensor。
+
+**稳定地址为何仍可能更贵。** Bucket固定ordered Q向量和context ceilings，实际C、positions、slot及cuK可在上限内增长；physical Q严格等于logical Q，不用maxQ padding抹平allocation差异。Work分别报告真实K、capacity/padding、inactive K、causal pairs及resident/scratch/workspace bytes。然而每bucket有六个capacity-shaped K/V staging tensor，对每个capacity row同时gather resident与scratch再选择，可能比旧exact-size路径增加流量。注册有限且显式；若枚举大R的全部ordered ell向量，workspace会组合爆炸，生产graph cache还需选择/淘汰及总预算。稳定指针只是可测前提，既未证明更快，也未解决graph-cache容量。
+
+**真实review失败与修复。** 首次本地七测试 **1.190秒、OK** 后，root review发现device身份保留了未解析的 `torch.device('cuda')`/`cpu:0`，可能与实际分配device不等。Direction实际CPU复现 `cpu:0` 配置分配到 `cpu`，合法prefix因device比较报ValueError；随后用首次分配的 `keys.device` 规范化后续分配与检查。新增实际indexed-CPU bootstrap/stage/attention/commit回归后为 **8tests/1.281秒、OS0**。七测试log与before-fix失败留存，最终证据读取handoff指定的 `tests-device-fixed-eight.log`，不把旧 `tests.log` 当八测试结果。CUDA别名采用同机制但未执行，不能写作GPU验证。
+
+**CPU证据与身份。** 八测试核增长C时resident/scratch/staging pointers稳定、ordered allocations、active subset/inactive residents、scratch/partial或zero commit/abort隔离、capability拒绝、非法决策及注入metadata准备失败/retry；独立variable-prefix CPU SDPA对照验证staging语义。实际随机初始化tiny Qwen的所有layer KV导入并部分提交，再与独立完整prefix forward比较，不是预训练target或native dispatch验证。使用现存本地 **Torch2.11.0/Transformers5.4.0、CPU、HIP/CUDA/ROCR隐藏**，与native固定 **Torch2.12.0+rocm7.2/Transformers5.17.0** 不同；没有安装包或远端运行。Root审查后提交/推送 **2010503571d551ec887eb411e53ad54e53f45eb2**（12:17:56）。记录者独立核最终handoff/current文件/该commit三者SHA一致：module **b7eea1b3…**、tests **77f5768b…**、doc **00ec7cb1…**；final log **64292238…**、alias失败 **ac775b9f…**，均在未发布 `output/persistent-target-kv-cpu-20261009/`。旧七测试与最初handoff属于修复前阶段，未用于证明最终版本。
+
+**缺失机制与下一决策。** 当前private ROCm wrapper要求K tensor长度等于actual cuK末值，并把GPU layout值读回Python，不能直接消费capacity tail；CPU切片attention也证明不了native支持。下一项单独授权的bounded capability check应在同一小bucket的两个增长context复用指针，先比较exact-length eager与capacity-tail native，poison未用尾部确认不读，再考虑fixed maxK下capture/replay及变化positions/cuK后的输出/commit核对。Exact-Q bucket也不能从t−2全局K预选：当前各request ell仍依赖当前confidence；未来R/physical B/maxQ家族需要动态cumulative值的native支持，多余physical queries须隔离并明确收费。单事务不支持CPU/GPU overlap；未来双bank还需producer/consumer所有权、stream events以及shared resident commit/scratch hazard顺序。当前 **没有native/capture/replay/graph/overlap、decoder integration或speed证据**，也不解除旧whole-Qwen RMS失败或cross-backend law限制；记录者只核日志与公开/scalar/source证据，不执行下一GPU实验。
