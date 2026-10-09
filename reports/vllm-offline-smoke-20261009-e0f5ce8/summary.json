@@ -1,0 +1,19 @@
+{
+  "status": "failed_runner_version_contract_before_engine_initialization",
+  "source_commit": "e0f5ce8dd511ecce8b2f77e1f4c870a607bb1833",
+  "worker_os_exit": 1,
+  "controller_os_exit": 1,
+  "timed_out": false,
+  "released": true,
+  "engine_initialization_started": false,
+  "generated_tokens": 0,
+  "performance_claim": false,
+  "worker_failure_elapsed_seconds": 13.211543082026765,
+  "controller_lifecycle_seconds": 15.900151135982014,
+  "failure": "Installed vLLM version differs from frozen inventory",
+  "intended_prompt_tokens": 35,
+  "intended_output_tokens": 128,
+  "intended_dtype": "bfloat16",
+  "intended_gpu_memory_utilization": 0.18,
+  "intended_enforce_eager": false
+}

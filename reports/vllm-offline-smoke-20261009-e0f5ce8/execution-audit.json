@@ -1,0 +1,71 @@
+{
+  "stages": [
+    {
+      "elapsed_seconds": 1.6050180420279503e-06,
+      "stage": "import_started"
+    },
+    {
+      "elapsed_seconds": 13.211543082026765,
+      "error": "Installed vLLM version differs from frozen inventory",
+      "error_type": "RuntimeError",
+      "stage": "worker_failed"
+    }
+  ],
+  "worker_os_exit": 1,
+  "controller_os_exit": 1,
+  "worker_deadline_seconds": 600,
+  "timeout": false,
+  "cleanup_signals": [],
+  "owned_process_count_including_outer_shell": 4,
+  "all_owned_pids_absent": true,
+  "asr_identity_unchanged": true,
+  "asr_pre_ready": true,
+  "asr_pre_busy": false,
+  "asr_post_ready": true,
+  "asr_post_busy": false,
+  "pre_kfd_asr_only": true,
+  "post_kfd_asr_only": true,
+  "vram_pre": [
+    {
+      "total_bytes": 34208743424,
+      "used_bytes": 8967499776,
+      "free_bytes": 25241243648
+    }
+  ],
+  "vram_post": [
+    {
+      "total_bytes": 34208743424,
+      "used_bytes": 8967499776,
+      "free_bytes": 25241243648
+    }
+  ],
+  "intended_engine": {
+    "dtype": "bfloat16",
+    "tensor_parallel_size": 1,
+    "generation_config": "vllm",
+    "max_model_len": 4096,
+    "max_num_seqs": 1,
+    "max_num_batched_tokens": 4096,
+    "gpu_memory_utilization": 0.18,
+    "enable_prefix_caching": false,
+    "enforce_eager": false,
+    "disable_log_stats": true,
+    "seed": 20261009
+  },
+  "intended_sampling": {
+    "n": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": 0,
+    "min_p": 0.0,
+    "max_tokens": 128,
+    "ignore_eos": true,
+    "repetition_penalty": 1.0,
+    "presence_penalty": 0.0,
+    "frequency_penalty": 0.0,
+    "detokenize": false,
+    "logprobs": null,
+    "prompt_logprobs": null,
+    "seed": 20261009
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "distribution_metadata_version": "0.30.0+rocm723",
+  "module_version_literal": "0.30.0",
+  "module_version_source_sha256": "2ade9f96dd56ff65e00062b12ea8523a94eae3dec037a2e3972d40de9f45da7b",
+  "module_version_source_bound_before_run": true,
+  "method": "stdlib AST read of already bound _version.py; no second vLLM import or GPU execution",
+  "interpretation": "Runner incorrectly equated distribution metadata version with module version; engine was not initialized"
+}

@@ -1,0 +1,27 @@
+{
+  "source_commit": "e0f5ce8dd511ecce8b2f77e1f4c870a607bb1833",
+  "archive_sha256": "0c932b4deea63aabce8b82f7382b047a9d06d3379c4c64ca036b2798f1bf143c",
+  "source_file_count": 257,
+  "installed_vllm_file_count": 3147,
+  "binding_file_count": 3425,
+  "binding_sha256": "9633bd7ec584c2249ea517f8666f444115e779d1dd5413bdac448efebb798727",
+  "controller_sha256": "78e4c69c947cd20a03f4cd39e5dadb6c387d8d5fc01077e9bac522c03a9d1c2e",
+  "worker_sha256": "6ccdec10d3dfa6bf08c753184212624bb9f79e5ac5c89db5a5b6b1107ddbf720",
+  "request_sha256": "8b676c697dd4abf77294f61c8b8bb7b2a7ad70ad92c26c7b5ce41863e8625237",
+  "versions": {
+    "vllm": "0.30.0+rocm723",
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0"
+  },
+  "target_model_tokenizer_sha256": {
+    "config.json": "660db3b73d788119c04535e48cf9be5f55bc3100841a718637ae695b442f27dd",
+    "configuration.json": "f888421726665e8a84b738eed42a64875aed79de8be7daade851ac8bf4c0cef9",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model.safetensors": "f47f71177f32bcd101b7573ec9171e6a57f4f4d31148d38e382306f42996874b",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "installed_manifest_sha256": "2b212afa537e623e2f7694e57963f0ed3598d99d5e09b5921aebced16e60cf50"
+}

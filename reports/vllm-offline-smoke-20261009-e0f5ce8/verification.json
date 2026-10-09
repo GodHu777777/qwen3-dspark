@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "scope": "Failure-boundary and process-release verification, not successful engine execution",
+  "checks": {
+    "source_archive_and_257_files_verified_before_launch": true,
+    "installed_3147_files_and_model_tokenizer_verified_before_launch": true,
+    "all_3425_binding_files_unchanged_after_execution": true,
+    "version_source_was_bound_before_execution": true,
+    "no_engine_initialization_stage": true,
+    "actual_worker_and_controller_exit_one": true,
+    "no_timeout_or_retry": true,
+    "all_four_owned_pids_independently_absent": true,
+    "kfd_asr_only_ready_not_busy": true,
+    "vram_pre_post_equal": true
+  },
+  "private_evidence_sha256": {
+    "execution/controller-result.json": "176f63559cc32af9f257ff3659e6baa15f01ba88a7ab5d5c57787ac3b1bfe124",
+    "execution/worker-exit.json": "182b1f564fcb386958d2a1d35aa5085633c1d294f3080b2ff2d4f29be34238a3",
+    "controller-os-exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "execution/worker/stages.jsonl": "0f22d95cb60055722f42081a61f1d6f19501f61ccb125ba3751158509c9317d7",
+    "execution/worker/failure.txt": "392b2ae09d59fcfd25cd87e658dcdb6068b5f1f89773f40e8d6715a82671e15f",
+    "execution/worker.log": "653340b5bb187233a1286bf037fece42540a06f8c3838bd1fe7566238984cc26",
+    "execution/prestate.json": "e5f070823aa07981b1237550faec4f7c8a8b7eaff027ac79a26663ae26186eaa",
+    "execution/poststate.json": "b9c4a1978406c62c997c43301d52b276005e5fad8e161102bc5e2e89a0c5bb51",
+    "execution/post-input-integrity.json": "efd69b4fe220fe8484df0960af9fba9e4a69daf4cc9f1bfde32871599a1a3853",
+    "independent-release.json": "ec09beadf177e0c65e4a59485684be077453b50d24c0d9ed4cff07d300ddc22d",
+    "version-diagnosis.json": "260453804de5a96f9078d05d3f2e90b581bb54f40ddd5314d11f620dbe431e15"
+  }
+}
