@@ -1,6 +1,6 @@
 # 实验日志
 
-最近记录核对：**2026-10-09 11:06（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
+最近记录核对：**2026-10-09 11:15（UTC+8）**。当前由现存 6.1 Sol（sol_data）承担专职记录角色，负责里程碑证据核对和本日志维护；root 负责最终审核与提交。独立 experiment_journal 的创建/恢复受系统 agent thread limit 限制，在限制解除前复用 sol_data 持续专职记录，历史交接与各轮记录来源保留在对应条目。记录者不操作 GPU/进程、不改实现、不读 final test 或 private 样本；远端大型 checkpoint/tensor 的核验事实引用已有留证并标明来源。本文持续追加：修正旧判断时保留原结论及修正依据，历史证据与实时状态分开。
 
 早期研究问题：冻结 Qwen3-0.6B target 后，并行 DSpark 草稿能否比带 KV cache 的 target-only greedy 更快地产出完全相同的 token？训练可运行、loss 下降、回退输出一致，各自只回答这个问题的一部分。早期阶段门槛见[实验计划](experiment-plan.md)，下面历史实验的协议与失败口径不回改。
 
@@ -758,3 +758,15 @@ Root随后在该immutable source archive运行完整unittest suite，未发布 `
 **证据与释放。** 直接读[六份公开失败报告](../reports/vllm-offline-smoke-20261009-e0f5ce8/README.md)并核对 **631892ce5db5a847df2d1005dcd956001aa73abe**（11:04:39）Git blobs；归档commit已核，root当时push进行中。执行source仍e0f5ce8，完整身份见[source identity](../reports/vllm-offline-smoke-20261009-e0f5ce8/source-identity.json)。257source/3147installed/3425binding files及八model/tokenizer文件前后不变；四自有shell/controller/worker/descendant PID均不存在、无cleanup signals、KFDonlyASR ready/notbusy、VRAM前后used8967499776/free25241243648bytes。完整raw日志/远端proc与版本再次核验依据root直接独立检查及[verification](../reports/vllm-offline-smoke-20261009-e0f5ce8/verification.json)，记录者未读private样本或重做远端进程动作。`verification.passed`只指失败边界/释放通过，不是engine通过；不添独立shell退出码。
 
 **修正与下一决策。** 原失败保留，direction仅CPU修双字段guard，分别钉distribution/module并报告actual/expected，不改installed packages。尚无第二次执行授权，不能沿用首次窗口重跑；真实init、graph capture/replay、完整request、fidelity与强性能baseline仍未验证。原35-token公开synthetic/128fixedignoreEOS/defaultgraph/.18配置身份保留，graph开关与显存比例仍不是replay或全系统硬cap证据；wholeQwen固定RMS失败独立保留。本轮只追加日志，无GPU/实现/进程/提交动作。
+
+
+<a id="trained-packed-gate-real"></a>
+## 2026-10-09 11:15（UTC+8）— S17：trained noncausal draft与packed集成固定GPU gate通过，target失败仍独立
+
+**问题与方法。** S15修正oracle后，唯一获授权的 **8378ea7** GPU矩阵实际检验已选step1280与真实Qwen3-0.6B，BF16 target/FP32 draft trainable与RoPE/BF16 AMP、原pinned causal/noncausal backend及protocol **a311e144…**不变。直接读[公开聚合报告](../reports/packed-decoder-gate-20261009/README.md)与未发布 `output/packed-decoder-gpu-20261009-8378ea7/` 的source archive、completion/exits及release身份字段；未读raw proposal/token样本。记录者独立核六public SHA、archive SHA **401822fc…**及 **260文件逐一对8378ea7 Git blobs**、38executed-source SHA；报告经root复核后归档至95038bf并核push；root另核原JSON的结构/层/TV/接受数及执行archive与Git一致。
+
+**通过的范围。** 固定状态为 **structural passed / draft_layer_numerical passed / endpoint completed**、system_pass_claimed=false。15normal pooled层与35request-layer全部满足原elementwise0.02/0.02和RMS≤0.005，max pooled/request RMS **0.0035258595/0.0038259146**；15saved oracle均FP32，S15首CPU错误已在GPU前修复。75结构内容检查和2exact draft poison pairs全部通过，覆盖committed projection/KV、oldprefix/inactive、remove/readd incarnation/markers及A actualQKV/output/logits/cache exact。5target forwards/**140events**、7draft forwards/**35events**（3normal+4poison/control），73normal target hidden query rows。记录者独立重算15/35计数/maxRMS、75passed/2exact及22endpoint概率行；完整actual tensor复核依据[CPU audit](../reports/packed-decoder-gate-20261009/cpu-audit.json)，本轮未重载远端raw。
+
+**端点差异与成本边界。** Independent SDPA按native实际input chunks/committed lengths replay，不另采轨迹。22verification概率行 **18非零TV、max0.0293895273、argmax changes0**，只是endpoint差异量化；resident target K/V各420comparisons中304不相同、projected draft K/V各75中55不相同，这些含重复retained-prefix观察，不是独立token或pool RMS。Native exact旧cache保留与cross-backend KV不相同可同时成立，完整幅度见[numerical](../reports/packed-decoder-gate-20261009/numerical.json)。两shadow轮各21draft/basehead rows，allocation0仍全付；fixed-zero只运行B的7-row backbone/basehead而抽2positions、仍复制inactive context，逻辑copy/gather量不冒称实际traffic。三轮14selected proposal tokens接受0，只是synthetic矩阵，不是quality估计。Hidden-GPU独立CPU audit核25artifacts/1022endpoint scalars/35request gate/22TV/**78law rows**；CPU/GPU TV统计maxdelta **7.0494474e−9**、重构FP32oracle maxabs1.2397766e−5仅诊断，不换GPU判定或阈值，记录者重算公开78计数/TV差上限。
+
+**退出、supervisor局限与下一决策。** Worker/launcher/controller/SSH均 **OS0**，无timeout/retry/fallback；peak3492600832bytes、instrumented35.456秒非benchmark。已保存release确认四ownedPIDgone、ASR同startticks/ready/notbusy、KFDonlyASR、VRAM恢复used8967499776/free25241243648bytes，非本轮live探测。Root指出outer controller裸PID复用弱点时实验已运行，未改source/重跑；postlaunch补存startticks、release独核且无termination signals，只证明本次释放，不能回溯宣称supervisor reuse-safe。后续须用已测试的identity-aware supervisor。原wholeQwen target固定layer26 RMS gate **failed unchanged**，本次draft/integration通过不提升为whole-system/target-law losslessness；无speedup/async overlap/graph或质量结论。Root给下一方向是先在CPU设计真实R/context/B成本profile与graph友好执行，未授权新GPU或继续同类门禁。本轮记录者只追加日志，无GPU/实现/进程/提交或final-test动作。

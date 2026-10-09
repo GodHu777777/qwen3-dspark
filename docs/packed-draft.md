@@ -2,9 +2,10 @@
 
 `dspark_qwen/packed_draft.py` provides an inference-only multi-request draft
 backbone using the existing `DSparkDraft` weights/modules. It does not modify the
-training model or immutable training/whole-Qwen snapshots. Native noncausal GPU
-execution remains unverified; CPU fixture success is not a native correctness,
-quality or speed result.
+training model or immutable training/whole-Qwen snapshots. The subsequent
+[trained GPU gate](../reports/packed-decoder-gate-20261009/README.md) passed its
+bounded noncausal draft checks. Target endpoint differences remain; this is not
+a whole-system equivalence, quality or speed result.
 
 ## Interface and ownership
 

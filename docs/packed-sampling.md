@@ -2,9 +2,10 @@
 
 `dspark_qwen/packed_sampling.py` connects the packed draft backbone, batched Markov
 proposal heads, one packed target verification forward, and committed-feature
-projection. It is a synchronous correctness reference. CPU fixtures passed;
-actual trained-draft noncausal GPU and integrated native decoder execution remain
-unverified. The earlier whole-Qwen target RMS gate remains failed.
+projection. It is a synchronous correctness reference. CPU fixtures and the
+[bounded trained GPU matrix](../reports/packed-decoder-gate-20261009/README.md)
+passed structural and draft-attention checks. Target endpoint differences and
+the earlier whole-Qwen target RMS failure remain.
 
 ## Request and cache lifecycle
 

@@ -284,8 +284,8 @@ GPU execution. Private evidence: output/sts-cpu-preflight-20261009-v2.
 
 Packed draft backbone: packed_draft.py reuses existing draft modules for one
 flattened multi-request backbone with fully visible own blocks and separate
-projected-context KV. Native noncausal ROCm selection is explicit and unverified
-on GPU. Ten CPU tests cover actual KV, lifecycle/isolation, batched module calls,
+projected-context KV. Native noncausal ROCm selection is explicit; the bounded
+trained GPU result is in reports/packed-decoder-gate-20261009. Ten CPU tests cover actual KV, lifecycle/isolation, batched module calls,
 transaction failures and BF16 AMP boundaries. Projected K/V may have different
 dtypes; preserve their representation and cast at the attention boundary, not
 by downcasting trainables/RoPE. See docs/packed-draft.md.
