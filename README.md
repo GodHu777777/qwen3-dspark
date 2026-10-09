@@ -20,9 +20,15 @@ now records all allocation shapes at two requests and a fixed 128-token context;
 its complete-round median is 94.978 ms, excluding real planner/history cost.
 A [matched-workload vLLM baseline](reports/vllm-offline-benchmark-20261009-700bfa6/README.md)
 measures 127–516 output tok/s across 1/2/4 requests and two prompt lengths.
-The native end-to-end comparison, measured capacity prediction, graph replay
-and scheduling overlap remain unfinished; these two measurements use different
-units and must not be treated as a speedup ratio.
+The [matched native end-to-end run](reports/native-offline-benchmark-20261009-0c36b03/README.md)
+completed all 54 batches: 14–36 output tok/s, only 7.1–12.3% of the vLLM
+throughput (8.2–14.2 times the batch time). This eager full-shadow baseline has
+no capacity scheduler or graphs. It exposes an engine performance gap; it does
+not isolate the cost of speculation from the different execution backends.
+These are synthetic fixed-output workloads, and target numerical differences
+remain unresolved. Measured capacity prediction, graph replay and scheduling
+overlap remain unfinished. Local verification rounds/s and output tok/s are
+different metrics.
 
 ## Architecture
 

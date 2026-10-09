@@ -149,10 +149,10 @@ draft 与 target 在不同 CUDA stream 并发运行。本文所核对原文也�
 | Stochastic distribution recovery | CPU 概率参考与真实 Markov/tensor/cache 路径已实现；Fraction 完整 law 与 tiny Qwen KV 检查通过，旧 pilot 真机9次运行/6次复现检查通过，expanded128/512/1280 quality32完成；均有same-prefix TV差异 | 检查实际 Qwen3-0.6B 的概率/缓存/数值差异，再接入调度因果性；区别概率无损理论与不同 kernel 的数值误差 |
 | Confidence STS | CPU算法与独立fit/eval CLI已实现，绑定冻结1280选择、checkpoint/data/source/runtime及fit身份，真实fit44/eval43/default61-grid STS已完成，含fit-only常数和EOS/截断分母；STS ECE在1/2/5劣于unscaled、Brier在1–6更差，constant ECE在1–5更好 | 保留冻结方法和baseline，不用eval再调参；尾部正例稀疏，仍需因果scheduler/engine检验；test不参与 |
 | R 请求全局 Algorithm1 | 已有独立CPU `scheduler.py` literal planner，输出ell/B/tau/score；7项测试用小R/gamma穷举oracle，保留cliff反例 | 尚未接入解码/engine，没有实际多请求SPS；fixture仅证明算法，不证明性能或因果score来源 |
-| 硬件容量 SPS(B) | 已测单请求 eager target 若干块长；不含 draft、并发或服务管线 | 测真实 batched engine 的 SPS/shape 台阶、上下文/并发敏感性；定义计时边界，验证模型预测误差 |
+| 硬件容量 SPS(B) | 已完成native R2/C128全部64种allocation的完整draft/verify局部成本测量，320个primary样本；计时不含真实planner/history，因此仍不能直接供完整driver使用 | 测含调度的真实round成本、上下文/R/物理shape敏感性，冻结预测模型并验证误差；不把局部1/T冒称全系统SPS |
 | 两步历史异步容量 K | CPU reference已实现精确t−2容量、当前分配、全离散搜索、完整shadow冷启动、请求incarnation与private confidence绑定；同步round driver接通真实tiny模型并重建KV，20项CPU检查通过 | 真实硬件SPS、异步buffer/执行重叠、graph shape及调度延迟隐藏；同步driver不等于异步引擎 |
 | 可变长度批验证执行 | PackedTarget 单次 Qwen forward 无 query padding；5 项 CPU 测试覆盖 marker 隔离、每请求 KV 内容/crop/生命周期；仍为 dense Q×K mask；原公开native GPU数值gate失败；六调用诊断支持显式窗口对齐原因；显式pinned backend三case/11调用完整tensor gate已通过，whole-Qwen独立门禁首次运行报告layer26 RMS门限失败，不能称整个native修复完成 | packed draft/Markov/verify/commit循环已接通，26项CPU检查与真实trained native有界集成gate通过（75结构、15pooled/35request draft数值），但18/22端点TV非零；仍需graph策略与真实物理工作/KV gather成本测量，不解除target原失败 |
-| 吞吐—交互性 frontier | 尚未测 | 多并发/到达负载下 aggregate tok/s、per-user TPS、TTFT/ITL分位数和SLA达成率；与强target-only serving engine基线在相同context/request/load下比较 |
+| 吞吐—交互性 frontier | 已完成相同六组synthetic固定batch的vLLM与native eager各54批；native吞吐仅vLLM的7.1%–12.3%，没有加速；这不是到达负载frontier | 继续图执行与调度集成，并测多并发/到达负载下aggregate tok/s、per-user TPS、TTFT/ITL分位数和SLA达成率；保留强target-only基线及数值限制 |
 
 单请求固定 k 和 cost lookup 仍有价值：它们是基线、成本界和开发步骤。它们不构成
 上表后五项的替代品，也不能把“完成一个容易子任务”写成 DSpark 系统复现完成。

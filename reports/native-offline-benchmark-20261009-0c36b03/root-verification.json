@@ -1,0 +1,57 @@
+{
+  "source_commit": "0c36b03416311c0ca529d10ff0a10663ebd407fd",
+  "archive_matches_git": true,
+  "archive_sha256": "ad8ee63bb232b847657d85a12fb1d6703c32f415d69060fe6738fe4c153eaafd",
+  "sample_sha256": "4fac289b931017aeaf65a43723aa4413e299656d64ac8dc30ed4b57d374b3883",
+  "samples": 54,
+  "all_output_tokens": 16128,
+  "primary_output_tokens": 8960,
+  "rounds": 5778,
+  "accepted_draft_tokens": 3294,
+  "comparison": {
+    "r1-c64": {
+      "native_tok_s": 16.092391532782948,
+      "vllm_tok_s": 131.26405631263103,
+      "native_over_vllm_throughput": 0.12259556793259362,
+      "native_over_vllm_batch_time": 8.1569017286973,
+      "native_batch_median_s": 7.960150428931229
+    },
+    "r1-c256": {
+      "native_tok_s": 13.928257837235,
+      "vllm_tok_s": 127.33989818625602,
+      "native_over_vllm_throughput": 0.10937858468256806,
+      "native_over_vllm_batch_time": 9.142557502477654,
+      "native_batch_median_s": 9.12191069801338
+    },
+    "r2-c64": {
+      "native_tok_s": 23.685737487609284,
+      "vllm_tok_s": 252.1654002466537,
+      "native_over_vllm_throughput": 0.09392937121604017,
+      "native_over_vllm_batch_time": 10.646297181101874,
+      "native_batch_median_s": 10.744645959930494
+    },
+    "r2-c256": {
+      "native_tok_s": 24.031714241574527,
+      "vllm_tok_s": 246.56672736039107,
+      "native_over_vllm_throughput": 0.09746535754781253,
+      "native_over_vllm_batch_time": 10.260055728102579,
+      "native_batch_median_s": 10.692893774947152
+    },
+    "r4-c64": {
+      "native_tok_s": 36.4075628292713,
+      "vllm_tok_s": 515.9979813723874,
+      "native_over_vllm_throughput": 0.07055756833086631,
+      "native_over_vllm_batch_time": 14.172824030877736,
+      "native_batch_median_s": 13.962427949998528
+    },
+    "r4-c256": {
+      "native_tok_s": 33.84836514725468,
+      "vllm_tok_s": 475.25985182075345,
+      "native_over_vllm_throughput": 0.07122075432540588,
+      "native_over_vllm_batch_time": 14.040851005747912,
+      "native_batch_median_s": 15.092376674991101
+    }
+  },
+  "actual_exit_release_evidence_checked": true,
+  "scope": "Independent scalar and exact Git archive check; numerical target gate remains failed; no graph or overlap claim."
+}

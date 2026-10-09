@@ -1,0 +1,61 @@
+{
+  "vllm_report": "../vllm-offline-benchmark-20261009-700bfa6",
+  "workload_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+  "formula": "Pooled output throughput recomputed separately per engine and cell; equal total output tokens",
+  "cells": [
+    {
+      "case_id": "r1-c64",
+      "native_output_tokens_per_second": 16.092391532782948,
+      "vllm_output_tokens_per_second": 131.26405631263103,
+      "native_over_vllm_throughput": 0.12259556793259359,
+      "native_over_vllm_batch_time": 8.1569017286973,
+      "native_unique_output_hash_vectors": 1
+    },
+    {
+      "case_id": "r1-c256",
+      "native_output_tokens_per_second": 13.928257837235,
+      "vllm_output_tokens_per_second": 127.33989818625602,
+      "native_over_vllm_throughput": 0.10937858468256806,
+      "native_over_vllm_batch_time": 9.142557502477654,
+      "native_unique_output_hash_vectors": 1
+    },
+    {
+      "case_id": "r2-c64",
+      "native_output_tokens_per_second": 23.685737487609284,
+      "vllm_output_tokens_per_second": 252.1654002466537,
+      "native_over_vllm_throughput": 0.09392937121604018,
+      "native_over_vllm_batch_time": 10.646297181101874,
+      "native_unique_output_hash_vectors": 1
+    },
+    {
+      "case_id": "r2-c256",
+      "native_output_tokens_per_second": 24.031714241574527,
+      "vllm_output_tokens_per_second": 246.56672736039107,
+      "native_over_vllm_throughput": 0.09746535754781253,
+      "native_over_vllm_batch_time": 10.260055728102579,
+      "native_unique_output_hash_vectors": 1
+    },
+    {
+      "case_id": "r4-c64",
+      "native_output_tokens_per_second": 36.4075628292713,
+      "vllm_output_tokens_per_second": 515.9979813723874,
+      "native_over_vllm_throughput": 0.07055756833086631,
+      "native_over_vllm_batch_time": 14.172824030877736,
+      "native_unique_output_hash_vectors": 1
+    },
+    {
+      "case_id": "r4-c256",
+      "native_output_tokens_per_second": 33.84836514725468,
+      "vllm_output_tokens_per_second": 475.25985182075345,
+      "native_over_vllm_throughput": 0.07122075432540588,
+      "native_over_vllm_batch_time": 14.040851005747912,
+      "native_unique_output_hash_vectors": 1
+    }
+  ],
+  "limitations": [
+    "Native whole-Qwen RMS numerical gate remains failed; no distribution equivalence",
+    "Native eager fixed maximum prefix versus vLLM graph-enabled target only; different execution and sampling paths",
+    "Fixed synthetic batch throughput, not serving arrival frontier or speculative verification SPS",
+    "Native diagnostic common batch start differs from vLLM individual add_request starts"
+  ]
+}

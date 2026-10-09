@@ -376,7 +376,21 @@ Persistent target KV candidate: persistent_target_kv.py separates fixed-address
 resident KV from speculative scratch and registered attention staging buffers.
 Eight local CPU tests include real tiny-Qwen KV prefix commits, stale-handle
 rejection, metadata-failure recovery and allocated-device alias normalization.
-These ran on Torch 2.11 / Transformers 5.4, not the pinned AMD runtime. This
+These first ran on Torch 2.11 / Transformers 5.4; immutable 2010503 then passed
+all eight on pinned AMD Torch 2.12.0+rocm7.2 / Transformers 5.17.0 with GPUs
+hidden (3.664 s, SSH OS0; output/persistent-target-kv-cpu-2010503-amd). This
 storage prototype is not connected to the decoder and proves no native graph,
 overlap or performance improvement. Capacity-tail native support and graph-safe
 attention still require a separate probe; see docs/persistent-target-kv.md.
+
+Native end-to-end result: immutable 0c36b03 passed the 212-test CPU suite and
+completed all 54 shared batches with worker/controller/SSH OS0 and independent
+resource-release checks. Root independently matched its archive to Git and
+recomputed all six primary rates: 16.092, 13.928, 23.686, 24.032, 36.408 and
+33.848 output tok/s in canonical R1/2/4 × C64/256 order. This is 7.06–12.26%
+of the frozen vLLM baseline throughput; no speedup. See
+reports/native-offline-benchmark-20261009-0c36b03. The raw 54-batch trace is
+private; public batch scalars and aggregate work preserve all repeats. This is
+eager full-shadow fixed-prefix execution, without real capacity scheduling,
+graph replay or overlap. It compares execution stacks and does not isolate
+speculation overhead; the previous target RMS failure remains unchanged.

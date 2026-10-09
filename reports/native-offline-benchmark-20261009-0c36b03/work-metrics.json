@@ -1,0 +1,100 @@
+{
+  "cells": [
+    {
+      "case_id": "r1-c64",
+      "request_count": 1,
+      "rounds": 91,
+      "request_rounds": 91,
+      "committed_after_admission": 127,
+      "accepted_draft_tokens": 36,
+      "selected_proposal_tokens": 624,
+      "full_shadow_positions": 637,
+      "committed_tokens_per_active_request_round": 1.3956043956043955,
+      "accepted_selected_fraction": 0.057692307692307696,
+      "target_append_call_reduction_vs_127_sequential_steps": 0.2834645669291339,
+      "selected_target_query_rows": 715,
+      "note": "Counts identical across all five primary repeats; synthetic-workload descriptive counts, not a causal speed estimate"
+    },
+    {
+      "case_id": "r1-c256",
+      "request_count": 1,
+      "rounds": 106,
+      "request_rounds": 106,
+      "committed_after_admission": 127,
+      "accepted_draft_tokens": 21,
+      "selected_proposal_tokens": 714,
+      "full_shadow_positions": 742,
+      "committed_tokens_per_active_request_round": 1.1981132075471699,
+      "accepted_selected_fraction": 0.029411764705882353,
+      "target_append_call_reduction_vs_127_sequential_steps": 0.16535433070866146,
+      "selected_target_query_rows": 820,
+      "note": "Counts identical across all five primary repeats; synthetic-workload descriptive counts, not a causal speed estimate"
+    },
+    {
+      "case_id": "r2-c64",
+      "request_count": 2,
+      "rounds": 108,
+      "request_rounds": 200,
+      "committed_after_admission": 254,
+      "accepted_draft_tokens": 54,
+      "selected_proposal_tokens": 1351,
+      "full_shadow_positions": 1400,
+      "committed_tokens_per_active_request_round": 1.27,
+      "accepted_selected_fraction": 0.03997039230199852,
+      "target_append_call_reduction_vs_127_sequential_steps": 0.14960629921259838,
+      "selected_target_query_rows": 1551,
+      "note": "Counts identical across all five primary repeats; synthetic-workload descriptive counts, not a causal speed estimate"
+    },
+    {
+      "case_id": "r2-c256",
+      "request_count": 2,
+      "rounds": 106,
+      "request_rounds": 210,
+      "committed_after_admission": 254,
+      "accepted_draft_tokens": 44,
+      "selected_proposal_tokens": 1416,
+      "full_shadow_positions": 1470,
+      "committed_tokens_per_active_request_round": 1.2095238095238094,
+      "accepted_selected_fraction": 0.031073446327683617,
+      "target_append_call_reduction_vs_127_sequential_steps": 0.16535433070866146,
+      "selected_target_query_rows": 1626,
+      "note": "Counts identical across all five primary repeats; synthetic-workload descriptive counts, not a causal speed estimate"
+    },
+    {
+      "case_id": "r4-c64",
+      "request_count": 4,
+      "rounds": 112,
+      "request_rounds": 382,
+      "committed_after_admission": 508,
+      "accepted_draft_tokens": 126,
+      "selected_proposal_tokens": 2587,
+      "full_shadow_positions": 2674,
+      "committed_tokens_per_active_request_round": 1.3298429319371727,
+      "accepted_selected_fraction": 0.04870506378044066,
+      "target_append_call_reduction_vs_127_sequential_steps": 0.11811023622047245,
+      "selected_target_query_rows": 2969,
+      "note": "Counts identical across all five primary repeats; synthetic-workload descriptive counts, not a causal speed estimate"
+    },
+    {
+      "case_id": "r4-c256",
+      "request_count": 4,
+      "rounds": 119,
+      "request_rounds": 423,
+      "committed_after_admission": 508,
+      "accepted_draft_tokens": 85,
+      "selected_proposal_tokens": 2868,
+      "full_shadow_positions": 2961,
+      "committed_tokens_per_active_request_round": 1.2009456264775413,
+      "accepted_selected_fraction": 0.029637377963737797,
+      "target_append_call_reduction_vs_127_sequential_steps": 0.06299212598425197,
+      "selected_target_query_rows": 3291,
+      "note": "Counts identical across all five primary repeats; synthetic-workload descriptive counts, not a causal speed estimate"
+    }
+  ],
+  "all_samples": {
+    "rounds": 5778,
+    "request_rounds": 12708,
+    "zero_prefix_rounds": 99,
+    "inactive_resident_rounds": 621
+  }
+}

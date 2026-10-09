@@ -1,0 +1,49 @@
+{
+  "runtime": {
+    "runtime": {
+      "torch": "2.12.0+rocm7.2",
+      "torch_git": "7661cd9c6b841b62b7f411aa52ec51f05457263b",
+      "hip": "7.2.53211",
+      "device_arch": "gfx1201",
+      "flash_preference": "_ROCmFABackend.AOTriton",
+      "flash_prefer_ck_env": null,
+      "aten_schema": "aten::_flash_attention_forward(Tensor query, Tensor key, Tensor value, Tensor? cum_seq_q, Tensor? cum_seq_k, SymInt max_q, SymInt max_k, float dropout_p, bool is_causal, bool return_debug_mask, *, float? scale=None, SymInt? window_size_left=None, SymInt? window_size_right=None, Tensor? seqused_k=None, Tensor? alibi_slopes=None, Tensor? block_table=None, int? num_splits=None) -> (Tensor output, Tensor softmax_logsumexp, Tensor rng_state, Tensor unused, Tensor debug_attn_mask)"
+    },
+    "setup_seconds": 18.152810975094326,
+    "model_loads": 1,
+    "workload_sha256": "3f2faab15e641ba0703effafb0099a0a4a73913a513137645def9d6f562e3a12",
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0"
+  },
+  "cpu_suite": {
+    "tests": 212,
+    "seconds": 13.648,
+    "os_exit": 0
+  },
+  "worker_os_exit": 0,
+  "controller_os_exit": 0,
+  "outer_execution_os_exit": 0,
+  "supervisor_elapsed_seconds": 639.6935028609587,
+  "timed_out": false,
+  "cleanup_actions": [],
+  "owned_process_count": 1,
+  "all_owned_controller_shell_absent": true,
+  "preserved_asr_same_start_identity": true,
+  "asr_ready": true,
+  "asr_busy": false,
+  "only_preserved_asr_owns_kfd": true,
+  "pre_post_vram_identical": true,
+  "restored_vram": [
+    {
+      "total_bytes": 34208743424,
+      "used_bytes": 8967499776,
+      "free_bytes": 25241243648
+    }
+  ],
+  "health_samples": 124,
+  "maximum_sampled_global_vram_used_bytes": 12178845696,
+  "maximum_whole_operation_peak_allocated_bytes": 2459580928,
+  "maximum_whole_operation_peak_reserved_bytes": 2728394752,
+  "memory_scope": "Before cache reset through completion; includes inherited previous target KV and prepared inputs, not an independent per-cell peak",
+  "post_input_source_hash_checks_passed": true
+}

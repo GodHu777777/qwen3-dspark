@@ -188,3 +188,10 @@ bootstrap/stage/commit test covers this without requiring GPU access. CUDA alias
 behavior is addressed by the same allocation-derived normalization but has not
 been executed in this local test. The original seven-test log and the reproduced
 failure are retained beside the new eight-test result.
+
+The immutable `2010503` storage module and tests were subsequently run with GPUs
+hidden on the existing AMD runtime (Torch 2.12.0+rocm7.2 / Transformers 5.17.0).
+All eight CPU tests passed in 3.664 seconds, with SSH exit 0 and CUDA unavailable
+to the process. Evidence is in `output/persistent-target-kv-cpu-2010503-amd`.
+This adds pinned-runtime CPU coverage; native attention and graph execution were
+not invoked.

@@ -1,10 +1,11 @@
 # Native fixed-output offline baseline
 
-`scripts/benchmark_packed_decoder.py` is a CPU-prepared end-to-end measurement
-runner for the shared six-case workload. It is separate from the frozen-cache
-local profile in `profile_packed_decoder.py`. No native end-to-end GPU result is
-implied. The reviewed preparation protocol has an1800-second worker deadline
-and1790-second cooperative boundary. At roughly95 ms for the measured R2/C128
+`scripts/benchmark_packed_decoder.py` measures the shared six-case workload.
+The [first real execution](../reports/native-offline-benchmark-20261009-0c36b03/README.md)
+completed all 54 batches on immutable `0c36b03`; its throughput was only
+7.06–12.26% of the matched vLLM baseline. It is separate from the frozen-cache
+local profile in `profile_packed_decoder.py`. The original protocol fixes an
+1800-second worker deadline and a 1790-second cooperative boundary. At roughly95 ms for the measured R2/C128
 local round,54 batches times127 rounds already gives about651 seconds before
 admission/setup and other R/context costs. This is budget-planning arithmetic,
 not a transfer guarantee or timing prediction. The larger bound is fixed before
