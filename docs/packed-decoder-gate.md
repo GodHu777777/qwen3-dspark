@@ -125,3 +125,14 @@ is retained as development history, not presented as valid FP32-oracle proof.
 CPU preparation evidence and hashes live privately under
 `output/packed-decoder-gate-cpu-20261009/`. No real GPU result exists at this
 preparation milestone.
+
+
+## Subsequent execution
+
+The immutable8378ea7 GPU matrix completed with worker/launcher/controller exit0,
+75 structural checks and all15 pooled/35 request draft comparisons passing.
+Same-input verification probabilities still differ on18/22 rows, max TV0.02938953.
+See [the complete aggregate report](../reports/packed-decoder-gate-20261009/README.md)
+for saved-tensor audits, physical work counts and the external controller's
+PID-reuse limitation. The prior target RMS failure remains unchanged; this was
+not a performance benchmark or a whole-system equivalence result.

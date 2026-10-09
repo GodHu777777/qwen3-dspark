@@ -1,0 +1,93 @@
+{
+  "source_commit": "8378ea7af51fdb84e369a4b306259e88d8dd22b7",
+  "execution": {
+    "exit_code": 0,
+    "timed_out": false,
+    "execution_completed": true,
+    "status": "completed",
+    "structural_status": "passed",
+    "draft_layer_numerical_status": "passed",
+    "endpoint_comparison_status": "completed",
+    "system_pass_claimed": false,
+    "wall_seconds": 35.45636209298391,
+    "timing_scope": "Bounded correctness instrumentation, not a benchmark"
+  },
+  "structural_checks": 75,
+  "structural_checks_passed": 75,
+  "target_native_forwards": 5,
+  "target_native_flash_events": 140,
+  "draft_native_forwards": 7,
+  "draft_native_flash_events": 35,
+  "normal_draft_pooled_comparisons": 15,
+  "normal_draft_request_layer_comparisons": 35,
+  "normal_draft_max_pooled_rms": 0.0035258594566771116,
+  "normal_draft_max_request_rms": 0.0038259145536139296,
+  "poison_pairs_exact": 2,
+  "normal_target_query_rows": 73,
+  "verification_probability_rows": 22,
+  "verification_nonzero_tv_rows": 18,
+  "verification_max_tv": 0.029389527278700492,
+  "verification_argmax_changed_rows": 0,
+  "resident_KV": {
+    "target": {
+      "key": {
+        "comparisons": 420,
+        "max_abs": 4.0,
+        "max_rms": 0.04842291872286551,
+        "nonidentical_comparisons": 304
+      },
+      "value": {
+        "comparisons": 420,
+        "max_abs": 1.25,
+        "max_rms": 0.21104112258469584,
+        "nonidentical_comparisons": 304
+      }
+    },
+    "draft": {
+      "key": {
+        "comparisons": 75,
+        "max_abs": 0.14380133152008057,
+        "max_rms": 0.018128830343485357,
+        "nonidentical_comparisons": 55
+      },
+      "value": {
+        "comparisons": 75,
+        "max_abs": 0.4375,
+        "max_rms": 0.05705351398913077,
+        "nonidentical_comparisons": 55
+      }
+    }
+  },
+  "peak_allocated_bytes": 3492600832,
+  "exit_codes": {
+    "worker": 0,
+    "launcher": 0,
+    "controller": 0,
+    "ssh_handle": 0
+  },
+  "release": {
+    "all_four_owned_pids_gone": true,
+    "asr_same_start_ticks": true,
+    "asr_ready": true,
+    "asr_busy": false,
+    "kfd_only_asr": true,
+    "vram": [
+      {
+        "total_bytes": 34208743424,
+        "used_bytes": 8967499776,
+        "free_bytes": 25241243648
+      }
+    ]
+  },
+  "prior_target_gate": "failed_unchanged",
+  "system_pass_claimed": false,
+  "controller_limit": "The already-running outer controller used bare PIDs. Start ticks were captured after launch and independently checked at release; no termination signal was needed. This does not retrospectively establish reuse-safe controller supervision.",
+  "claims_excluded": [
+    "whole-system numerical equivalence",
+    "target-law losslessness",
+    "quality evaluation",
+    "speedup",
+    "async overlap",
+    "graph replay"
+  ]
+}

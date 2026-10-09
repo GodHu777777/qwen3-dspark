@@ -12,8 +12,10 @@ failures described below.
 
 A [packed multi-request decoder](docs/packed-sampling.md) and a
 [two-step capacity reference](docs/async-capacity.md) now run together on tiny CPU
-models, with per-request KV reconstruction and confidence-source checks. Native
-GPU integration, measured hardware profiles and execution overlap remain open.
+models, with per-request KV reconstruction and confidence-source checks. A
+[bounded trained GPU gate](reports/packed-decoder-gate-20261009/README.md) passed
+structural and draft-attention checks; target probability differences remain.
+Measured hardware profiles and execution overlap are still open.
 
 ## Architecture
 

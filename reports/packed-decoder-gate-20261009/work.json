@@ -1,0 +1,383 @@
+[
+  {
+    "name": "shadow_one",
+    "requests": {
+      "A": {
+        "accepted": 0,
+        "proposed": 1,
+        "committed": 1,
+        "rejected_index": 0,
+        "extra_token_kind": "residual",
+        "stop_reason": "round_complete",
+        "cache_before": 16,
+        "cache_after": 17
+      },
+      "B": {
+        "accepted": 0,
+        "proposed": 7,
+        "committed": 1,
+        "rejected_index": 0,
+        "extra_token_kind": "residual",
+        "stop_reason": "round_complete",
+        "cache_before": 21,
+        "cache_after": 22
+      },
+      "C": {
+        "accepted": 0,
+        "proposed": 0,
+        "committed": 1,
+        "rejected_index": null,
+        "extra_token_kind": "bonus",
+        "stop_reason": "round_complete",
+        "cache_before": 13,
+        "cache_after": 14
+      }
+    },
+    "work": {
+      "target": {
+        "queried_requests": 3,
+        "resident_requests": 3,
+        "logical_query_tokens": 11,
+        "physical_query_tokens": 11,
+        "physical_kv_tokens": 61,
+        "physical_kv_tokens_before": 50,
+        "query_lengths": [
+          2,
+          8,
+          1
+        ],
+        "queried_context_lengths": [
+          16,
+          21,
+          13
+        ],
+        "resident_context_lengths_before": [
+          16,
+          21,
+          13
+        ],
+        "dense_attention_pairs_per_head_layer": 671,
+        "allowed_causal_pairs": 253,
+        "masked_cross_request_pairs": 389,
+        "masked_future_pairs": 29,
+        "attention_heads": 16,
+        "layers": 28,
+        "dense_attention_pairs_all_heads_layers": 300608,
+        "model_forward_calls": 1,
+        "attention_backend": "rocm_aten_no_window_pinned_v1_unverified",
+        "mask_shape": null,
+        "mask_bytes": 0,
+        "active_kv_gather_tokens": 61,
+        "inactive_kv_tokens_excluded": 0,
+        "kv_gather_payload_bytes_per_layer": 249856,
+        "varlen_pair_domain_per_head_layer": 282,
+        "varlen_cross_request_pair_domain": 0,
+        "attention_adapter_calls_per_layer": 1,
+        "native_varlen_calls_per_layer": 1,
+        "scope": "Metadata-only varlen layout; dense Q*K counts are counterfactual oracle domains. CPU injected kernel is test-only; native execution is not implied."
+      },
+      "draft_context_projection": {
+        "requests": 3,
+        "new_context_tokens": 3,
+        "context_projection_calls": 1,
+        "kv_projection_calls": 5,
+        "cache_concatenation_kv_elements": 542720,
+        "cache_concatenation_kv_bytes": 1628160
+      },
+      "proposal_batches": [
+        {
+          "active_requests": 3,
+          "draft_requests": 3,
+          "target_only_skipped_requests": 0,
+          "backbone_calls": 1,
+          "base_lm_head_calls": 1,
+          "markov_projection_calls": 7,
+          "confidence_head_calls": 7,
+          "proposal_positions": 21,
+          "base_lm_head_rows": 21,
+          "markov_head_rows": 21,
+          "probability_policy": "float64_softmax_normalize_cdf_v1",
+          "backbone": {
+            "requests": 3,
+            "query_rows": 21,
+            "gathered_key_rows": 71,
+            "physical_context_rows": 50,
+            "attention_pair_domain": 497,
+            "attention_calls": 5,
+            "context_block_concatenation_kv_elements": 727040,
+            "context_block_concatenation_kv_bytes": 2181120,
+            "gathered_kv_elements": 727040,
+            "gathered_kv_bytes": 2181120,
+            "attention_cast_elements": 578560,
+            "attention_cast_output_bytes": 1157120,
+            "mlp_calls": 5,
+            "scope": "Work counts only; no speed claim"
+          },
+          "observation_copy_elements": 3190698
+        }
+      ],
+      "policy_confidence_host_values": 0
+    },
+    "allocation_policy": "external_nonanticipating"
+  },
+  {
+    "name": "shadow_readd",
+    "requests": {
+      "A": {
+        "accepted": 0,
+        "proposed": 0,
+        "committed": 1,
+        "rejected_index": null,
+        "extra_token_kind": "bonus",
+        "stop_reason": "round_complete",
+        "cache_before": 17,
+        "cache_after": 18
+      },
+      "B": {
+        "accepted": 0,
+        "proposed": 1,
+        "committed": 1,
+        "rejected_index": 0,
+        "extra_token_kind": "residual",
+        "stop_reason": "round_complete",
+        "cache_before": 22,
+        "cache_after": 23
+      },
+      "C": {
+        "accepted": 0,
+        "proposed": 3,
+        "committed": 1,
+        "rejected_index": 0,
+        "extra_token_kind": "residual",
+        "stop_reason": "round_complete",
+        "cache_before": 1,
+        "cache_after": 2
+      }
+    },
+    "work": {
+      "target": {
+        "queried_requests": 3,
+        "resident_requests": 3,
+        "logical_query_tokens": 7,
+        "physical_query_tokens": 7,
+        "physical_kv_tokens": 47,
+        "physical_kv_tokens_before": 40,
+        "query_lengths": [
+          1,
+          2,
+          4
+        ],
+        "queried_context_lengths": [
+          17,
+          22,
+          1
+        ],
+        "resident_context_lengths_before": [
+          17,
+          22,
+          1
+        ],
+        "dense_attention_pairs_per_head_layer": 329,
+        "allowed_causal_pairs": 79,
+        "masked_cross_request_pairs": 243,
+        "masked_future_pairs": 7,
+        "attention_heads": 16,
+        "layers": 28,
+        "dense_attention_pairs_all_heads_layers": 147392,
+        "model_forward_calls": 1,
+        "attention_backend": "rocm_aten_no_window_pinned_v1_unverified",
+        "mask_shape": null,
+        "mask_bytes": 0,
+        "active_kv_gather_tokens": 47,
+        "inactive_kv_tokens_excluded": 0,
+        "kv_gather_payload_bytes_per_layer": 192512,
+        "varlen_pair_domain_per_head_layer": 86,
+        "varlen_cross_request_pair_domain": 0,
+        "attention_adapter_calls_per_layer": 1,
+        "native_varlen_calls_per_layer": 1,
+        "scope": "Metadata-only varlen layout; dense Q*K counts are counterfactual oracle domains. CPU injected kernel is test-only; native execution is not implied."
+      },
+      "draft_context_projection": {
+        "requests": 3,
+        "new_context_tokens": 3,
+        "context_projection_calls": 1,
+        "kv_projection_calls": 5,
+        "cache_concatenation_kv_elements": 440320,
+        "cache_concatenation_kv_bytes": 1320960
+      },
+      "proposal_batches": [
+        {
+          "active_requests": 3,
+          "draft_requests": 3,
+          "target_only_skipped_requests": 0,
+          "backbone_calls": 1,
+          "base_lm_head_calls": 1,
+          "markov_projection_calls": 7,
+          "confidence_head_calls": 7,
+          "proposal_positions": 21,
+          "base_lm_head_rows": 21,
+          "markov_head_rows": 21,
+          "probability_policy": "float64_softmax_normalize_cdf_v1",
+          "backbone": {
+            "requests": 3,
+            "query_rows": 21,
+            "gathered_key_rows": 61,
+            "physical_context_rows": 40,
+            "attention_pair_domain": 427,
+            "attention_calls": 5,
+            "context_block_concatenation_kv_elements": 624640,
+            "context_block_concatenation_kv_bytes": 1873920,
+            "gathered_kv_elements": 624640,
+            "gathered_kv_bytes": 1873920,
+            "attention_cast_elements": 527360,
+            "attention_cast_output_bytes": 1054720,
+            "mlp_calls": 5,
+            "scope": "Work counts only; no speed claim"
+          },
+          "observation_copy_elements": 3190698
+        }
+      ],
+      "policy_confidence_host_values": 0
+    },
+    "allocation_policy": "external_nonanticipating"
+  },
+  {
+    "name": "fixed_zero",
+    "requests": {
+      "A": {
+        "accepted": 0,
+        "proposed": 0,
+        "committed": 1,
+        "rejected_index": null,
+        "extra_token_kind": "bonus",
+        "stop_reason": "round_complete",
+        "cache_before": 18,
+        "cache_after": 19
+      },
+      "B": {
+        "accepted": 0,
+        "proposed": 2,
+        "committed": 1,
+        "rejected_index": 0,
+        "extra_token_kind": "residual",
+        "stop_reason": "round_complete",
+        "cache_before": 23,
+        "cache_after": 24
+      }
+    },
+    "work": {
+      "target": {
+        "queried_requests": 2,
+        "resident_requests": 3,
+        "logical_query_tokens": 4,
+        "physical_query_tokens": 4,
+        "physical_kv_tokens": 47,
+        "physical_kv_tokens_before": 43,
+        "query_lengths": [
+          1,
+          3
+        ],
+        "queried_context_lengths": [
+          18,
+          23
+        ],
+        "resident_context_lengths_before": [
+          18,
+          23,
+          2
+        ],
+        "dense_attention_pairs_per_head_layer": 188,
+        "allowed_causal_pairs": 94,
+        "masked_cross_request_pairs": 91,
+        "masked_future_pairs": 3,
+        "attention_heads": 16,
+        "layers": 28,
+        "dense_attention_pairs_all_heads_layers": 84224,
+        "model_forward_calls": 1,
+        "attention_backend": "rocm_aten_no_window_pinned_v1_unverified",
+        "mask_shape": null,
+        "mask_bytes": 0,
+        "active_kv_gather_tokens": 45,
+        "inactive_kv_tokens_excluded": 2,
+        "kv_gather_payload_bytes_per_layer": 184320,
+        "varlen_pair_domain_per_head_layer": 97,
+        "varlen_cross_request_pair_domain": 0,
+        "attention_adapter_calls_per_layer": 1,
+        "native_varlen_calls_per_layer": 1,
+        "scope": "Metadata-only varlen layout; dense Q*K counts are counterfactual oracle domains. CPU injected kernel is test-only; native execution is not implied."
+      },
+      "draft_context_projection": {
+        "requests": 2,
+        "new_context_tokens": 2,
+        "context_projection_calls": 1,
+        "kv_projection_calls": 5,
+        "cache_concatenation_kv_elements": 460800,
+        "cache_concatenation_kv_bytes": 1382400
+      },
+      "proposal_batches": [
+        {
+          "active_requests": 2,
+          "draft_requests": 1,
+          "target_only_skipped_requests": 1,
+          "backbone_calls": 1,
+          "base_lm_head_calls": 1,
+          "markov_projection_calls": 2,
+          "confidence_head_calls": 2,
+          "proposal_positions": 2,
+          "base_lm_head_rows": 7,
+          "markov_head_rows": 2,
+          "probability_policy": "float64_softmax_normalize_cdf_v1",
+          "backbone": {
+            "requests": 1,
+            "query_rows": 7,
+            "gathered_key_rows": 30,
+            "physical_context_rows": 43,
+            "attention_pair_domain": 210,
+            "attention_calls": 5,
+            "context_block_concatenation_kv_elements": 512000,
+            "context_block_concatenation_kv_bytes": 1536000,
+            "gathered_kv_elements": 307200,
+            "gathered_kv_bytes": 921600,
+            "attention_cast_elements": 225280,
+            "attention_cast_output_bytes": 450560,
+            "mlp_calls": 5,
+            "scope": "Work counts only; no speed claim"
+          },
+          "observation_copy_elements": 303876
+        }
+      ],
+      "policy_confidence_host_values": 0,
+      "proposal": {
+        "active_requests": 2,
+        "draft_requests": 1,
+        "target_only_skipped_requests": 1,
+        "backbone_calls": 1,
+        "base_lm_head_calls": 1,
+        "markov_projection_calls": 2,
+        "confidence_head_calls": 2,
+        "proposal_positions": 2,
+        "base_lm_head_rows": 7,
+        "markov_head_rows": 2,
+        "probability_policy": "float64_softmax_normalize_cdf_v1",
+        "backbone": {
+          "requests": 1,
+          "query_rows": 7,
+          "gathered_key_rows": 30,
+          "physical_context_rows": 43,
+          "attention_pair_domain": 210,
+          "attention_calls": 5,
+          "context_block_concatenation_kv_elements": 512000,
+          "context_block_concatenation_kv_bytes": 1536000,
+          "gathered_kv_elements": 307200,
+          "gathered_kv_bytes": 921600,
+          "attention_cast_elements": 225280,
+          "attention_cast_output_bytes": 450560,
+          "mlp_calls": 5,
+          "scope": "Work counts only; no speed claim"
+        },
+        "observation_copy_elements": 303876
+      }
+    },
+    "allocation_policy": "fixed_before_proposal"
+  }
+]

@@ -70,7 +70,8 @@ independent targets. It uses a dense Q*K mask, with explicit work-domain counts;
 this dense oracle is not an efficient varlen kernel. The separate packed_sampling
 module now supplies a CPU-validated multi-request decoder; serving remains incomplete.
 See docs/packed-target.md. Native target GPU evidence is reported separately
-below; the integrated packed decoder has no GPU execution result yet.
+below; the integrated trained packed decoder now has a bounded native GPU result
+(see reports/packed-decoder-gate-20261009), with endpoint differences preserved.
 CachedTarget has six CPU FP32 tests and a real same-dtype HF cached greedy
 check (117 tokens on seven pilot prompts). Reports/cached-target-20261008 records
 a BF16 full-recompute/cached near-tie divergence and isolated target costs.
@@ -295,8 +296,11 @@ batched heads, one target verification and one committed-feature projection;
 actual q and original pre-token confidence remain session-owned. Prefill projects
 only R final hidden rows. GPU sessions require the explicit pinned causal target
 and noncausal draft backends; neither this entry guard nor CPU tests resolve the
-whole-Qwen RMS failure. Native integrated GPU execution, measured capacity and
-actual asynchronous overlap remain unverified.
+whole-Qwen RMS failure. The bounded trained GPU gate on8378ea7 passed75 structural checks and all15
+pooled/35 request draft-layer comparisons. Same-input endpoint TV is nonzero
+on18/22 verification rows (max0.02938953), so the earlier target failure and
+distribution limitations remain. See reports/packed-decoder-gate-20261009.
+Measured capacity and actual asynchronous overlap remain unverified.
 
 Two-step capacity CPU reference: async_capacity.py freezes absolute K from exactly
 t-2 history and allocates using current calibrated prefix scores; scheduler.py's
@@ -309,3 +313,11 @@ freeze -> propose -> bind -> verify/commit -> finish and charges synchronous hos
 copies, calibration and hashing. Twenty hidden-GPU tests passed, including real
 three-round tiny-Qwen KV reconstruction. Profiles are synthetic; CPU ordering is
 not evidence of GPU overlap, graph replay or measured SPS. See docs/async-capacity.md.
+
+Target-only engine preparation: probe_vllm_offline.py and guard_vllm_smoke.py
+provide a bounded, identity-aware offline smoke. The first e0f5ce8 run stopped
+before engine initialization because distribution and module versions were
+incorrectly equated; reports/vllm-offline-smoke-20261009-e0f5ce8 preserves that
+failure. The03b80a2 correction pins both fields separately. Reuse this tested
+supervisor for future experiments; the already-executed packed gate used an older
+external bare-PID controller and cannot establish PID-reuse-safe supervision.
