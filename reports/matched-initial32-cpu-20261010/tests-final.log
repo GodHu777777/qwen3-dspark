@@ -1,0 +1,26 @@
+<local-python>/lib/python3.14/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+test_default_cli_import_and_data_read_traps (test_diagnose_matched_initial32.BindingTests.test_default_cli_import_and_data_read_traps) ... ok
+test_dependency_hashes_without_dereferencing_training_data (test_diagnose_matched_initial32.BindingTests.test_dependency_hashes_without_dereferencing_training_data) ... ok
+test_identity_extension_rejects_missing_duplicate_order_anchor (test_diagnose_matched_initial32.BindingTests.test_identity_extension_rejects_missing_duplicate_order_anchor) ... ok
+test_invalid_transient_tail_and_retained_law (test_diagnose_matched_initial32.CaptureTests.test_invalid_transient_tail_and_retained_law) ... ok
+test_original_shapes_amp_no_grad_order_and_fresh_caches (test_diagnose_matched_initial32.CaptureTests.test_original_shapes_amp_no_grad_order_and_fresh_caches) ... ok
+test_all64_order_four_loads_and_no_private_public_fields (test_diagnose_matched_initial32.PanelTests.test_all64_order_four_loads_and_no_private_public_fields) ... ok
+test_deadline_no_forward_and_partial_saved (test_diagnose_matched_initial32.PanelTests.test_deadline_no_forward_and_partial_saved) ... ok
+test_final_input_mutation_does_not_publish_complete_aggregate (test_diagnose_matched_initial32.PanelTests.test_final_input_mutation_does_not_publish_complete_aggregate) ... ok
+test_fourth_anchor_failure_never_starts_remaining30 (test_diagnose_matched_initial32.PanelTests.test_fourth_anchor_failure_never_starts_remaining30) ... ok
+test_illegal_law_evidence_gap_after_raw_save (test_diagnose_matched_initial32.PanelTests.test_illegal_law_evidence_gap_after_raw_save) ... ok
+test_mismatch_persists_raw_and_comparison_before_stop (test_diagnose_matched_initial32.PanelTests.test_mismatch_persists_raw_and_comparison_before_stop) ... ok
+test_missing_duplicate_plan_and_partial32_cannot_aggregate (test_diagnose_matched_initial32.PanelTests.test_missing_duplicate_plan_and_partial32_cannot_aggregate) ... ok
+test_pair_sensitivity_and_equal_state_disagreement (test_diagnose_matched_initial32.PanelTests.test_pair_sensitivity_and_equal_state_disagreement) ... ok
+test_device_mapping_must_be_exact_and_driver_stable (test_diagnose_matched_initial32.SupervisorTests.test_device_mapping_must_be_exact_and_driver_stable) ... ok
+test_missing_telemetry_no_child_and_saved_exit (test_diagnose_matched_initial32.SupervisorTests.test_missing_telemetry_no_child_and_saved_exit) ... ok
+test_nonzero_exit_or_final_telemetry_revokes_completed_summary (test_diagnose_matched_initial32.SupervisorTests.test_nonzero_exit_or_final_telemetry_revokes_completed_summary) ... ok
+test_pressure_kills_only_owned_child_and_reaps_real_code (test_diagnose_matched_initial32.SupervisorTests.test_pressure_kills_only_owned_child_and_reaps_real_code) ... ok
+test_sysfs_unique_physical_device_and_identity (test_diagnose_matched_initial32.SupervisorTests.test_sysfs_unique_physical_device_and_identity) ... ok
+test_wall_rss_output_caps_reap_child (test_diagnose_matched_initial32.SupervisorTests.test_wall_rss_output_caps_reap_child) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.545s
+
+OK

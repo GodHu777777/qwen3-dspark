@@ -1,0 +1,31 @@
+{
+  "scope": "Synthetic CPU tests and stdlib binding of existing local evidence only; no historical tensor loading or model execution.",
+  "cpu_tests": 19,
+  "os_exit": 0,
+  "command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_diagnose_matched_initial32.py",
+    "-v"
+  ],
+  "evidence_sha256": {
+    "tests-first.log": "86aa45780e7edc296ceee271c46d4bc5e99cc52828fd7a7e3a8f7278cdb417c9",
+    "tests-first-exit.json": "f80bbb2917dcd6b6d125555abd5360cbfadcc0fd7c7ae3d5a6a914d44ada725d",
+    "tests-second.log": "47dab7a7d3764f6fe2ccb6914aeafd95883268f08bf3c574f0c96703408a45d5",
+    "tests-second-exit.json": "f1bca57588e89692e82bdd04e74840458f6a8fdf136fad7a958af3a1b7808204",
+    "tests-final.log": "dd73c8d815e045353df5a76307c6e777c64945f76653f222c72fe18ecd559b1c",
+    "tests-final-exit.json": "f1bca57588e89692e82bdd04e74840458f6a8fdf136fad7a958af3a1b7808204",
+    "evidence-only.log": "c3331e41ff909482774241e3ad2829b16139f7fad3b277d7e21bf32ba5bcea4b",
+    "evidence-only-exit.json": "da7fd007f209ea76ec63ac45a8e81dd8ad28f4e7df5afcea077cbf1365577466"
+  },
+  "public_test_log": {
+    "path": "tests-final.log",
+    "sanitization": "Replaced local Python environment prefix with <local-python>; raw evidence hashes above refer to unchanged private originals.",
+    "sha256": "a009b910773255a6e5626d5d55354396cfc9b0d44ddc60ec96f09ec4ac57f8de"
+  }
+}

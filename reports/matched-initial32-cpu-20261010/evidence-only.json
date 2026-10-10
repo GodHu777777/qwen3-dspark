@@ -1,0 +1,326 @@
+{
+  "status": "dry_run_no_tensor_load",
+  "dependencies_verified": false,
+  "state_count": 32,
+  "checkpoint_state_count": 64,
+  "plan": [
+    [
+      512,
+      0
+    ],
+    [
+      512,
+      1
+    ],
+    [
+      1280,
+      0
+    ],
+    [
+      1280,
+      1
+    ],
+    [
+      512,
+      2
+    ],
+    [
+      512,
+      3
+    ],
+    [
+      512,
+      4
+    ],
+    [
+      512,
+      5
+    ],
+    [
+      512,
+      6
+    ],
+    [
+      512,
+      7
+    ],
+    [
+      512,
+      8
+    ],
+    [
+      512,
+      9
+    ],
+    [
+      512,
+      10
+    ],
+    [
+      512,
+      11
+    ],
+    [
+      512,
+      12
+    ],
+    [
+      512,
+      13
+    ],
+    [
+      512,
+      14
+    ],
+    [
+      512,
+      15
+    ],
+    [
+      512,
+      16
+    ],
+    [
+      512,
+      17
+    ],
+    [
+      512,
+      18
+    ],
+    [
+      512,
+      19
+    ],
+    [
+      512,
+      20
+    ],
+    [
+      512,
+      21
+    ],
+    [
+      512,
+      22
+    ],
+    [
+      512,
+      23
+    ],
+    [
+      512,
+      24
+    ],
+    [
+      512,
+      25
+    ],
+    [
+      512,
+      26
+    ],
+    [
+      512,
+      27
+    ],
+    [
+      512,
+      28
+    ],
+    [
+      512,
+      29
+    ],
+    [
+      512,
+      30
+    ],
+    [
+      512,
+      31
+    ],
+    [
+      1280,
+      2
+    ],
+    [
+      1280,
+      3
+    ],
+    [
+      1280,
+      4
+    ],
+    [
+      1280,
+      5
+    ],
+    [
+      1280,
+      6
+    ],
+    [
+      1280,
+      7
+    ],
+    [
+      1280,
+      8
+    ],
+    [
+      1280,
+      9
+    ],
+    [
+      1280,
+      10
+    ],
+    [
+      1280,
+      11
+    ],
+    [
+      1280,
+      12
+    ],
+    [
+      1280,
+      13
+    ],
+    [
+      1280,
+      14
+    ],
+    [
+      1280,
+      15
+    ],
+    [
+      1280,
+      16
+    ],
+    [
+      1280,
+      17
+    ],
+    [
+      1280,
+      18
+    ],
+    [
+      1280,
+      19
+    ],
+    [
+      1280,
+      20
+    ],
+    [
+      1280,
+      21
+    ],
+    [
+      1280,
+      22
+    ],
+    [
+      1280,
+      23
+    ],
+    [
+      1280,
+      24
+    ],
+    [
+      1280,
+      25
+    ],
+    [
+      1280,
+      26
+    ],
+    [
+      1280,
+      27
+    ],
+    [
+      1280,
+      28
+    ],
+    [
+      1280,
+      29
+    ],
+    [
+      1280,
+      30
+    ],
+    [
+      1280,
+      31
+    ]
+  ],
+  "caps": {
+    "wall_seconds": 300,
+    "cooperative_seconds": 290,
+    "rss_bytes": 8589934592,
+    "output_bytes": 1073741824,
+    "allocator_bytes": 6442450944,
+    "free_before_load_bytes": 8589934592,
+    "device_used_delta_bytes": 8589934592
+  },
+  "binding_sha256": "06b2ebee3f0a670dae4b9f049c12a746461fc16c6d61641c92c18f23ca8d5f70",
+  "source_sha256": {
+    "scripts/diagnose_matched_initial32.py": "c008f4b393a7b020f2dc080240bd2c65f9cd0c3ac66662ff6578ce7763802b67",
+    "tests/test_diagnose_matched_initial32.py": "9421968c96fc00790fcd8e43ece997f7364ba4694ea819db2e153c8c83538aeb",
+    "scripts/analyze_matched_prefix_probes.py": "637561d74cb53e3975fd065acb2237b6cf66924f86e6b3f540c9d17ae26b6b75",
+    "docs/matched-initial32-diagnostic.md": "177b91cc789213754e617d33e8bdea52caef960c6cdaa41d6ef7b4718f5492b1",
+    "dspark_qwen/__init__.py": "bc0e47a109ff9d53f21efbf0b8c02d23ca53ef4658488fba8dd5de037b9b636d",
+    "dspark_qwen/async_capacity.py": "4b8dad908844b70c7a874606a8e0cf1862b5281c676fc24b9ffb677f68d68ff6",
+    "dspark_qwen/async_round.py": "f1fbc830748868805dc9c6b97437471d538c378e2a8b6a2d4e9e919f7e519e7a",
+    "dspark_qwen/bench_cached_target.py": "425132af31261bbbcd0e88699a15520e6bff012386d39be74a07f3a0f4224e89",
+    "dspark_qwen/cached_decode.py": "f16b04ef254b973ebb09f2caa334a419cd44fa1f673690b9df7804ddc4adbbcc",
+    "dspark_qwen/cached_sampling.py": "322872e1d7ede2b22369e27a2c07d62462e74f951acd2285312f45933e3df9ad",
+    "dspark_qwen/cached_target.py": "183ea145338c395aa3adbb50d80035af44f59535d2ae03b9d93cf0cf1f21f241",
+    "dspark_qwen/calibrate_rollout.py": "04f405dbefabe10d86dce119e736a4da0f8534ef3648886d1311203676943f95",
+    "dspark_qwen/calibration.py": "56f5a25fd6e233107cf1d574ab07208858480b66e06be286db9f6067657c5351",
+    "dspark_qwen/canonical_target.py": "6b80ba03ddafce7afebfa67fd84f2c523bdc458176123bc536b3434c62035290",
+    "dspark_qwen/checkpoint.py": "06cd16e512c2b90e19ca50faed3f5a9d4d01ded44ea355575d23e87799094635",
+    "dspark_qwen/collect_rollout.py": "d4bed7a41f0acee890a487582afcfb92804e7fb2f97f83e945b32af3fe6b84b5",
+    "dspark_qwen/config.py": "d27c330979e4c8b94d6509614057ccb1b04df7e61e38a88e453e39525d08cab8",
+    "dspark_qwen/data.py": "14a33ef586e3e76ffc28177805c91abcea4bd685ef3d9c4e1b26dfe030521fed",
+    "dspark_qwen/decode.py": "eebfd7c8d7f9cc697f4fa13d5048ec752813c8242882db9b57ff40c90cb6ce9e",
+    "dspark_qwen/diagnose_learning.py": "738212bc71937a92a34f0aba46ac79cf704073408b06d449ecb7c3267701481c",
+    "dspark_qwen/eval_cached_decode.py": "afb721d3d487cd7f5f35416b86eb8f86875fdbd6c73712db9d8094263ec85820",
+    "dspark_qwen/eval_canonical_decode.py": "19d0728a07ac9d53af9db1d3b33aac078e89422f70a6985cca2811553d8493c0",
+    "dspark_qwen/eval_decode.py": "248cac7fb4e8eaff468ac5631c1f1aadbcadf1a228b5649e0a4f1a1f0be4bfd7",
+    "dspark_qwen/eval_dev_tf.py": "5846308aa3435930e1175c36a0912194ebcb3f3cebdaa4bb0154a281d9cae84c",
+    "dspark_qwen/eval_stochastic_gate.py": "ecb986a7574f39940aec8d1a5660ce1423a52cdecc113182d5da6edee8d34a33",
+    "dspark_qwen/experiment_inputs.py": "dda5dbc6f43c90f5b3434fa503d8d79941b3e74f3e67d7c4119b66746abb1b58",
+    "dspark_qwen/experimental_categorical.py": "23d989262a7a192bf9421918782e2d70a5fdc5045da4ef374138fb8b7dc9f01b",
+    "dspark_qwen/losses.py": "25b735023512429e3d2ab5d0661b08708dc10bef69804ee50be324af104348ed",
+    "dspark_qwen/memory_gate.py": "b6f23bc312038c8995d3dab88f0c6e652cfe292d8177b9d4f940254762f42fa1",
+    "dspark_qwen/model.py": "99c095ec3453e9fb47ecfce5d3b8c24fb97049f3f4c3e80d2202ba59f49ccb01",
+    "dspark_qwen/packed_draft.py": "f8938551278a03cef4a3aad24dfffa6e579ac4a6387dca69940b1801f3b0b904",
+    "dspark_qwen/packed_sampling.py": "1bc8e2b2141d4801d7a0976b07fd1a57c8272f65805b14df2c62f3098bd5aabf",
+    "dspark_qwen/packed_target.py": "91c811fff0d3353d7c14999c1ed2276dee267be3b12478e5803067a46e1357e5",
+    "dspark_qwen/packed_target_sampling.py": "eb6c6305b1a9ec68f5ca90d26b1d61626476d45a51a70cb682925acddd072672",
+    "dspark_qwen/paired_observer.py": "06049747500ba3dc38337023fc9265bc64af66e07f23ea5c4889a50b6013eed9",
+    "dspark_qwen/performance_workloads.py": "68dd26f34c11defcc3cb43a60020cf6f79c062c5bc6d91851f433c3c5bf6413f",
+    "dspark_qwen/persistent_qwen_graph.py": "329d4b0af7c8792bfe68b96beb7b81af34f2187ed10e86eef7a62cbae7a444ba",
+    "dspark_qwen/persistent_qwen_target.py": "d05a393bc2c0019433be1cfc5c2c754d79ec282504fb8d5670741a3a505efdf3",
+    "dspark_qwen/persistent_target_kv.py": "ff4ee8724cb1a985c81e29065d150154c5cf1ef3af7a26d2948fe187dae592b8",
+    "dspark_qwen/profile_resource_monitor.py": "a5616d4110820ee252474f2cfd22398dd47a6530aa8acb6da087f082002ef05b",
+    "dspark_qwen/rocm_varlen.py": "7ab67b71290102d22e4c825ab622e7106fb3b3ab63720dc048190f247143cbfe",
+    "dspark_qwen/rollout_protocol.py": "32f57537071ca36872601841bbc4110894c9f957963ab0d2973274ad92b581dc",
+    "dspark_qwen/sampling.py": "af21ad1756069ce1ab5537a778cf9bb89ece8ac3823e18c817e09c2c35d71ed4",
+    "dspark_qwen/scheduler.py": "579248b6ca3644e08ed10a1e53ac0edf3b77f37633905b803a7508510c46967f",
+    "dspark_qwen/target.py": "9046268d3112085710d78fa6fafbe5e071b358addfc1e620845140b33d1e2797",
+    "dspark_qwen/target_strategy.py": "a3ca6db6c6a926607bb21a82b51a2b73e81dcfe0e40c3e81d90bb2ce22e1593c",
+    "dspark_qwen/tensor_sampling.py": "6d31ce1861094a674037f30acff2197a890fc0124953eb0f8461f904705f6033",
+    "dspark_qwen/train.py": "6e4e7ac514a2592b9a8c212cb41df69a33396cf9d68e4fbb6fc5a5ccdd27c471",
+    "dspark_qwen/varlen_target.py": "ba48fd1359af02ecfdc608c8fd7971d7937b473d66bcc5db86dc276b8507b3ea"
+  },
+  "os_exit": 0
+}

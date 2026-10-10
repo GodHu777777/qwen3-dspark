@@ -1,0 +1,21 @@
+{
+  "base_commit": "71381c2",
+  "source_sha256": {
+    "scripts/diagnose_matched_initial32.py": "c008f4b393a7b020f2dc080240bd2c65f9cd0c3ac66662ff6578ce7763802b67",
+    "tests/test_diagnose_matched_initial32.py": "9421968c96fc00790fcd8e43ece997f7364ba4694ea819db2e153c8c83538aeb",
+    "docs/matched-initial32-diagnostic.md": "177b91cc789213754e617d33e8bdea52caef960c6cdaa41d6ef7b4718f5492b1"
+  },
+  "cpu_tests": 19,
+  "first_test_exit": 1,
+  "second_test_exit": 0,
+  "final_test_exit": 0,
+  "failure_history": [
+    "First suite: macOS temporary path fixture expected uncanonical /var; actual canonical /private/var was correct. Fixed expected path.resolve()."
+  ],
+  "native_execution_count": 0,
+  "remaining_gaps": [
+    "Exact runtime PCI property availability/mapping unverified; fail closed before model load if unavailable.",
+    "No deployment, target/checkpoint loading, GPU/model execution or native numerical replay.",
+    "Local evidence-only preflight deliberately leaves current remote dependencies unverified."
+  ]
+}

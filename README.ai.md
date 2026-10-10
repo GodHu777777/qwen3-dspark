@@ -918,3 +918,31 @@ whole-card used-VRAM rise<=8GiB over a fixed baseline, including other processes
 Missing telemetry is a gap; never reset baseline/stop ASR, reap only own worker.
 No runner or model execution exists; retain original sampler/frozen1280/STS and
 prior benchmark/vLLM/numerical/confidence/scheduler bounds. See notebook S50.
+
+
+Initial32 diagnostic runner CPU preparation (S51):
+`scripts/diagnose_matched_initial32.py` implements the S50 protocol; see
+[CPU preparation report](reports/matched-initial32-cpu-20261010/README.md).
+Frozen source is c008f4b3…802b67, tests9421968c…538aeb, design177b91cc…5492b1,
+base71381c2. First14 tests had13 pass/one fixture failure (.283 s, OS1): macOS
+canonical temporary path differed from the unresolved expectation; fixing the
+expected path.resolve() preserved correct runtime behavior. Second18 passed
+(.535 s); final19 synthetic CPU tests passed (.545 s, OS0), with all logs retained.
+Mocks check original shapes/AMP/no_grad,64 rows/four loads, four anchors before
+remaining30 ordinals, raw-before-gate, mismatch/gap classification, cache/operation
+records and scalar hashes, full-coverage aggregation and failure cleanup.
+Review fixes revoke a completed summary on worker failure/final telemetry failure
+and add final output/input checks; these are CPU/source controls, not native results.
+Core's actual evidence-only check exited0 for32/64, binding06b2ebee…8d5f70,
+status dry_run_no_tensor_load and dependencies_verified=false; historical probes
+were hashed, not tensor-loaded. Independent source/test review approved CPU
+preparation only ([review](reports/matched-initial32-cpu-20261010/independent-review.json), 103cf304…e911ff), without rerunning the suite or native execution.
+The public test log replaces a warning's local Python path; original evidence is
+unchanged and validation records both hashes. This is publication cleanup.
+Actual ROCm pci_bus_id/driver telemetry and exact logical-to-physical mapping
+remain unverified; unavailable/mismatched mapping stops before model load.
+Current target/tokenizer/checkpoint/source/runtime/backend, coordinated GPU window
+and historical BF16 replay remain future gates. No deployment, real model/GPU,
+training/generation/final-test or new quality/speed result occurred. Keep original
+sampler/frozen1280/STS and prior same-backend negative result, strong separate
+vLLM and numerical-law/TV/confidence/scheduler boundaries. See notebook S51.

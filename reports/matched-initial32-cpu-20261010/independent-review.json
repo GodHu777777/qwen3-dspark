@@ -1,0 +1,70 @@
+{
+  "reviewer": "astra_direction",
+  "reviewed_at_utc": "2026-10-10T01:14:54.937615+00:00",
+  "decision": "approved_cpu_preparation_only",
+  "native_execution_authorized_by_this_review": false,
+  "open_implementation_blockers": [],
+  "source_sha256": {
+    "scripts/diagnose_matched_initial32.py": "c008f4b393a7b020f2dc080240bd2c65f9cd0c3ac66662ff6578ce7763802b67",
+    "tests/test_diagnose_matched_initial32.py": "9421968c96fc00790fcd8e43ece997f7364ba4694ea819db2e153c8c83538aeb",
+    "docs/matched-initial32-diagnostic.md": "177b91cc789213754e617d33e8bdea52caef960c6cdaa41d6ef7b4718f5492b1"
+  },
+  "historical_core_equality_sha256": {
+    "model.py": "99c095ec3453e9fb47ecfce5d3b8c24fb97049f3f4c3e80d2202ba59f49ccb01",
+    "cached_target.py": "183ea145338c395aa3adbb50d80035af44f59535d2ae03b9d93cf0cf1f21f241",
+    "cached_decode.py": "f16b04ef254b973ebb09f2caa334a419cd44fa1f673690b9df7804ddc4adbbcc",
+    "tensor_sampling.py": "6d31ce1861094a674037f30acff2197a890fc0124953eb0f8461f904705f6033"
+  },
+  "review_method": "Independent source and test review; inspected and hash-bound core agent CPU execution records. No duplicate suite run or historical tensor reload by reviewer.",
+  "cpu_validation": {
+    "focused_tests": 19,
+    "os_exit": 0,
+    "suite_seconds": 0.545,
+    "evidence_only_os_exit": 0,
+    "states": 32,
+    "checkpoint_states": 64,
+    "dependencies_verified": false,
+    "binding_sha256": "06b2ebee3f0a670dae4b9f049c12a746461fc16c6d61641c92c18f23ca8d5f70"
+  },
+  "reviewed_invariants": [
+    "Draw-free k0 path preserves complete seven-row backbone/head, confidence-before-Markov, q adapter [1,V], no_grad and BF16 draft autocast.",
+    "Target block [8,V] and fresh prompt-plus-anchor sequential [V] remain outside draft autocast; all eight transient block laws validated.",
+    "Fresh target/projected caches per state; four weights-only checkpoint loads; no optimizer-state loading, tokenizer execution, generation/verifier execution, or final-test/training-data path dereference.",
+    "Fixed new step512 sequential reference per ordinal; equal32 aggregation only after complete valid coverage, finite-mass identity and teacher sensitivity bounds.",
+    "Four own-path historical anchors must pass before remaining30 states; legal replay drift differs from invalid law/evidence gap; raw and check saved before gate enforcement.",
+    "All64 selected p/q and confidence checks exact; raw/scalar hashes, cache lengths and attempted operation counts retained.",
+    "Supervisor uses fixed whole-card baseline and only its own worker; wall/RSS/output/device-pressure failures reap child; nonzero exit or final telemetry failure revokes completed summary.",
+    "Telemetry mapping is fail-closed exact logical PCI BDF plus unique AMD physical candidate, memory total, driver source version and kernel checks."
+  ],
+  "resolved_review_findings": [
+    "Added cache-length and operation-count records, scalar artifact hashes and pre-Markov finite-confidence check.",
+    "Added target AMP-off and q/block/sequential adapter AMP assertions.",
+    "Added final telemetry/output checks and authoritative failure override for previously completed worker summary."
+  ],
+  "failure_history": [
+    "First suite: macOS temporary path fixture expected uncanonical /var; actual canonical /private/var was correct. Fixed expected path.resolve()."
+  ],
+  "remaining_execution_gaps": [
+    "No native model replay, checkpoint/target loading, deployment or accelerator execution occurred in this CPU-preparation stage.",
+    "Actual ROCm pci_bus_id property, precise PCI normalization and required driver telemetry availability remain unverified; absent/mismatched data fails preflight before model load.",
+    "Current remote target/tokenizer/source/dependency identity and freshly coordinated execution window remain future preflight work.",
+    "CPU mocks establish protocol/scoping/failure behavior, not native BF16 equality, model quality or speed."
+  ],
+  "read_only_live_check": {
+    "count": 1,
+    "path": "output/matched-initial32-cpu-review-20261010/amd-live-sanitized.json",
+    "sha256": "3fb5a637428fadcd57ef237bd096ab78fa4e271450394c899cc058ad9eea3ca2",
+    "interpretation": "Point-in-time process/listener/KFD/ASR/VRAM evidence, not execution readiness."
+  },
+  "evidence_sha256": {
+    "output/matched-initial32-cpu-20261010/source-freeze.json": "2096611310ba1d146b15d7c39f4f0db7ed8f1716956a9cf4269ddaeef76a265c",
+    "output/matched-initial32-cpu-20261010/tests-first-exit.json": "f80bbb2917dcd6b6d125555abd5360cbfadcc0fd7c7ae3d5a6a914d44ada725d",
+    "output/matched-initial32-cpu-20261010/tests-first.log": "86aa45780e7edc296ceee271c46d4bc5e99cc52828fd7a7e3a8f7278cdb417c9",
+    "output/matched-initial32-cpu-20261010/tests-second-exit.json": "f1bca57588e89692e82bdd04e74840458f6a8fdf136fad7a958af3a1b7808204",
+    "output/matched-initial32-cpu-20261010/tests-second.log": "47dab7a7d3764f6fe2ccb6914aeafd95883268f08bf3c574f0c96703408a45d5",
+    "output/matched-initial32-cpu-20261010/tests-final-exit.json": "f1bca57588e89692e82bdd04e74840458f6a8fdf136fad7a958af3a1b7808204",
+    "output/matched-initial32-cpu-20261010/tests-final.log": "dd73c8d815e045353df5a76307c6e777c64945f76653f222c72fe18ecd559b1c",
+    "output/matched-initial32-cpu-20261010/evidence-only-exit.json": "da7fd007f209ea76ec63ac45a8e81dd8ad28f4e7df5afcea077cbf1365577466",
+    "output/matched-initial32-cpu-20261010/evidence-only.log": "c3331e41ff909482774241e3ad2829b16139f7fad3b277d7e21bf32ba5bcea4b"
+  }
+}
