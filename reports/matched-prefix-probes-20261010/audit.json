@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "recovery": {
+    "status": "recovered_and_hash_verified",
+    "steps": [
+      "128",
+      "512",
+      "1280"
+    ],
+    "files": 6,
+    "bytes": 196953054,
+    "archive_sha256": "ffc655c1d38069ce2d6202b53762be8d26113abb024caddb17b1ca6b824bb787",
+    "scope": "Read only exact existing quality collection artifacts; no remote writes, model, tensor, generation or final-test access",
+    "historical_integrity_limit": "Hashes measured during recovery bind present artifacts; original published binding/source/aggregate identities require separate reconciliation"
+  },
+  "cpu_tests": {
+    "first": 11,
+    "final": 12,
+    "final_seconds": 0.07,
+    "final_os_exit": 0,
+    "test_failures": 0,
+    "raw_final_log_sha256": "835c7e356cc6da043c202890fdce2f06fad9092ba7878ab3f2a74a0ac795fd0d"
+  },
+  "execution": {
+    "os_exit": 0,
+    "wall_seconds": 1.6911603329936042,
+    "source_sha256": {
+      "scripts/analyze_matched_prefix_probes.py": "637561d74cb53e3975fd065acb2237b6cf66924f86e6b3f540c9d17ae26b6b75",
+      "tests/test_analyze_matched_prefix_probes.py": "9acb237f7245e78fa36f1423222b69c6ef754a75509d80ff976d8369299c806b",
+      "docs/matched-prefix-diagnostic.md": "327b4c0a2e78562a8184466f1179b5df41d1bc01ed977a4bfc6961b41163355b"
+    },
+    "executions": 1
+  },
+  "supervision": {
+    "child_reaped": true,
+    "elapsed_seconds": 1.3023823329713196,
+    "limit_reason": null,
+    "maximum_observed_rss_bytes": 345063424,
+    "status": "completed",
+    "worker_os_exit": 0
+  },
+  "validation": {
+    "probes": 6,
+    "probability_rows_per_probe": 23,
+    "probability_rows_total": 138,
+    "quality_rows": 6,
+    "states": 2,
+    "selected_p_q_gathers_exact": true,
+    "historical_row0_controls_reconciled": true,
+    "source_and_inputs_unchanged": true
+  },
+  "artifact_sha256": {
+    "summary.json": "d547687a8671b22401a49a47659cfff53276bc070de3126c15fdab1335f39ce7",
+    "source-identity.json": "ca88e58027304966820849fe825c436634994c10a1ddc6d53f6009a8764e02f5"
+  },
+  "raw_evidence_sha256": {
+    "binding.private.json": "711659a5887e972e31008de777fc105f327699d9c244dfefbf4ccfc265eda456",
+    "private-validation.json": "8520c1b8a16e07aa0eee06e7a0e4a628c94177519d9fd457029f1906fc7f500b",
+    "remote-inventory.json": "d57d1b1bb45f6395dcabbbb8e117e4be1c8bd74c1a20f850a95eccfc0767f93e"
+  },
+  "incident": "Core agent connection error interrupted authoring after the script was saved. The same agent resumed; no duplicated recovery, training or tensor-analysis attempt.",
+  "independent_review": {
+    "raw_checks": 180,
+    "formal_comparison_checks": 337,
+    "absolute_tolerance": 1e-12,
+    "max_scalar_difference": 6.661338147750939e-16,
+    "comparison_sha256": "dac85612d89b7c3bc82ce67a08947c8bbdbdc5f87a4c34c8686eaa2262941340",
+    "scope": "Independent six-row math.fsum analysis preceded source freeze; values withheld from core until formal execution. Final comparison used saved JSON only."
+  }
+}

@@ -868,3 +868,25 @@ with no new analyzer/runner/tests or probe execution. See the public independent
 review; source byte alignment does not establish numerical equality. Overlap uses
 O=sum min and the finite-mass identity O=(sum p+sum q-L1)/2; normalized1-O rejection
 interpretation and saved-law mass errors are separate. Native paths remain controls.
+
+
+Six historical matched-probe CPU result (S49):
+`scripts/analyze_matched_prefix_probes.py` analyzes six recovered original ordinal0/1 round0
+payloads across128/512/1280 (196953054 bytes). All138 law rows validated; quality
+comparison used six first rows with exact prefix/proposal/selected p/q reconciliation.
+First11 and final12 tests passed (.071/.070 s); root's one actual CPU execution
+exited0 (outer1.691160 s, supervisor1.302382 s), with source/input hashes unchanged.
+A core connection interruption resumed from saved code; no test/analysis failure or
+repeated recovery occurred. CPU timing is not inference performance.
+Fixed128 sequential-reference O_ref was.000434/.003433/.001763 for ordinal0 and
+.047161/.973534/.981109 for ordinal1. From512→1280 one state worsens and one improves;
+no two-state mean hides this. Each state's sequential and block teachers separately
+match byte-for-byte across checkpoints, while block/seq remain different laws.
+Independent six-row180-check reductions preceded freeze and withheld values until
+formal completion; JSON-only337-check comparison passed (maxdiff6.66e-16<=1e-12).
+See reports/matched-prefix-probes-20261010. Current recovery hashes are not historical
+precommit hashes; two states cannot establish quality32 generality, dense/cache q
+equality, training causes or speed. Close this analysis, retain original sampler and
+frozen1280/STS state. Root accepted only designing a32-state initial-prefix
+512/1280 panel with frozen coverage/reference/numerical/resource bounds; no new
+implementation or model/GPU/generation/training/final-test execution occurred.

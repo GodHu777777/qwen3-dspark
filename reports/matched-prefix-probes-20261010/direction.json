@@ -1,0 +1,33 @@
+{
+  "status": "result_review_passed",
+  "independent_audit_sha256": "d9426caff1a04647d36e0e76a1036000a8dbdf36b6d066c2934d37ed0789dd8e",
+  "formal_comparison_sha256": "dac85612d89b7c3bc82ce67a08947c8bbdbdc5f87a4c34c8686eaa2262941340",
+  "live_read_only_sha256": "d464e76db6466b89ef8f316bb0f57a34a2ed6c9645005085491afff5f2073b10",
+  "findings": {
+    "state0_reference_overlap": [
+      0.0004338416058052973,
+      0.0034334131396257053,
+      0.0017627767098249089
+    ],
+    "state1_reference_overlap": [
+      0.047160729257251954,
+      0.9735341349291882,
+      0.9811088436922689
+    ],
+    "teacher_laws": "Both sequential and block row0 vectors are separately byte-identical across the three checkpoints for each ordinal; block and sequential remain different numerical laws.",
+    "interpretation": "From512 to1280, state0 decreases and state1 increases under the common target law. Directions remain the same under all retained sequential teachers and block laws; target-path TV sensitivity does not reverse these changes. State0 remains very low-overlap while state1 is near-unit at1280.",
+    "scope": "Two preselected initial states only, with six retained actual q rows. This is full-law evidence on those states, not the broad8158-round population or training-cause evidence."
+  },
+  "decision": {
+    "current": "Close the six-probe analysis with both states and their disagreement retained. Keep original sampler, frozen1280 checkpoint selection and calibration state; no training/data/objective/policy changes follow.",
+    "next_bounded_task_proposal": "Design only a first-position matched-initial-prefix panel using all original32 quality prompts and their already-saved identical first target outputs, with512 and1280 checkpoint comparisons. Freeze equal-state coverage, reference target law, numerical controls and execution/memory limits before any new implementation or model execution; no new sampled trajectories. Its purpose is to test how far the observed two-state heterogeneity extends, not explain training causally.",
+    "why": "The immediate uncertainty is coverage: two existing states show opposite checkpoint changes and vastly different absolute overlaps, so a two-state mean or prompt-specific training intervention is not justified.",
+    "stop": "No new model/GPU execution, training, generation, checkpoint reselection, final-test access or additional analysis in this review turn."
+  },
+  "limitations": [
+    "Recovered current bytes do not supply historical precommitted full tensor hashes.",
+    "No dense training q, raw draft logits or intermediate target features are saved in these probes.",
+    "The result does not diagnose objective/data/exposure/capacity causes or imply speedup."
+  ],
+  "independence": "Six-row independent reductions completed and saved before core freeze; scalar results withheld from core until formal execution completed. Formal comparison was JSON-only with337 checks, max absolute difference6.661338147750939e-16 under1e-12 predeclared tolerance."
+}

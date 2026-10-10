@@ -1,0 +1,500 @@
+{
+  "binding_sha256": "e3b3af55be87f00a137f15728494e51a8a7f177d735775715d7119079df6c793",
+  "bounds": {
+    "cooperative_seconds": 290,
+    "file_bytes": 67108864,
+    "output_bytes": 268435456,
+    "rss_bytes": 2147483648,
+    "timeout_seconds": 300,
+    "total_input_bytes": 402653184
+  },
+  "input_hashes_unchanged": true,
+  "limits": [
+    "Two existing matched initial states only; no quality32 or later-prefix generalization.",
+    "Actual retained q only; no dense-draft/training-objective/exposure mechanism attribution.",
+    "No new forward, training, generation, policy search, speed inference or independent-round CI.",
+    "Current recovered-file identity, not historical precommitted probe hashes"
+  ],
+  "peak_rss_bytes": 336101376,
+  "probe_count": 6,
+  "reference": "step128 sequential row0 for each ordinal",
+  "state_count": 2,
+  "states": [
+    {
+      "all_sequential_laws_byte_equal": true,
+      "changes": [
+        {
+          "common_reference_delta": 0.002999571533820409,
+          "from_step": 128,
+          "pair_controls": {
+            "block": {
+              "absolute_delta_shift": 1.1846475886419933e-06,
+              "bound": 5.802893642688233e-05,
+              "common_reference_delta": 0.002999571533820409,
+              "own_pair_delta": 0.003000756181409051
+            },
+            "seq": {
+              "absolute_delta_shift": 0.0,
+              "bound": 2e-12,
+              "common_reference_delta": 0.002999571533820409,
+              "own_pair_delta": 0.002999571533820409
+            }
+          },
+          "saved_sequential_teacher_sensitivity": [
+            {
+              "delta": 0.002999571533820409,
+              "sign": 1,
+              "teacher_step": 128
+            },
+            {
+              "delta": 0.002999571533820409,
+              "sign": 1,
+              "teacher_step": 512
+            },
+            {
+              "delta": 0.002999571533820409,
+              "sign": 1,
+              "teacher_step": 1280
+            }
+          ],
+          "sensitivity_status": "same_sign",
+          "to_step": 512,
+          "tv_between_draft_laws": 0.6054149733994943
+        },
+        {
+          "common_reference_delta": -0.0016706364298007966,
+          "from_step": 512,
+          "pair_controls": {
+            "block": {
+              "absolute_delta_shift": 2.1901587778767016e-06,
+              "bound": 5.802893642688233e-05,
+              "common_reference_delta": -0.0016706364298007966,
+              "own_pair_delta": -0.0016728265885786733
+            },
+            "seq": {
+              "absolute_delta_shift": 0.0,
+              "bound": 2e-12,
+              "common_reference_delta": -0.0016706364298007966,
+              "own_pair_delta": -0.0016706364298007966
+            }
+          },
+          "saved_sequential_teacher_sensitivity": [
+            {
+              "delta": -0.0016706364298007966,
+              "sign": -1,
+              "teacher_step": 128
+            },
+            {
+              "delta": -0.0016706364298007966,
+              "sign": -1,
+              "teacher_step": 512
+            },
+            {
+              "delta": -0.0016706364298007966,
+              "sign": -1,
+              "teacher_step": 1280
+            }
+          ],
+          "sensitivity_status": "same_sign",
+          "to_step": 1280,
+          "tv_between_draft_laws": 0.8400555631483518
+        }
+      ],
+      "checkpoints": [
+        {
+          "overlaps": {
+            "block": {
+              "algebra_error": 9.676504389433127e-17,
+              "l1": 1.9990954749153256,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.9995477374576625,
+              "overlap": 0.00045226254233753056,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.9995477374576628
+            },
+            "ref": {
+              "algebra_error": -2.0995575070181793e-16,
+              "l1": 1.9991323167883894,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.9995661583941947,
+              "overlap": 0.0004338416058052973,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.9995661583941947
+            },
+            "seq": {
+              "algebra_error": -2.0995575070181793e-16,
+              "l1": 1.9991323167883894,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.9995661583941947,
+              "overlap": 0.0004338416058052973,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.9995661583941947
+            }
+          },
+          "sequential_reference_byte_equal": true,
+          "step": 128,
+          "teacher_sensitivity": {
+            "block": {
+              "absolute_overlap_shift": 1.8420936532233278e-05,
+              "bound": 2.9014468213441167e-05,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 2.9014467213441167e-05
+            },
+            "seq": {
+              "absolute_overlap_shift": 0.0,
+              "bound": 1e-12,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0
+            }
+          },
+          "tv_block_vs_sequential": 2.9014467213441167e-05
+        },
+        {
+          "overlaps": {
+            "block": {
+              "algebra_error": 3.217912047936977e-16,
+              "l1": 1.9930939625525075,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.9965469812762534,
+              "overlap": 0.0034530187237465813,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 0.9999999999999999,
+              "total_variation": 0.9965469812762537
+            },
+            "ref": {
+              "algebra_error": -2.675810961694225e-16,
+              "l1": 1.993133173720748,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.9965665868603742,
+              "overlap": 0.003433413139625706,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 0.9999999999999999,
+              "total_variation": 0.996566586860374
+            },
+            "seq": {
+              "algebra_error": -2.675810961694225e-16,
+              "l1": 1.993133173720748,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.9965665868603742,
+              "overlap": 0.003433413139625706,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 0.9999999999999999,
+              "total_variation": 0.996566586860374
+            }
+          },
+          "sequential_reference_byte_equal": true,
+          "step": 512,
+          "teacher_sensitivity": {
+            "block": {
+              "absolute_overlap_shift": 1.9605584120875163e-05,
+              "bound": 2.9014468213441167e-05,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 2.9014467213441167e-05
+            },
+            "seq": {
+              "absolute_overlap_shift": 0.0,
+              "bound": 1e-12,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0
+            }
+          },
+          "tv_block_vs_sequential": 2.9014467213441167e-05
+        },
+        {
+          "overlaps": {
+            "block": {
+              "algebra_error": -3.157196726277789e-16,
+              "l1": 1.996439615729664,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.9982198078648321,
+              "overlap": 0.001780192135167908,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.998219807864832
+            },
+            "ref": {
+              "algebra_error": -1.43982048506075e-16,
+              "l1": 1.9964744465803503,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.9982372232901751,
+              "overlap": 0.0017627767098249095,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.9982372232901752
+            },
+            "seq": {
+              "algebra_error": -1.43982048506075e-16,
+              "l1": 1.9964744465803503,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.9982372232901751,
+              "overlap": 0.0017627767098249095,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.9982372232901752
+            }
+          },
+          "sequential_reference_byte_equal": true,
+          "step": 1280,
+          "teacher_sensitivity": {
+            "block": {
+              "absolute_overlap_shift": 1.741542534299846e-05,
+              "bound": 2.9014468213441167e-05,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 2.9014467213441167e-05
+            },
+            "seq": {
+              "absolute_overlap_shift": 0.0,
+              "bound": 1e-12,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0
+            }
+          },
+          "tv_block_vs_sequential": 2.9014467213441167e-05
+        }
+      ],
+      "ordinal": 0
+    },
+    {
+      "all_sequential_laws_byte_equal": true,
+      "changes": [
+        {
+          "common_reference_delta": 0.9263734056719363,
+          "from_step": 128,
+          "pair_controls": {
+            "block": {
+              "absolute_delta_shift": 5.74301247924236e-06,
+              "bound": 0.0007104371773215678,
+              "common_reference_delta": 0.9263734056719363,
+              "own_pair_delta": 0.926367662659457
+            },
+            "seq": {
+              "absolute_delta_shift": 0.0,
+              "bound": 2e-12,
+              "common_reference_delta": 0.9263734056719363,
+              "own_pair_delta": 0.9263734056719363
+            }
+          },
+          "saved_sequential_teacher_sensitivity": [
+            {
+              "delta": 0.9263734056719363,
+              "sign": 1,
+              "teacher_step": 128
+            },
+            {
+              "delta": 0.9263734056719363,
+              "sign": 1,
+              "teacher_step": 512
+            },
+            {
+              "delta": 0.9263734056719363,
+              "sign": 1,
+              "teacher_step": 1280
+            }
+          ],
+          "sensitivity_status": "same_sign",
+          "to_step": 512,
+          "tv_between_draft_laws": 0.9284405238195457
+        },
+        {
+          "common_reference_delta": 0.007574708763080751,
+          "from_step": 512,
+          "pair_controls": {
+            "block": {
+              "absolute_delta_shift": 0.0005766890858744933,
+              "bound": 0.0007104371773215678,
+              "common_reference_delta": 0.007574708763080751,
+              "own_pair_delta": 0.0069980196772062575
+            },
+            "seq": {
+              "absolute_delta_shift": 0.0,
+              "bound": 2e-12,
+              "common_reference_delta": 0.007574708763080751,
+              "own_pair_delta": 0.007574708763080751
+            }
+          },
+          "saved_sequential_teacher_sensitivity": [
+            {
+              "delta": 0.007574708763080751,
+              "sign": 1,
+              "teacher_step": 128
+            },
+            {
+              "delta": 0.007574708763080751,
+              "sign": 1,
+              "teacher_step": 512
+            },
+            {
+              "delta": 0.007574708763080751,
+              "sign": 1,
+              "teacher_step": 1280
+            }
+          ],
+          "sensitivity_status": "same_sign",
+          "to_step": 1280,
+          "tv_between_draft_laws": 0.025527223415177273
+        }
+      ],
+      "checkpoints": [
+        {
+          "overlaps": {
+            "block": {
+              "algebra_error": -4.85722573273506e-17,
+              "l1": 1.905085552777951,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.9525427763889756,
+              "overlap": 0.0474572236110244,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0,
+              "total_variation": 0.9525427763889756
+            },
+            "ref": {
+              "algebra_error": 7.632783294297951e-17,
+              "l1": 1.9056785414854962,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.952839270742748,
+              "overlap": 0.047160729257251975,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0,
+              "total_variation": 0.9528392707427481
+            },
+            "seq": {
+              "algebra_error": 7.632783294297951e-17,
+              "l1": 1.9056785414854962,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.952839270742748,
+              "overlap": 0.047160729257251975,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0,
+              "total_variation": 0.9528392707427481
+            }
+          },
+          "sequential_reference_byte_equal": true,
+          "step": 128,
+          "teacher_sensitivity": {
+            "block": {
+              "absolute_overlap_shift": 0.0002964943537724224,
+              "bound": 0.0003552185886607839,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0003552185876607839
+            },
+            "seq": {
+              "absolute_overlap_shift": 0.0,
+              "bound": 1e-12,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0
+            }
+          },
+          "tv_block_vs_sequential": 0.0003552185876607839
+        },
+        {
+          "overlaps": {
+            "block": {
+              "algebra_error": 1.1102230246251565e-16,
+              "l1": 0.05235022745903769,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.02617511372951853,
+              "overlap": 0.9738248862704815,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.026175113729518844
+            },
+            "ref": {
+              "algebra_error": -1.1102230246251565e-16,
+              "l1": 0.05293173014162369,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.026465865070811723,
+              "overlap": 0.9735341349291883,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.026465865070811844
+            },
+            "seq": {
+              "algebra_error": -1.1102230246251565e-16,
+              "l1": 0.05293173014162369,
+              "mass_residual": 2.220446049250313e-16,
+              "one_minus_overlap_normalized_interpretation": 0.026465865070811723,
+              "overlap": 0.9735341349291883,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 1.0000000000000002,
+              "total_variation": 0.026465865070811844
+            }
+          },
+          "sequential_reference_byte_equal": true,
+          "step": 512,
+          "teacher_sensitivity": {
+            "block": {
+              "absolute_overlap_shift": 0.0002907513412931939,
+              "bound": 0.0003552185886607839,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0003552185876607839
+            },
+            "seq": {
+              "absolute_overlap_shift": 0.0,
+              "bound": 1e-12,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0
+            }
+          },
+          "tv_block_vs_sequential": 0.0003552185876607839
+        },
+        {
+          "overlaps": {
+            "block": {
+              "algebra_error": 3.3306690738754696e-16,
+              "l1": 0.03835418810462512,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.01917709405231227,
+              "overlap": 0.9808229059476877,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 0.9999999999999998,
+              "total_variation": 0.01917709405231256
+            },
+            "ref": {
+              "algebra_error": 1.1102230246251565e-16,
+              "l1": 0.03778231261546219,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.018891156307730972,
+              "overlap": 0.981108843692269,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 0.9999999999999998,
+              "total_variation": 0.018891156307731093
+            },
+            "seq": {
+              "algebra_error": 1.1102230246251565e-16,
+              "l1": 0.03778231261546219,
+              "mass_residual": 0.0,
+              "one_minus_overlap_normalized_interpretation": 0.018891156307730972,
+              "overlap": 0.981108843692269,
+              "p_mass": 1.0000000000000002,
+              "q_mass": 0.9999999999999998,
+              "total_variation": 0.018891156307731093
+            }
+          },
+          "sequential_reference_byte_equal": true,
+          "step": 1280,
+          "teacher_sensitivity": {
+            "block": {
+              "absolute_overlap_shift": 0.0002859377445812994,
+              "bound": 0.0003552185886607839,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0003552185876607839
+            },
+            "seq": {
+              "absolute_overlap_shift": 0.0,
+              "bound": 1e-12,
+              "mass_defect_correction": 0.0,
+              "tv_to_reference": 0.0
+            }
+          },
+          "tv_block_vs_sequential": 0.0003552185876607839
+        }
+      ],
+      "ordinal": 1
+    }
+  ],
+  "status": "completed",
+  "tolerance": 1e-12
+}

@@ -1,0 +1,9 @@
+{
+  "base_commit": "c91986dae47f47e44a24f03e74f6b2027c682074",
+  "source_sha256": {
+    "scripts/analyze_matched_prefix_probes.py": "637561d74cb53e3975fd065acb2237b6cf66924f86e6b3f540c9d17ae26b6b75",
+    "tests/test_analyze_matched_prefix_probes.py": "9acb237f7245e78fa36f1423222b69c6ef754a75509d80ff976d8369299c806b",
+    "docs/matched-prefix-diagnostic.md": "327b4c0a2e78562a8184466f1179b5df41d1bc01ed977a4bfc6961b41163355b"
+  },
+  "scope": "Frozen source for the one actual CPU analysis; production code unchanged."
+}

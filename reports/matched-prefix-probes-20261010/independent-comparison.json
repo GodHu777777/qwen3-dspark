@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "checks": 337,
+  "absolute_tolerance": 1e-12,
+  "max_scalar_difference": 6.661338147750939e-16,
+  "formal_summary_sha256": "d547687a8671b22401a49a47659cfff53276bc070de3126c15fdab1335f39ce7",
+  "formal_private_validation_sha256": "8520c1b8a16e07aa0eee06e7a0e4a628c94177519d9fd457029f1906fc7f500b",
+  "formal_supervision_sha256": "14bc2ac87b87bbf0ce9c69f9f55c1e0a74c30e96bf98b3ae31bf2d92f582f9a3",
+  "independent_audit_sha256": "d9426caff1a04647d36e0e76a1036000a8dbdf36b6d066c2934d37ed0789dd8e",
+  "final_analyzer_sha256": "637561d74cb53e3975fd065acb2237b6cf66924f86e6b3f540c9d17ae26b6b75",
+  "independence": "Independent six-row math.fsum reanalysis saved before analyzer freeze; values withheld from core until formal analysis complete. This comparison uses only saved JSON, no tensor reload.",
+  "scope": "All six row overlap/mass/algebra/TV/sensitivity controls, four checkpoint contrasts, six historical row0 controls and input identities agree."
+}
