@@ -1,0 +1,22 @@
+{
+  "status": "approved_design_only",
+  "document": "docs/matched-initial32-diagnostic.md",
+  "document_sha256": "177b91cc789213754e617d33e8bdea52caef960c6cdaa41d6ef7b4718f5492b1",
+  "base_commit": "cb91855e51d76a7e17b03d29c54c21b04362625a",
+  "independent_protocol_review_sha256": "35ab92f5375ed68a6f7031012cdd5d0731f190d570a3c46d44768b05b567f9e3",
+  "source_metadata_audit_sha256": "4ebe4ed8034537108c98f14d1537b9d7c7c6e817149c90cabe5decf3241256cc",
+  "live_read_only_sha256": "18885c5b91a36c0d16fa4ffd09fdd6620eff791c1f0d12dd8e1b0bf725fb9e7f",
+  "root_dependency_evidence_sha256": "07d02ac748e9156b626bdb65f3b8e10fdce22f870a890e62390f4afb6c61884f",
+  "blocking_findings": [],
+  "final_review": [
+    "32 common initial states/64 checkpoint-state rows; complete equal32 coverage, no selection/reweighting.",
+    "Four own-path historical full-law anchors run first;30 remaining ordinals per checkpoint; one draft with4weights-only loads and fresh checkpoint-dependent projected caches.",
+    "Preserves seven-row draft backbone/head; q adapter[1,V], block adapter[8,V]after batch0 selection, fresh sequential adapter[V]. Eval/no_grad/BF16 AMP scope explicit; no RNG draw or new trajectory.",
+    "Common p_ref fixed to512 sequential row0; byte equality/TV/mass residual/sensitivity separate from quality. All64 original selected gathers and raw confidence are narrow compatibility checks.",
+    "Historical lawful replay differences are inconclusive compatibility failures, not corrupt probability evidence; raw saved first, stop with no relaxed threshold/retry/backend switch.",
+    "300s wall/290s cooperative,6GiB allocator,8GiB RSS,1GiB output,8GiB fixed-baseline whole-card delta. Delta is conservative pressure includingASR/others, not worker-only attribution.",
+    "Future current-target/runtime/source/telemetry/window checks and CPU implementation gates remain necessary; current design/dependency hashes are not evidence of native replay support."
+  ],
+  "scope": "Only one fresh read-only AMD liveness check plus local stdlib metadata/source/document review. Root supplied separate dependency hash inspection. No tensor load, new model/GPU/training/generation/final-test execution, tests/runner, notebook edits or commit by reviewer.",
+  "decision": "Design accepted for future bounded implementation review. No model execution is performed or inferred by this review; keep original sampler, frozen checkpoint/STS state and separate benchmark/vLLM/numerical-law/confidence/scheduler boundaries."
+}

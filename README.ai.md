@@ -890,3 +890,31 @@ equality, training causes or speed. Close this analysis, retain original sampler
 frozen1280/STS state. Root accepted only designing a32-state initial-prefix
 512/1280 panel with frozen coverage/reference/numerical/resource bounds; no new
 implementation or model/GPU/generation/training/final-test execution occurred.
+
+
+Original32 matched-initial-state diagnostic design (S50, no implementation):
+See [design](docs/matched-initial32-diagnostic.md) and
+[preparation evidence](reports/matched-initial32-design-20261010/README.md).
+All32 saved prompts/first-target outputs match across512/1280; lengths32–326,
+total2972, with64 original seven-proposal round0s. Read-only AMD hashing confirmed
+both metadata and draft files (646774924 bytes each) against original bindings,
+OS0 in9.397773 s; installed Torch/Transformers metadata matches. No torch import,
+target/optimizer read, model/GPU init or new tests occurred. Future target/tokenizer,
+loaded HIP/driver/device/backend, deployed source and coordinated window remain gaps.
+Final design SHA177b91cc…5492b1 passed the [independent design-only review](reports/matched-initial32-design-20261010/independent-review.json).
+Four weights-only loads run512 anchors0/1,1280 anchors0/1,then30 remaining ordinals
+per checkpoint; anchors count once. Preserve7-row draft/head, q adapter[1,V],
+block adapter[8,V], fresh sequential adapter[V], no_grad/eval/original BF16 AMP.
+Proposed64 draft forwards/128 prefills/64 block8/64 anchor1 appends, no warmup/retry.
+Fix each state's common reference to NEW512 sequential row0;1280 seq is a numerical
+repeat, not a replacement. Report complete equal32 overlap/change/sign coverage,
+with teacher TV/mass/sensitivity separate; no causal, holdout, quality threshold or
+speed claim. Four historical full-law anchors must pass own-path byte equality
+before the remaining30 ordinals; all64 selected gathers/raw confidence must match.
+Lawful replay drift means historical numerical mismatch/inconclusive and stop,
+not corrupt old evidence; save raw first, no threshold relaxation/backend switch.
+Proposed300/290 s,6GiB allocator,8GiB RSS,1GiB output,preload free>=8GiB and
+whole-card used-VRAM rise<=8GiB over a fixed baseline, including other processes.
+Missing telemetry is a gap; never reset baseline/stop ASR, reap only own worker.
+No runner or model execution exists; retain original sampler/frozen1280/STS and
+prior benchmark/vLLM/numerical/confidence/scheduler bounds. See notebook S50.

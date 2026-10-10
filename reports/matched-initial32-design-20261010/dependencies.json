@@ -1,0 +1,33 @@
+{
+  "scope": "Read-only file hashing and installed package metadata; no torch import, model load, GPU init, target-weight read or optimizer-state access",
+  "checkpoints": [
+    {
+      "step": 512,
+      "metadata_exists": true,
+      "metadata_bytes": 4474,
+      "metadata_sha256": "30d8813eaa5a4db7a50ddbf164f17b8c045e79ae38434e378aa8e703bc699ddb",
+      "metadata_matches_original_binding": true,
+      "weights_exists": true,
+      "weights_bytes": 646774924,
+      "weights_sha256": "667d2dd6e8ad7d11e2115e936af1b6cf7e44357d68e3412f5c9ef433f26690ae",
+      "weights_matches_original_binding": true
+    },
+    {
+      "step": 1280,
+      "metadata_exists": true,
+      "metadata_bytes": 4475,
+      "metadata_sha256": "8bb0c5113d02decac5b8a64c585284dd1664f1a5f88f13014713ec1facc7ecc5",
+      "metadata_matches_original_binding": true,
+      "weights_exists": true,
+      "weights_bytes": 646774924,
+      "weights_sha256": "d6f21ab3af5187ed181efdbde54118a9ada21b458d9957515a17d6b3693d0de4",
+      "weights_matches_original_binding": true
+    }
+  ],
+  "package_versions": {
+    "torch": "2.12.0+rocm7.2",
+    "transformers": "5.17.0",
+    "safetensors": "0.8.0"
+  },
+  "python_version": "3.12.14"
+}

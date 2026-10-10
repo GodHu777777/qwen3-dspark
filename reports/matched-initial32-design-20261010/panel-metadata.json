@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "scope": "CPU metadata inspection of existing recovered quality32; no model, weights or generated text exported",
+  "steps": [
+    512,
+    1280
+  ],
+  "state_count": 32,
+  "exact_prompt_case_and_initial_output_match": true,
+  "prompt_tokens": {
+    "min": 32,
+    "max": 326,
+    "sum": 2972,
+    "by_ordinal": [
+      151,
+      200,
+      49,
+      43,
+      54,
+      86,
+      63,
+      114,
+      66,
+      79,
+      125,
+      75,
+      44,
+      89,
+      87,
+      70,
+      32,
+      82,
+      82,
+      299,
+      326,
+      81,
+      67,
+      52,
+      57,
+      110,
+      64,
+      70,
+      78,
+      62,
+      73,
+      42
+    ]
+  },
+  "draft_config_equal": true,
+  "input_sha256": {
+    "512/run.json": "79299aba6990b915ca481a8317439fb223cb8ebc168ec0d50d9ba0a14b1b9970",
+    "512/private-outputs.jsonl": "0e2130c34205c2f916678dd013d446c5c785c238ac1c45238ffbdfaa1f215898",
+    "1280/run.json": "46da68c61ab6dcee645ceae73a502d798ccb970246ecbc62399a58f5476b5d68",
+    "1280/private-outputs.jsonl": "368fd0b4633b8d8075f4d66ddd18a0457414ebff640cf6fd1ba0e0013f7fe5b6"
+  }
+}
